@@ -1,0 +1,8 @@
+# C2: keep raw dataset files and model weights out of Git
+data/studentlife/*
+data/swell_kw/*
+!data/studentlife/README.md
+!data/swell_kw/README.md
+models/*
+!models/README.md
+.ipynb_checkpoints/
