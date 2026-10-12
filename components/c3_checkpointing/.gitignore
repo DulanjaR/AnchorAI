@@ -1,0 +1,19 @@
+# Raw datasets (never commit participant data)
+data/raw/**
+!data/raw/**/
+
+# Model files and weights
+models/*.pkl
+models/*/
+*.safetensors
+*.bin
+
+# Data/archive formats
+*.csv
+*.xlsx
+*.sav
+*.zip
+
+# Keep placeholder files committable
+!.gitkeep
+!**/.gitkeep
