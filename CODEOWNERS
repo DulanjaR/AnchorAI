@@ -1,0 +1,8 @@
+# Replace each @username with the member's GitHub handle.
+# A change inside a folder requests review from its owner.
+/components/c1_disruption/    @Ravindu912
+/components/c2_capacity/      @Hirunya003
+/components/c3_checkpointing/ @Sewmini001
+/components/c4_hcde/          @DulanjaR
+/shared/                      @DulanjaR @member1 @member2 @member3
+/orchestration/               @DulanjaR @member1 @member2 @member3

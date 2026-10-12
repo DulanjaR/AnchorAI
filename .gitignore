@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+.idea/
+.vscode/
+# model weights and large data
+*.safetensors
+*.bin
+*.gguf
+checkpoints/
+data/raw/
+data/generated/
+node_modules/
