@@ -1,0 +1,172 @@
+{
+  "id": "S7",
+  "name": "Replanning mid-morning after the delay is over: EF = 1.0 for all; compress only as needed",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "08:00",
+      "end": "13:00"
+    },
+    "planFrom": "10:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "08:00",
+      "end": "09:30"
+    },
+    "protectedBlocks": [],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Problem set questions 1–5",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "R1",
+        "title": "Proofread report printout",
+        "type": "Analog",
+        "priority": "Medium",
+        "estimatedHours": 1.25,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      },
+      {
+        "id": "L1",
+        "title": "Tidy notes folder",
+        "type": "Analog",
+        "priority": "Low",
+        "estimatedHours": 1,
+        "deadline": "2026-10-11T23:59",
+        "delegable": false
+      },
+      {
+        "id": "L2",
+        "title": "Rename lecture recordings",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 0.5,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Horizon 10:00–13:00; the window (08:00–09:30) is already over → every task",
+    "runs in normal conditions → EF = 1.0 for all (R1).",
+    "Order: A[K1 0.25] → C[R1 1.6] → D[L2 4, L1 12]"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "10:00",
+      "end": "13:00"
+    },
+    "order": [
+      "K1",
+      "R1",
+      "L2",
+      "L1"
+    ],
+    "freeMinutesLeft": 0,
+    "tasks": {
+      "K1": {
+        "fi": 0.25,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "10:00",
+        "end": "12:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.25). Scheduled 10:00–12:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2 × 1.0) = 0.25 → A. Earliest gap → 10:00–12:00."
+        ]
+      },
+      "R1": {
+        "fi": 1.6,
+        "efUsed": 1,
+        "tag": "Reduce",
+        "start": "12:00",
+        "end": "13:00",
+        "compressionPct": 20,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Shortened by 20% to fit the free time left today (12:00–13:00). Do the most important part first (Fi 1.6).",
+        "workings": [
+          "Fi = 1 × 2 / (1.25 × 1.0) = 1.6 → C. 60 of 75 min left → 20% (not 50%)."
+        ]
+      },
+      "L1": {
+        "fi": 12,
+        "efUsed": 1,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "LOW_URGENCY",
+        "deadlineRisk": false,
+        "group": "D",
+        "explanation": "Moved to tomorrow: it is due in 4 days and flexible (Fi 12), so today's time goes to more urgent tasks.",
+        "workings": [
+          "Fi = 4 × 3 / (1 × 1.0) = 12 → D."
+        ]
+      },
+      "L2": {
+        "fi": 4,
+        "efUsed": 1,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "LOW_URGENCY",
+        "deadlineRisk": true,
+        "group": "D",
+        "explanation": "Moved to tomorrow: it is due tomorrow and flexible (Fi 4), so today's time goes to more urgent tasks. Warning: this task is due tomorrow, so its deadline is at risk.",
+        "workings": [
+          "Fi = 1 × 2 / (0.5 × 1.0) = 4 → D.",
+          "REVISED (R10): due tomorrow → deadline risk (was false), even though Fi > 2."
+        ]
+      }
+    },
+    "protect": {},
+    "warnings": [
+      {
+        "taskId": "L2",
+        "code": "DEADLINE_RISK",
+        "message": "Moved to tomorrow: it is due tomorrow and flexible (Fi 4), so today's time goes to more urgent tasks. Warning: this task is due tomorrow, so its deadline is at risk."
+      }
+    ]
+  }
+}

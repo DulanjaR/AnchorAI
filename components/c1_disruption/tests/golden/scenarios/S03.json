@@ -1,0 +1,179 @@
+{
+  "id": "S3",
+  "name": "Transport delay: digital work is allowed during the window (EF 0.7)",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "16:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "09:00",
+      "end": "11:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:00",
+        "end": "13:00"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "D1",
+        "title": "Write report draft on laptop",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "A1",
+        "title": "Annotate printed case study",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      },
+      {
+        "id": "D2",
+        "title": "Update portfolio site",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 1,
+        "deadline": "2026-10-09T23:59",
+        "delegable": false
+      },
+      {
+        "id": "D3",
+        "title": "Reply to project group thread",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 1.5,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[D1 0.357, A1 0.417] → C[D3 1.905] → D[D2 5.714]"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "16:00"
+    },
+    "order": [
+      "D1",
+      "A1",
+      "D3",
+      "D2"
+    ],
+    "freeMinutesLeft": 60,
+    "tasks": {
+      "D1": {
+        "fi": 0.357,
+        "efUsed": 0.7,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "11:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.357). Scheduled 09:00–11:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2 × 0.7) = 0.357 → A. Window-first → 09:00–11:00."
+        ]
+      },
+      "A1": {
+        "fi": 0.417,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "13:00",
+        "end": "15:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due tomorrow and High priority, so it is one of the most urgent tasks (Fi 0.417). Scheduled 13:00–15:00.",
+        "workings": [
+          "Fi = 1 × 1 / (2 × 1.2) = 0.417 → A. Window full; 11:00–12:00 too short → 13:00."
+        ]
+      },
+      "D2": {
+        "fi": 5.714,
+        "efUsed": 0.7,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "LOW_URGENCY",
+        "deadlineRisk": false,
+        "group": "D",
+        "explanation": "Moved to tomorrow: it is due in 2 days and flexible (Fi 5.714), so today's time goes to more urgent tasks. You have free time today, so you can start it early if you like.",
+        "workings": [
+          "Fi = 2 × 2 / (1 × 0.7) = 5.714 → D."
+        ]
+      },
+      "D3": {
+        "fi": 1.905,
+        "efUsed": 0.7,
+        "tag": "Reduce",
+        "start": "11:00",
+        "end": "12:00",
+        "compressionPct": 33.3,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Shortened by 33.3% to fit the free time left today (11:00–12:00). Do the most important part first (Fi 1.905).",
+        "workings": [
+          "Fi = 1 × 2 / (1.5 × 0.7) = 1.905 → C. Gaps left: 11–12 and 15–16 (60 each),",
+          "neither fits 90 → largest, earliest tie = 11:00–12:00 → 60/90 → 33.3%."
+        ]
+      }
+    },
+    "protect": {
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:00",
+        "end": "13:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:00–13:00): the planner never moves or shortens it."
+      }
+    },
+    "warnings": []
+  }
+}

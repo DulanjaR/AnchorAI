@@ -1,0 +1,196 @@
+{
+  "id": "S10",
+  "name": "Several protected blocks (one inside the window): tasks never span a protected block",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "08:00",
+      "end": "17:00"
+    },
+    "planFrom": "08:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "08:00",
+      "end": "10:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "breakfast",
+        "label": "Breakfast",
+        "start": "08:30",
+        "end": "09:00"
+      },
+      {
+        "id": "prayer",
+        "label": "Prayer",
+        "start": "10:00",
+        "end": "10:30"
+      },
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:30",
+        "end": "13:30"
+      },
+      {
+        "id": "sleep",
+        "label": "Sleep",
+        "start": "22:00",
+        "end": "06:00"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Revise statistics formulas",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 1.5,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "K2",
+        "title": "Complete take-home paper",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 3,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "D1",
+        "title": "Upload slides to LMS",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 1.5,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[K2 0.139, K1 0.278] → C[D1 1.905].",
+    "Gaps: 08:00–08:30, 09:00–10:00, 10:30–12:30, 13:30–17:00."
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "08:00",
+      "end": "17:00"
+    },
+    "order": [
+      "K2",
+      "K1",
+      "D1"
+    ],
+    "freeMinutesLeft": 90,
+    "tasks": {
+      "K2": {
+        "fi": 0.139,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "13:30",
+        "end": "16:30",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.139). Scheduled 13:30–16:30.",
+        "workings": [
+          "Fi = 0.5 × 1 / (3 × 1.2) = 0.139 → first. Window gaps (30, 60) and",
+          "10:30–12:30 (120) too short → 13:30–16:30."
+        ]
+      },
+      "K1": {
+        "fi": 0.278,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "10:30",
+        "end": "12:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.278). Scheduled 10:30–12:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (1.5 × 1.2) = 0.278. Window gaps 08:00–08:30 + 09:00–10:00",
+          "add up to 90 min but are split by breakfast → not used (R4) → 10:30–12:00."
+        ]
+      },
+      "D1": {
+        "fi": 1.905,
+        "efUsed": 0.7,
+        "tag": "Reduce",
+        "start": "09:00",
+        "end": "10:00",
+        "compressionPct": 33.3,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Shortened by 33.3% to fit the free time left today (09:00–10:00). Do the most important part first (Fi 1.905).",
+        "workings": [
+          "Fi = 1 × 2 / (1.5 × 0.7) = 1.905 → C. Gaps left: 30, 60, 30, 30 min",
+          "→ largest 09:00–10:00 → 60/90 → 33.3%."
+        ]
+      }
+    },
+    "protect": {
+      "breakfast": {
+        "tag": "Protect",
+        "start": "08:30",
+        "end": "09:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Breakfast, 08:30–09:00): the planner never moves or shortens it."
+      },
+      "prayer": {
+        "tag": "Protect",
+        "start": "10:00",
+        "end": "10:30",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Prayer, 10:00–10:30): the planner never moves or shortens it."
+      },
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:30",
+        "end": "13:30",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:30–13:30): the planner never moves or shortens it."
+      },
+      "sleep": {
+        "tag": "Protect",
+        "start": "22:00",
+        "end": "06:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Sleep, 22:00–06:00): the planner never moves or shortens it."
+      }
+    },
+    "warnings": []
+  }
+}

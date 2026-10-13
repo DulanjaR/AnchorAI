@@ -1,0 +1,464 @@
+{
+  "source": "anchor-ai-component1 backend/tests/api/{basics,tasks,mvds,reviews}.test.js (Task 3, approved 8 Oct 2026). Golden flows S1-S16 over HTTP are driven from scenarios/*.json, not repeated here.",
+  "format": "See ../README.md. Each case starts with an empty store and a fixed clock at `now` (Asia/Colombo). Paths use the /api prefix of docs/API.md.",
+  "defaultNow": "2026-10-07T09:00",
+  "templates": {
+    "task": {
+      "title": "Read lecture notes",
+      "type": "Analog",
+      "priority": "High",
+      "estimatedHours": 2,
+      "deadline": "2026-10-07T23:59",
+      "plannedDate": "2026-10-07"
+    },
+    "disruption": {
+      "date": "2026-10-07",
+      "type": "power_outage",
+      "start": "09:00",
+      "timeLostMinutes": 180,
+      "severity": 2,
+      "confirmed": true
+    }
+  },
+  "fixtures": {
+    "readyDay": [
+      { "as": "u1", "method": "PUT", "path": "/api/me/settings", "body": { "workStart": "09:00", "workEnd": "18:00" }, "expect": { "status": 200 } },
+      { "as": "u1", "method": "POST", "path": "/api/protected-blocks", "body": { "label": "Lunch", "start": "12:30", "end": "13:30" }, "expect": { "status": 201 } },
+      { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "Reading", "plannedStart": "09:00", "plannedEnd": "11:00" } }, "expect": { "status": 201 }, "save": "reading" },
+      { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "Coding", "type": "Digital", "estimatedHours": 1.5, "plannedStart": "11:00", "plannedEnd": "12:30" } }, "expect": { "status": 201 }, "save": "coding" },
+      { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": {} }, "expect": { "status": 201 }, "save": "report" }
+    ],
+    "dayWithTasks": [
+      { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "A" } }, "expect": { "status": 201 }, "save": "a" },
+      { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "B" } }, "expect": { "status": 201 }, "save": "b" },
+      { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "C" } }, "expect": { "status": 201 }, "save": "c" }
+    ]
+  },
+  "cases": [
+    {
+      "id": "basics.health_needs_no_user",
+      "steps": [
+        { "as": null, "method": "GET", "path": "/health", "expect": { "status": 200 } }
+      ]
+    },
+    {
+      "id": "basics.no_user_401",
+      "steps": [
+        { "as": null, "method": "GET", "path": "/api/tasks", "expect": { "status": 401, "equals": { "error": { "code": "NO_USER", "message": "<any-string>" } } } }
+      ]
+    },
+    {
+      "id": "basics.unknown_route_404",
+      "steps": [
+        { "as": "u1", "method": "GET", "path": "/api/nope", "expect": { "status": 404, "errorCode": "NOT_FOUND" } }
+      ]
+    },
+    {
+      "id": "basics.malformed_json_400",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "headers": { "Content-Type": "application/json" }, "rawBody": "{\"title\": ", "expect": { "status": 400, "errorCode": "INVALID_JSON" } }
+      ]
+    },
+    {
+      "id": "settings.put_then_get",
+      "steps": [
+        { "as": "u1", "method": "GET", "path": "/api/me/settings", "expect": { "status": 404 } },
+        { "as": "u1", "method": "PUT", "path": "/api/me/settings", "body": { "workStart": "09:00", "workEnd": "18:00" }, "expect": { "status": 200 } },
+        { "as": "u1", "method": "GET", "path": "/api/me/settings", "expect": { "status": 200, "equals": { "id": "u1", "workStart": "09:00", "workEnd": "18:00" } } }
+      ]
+    },
+    {
+      "id": "settings.invalid",
+      "steps": [
+        { "as": "u1", "method": "PUT", "path": "/api/me/settings", "body": { "workStart": "18:00", "workEnd": "09:00" }, "expect": { "status": 400 } },
+        { "as": "u1", "method": "PUT", "path": "/api/me/settings", "body": { "workStart": "9am", "workEnd": "18:00" }, "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "protected_blocks.crud",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/protected-blocks", "body": { "label": "Sleep", "start": "22:00", "end": "06:00" }, "expect": { "status": 201 }, "save": "sleep" },
+        { "as": "u1", "method": "GET", "path": "/api/protected-blocks", "expect": { "status": 200, "length": 1 } },
+        { "as": "u1", "method": "PATCH", "path": "/api/protected-blocks/${sleep.id}", "body": { "end": "05:30" }, "expect": { "status": 200, "match": { "label": "Sleep", "start": "22:00", "end": "05:30" } } },
+        { "as": "u1", "method": "DELETE", "path": "/api/protected-blocks/${sleep.id}", "expect": { "status": 204 } },
+        { "as": "u1", "method": "GET", "path": "/api/protected-blocks", "expect": { "status": 200, "equals": [] } }
+      ]
+    },
+    {
+      "id": "protected_blocks.invalid",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/protected-blocks", "body": { "label": "X", "start": "12:00", "end": "12:00" }, "expect": { "status": 400 } },
+        { "as": "u1", "method": "POST", "path": "/api/protected-blocks", "body": { "label": "X", "start": "12:00", "end": "13:00", "colour": "red" }, "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "protected_blocks.other_user_not_found",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/protected-blocks", "body": { "label": "Lunch", "start": "12:00", "end": "13:00" }, "expect": { "status": 201 }, "save": "lunch" },
+        { "as": "u2", "method": "GET", "path": "/api/protected-blocks", "expect": { "status": 200, "equals": [] } },
+        { "as": "u2", "method": "DELETE", "path": "/api/protected-blocks/${lunch.id}", "expect": { "status": 404 } }
+      ]
+    },
+    {
+      "id": "tasks.create_defaults",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201, "match": { "userId": "u1", "delegable": false, "status": "planned", "plannedStart": null, "mvdTag": null } } }
+      ]
+    },
+    {
+      "id": "tasks.list_by_date",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "plannedDate": "2026-10-08" } }, "expect": { "status": 201 } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks", "expect": { "status": 200, "length": 2 } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks?date=2026-10-07", "expect": { "status": 200, "length": 1 } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks?date=tomorrow", "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "tasks.get_patch_delete",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 }, "save": "t" },
+        { "as": "u1", "method": "PATCH", "path": "/api/tasks/${t.id}", "body": { "priority": "Low", "plannedStart": "10:00", "plannedEnd": "12:00" }, "expect": { "status": 200, "match": { "title": "Read lecture notes", "priority": "Low", "plannedStart": "10:00" } } },
+        { "as": "u1", "method": "DELETE", "path": "/api/tasks/${t.id}", "expect": { "status": 204 } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${t.id}", "expect": { "status": 404 } }
+      ]
+    },
+    { "id": "tasks.invalid_type", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "type": "Gaming" } }, "expect": { "status": 400, "messageRegex": "type" } }] },
+    { "id": "tasks.invalid_priority", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "priority": "Urgent" } }, "expect": { "status": 400, "messageRegex": "priority" } }] },
+    { "id": "tasks.invalid_hours", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "estimatedHours": 0 } }, "expect": { "status": 400, "messageRegex": "estimatedHours" } }] },
+    { "id": "tasks.invalid_deadline", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "deadline": "2026-10-07" } }, "expect": { "status": 400, "messageRegex": "deadline" } }] },
+    { "id": "tasks.planned_start_without_end", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "plannedStart": "10:00" } }, "expect": { "status": 400, "messageRegex": "together" } }] },
+    { "id": "tasks.planned_end_before_start", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "plannedStart": "12:00", "plannedEnd": "10:00" } }, "expect": { "status": 400, "messageRegex": "after" } }] },
+    { "id": "tasks.status_is_server_owned", "steps": [{ "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "status": "done" } }, "expect": { "status": 400, "messageRegex": "Unknown field" } }] },
+    {
+      "id": "tasks.missing_title",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {}, "$omit": ["title"] }, "expect": { "status": 400, "messageRegex": "'title' is required" } }
+      ]
+    },
+    {
+      "id": "tasks.other_user_not_found",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 }, "save": "t" },
+        { "as": "u2", "method": "GET", "path": "/api/tasks/${t.id}", "expect": { "status": 404 } },
+        { "as": "u2", "method": "PATCH", "path": "/api/tasks/${t.id}", "body": { "title": "x" }, "expect": { "status": 404 } }
+      ]
+    },
+    {
+      "id": "tasks.start_done_records_actual_minutes_no_cascade",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 }, "save": "t" },
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "Next task" } }, "expect": { "status": 201 }, "save": "other" },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/start", "expect": { "status": 200 } },
+        { "setNow": "2026-10-07T11:30" },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/done", "expect": { "status": 200, "match": { "status": "done" } } },
+        { "store": { "collection": "completions", "where": { "taskId": "${t.id}" } }, "expect": { "match": [{ "source": "buttons", "outcome": "done", "actualMinutes": 150, "estimatedMinutes": 120 }] } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${other.id}", "expect": { "status": 200, "equals": "${other}" } },
+        { "store": { "collection": "mvds" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "tasks.done_without_start",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 }, "save": "t" },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/done", "expect": { "status": 200 } },
+        { "store": { "collection": "completions" }, "expect": { "match": [{ "actualMinutes": null }] } }
+      ]
+    },
+    {
+      "id": "tasks.start_or_done_twice_409",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": {} }, "expect": { "status": 201 }, "save": "t" },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/start", "expect": { "status": 200 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/start", "expect": { "status": 409 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/done", "expect": { "status": 200 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/done", "expect": { "status": 409 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${t.id}/start", "expect": { "status": 409 } }
+      ]
+    },
+    {
+      "id": "reviews.lists_tasks_without_completion",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${a.id}/done", "expect": { "status": 200 } },
+        { "as": "u1", "method": "GET", "path": "/api/reviews/2026-10-07", "expect": { "status": 200, "at": [{ "path": "", "pluck": "title", "equals": ["B", "C"] }] } }
+      ]
+    },
+    {
+      "id": "reviews.stores_outcomes",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [
+          { "taskId": "${a.id}", "outcome": "done" },
+          { "taskId": "${b.id}", "outcome": "partial", "partialPct": 50 },
+          { "taskId": "${c.id}", "outcome": "not_done" }
+        ] }, "expect": { "status": 201 } },
+        { "store": { "collection": "completions", "where": { "source": "review" } }, "expect": { "match": [
+          { "outcome": "done", "partialPct": null, "actualMinutes": null },
+          { "outcome": "partial", "partialPct": 50, "actualMinutes": null },
+          { "outcome": "not_done", "partialPct": null, "actualMinutes": null }
+        ] } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${b.id}", "expect": { "status": 200, "match": { "status": "partial" } } },
+        { "as": "u1", "method": "GET", "path": "/api/reviews/2026-10-07", "expect": { "status": 200, "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.partial_needs_pct",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "partial" }] }, "expect": { "status": 400 } },
+        { "store": { "collection": "completions" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.pct_only_25_50_75",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "partial", "partialPct": 30 }] }, "expect": { "status": 400 } },
+        { "store": { "collection": "completions" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.pct_only_with_partial",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "done", "partialPct": 50 }] }, "expect": { "status": 400 } },
+        { "store": { "collection": "completions" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.duplicate_task_in_items",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "done" }, { "taskId": "${a.id}", "outcome": "done" }] }, "expect": { "status": 400 } },
+        { "store": { "collection": "completions" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.unknown_task_409",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "unknown", "outcome": "done" }] }, "expect": { "status": 409 } },
+        { "store": { "collection": "completions" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "reviews.reviewed_once",
+      "now": "2026-10-07T18:00",
+      "fixture": "dayWithTasks",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "done" }] }, "expect": { "status": 201 } },
+        { "as": "u1", "method": "POST", "path": "/api/reviews/2026-10-07", "body": { "items": [{ "taskId": "${a.id}", "outcome": "not_done" }] }, "expect": { "status": 409 } }
+      ]
+    },
+    {
+      "id": "disruptions.window_end_from_time_lost",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "start": "20:00", "timeLostMinutes": 360 } }, "expect": { "status": 201, "match": { "start": "20:00", "end": "02:00", "confirmed": true, "severity": 2 } } }
+      ]
+    },
+    {
+      "id": "disruptions.must_be_confirmed",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "confirmed": false } }, "expect": { "status": 400, "errorCode": "NOT_CONFIRMED" } }
+      ]
+    },
+    { "id": "disruptions.invalid_type", "steps": [{ "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "type": "alien_invasion" } }, "expect": { "status": 400 } }] },
+    { "id": "disruptions.invalid_severity", "steps": [{ "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "severity": 4 } }, "expect": { "status": 400 } }] },
+    { "id": "disruptions.time_lost_zero", "steps": [{ "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "timeLostMinutes": 0 } }, "expect": { "status": 400 } }] },
+    { "id": "disruptions.time_lost_full_day", "steps": [{ "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "timeLostMinutes": 1440 } }, "expect": { "status": 400 } }] },
+    { "id": "disruptions.invalid_suggested_type", "steps": [{ "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "suggestedType": "nope" } }, "expect": { "status": 400 } }] },
+    {
+      "id": "mvds.generate_proposed_with_comparison",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "body": { "manualReplan": [{ "taskId": "${coding.id}", "tag": "Move" }] }, "expect": {
+          "status": 201,
+          "match": { "status": "proposed", "planFrom": "09:00" },
+          "at": [
+            { "path": "plan.tasks", "find": { "id": "${reading.id}" }, "match": { "tag": "Keep", "start": "09:00", "end": "11:00" } },
+            { "path": "plan.tasks", "find": { "id": "${coding.id}" }, "match": { "tag": "Keep", "start": "13:30", "end": "15:00", "reason": "OUTSIDE_DISRUPTION_WINDOW" } },
+            { "path": "comparison", "equals": {
+              "original": [
+                { "taskId": "${reading.id}", "tag": null, "start": "09:00", "end": "11:00" },
+                { "taskId": "${coding.id}", "tag": null, "start": "11:00", "end": "12:30" }
+              ],
+              "manualReplan": [{ "taskId": "${coding.id}", "tag": "Move", "start": null, "end": null }],
+              "mvd": [
+                { "taskId": "${reading.id}", "tag": "Keep", "start": "09:00", "end": "11:00" },
+                { "taskId": "${coding.id}", "tag": "Keep", "start": "13:30", "end": "15:00" }
+              ]
+            } }
+          ]
+        } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${coding.id}", "expect": { "status": 200, "match": { "mvdTag": null } } }
+      ]
+    },
+    {
+      "id": "mvds.plan_from_defaults_to_now_done_tasks_left_out",
+      "now": "2026-10-07T10:15",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${reading.id}/done", "expect": { "status": 200 } },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201, "match": { "planFrom": "10:15" }, "at": [{ "path": "plan.tasks", "pluck": "title", "equals": ["Coding"] }] } }
+      ]
+    },
+    {
+      "id": "mvds.other_day_plans_from_work_start",
+      "now": "2026-10-06T20:00",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201, "match": { "planFrom": "09:00" } } }
+      ]
+    },
+    {
+      "id": "mvds.no_settings_409",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": {} }, "expect": { "status": 201 }, "save": "report" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 409, "errorCode": "NO_SETTINGS" } }
+      ]
+    },
+    {
+      "id": "mvds.null_ef_422",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "type": "connectivity_failure" } }, "expect": { "status": 201 }, "save": "cut" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${cut.id}/mvd", "expect": { "status": 422, "messageRegex": "connectivity_failure[\\s\\S]*(Analog|Digital)" } }
+      ]
+    },
+    {
+      "id": "mvds.other_users_disruption_404",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u2", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 404 } }
+      ]
+    },
+    {
+      "id": "mvds.newer_proposal_supersedes",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "first" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 } },
+        { "as": "u1", "method": "GET", "path": "/api/mvds/${first.id}", "expect": { "status": 200, "match": { "status": "superseded" } } },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${first.id}/accept", "expect": { "status": 409 } }
+      ]
+    },
+    {
+      "id": "mvds.accept_writes_tags_and_feedback",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/accept", "expect": { "status": 200, "match": { "status": "accepted" } } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${reading.id}", "expect": { "status": 200, "match": { "mvdTag": "Keep", "mvdStart": "09:00", "mvdEnd": "11:00", "mvdId": "${mvd.id}" } } },
+        { "store": { "collection": "feedback" }, "expect": { "match": [{ "action": "accept", "mvdId": "${mvd.id}", "edits": null }] } }
+      ]
+    },
+    {
+      "id": "mvds.decided_only_once",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/reject", "expect": { "status": 200 } },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/accept", "expect": { "status": 409 } }
+      ]
+    },
+    {
+      "id": "mvds.edit_applies_changes_and_feedback",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [{ "taskId": "${coding.id}", "start": "15:00", "end": "16:00", "tag": "Reduce" }] }, "expect": { "status": 200, "match": { "status": "edited" } } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${coding.id}", "expect": { "status": 200, "match": { "mvdTag": "Reduce", "mvdStart": "15:00", "mvdEnd": "16:00" } } },
+        { "store": { "collection": "feedback" }, "expect": { "match": [{ "action": "edit", "edits": [{ "taskId": "${coding.id}", "before": { "tag": "Keep", "start": "13:30", "end": "15:00" }, "after": { "tag": "Reduce", "start": "15:00", "end": "16:00" } }] }] } }
+      ]
+    },
+    {
+      "id": "mvds.edit_to_move_clears_slot",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [{ "taskId": "${coding.id}", "tag": "Move" }] }, "expect": { "status": 200 } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${coding.id}", "expect": { "status": 200, "match": { "mvdTag": "Move", "mvdStart": null, "mvdEnd": null } } }
+      ]
+    },
+    {
+      "id": "mvds.edit_overlapping_protected_block_refused",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [{ "taskId": "${coding.id}", "start": "12:00", "end": "13:00" }] }, "expect": { "status": 400, "errorCode": "PROTECTED_BLOCK_OVERLAP" } },
+        { "as": "u1", "method": "GET", "path": "/api/mvds/${mvd.id}", "expect": { "status": 200, "match": { "status": "proposed" } } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${coding.id}", "expect": { "status": 200, "match": { "mvdTag": null } } },
+        { "store": { "collection": "feedback" }, "expect": { "equals": [] } }
+      ]
+    },
+    {
+      "id": "mvds.edit_invalid_empty_changes",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [] }, "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "mvds.edit_invalid_task_not_in_mvd",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [{ "taskId": "not-in-this-mvd" }] }, "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "mvds.edit_invalid_tag",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/edit", "body": { "changes": [{ "taskId": "X", "tag": "Later" }] }, "expect": { "status": 400 } }
+      ]
+    },
+    {
+      "id": "mvds.reject_keeps_tasks_stores_reason",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${mvd.id}/reject", "body": { "reason": "I will study at the library" }, "expect": { "status": 200, "match": { "status": "rejected" } } },
+        { "as": "u1", "method": "GET", "path": "/api/tasks/${reading.id}", "expect": { "status": 200, "match": { "mvdTag": null } } },
+        { "store": { "collection": "feedback" }, "expect": { "match": [{ "action": "reject", "reason": "I will study at the library" }] } }
+      ]
+    },
+    {
+      "id": "mvds.other_users_mvd_404",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201 }, "save": "mvd" },
+        { "as": "u2", "method": "POST", "path": "/api/mvds/${mvd.id}/accept", "expect": { "status": 404 } }
+      ]
+    },
+    {
+      "id": "mvds.second_disruption_uses_parent",
+      "fixture": "readyDay",
+      "steps": [
+        { "as": "u1", "method": "POST", "path": "/api/tasks", "body": { "$task": { "title": "Optional reading", "priority": "Low", "deadline": "2026-10-12T23:59" } }, "expect": { "status": 201 }, "save": "extra" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${report.id}/mvd", "expect": { "status": 201, "at": [{ "path": "plan.tasks", "find": { "id": "${extra.id}" }, "match": { "tag": "Move" } }] }, "save": "first" },
+        { "as": "u1", "method": "POST", "path": "/api/mvds/${first.id}/accept", "expect": { "status": 200 } },
+        { "as": "u1", "method": "POST", "path": "/api/tasks/${reading.id}/done", "expect": { "status": 200 } },
+        { "setNow": "2026-10-07T13:30" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions", "body": { "$disruption": { "type": "transport_delay", "start": "13:30", "timeLostMinutes": 60 } }, "expect": { "status": 201 }, "save": "second" },
+        { "as": "u1", "method": "POST", "path": "/api/disruptions/${second.id}/mvd", "expect": { "status": 201,
+          "match": { "parentMvdId": "${first.id}" },
+          "at": [
+            { "path": "plan.tasks", "pluck": "id", "equals": ["${coding.id}"] },
+            { "path": "comparison.original", "equals": [{ "taskId": "${coding.id}", "tag": "Keep", "start": "13:30", "end": "15:00" }] }
+          ] } }
+      ]
+    }
+  ]
+}

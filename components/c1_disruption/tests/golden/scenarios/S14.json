@@ -1,0 +1,168 @@
+{
+  "id": "S14",
+  "name": "Evening power cut crossing midnight (20:00–02:00) is clipped to 20:00–24:00 for today",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "planFrom": "16:00",
+    "disruption": {
+      "type": "power_outage",
+      "start": "20:00",
+      "end": "02:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "dinner",
+        "label": "Dinner",
+        "start": "19:00",
+        "end": "19:30"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "D1",
+        "title": "Finish coding lab",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 3,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "A1",
+        "title": "Read printed notes for viva",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "D2",
+        "title": "Email supervisor draft",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 1.5,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Window for today's plan = 20:00–24:00 (clipped). It overlaps the horizon",
+    "16:00–23:00, so it is active. Gaps: 16:00–19:00, 19:30–23:00.",
+    "Order: A[D1 0.167, A1 0.208] → C[D2 1.333]",
+    "(Without clipping the window was ignored: A1 would get Fi 0.25 and",
+    "19:30–21:30, and D2 would be placed 21:30–23:00 in the dark.)"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "order": [
+      "D1",
+      "A1",
+      "D2"
+    ],
+    "freeMinutesLeft": 90,
+    "tasks": {
+      "D1": {
+        "fi": 0.167,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "16:00",
+        "end": "19:00",
+        "compressionPct": 0,
+        "reason": "OUTSIDE_DISRUPTION_WINDOW",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: it cannot be done during the power outage (20:00–02:00), so it is scheduled outside it, 16:00–19:00 (Fi 0.167).",
+        "workings": [
+          "EF 0.1 < 0.3 → EF 1.0. Fi = 0.5 × 1 / (3 × 1.0) = 0.167 → A, first.",
+          "Gaps outside the window: 16:00–19:00 (180), 19:30–20:00 (30) → 16:00–19:00."
+        ]
+      },
+      "A1": {
+        "fi": 0.208,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "20:00",
+        "end": "22:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.208). Scheduled 20:00–22:00.",
+        "workings": [
+          "Window active → EF 1.2. Fi = 0.5 × 1 / (2 × 1.2) = 0.208 → A.",
+          "R6a: gap 19:30–23:00 ∩ window 20:00–24:00 = 20:00–23:00 (180) fits 120",
+          "→ starts at max(19:30, 20:00) = 20:00."
+        ]
+      },
+      "D2": {
+        "fi": 1.333,
+        "efUsed": 1,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "BLOCKED_BY_DISRUPTION",
+        "deadlineRisk": true,
+        "group": "C",
+        "explanation": "Moved to tomorrow: it cannot be done during the power outage (20:00–02:00), and there is not enough free time outside it, even at half length. Warning: this task is due tomorrow, so its deadline is at risk.",
+        "workings": [
+          "EF 0.1 < 0.3 → EF 1.0. Fi = 1 × 2 / (1.5 × 1.0) = 1.333 → C.",
+          "Outside the window only 19:30–20:00 (30) is left; needs ≥ 45 even at 50%",
+          "→ unplaced → Move. Due tomorrow → deadline risk (R10)."
+        ]
+      }
+    },
+    "protect": {
+      "dinner": {
+        "tag": "Protect",
+        "start": "19:00",
+        "end": "19:30",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Dinner, 19:00–19:30): the planner never moves or shortens it."
+      }
+    },
+    "warnings": [
+      {
+        "taskId": "D2",
+        "code": "DEADLINE_RISK",
+        "message": "Moved to tomorrow: it cannot be done during the power outage (20:00–02:00), and there is not enough free time outside it, even at half length. Warning: this task is due tomorrow, so its deadline is at risk."
+      }
+    ]
+  }
+}

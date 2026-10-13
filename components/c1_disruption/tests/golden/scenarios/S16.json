@@ -1,0 +1,188 @@
+{
+  "id": "S16",
+  "name": "Family obligation 14:00–17:00 takes the afternoon: time-taken Move, Delegate, Meeting task with no EF",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "family_obligation",
+      "start": "14:00",
+      "end": "17:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:00",
+        "end": "13:00"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Revise for viva",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 3,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "M1",
+        "title": "Project group call",
+        "type": "Meeting",
+        "priority": "High",
+        "estimatedHours": 1,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "K2",
+        "title": "Fix login bug",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      },
+      {
+        "id": "G1",
+        "title": "Collect printed forms",
+        "type": "Analog",
+        "priority": "Medium",
+        "estimatedHours": 1,
+        "deadline": "2026-10-08T23:59",
+        "delegable": true
+      }
+    ]
+  },
+  "workings": [
+    "Free time = 09:00–12:00 (180) and 13:00–14:00 (60); EF = 1.0 for all.",
+    "Order: A[K1 0.167] → C[M1 0.5 (due today), K2 0.5 (due tomorrow), G1 2.0]"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "unavailable",
+    "horizon": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "order": [
+      "K1",
+      "M1",
+      "K2",
+      "G1"
+    ],
+    "freeMinutesLeft": 0,
+    "tasks": {
+      "K1": {
+        "fi": 0.167,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "12:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.167). Scheduled 09:00–12:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (3 × 1.0) = 0.167 → A → 09:00–12:00."
+        ]
+      },
+      "M1": {
+        "fi": 0.5,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "13:00",
+        "end": "14:00",
+        "compressionPct": 0,
+        "reason": "FITS_FULLY",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Kept in full: there was enough free time, so no shortening was needed (Fi 0.5). Scheduled 13:00–14:00.",
+        "workings": [
+          "Meeting: config EF is null for every disruption, but no lookup happens",
+          "for kind unavailable. Fi = 0.5 × 1 / (1 × 1.0) = 0.5 → C (not < 0.5).",
+          "Ties with K2 on Fi, earlier deadline → first. 13:00–14:00 fits → Keep."
+        ]
+      },
+      "K2": {
+        "fi": 0.5,
+        "efUsed": 1,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "TIME_TAKEN_BY_DISRUPTION",
+        "deadlineRisk": true,
+        "group": "C",
+        "explanation": "Moved to tomorrow: this time is taken by family obligation (14:00–17:00), and there is not enough free time left today, even at half length. Warning: this task is due tomorrow, so its deadline is at risk.",
+        "workings": [
+          "Fi = 1 × 1 / (2 × 1.0) = 0.5 → C. No free time left → Move; the time went",
+          "to the family obligation → TIME_TAKEN_BY_DISRUPTION. Due tomorrow → risk."
+        ]
+      },
+      "G1": {
+        "fi": 2,
+        "efUsed": 1,
+        "tag": "Delegate",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "DELEGABLE",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Not enough time for you today, but you marked it as delegable: ask someone else or use AI help.",
+        "workings": [
+          "Fi = 1 × 2 / (1 × 1.0) = 2.0 → C. Not placed, delegable → Delegate."
+        ]
+      }
+    },
+    "protect": {
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:00",
+        "end": "13:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:00–13:00): the planner never moves or shortens it."
+      }
+    },
+    "warnings": [
+      {
+        "taskId": "K2",
+        "code": "DEADLINE_RISK",
+        "message": "Moved to tomorrow: this time is taken by family obligation (14:00–17:00), and there is not enough free time left today, even at half length. Warning: this task is due tomorrow, so its deadline is at risk."
+      }
+    ]
+  }
+}

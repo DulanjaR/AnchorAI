@@ -1,0 +1,136 @@
+{
+  "id": "S5",
+  "name": "Keep task cannot fit even at 50%: Move with deadline risk warning",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "13:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "09:00",
+      "end": "11:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "prayer",
+        "label": "Prayer",
+        "start": "11:00",
+        "end": "11:30"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Revise lectures 1–4",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 3.5,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "K2",
+        "title": "Write lab analysis by hand",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 4,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[K2 0.104, K1 0.119]. Gaps: 09:00–11:00 (120), 11:30–13:00 (90)."
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "13:00"
+    },
+    "order": [
+      "K2",
+      "K1"
+    ],
+    "freeMinutesLeft": 90,
+    "tasks": {
+      "K2": {
+        "fi": 0.104,
+        "efUsed": 1.2,
+        "tag": "Reduce",
+        "start": "09:00",
+        "end": "11:00",
+        "compressionPct": 50,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Shortened by 50% to fit the free time left today (09:00–11:00). Do the most important part first (Fi 0.104).",
+        "workings": [
+          "Fi = 0.5 × 1 / (4 × 1.2) = 0.104 → first. No single gap holds 240 min (R4),",
+          "so it is compressed into the largest gap: 120/240 → 50%."
+        ]
+      },
+      "K1": {
+        "fi": 0.119,
+        "efUsed": 1.2,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "BUDGET_EXCEEDED",
+        "deadlineRisk": true,
+        "group": "A",
+        "explanation": "Moved to tomorrow: there is not enough free time left today, even at half length. Warning: this task is due today, so its deadline is at risk.",
+        "workings": [
+          "Fi = 0.5 × 1 / (3.5 × 1.2) = 0.119 → last. Needs ≥ 105 min, only 90 left",
+          "→ unplaced. Due today → deadline risk."
+        ]
+      }
+    },
+    "protect": {
+      "prayer": {
+        "tag": "Protect",
+        "start": "11:00",
+        "end": "11:30",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Prayer, 11:00–11:30): the planner never moves or shortens it."
+      }
+    },
+    "warnings": [
+      {
+        "taskId": "K1",
+        "code": "DEADLINE_RISK",
+        "message": "Moved to tomorrow: there is not enough free time left today, even at half length. Warning: this task is due today, so its deadline is at risk."
+      }
+    ]
+  }
+}

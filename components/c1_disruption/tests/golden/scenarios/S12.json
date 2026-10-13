@@ -1,0 +1,132 @@
+{
+  "id": "S12",
+  "name": "Window-first: analog work goes towards the afternoon outage, leaving the morning for digital work",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "power_outage",
+      "start": "14:00",
+      "end": "16:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:00",
+        "end": "13:00"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "A1",
+        "title": "Revise printed past paper",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "D1",
+        "title": "Build presentation slides",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 3,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[A1 0.208] → C[D1 0.667]. Gaps: 09–12, 13–17."
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "order": [
+      "A1",
+      "D1"
+    ],
+    "freeMinutesLeft": 120,
+    "tasks": {
+      "A1": {
+        "fi": 0.208,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "14:00",
+        "end": "16:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.208). Scheduled 14:00–16:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2 × 1.2) = 0.208 → A, placed first. Window-first (R6a):",
+          "gap 13:00–17:00 ∩ window 14:00–16:00 = 120 min, fits → starts at",
+          "max(13:00, 14:00) = 14:00. REVISED (Q6 revision): was 13:00–15:00.",
+          "(Without window-first it would take 09:00–11:00 and squeeze D1 out.)"
+        ]
+      },
+      "D1": {
+        "fi": 0.667,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "12:00",
+        "compressionPct": 0,
+        "reason": "OUTSIDE_DISRUPTION_WINDOW",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Kept: it cannot be done during the power outage (14:00–16:00), so it is scheduled outside it, 09:00–12:00 (Fi 0.667).",
+        "workings": [
+          "EF 0.1 < 0.3 → EF 1.0. Fi = 1 × 2 / (3 × 1.0) = 0.667 → C. Outside-window",
+          "gaps: 09:00–12:00 (180), 13:00–14:00, 16:00–17:00 → 09:00–12:00 in full."
+        ]
+      }
+    },
+    "protect": {
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:00",
+        "end": "13:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:00–13:00): the planner never moves or shortens it."
+      }
+    },
+    "warnings": []
+  }
+}

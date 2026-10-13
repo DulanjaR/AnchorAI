@@ -1,0 +1,155 @@
+{
+  "id": "S4",
+  "name": "Keep tasks overflow: Fi tie broken by deadline; last task in order reduced to exactly 50%",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "15:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "09:00",
+      "end": "10:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:30",
+        "end": "13:00"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Prepare quiz cheat-sheet",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T17:00",
+        "delegable": false
+      },
+      {
+        "id": "K2",
+        "title": "Study for midterm",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2.5,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "K3",
+        "title": "Finish worksheet",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order (Q4): A[K2 0.167, K1 0.208 (deadline 17:00), K3 0.208 (deadline 23:59)].",
+    "Free: 09:00–12:30 (210) + 13:00–15:00 (120) = 330 min; needed 390."
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "15:00"
+    },
+    "order": [
+      "K2",
+      "K1",
+      "K3"
+    ],
+    "freeMinutesLeft": 0,
+    "tasks": {
+      "K2": {
+        "fi": 0.167,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "11:30",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.167). Scheduled 09:00–11:30.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2.5 × 1.2) = 0.167 → first. Window-first → 09:00–11:30."
+        ]
+      },
+      "K1": {
+        "fi": 0.208,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "13:00",
+        "end": "15:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.208). Scheduled 13:00–15:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2 × 1.2) = 0.208, ties with K3 → earlier deadline wins.",
+          "11:30–12:30 (60) too short → 13:00–15:00."
+        ]
+      },
+      "K3": {
+        "fi": 0.208,
+        "efUsed": 1.2,
+        "tag": "Reduce",
+        "start": "11:30",
+        "end": "12:30",
+        "compressionPct": 50,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Shortened by 50% to fit the free time left today (11:30–12:30). Do the most important part first (Fi 0.208).",
+        "workings": [
+          "Fi = 0.208, last in order → reduced. Only 11:30–12:30 left: 60/120 → 50%."
+        ]
+      }
+    },
+    "protect": {
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:30",
+        "end": "13:00",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:30–13:00): the planner never moves or shortens it."
+      }
+    },
+    "warnings": []
+  }
+}

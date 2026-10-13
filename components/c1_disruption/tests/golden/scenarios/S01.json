@@ -1,0 +1,156 @@
+{
+  "id": "S1",
+  "name": "Power outage in the morning: analog work fills the outage, digital task runs after it",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "18:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "power_outage",
+      "start": "09:00",
+      "end": "12:00"
+    },
+    "protectedBlocks": [
+      {
+        "id": "lunch",
+        "label": "Lunch",
+        "start": "12:30",
+        "end": "13:30"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "T1",
+        "title": "Read lecture notes for quiz",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "T2",
+        "title": "Submit lab report online",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 1.5,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "T3",
+        "title": "Hand-write essay outline",
+        "type": "Analog",
+        "priority": "Medium",
+        "estimatedHours": 2,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[T1 0.208, T2 0.333] → C[T3 0.833]"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "18:00"
+    },
+    "order": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "freeMinutesLeft": 150,
+    "tasks": {
+      "T1": {
+        "fi": 0.208,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "11:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.208). Scheduled 09:00–11:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (2 × 1.2) = 0.208 → A. Window-first → start of the outage."
+        ]
+      },
+      "T2": {
+        "fi": 0.333,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "13:30",
+        "end": "15:00",
+        "compressionPct": 0,
+        "reason": "OUTSIDE_DISRUPTION_WINDOW",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: it cannot be done during the power outage (09:00–12:00), so it is scheduled outside it, 13:30–15:00 (Fi 0.333).",
+        "workings": [
+          "EF 0.1 < 0.3 → runs outside the window → EF 1.0.",
+          "Fi = 0.5 × 1 / (1.5 × 1.0) = 0.333 → A. Outside-window gaps: 12:00–12:30",
+          "(30 min, too short), 13:30–18:00 → 13:30–15:00."
+        ]
+      },
+      "T3": {
+        "fi": 0.833,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "15:00",
+        "end": "17:00",
+        "compressionPct": 0,
+        "reason": "FITS_FULLY",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Kept in full: there was enough free time, so no shortening was needed (Fi 0.833). Scheduled 15:00–17:00.",
+        "workings": [
+          "Fi = 1 × 2 / (2 × 1.2) = 0.833 → C. Window gap 11:00–12:30 (90) too short",
+          "→ next whole fit 15:00–17:00 → fits fully → Keep (Q2)."
+        ]
+      }
+    },
+    "protect": {
+      "lunch": {
+        "tag": "Protect",
+        "start": "12:30",
+        "end": "13:30",
+        "reason": "PROTECTED_BLOCK",
+        "explanation": "Protected time (Lunch, 12:30–13:30): the planner never moves or shortens it."
+      }
+    },
+    "warnings": []
+  }
+}

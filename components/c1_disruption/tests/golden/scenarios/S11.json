@@ -1,0 +1,41 @@
+{
+  "id": "S11",
+  "name": "Null EF value throws a clear error naming the missing pair",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "connectivity_failure",
+      "start": "09:00",
+      "end": "11:00"
+    },
+    "protectedBlocks": [],
+    "tasks": [
+      {
+        "id": "D1",
+        "title": "Online quiz",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 1,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Error message must contain both names, e.g.",
+    "\"EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in config.js)\""
+  ],
+  "expected": {
+    "error": {
+      "messageRegex": "connectivity_failure[\\s\\S]*Digital",
+      "message": "EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in config.js; open research decision for the owner)",
+      "httpStatus": 422
+    }
+  }
+}

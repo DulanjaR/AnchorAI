@@ -1,0 +1,141 @@
+{
+  "id": "S13",
+  "name": "Window-first starts INSIDE the window: analog reading fills the power cut, digital work goes around it",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "18:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "power_outage",
+      "start": "13:00",
+      "end": "17:00"
+    },
+    "protectedBlocks": [],
+    "tasks": [
+      {
+        "id": "READ",
+        "title": "Reading (printed)",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 4,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "CODE",
+        "title": "Coding",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 4,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "REPORT",
+        "title": "Report",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 2,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[READ 0.104, CODE 0.125, REPORT 0.25]. Free: 09:00–18:00 (one gap)."
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "18:00"
+    },
+    "order": [
+      "READ",
+      "CODE",
+      "REPORT"
+    ],
+    "freeMinutesLeft": 0,
+    "tasks": {
+      "READ": {
+        "fi": 0.104,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "13:00",
+        "end": "17:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.104). Scheduled 13:00–17:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (4 × 1.2) = 0.104 → A, first. R6a: gap ∩ window =",
+          "13:00–17:00 (240) fits 240 → starts at max(09:00, 13:00) = 13:00."
+        ]
+      },
+      "CODE": {
+        "fi": 0.125,
+        "efUsed": 1,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "13:00",
+        "compressionPct": 0,
+        "reason": "OUTSIDE_DISRUPTION_WINDOW",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: it cannot be done during the power outage (13:00–17:00), so it is scheduled outside it, 09:00–13:00 (Fi 0.125).",
+        "workings": [
+          "EF 0.1 < 0.3 → EF 1.0. Fi = 0.5 × 1 / (4 × 1.0) = 0.125 → A. Gaps left",
+          "outside the window: 09:00–13:00 (240), 17:00–18:00 (60) → 09:00–13:00."
+        ]
+      },
+      "REPORT": {
+        "fi": 0.25,
+        "efUsed": 1,
+        "tag": "Reduce",
+        "start": "17:00",
+        "end": "18:00",
+        "compressionPct": 50,
+        "reason": "REDUCE_BUDGET",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Shortened by 50% to fit the free time left today (17:00–18:00). Do the most important part first (Fi 0.25).",
+        "workings": [
+          "EF 0.1 < 0.3 → EF 1.0. Fi = 0.5 × 1 / (2 × 1.0) = 0.25 → A, last in order.",
+          "Only 17:00–18:00 (60) left; 60 ≥ 50% of 120 → compressed → 50%."
+        ]
+      }
+    },
+    "protect": {},
+    "warnings": []
+  }
+}

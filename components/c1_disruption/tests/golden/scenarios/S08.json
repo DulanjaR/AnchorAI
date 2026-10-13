@@ -1,0 +1,171 @@
+{
+  "id": "S8",
+  "name": "Delegate only when flagged AND not placed; a delegable task that fits is placed",
+  "source": "anchor-ai-component1 backend/tests/golden/scenarios.js (owner-approved, test-first)",
+  "input": {
+    "date": "2026-10-07",
+    "workHours": {
+      "start": "09:00",
+      "end": "13:00"
+    },
+    "planFrom": "09:00",
+    "disruption": {
+      "type": "transport_delay",
+      "start": "09:00",
+      "end": "10:00"
+    },
+    "protectedBlocks": [],
+    "tasks": [
+      {
+        "id": "K1",
+        "title": "Exam revision",
+        "type": "Analog",
+        "priority": "High",
+        "estimatedHours": 3,
+        "deadline": "2026-10-07T23:59",
+        "delegable": false
+      },
+      {
+        "id": "G1",
+        "title": "Format references list",
+        "type": "Digital",
+        "priority": "Medium",
+        "estimatedHours": 1,
+        "deadline": "2026-10-07T23:59",
+        "delegable": true
+      },
+      {
+        "id": "G2",
+        "title": "Collect group survey forms",
+        "type": "Analog",
+        "priority": "Low",
+        "estimatedHours": 1,
+        "deadline": "2026-10-10T23:59",
+        "delegable": true
+      },
+      {
+        "id": "N1",
+        "title": "Fix bug in own code",
+        "type": "Digital",
+        "priority": "High",
+        "estimatedHours": 1,
+        "deadline": "2026-10-08T23:59",
+        "delegable": false
+      }
+    ]
+  },
+  "workings": [
+    "Order: A[K1 0.139] → C[G1 1.429 (due today), N1 1.429 (due tomorrow)] → D[G2 7.5]"
+  ],
+  "expected": {
+    "approvedFields": [
+      "tasks.*.fi",
+      "tasks.*.efUsed",
+      "tasks.*.tag",
+      "tasks.*.start",
+      "tasks.*.end",
+      "tasks.*.compressionPct",
+      "tasks.*.reason",
+      "tasks.*.deadlineRisk",
+      "protect.*.tag/start/end/reason"
+    ],
+    "engineCapturedFields": [
+      "tasks.*.group",
+      "tasks.*.explanation",
+      "protect.*.explanation",
+      "order",
+      "horizon",
+      "disruptionKind",
+      "freeMinutesLeft",
+      "warnings"
+    ],
+    "comparison": {
+      "fi": "equal after rounding to 3 decimal places (R12)",
+      "everythingElse": "exactly equal"
+    },
+    "disruptionKind": "environment",
+    "horizon": {
+      "start": "09:00",
+      "end": "13:00"
+    },
+    "order": [
+      "K1",
+      "G1",
+      "N1",
+      "G2"
+    ],
+    "freeMinutesLeft": 0,
+    "tasks": {
+      "K1": {
+        "fi": 0.139,
+        "efUsed": 1.2,
+        "tag": "Keep",
+        "start": "09:00",
+        "end": "12:00",
+        "compressionPct": 0,
+        "reason": "KEEP_URGENT",
+        "deadlineRisk": false,
+        "group": "A",
+        "explanation": "Kept: due today and High priority, so it is one of the most urgent tasks (Fi 0.139). Scheduled 09:00–12:00.",
+        "workings": [
+          "Fi = 0.5 × 1 / (3 × 1.2) = 0.139 → A. Window-first → 09:00–12:00."
+        ]
+      },
+      "G1": {
+        "fi": 1.429,
+        "efUsed": 0.7,
+        "tag": "Keep",
+        "start": "12:00",
+        "end": "13:00",
+        "compressionPct": 0,
+        "reason": "FITS_FULLY",
+        "deadlineRisk": false,
+        "group": "C",
+        "explanation": "Kept in full: there was enough free time, so no shortening was needed (Fi 1.429). Scheduled 12:00–13:00.",
+        "workings": [
+          "Fi = 0.5 × 2 / (1 × 0.7) = 1.429 → C; wins the tie with N1 on deadline.",
+          "Fits whole 12:00–13:00 → placed, NOT delegated (Q3) → Keep."
+        ]
+      },
+      "G2": {
+        "fi": 7.5,
+        "efUsed": 1.2,
+        "tag": "Delegate",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "DELEGABLE",
+        "deadlineRisk": false,
+        "group": "D",
+        "explanation": "Not enough time for you today, but you marked it as delegable: ask someone else or use AI help.",
+        "workings": [
+          "Fi = 3 × 3 / (1 × 1.2) = 7.5 → D, unplaced, delegable → Delegate."
+        ]
+      },
+      "N1": {
+        "fi": 1.429,
+        "efUsed": 0.7,
+        "tag": "Move",
+        "start": null,
+        "end": null,
+        "compressionPct": null,
+        "reason": "BUDGET_EXCEEDED",
+        "deadlineRisk": true,
+        "group": "C",
+        "explanation": "Moved to tomorrow: there is not enough free time left today, even at half length. Warning: this task is due tomorrow, so its deadline is at risk.",
+        "workings": [
+          "Fi = 1 × 1 / (1 × 0.7) = 1.429 → C. Nothing left, not delegable → Move.",
+          "REVISED (R10): due tomorrow → deadline risk (was false)."
+        ]
+      }
+    },
+    "protect": {},
+    "warnings": [
+      {
+        "taskId": "N1",
+        "code": "DEADLINE_RISK",
+        "message": "Moved to tomorrow: there is not enough free time left today, even at half length. Warning: this task is due tomorrow, so its deadline is at risk."
+      }
+    ]
+  }
+}
