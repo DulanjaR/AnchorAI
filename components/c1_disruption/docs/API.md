@@ -1,27 +1,33 @@
-# Component 1 API (Task 3)
+# Component 1 API
 
-> Approved by the owner 8 Oct 2026 (all four questions in §6 answered with the defaults). Implemented in `backend/src/`.
+> Approved by the owner 8 Oct 2026 (all four questions in §6 answered with the defaults).
+> Ported 13 Oct 2026 from Node.js/Express to **Python/FastAPI** (`components/c1_disruption/app/`)
+> with the same endpoints and behaviour; differences are listed in §7.
 
-Node.js + Express 5 API around the MVD engine. All storage goes through the data-access
-layer (`backend/src/data/`), in-memory for now; Firestore is plugged in later without
-changing the routes.
+FastAPI app around the MVD engine. All storage goes through the repository interface
+(`app/data/repository.py`), in-memory for now; the real database (PostgreSQL or
+Firestore, open team decision) is plugged in later without changing the routes.
 
 ## 1. Ground rules
 
-- **Base path** `/api`. JSON in, JSON out. Times are `HH:MM`, dates `YYYY-MM-DD`,
+- **Base path** `/api` (one setting: `C1_API_PREFIX` in `app/settings.py`; the base path
+  for orchestration is an open question). JSON in, JSON out. Times are `HH:MM`, dates `YYYY-MM-DD`,
   deadlines `YYYY-MM-DDTHH:MM`, all in Sri Lanka time (Asia/Colombo).
+- **Team API key:** header `X-API-Key` on **every** request, `/health` included, checked by
+  `shared.auth.require_api_key` (value: `API_KEY` in `.env`, `shared.config`). Wrong or
+  missing → `401 INVALID_API_KEY`. Checked before anything else.
 - **Who is calling:** header `X-User-Id: <id>` on every `/api` request. This is a
-  stand-in until Firebase Auth is set up; it will be replaced by a Firebase ID token.
+  stand-in until real user auth is set up (team decision).
 - **Disruption types** come from `DISRUPTION_KINDS` in the engine config: environment (`power_outage`, `transport_delay`, `connectivity_failure`) and unavailable (`urgent_work`, `family_obligation`, `health_issue`). For an unavailable type the window is taken time: nothing is placed in it (Task 2a). The generated MVD includes `disruption.kind`.
 - **No auto-actions** (CLAUDE.md rule 5): an MVD is generated only for a disruption
   the user has **confirmed**; nothing starts, cascades or finalises by itself.
 - **Errors:** `{ "error": { "code", "message" } }` with
-  `400` invalid input (unknown fields are refused too, so typos are caught) · `401` no `X-User-Id` · `404` not found (or another user's data) · `409` wrong state
+  `400` invalid input (unknown fields are refused too, so typos are caught; malformed JSON → `INVALID_JSON`) · `401` no or wrong `X-API-Key` (`INVALID_API_KEY`) or no `X-User-Id` (`NO_USER`) · `404` not found (or another user's data) · `409` wrong state
   (e.g. deciding an MVD twice) · `422` the engine cannot plan (e.g. a `null` EF value;
   the message names the disruption and task type).
-- **Clock:** "now" is injected (`createApp({ store, clock })`), so tests are repeatable.
+- **Clock:** "now" is injected (`create_app(store=..., clock=...)`), so tests are repeatable.
 
-## 2. Data (one record type per future Firestore collection)
+## 2. Data (one record type per repository collection)
 
 | Collection | Main fields |
 |---|---|
@@ -77,32 +83,35 @@ An MVD can be decided **once** (accept, edit or reject); a second decision retur
 ## 4. Code layout
 
 ```
-backend/src/
-├── app.js            createApp({ store, clock }): wires routes, JSON errors
-├── api/              one router per area: settings, protectedBlocks, tasks, disruptions, mvds, reviews
-│   ├── auth.js       X-User-Id stand-in (Firebase Auth later)
-│   ├── errors.js     ApiError + the one error handler
-│   └── validate.js   small hand-written input checks (no new dependency)
+components/c1_disruption/app/
+├── main.py           create_app(store, clock): /health, mounts the routers under the prefix, error handlers
+├── settings.py       C1Settings: api_prefix (env C1_API_PREFIX)
+├── api/              one router per area: settings, protected_blocks, tasks, disruptions, mvds, reviews
+│   ├── deps.py       require_user (X-User-Id stand-in), get_deps (store + clock)
+│   ├── errors.py     ApiError + the error handlers (C1 app only)
+│   ├── models.py     Pydantic request models, one per request body
+│   └── validation.py field types with the Node API's rules and messages
 ├── services/
-│   ├── mvdService.js builds the engine input from stored data, applies decisions
-│   ├── clock.js      "now" in Asia/Colombo; fixed clock for tests
-│   └── owned.js      load a record and check it belongs to the caller (else 404)
+│   ├── mvd_service.py builds the engine input from stored data, applies decisions
+│   ├── clock.py      "now" in Asia/Colombo (UTC+05:30); FixedClock for tests
+│   └── owned.py      load a record and check it belongs to the caller (else 404)
 └── data/
-    ├── repository.md the interface every store must implement (async methods)
-    └── memoryStore.js in-memory implementation (firestoreStore.js later)
+    ├── repository.py the interface every store implements (Protocol)
+    └── memory_store.py in-memory implementation (a database store after the team decision)
 ```
 
 Routes stay thin; the engine stays pure; `services/` is the only place that combines
 stored data with the engine.
 
-## 5. Tests (Jest + supertest)
+## 5. Tests (pytest, run from the repo root)
 
-- Store contract tests (re-run later against `firestoreStore.js` / the emulator)
-- Route tests per area: valid input, invalid input (400), other user's data (404), wrong state (409)
-- **End-to-end flow:** set work hours and protected blocks → create tasks → report a power cut →
-  generate → accept → tasks carry `mvdTag` → PTVR = 0 on the finalised plan
-- Edit and reject flows; second disruption sets `parentMvdId`; null EF → 422
-- **Every golden scenario (S1–S14) replayed through the HTTP API** must give the same tags, slots and reasons as the engine tests (`tests/api/goldenFlow.test.js`)
+- Store contract tests (`tests/data/`), re-run later against the database store
+- **All 57 frozen API cases** (`tests/golden/api_cases.json`, from the Node route tests):
+  valid input, invalid input (400), other user's data (404), wrong state (409), edit and
+  reject flows, second disruption sets `parentMvdId`, null EF → 422
+- **Every golden scenario (S1–S16) replayed through the HTTP API** must give exactly the
+  golden plan, every field (`tests/api/test_golden_flow.py`); accepted plans keep PTVR = 0
+- API key on every route, the prefix setting, error shapes (`tests/api/test_auth_and_errors.py`)
 
 ## 6. Owner decisions (8 Oct 2026)
 
@@ -110,3 +119,19 @@ stored data with the engine.
 2. An edit that overlaps a protected block is refused with `400` (PTVR must stay 0).
 3. `X-User-Id` header as a stand-in for Firebase Auth until a teammate sets it up.
 4. `severity` is stored for the bandit (Task 5) but does not change the MVD in Task 3.
+
+## 7. Differences from the Node API (port, 13 Oct 2026)
+
+1. **`X-API-Key` on every route** (team rule), including `/health`, which needed nothing in Node.
+2. **Dates must exist:** `2026-02-30` is refused (`400`); Node rolled it over to 2 March
+   (DECISIONS.md 2026-10-13).
+3. **Which error is reported first** when a request has several problems: Pydantic checks
+   the whole body before the route runs, so e.g. an invalid `manualReplan` gives `400`
+   even when work hours are not set (Node: `409 NO_SETTINGS` first). Status codes for a
+   request with one problem are unchanged.
+4. **Only engine errors are `422`:** an unexpected error is `500 INTERNAL`; Node turned
+   any error inside the engine call into `422`.
+5. **Numbers** are returned as Python stores them: a whole number sent as `2` comes back
+   as `2`; values the engine computes as floats (e.g. `efUsed`, `compressionPct`) may print
+   as `1.0` / `50.0` where Node printed `1` / `50`. Same numeric value; explanation texts are
+   identical (golden spec).

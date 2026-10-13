@@ -2,6 +2,13 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-13 — Impossible dates are refused (intentional difference from Node)
+- **Decision (owner-approved, Phase 3 review):** a date that does not exist in the calendar, e.g. `2026-02-30`, is an error.
+  - Engine: `engine/time.py` `parse_date` raises `EngineError("Invalid date '2026-02-30', expected YYYY-MM-DD")`.
+  - API: such a date in `date`, `plannedDate`, `deadline` or a path/query date gives `400` ("'plannedDate' must be a date YYYY-MM-DD").
+- **Node behaviour (not kept):** `Date.UTC` silently rolled the date over (`2026-02-30` → 2 March), so a typo became a different deadline and a different Fi.
+- No golden scenario or API case uses such a date, so the frozen spec is unaffected. Tests: `tests/engine/test_time.py` (`test_a_date_that_does_not_exist_raises`), `tests/api/test_auth_and_errors.py` (`plannedDate` 2026-02-30).
+
 ## 2026-10-13 — Golden change: S11 error text names the Python config file
 - **Deliberate change to the frozen golden spec** (owner-approved, Phase 3 review of the Python port).
 - `tests/golden/scenarios/S11.json`, `expected.error.message`:
