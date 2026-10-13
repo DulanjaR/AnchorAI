@@ -2,6 +2,15 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-13 — Golden change: S11 error text names the Python config file
+- **Deliberate change to the frozen golden spec** (owner-approved, Phase 3 review of the Python port).
+- `tests/golden/scenarios/S11.json`, `expected.error.message`:
+  - old (Node): `EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in config.js; open research decision for the owner)`
+  - new: `EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in engine/config.py; open research decision for the owner)`
+- *Why:* after the port the EF values live in `engine/config.py`; the old text pointed to a file that no longer exists in this repo.
+- The approved check (`messageRegex`: disruption type, then task type) is unchanged. The old text is kept in `S11.json` as `nodeMessage`, so `tools/golden_from_node.js --check` still verifies the Node engine. The API case `mvds.null_ef_422` checks only the regex, so it is unchanged; the exact text over HTTP is checked from `S11.json`.
+- Engine: `engine/fi.py` (`lookup_ef`).
+
 ## 2026-10-12 — Pre-test survey is a DRAFT
 - `docs/Pre_test_PartA_C1_C2_C3.docx` is a **DRAFT**: the team is still finalising it. The final version will replace this file.
 - Until then the pre-test mapping in CLAUDE.md §3.8 (and the 2026-10-10 entry below) stays **provisional**: question numbers and wording may change.

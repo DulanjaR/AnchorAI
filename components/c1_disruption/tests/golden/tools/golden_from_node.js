@@ -159,7 +159,9 @@ function checkScenario(json, s) {
     if (json.expected.error.messageRegex !== s.expected.throws.source) fail(where, 'error regex differs');
     let message = null;
     try { generateMvd(s.input); } catch (err) { message = err.message; }
-    if (message !== json.expected.error.message) fail(where, `engine message differs: ${message}`);
+    // A deliberate, owner-approved text change keeps the Node text as nodeMessage (README.md).
+    const nodeMessage = json.expected.error.nodeMessage || json.expected.error.message;
+    if (message !== nodeMessage) fail(where, `engine message differs: ${message}`);
     if (!new RegExp(json.expected.error.messageRegex).test(message)) fail(where, 'message does not match regex');
     return;
   }
@@ -226,7 +228,7 @@ async function checkScenarioHttp(json) {
   const res = await call('post', `/api/disruptions/${report.body.id}/mvd`, { planFrom: input.planFrom });
   if (json.expected.error) {
     if (res.status !== json.expected.error.httpStatus) fail(where, `status ${res.status}`);
-    if (res.body.error.message !== json.expected.error.message) fail(where, 'error message differs');
+    if (res.body.error.message !== (json.expected.error.nodeMessage || json.expected.error.message)) fail(where, 'error message differs');
     return;
   }
   if (res.status !== 201) return fail(where, `status ${res.status}`);

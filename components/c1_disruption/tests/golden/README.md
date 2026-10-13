@@ -32,6 +32,17 @@ Never change an expected value to make a test pass; report the mismatch to the o
 Comparison: `fi` after rounding to 3 decimal places (rule R12); everything else exactly.
 JSON writes `1.0` as `1`; numeric equality is meant.
 
+## Deliberate changes after the freeze
+
+Only with owner approval, each in its own commit and logged in `docs/DECISIONS.md`.
+The Node text is kept next to the new one so the Node checker still verifies it.
+
+| Date | Where | Change |
+|---|---|---|
+| 13 Oct 2026 | `S11.json` `expected.error.message` | `(null in config.js; …)` → `(null in engine/config.py; …)`; old text kept as `nodeMessage` |
+
+`tools/golden_from_node.js --write` regenerates from Node and would undo these; use `--check`.
+
 ## Rules used for the expected outputs (copied from `scenarios.js`)
 
 ```

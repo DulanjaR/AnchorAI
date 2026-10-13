@@ -34,7 +34,9 @@
   "expected": {
     "error": {
       "messageRegex": "connectivity_failure[\\s\\S]*Digital",
-      "message": "EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in config.js; open research decision for the owner)",
+      "message": "EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in engine/config.py; open research decision for the owner)",
+      "nodeMessage": "EF not defined for disruption 'connectivity_failure' and task type 'Digital' (null in config.js; open research decision for the owner)",
+      "messageChange": "Deliberate golden change, owner-approved 13 Oct 2026: the config path in the text is now the Python file (DECISIONS.md 2026-10-13). nodeMessage is the text the Node engine gave.",
       "httpStatus": 422
     }
   }

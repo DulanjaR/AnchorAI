@@ -32,10 +32,10 @@ def lookup_ef(disruption_type: str, task_type: str, config: ModuleType = default
         )
     ef = row[task_type]
     if ef is None:
-        # Text identical to the Node engine (golden S11 message).
+        # Golden S11 message (config path changed from config.js, DECISIONS.md 2026-10-13).
         raise EngineError(
             f"EF not defined for disruption '{disruption_type}' and task type '{task_type}' "
-            "(null in config.js; open research decision for the owner)"
+            "(null in engine/config.py; open research decision for the owner)"
         )
     return ef
 
