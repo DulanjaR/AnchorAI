@@ -1,3 +1,54 @@
-# Disruption Recovery Planner (Resilience)
+# C1 · Disruption Recovery Planner (Resilience)
 
-Owner: TBD. Keep all code for this component inside this folder; import common code from `shared/`.
+Owner: **@Ravindu912** (Sehan A.M.R, IT23202986) · see `CODEOWNERS`
+
+When a disruption (power cut, transport delay, connectivity failure, urgent work,
+family obligation, health issue) breaks a student's planned day, C1 builds a
+**Minimum Viable Day (MVD)**: the smallest realistic plan that still protects critical
+deadlines and protected time, with a plain-language explanation for every task.
+Keep-tagged tasks go to C3, Delegate-tagged tasks to C4.
+
+The core idea is **Environmental Feasibility (EF)**: the kind of disruption decides
+which task types can physically run during it. Rules and decisions: [CLAUDE.md](CLAUDE.md),
+[docs/DECISIONS.md](docs/DECISIONS.md). API contract: [docs/API.md](docs/API.md).
+
+## Status
+
+Being ported from the original Node.js project (`ravindu912/anchor-ai-component1`) to
+Python/FastAPI to match the team stack and `shared/` modules. The approved behaviour is
+frozen in [tests/golden/](tests/golden/) and the Python code must match it exactly.
+Progress: [docs/PROGRESS.md](docs/PROGRESS.md).
+
+## Layout
+
+| Folder | What |
+|---|---|
+| `app/` | The one C1 FastAPI service: `main.py`, `api/` (routers), `services/`, `data/` (repository + in-memory store) |
+| `engine/` | Pure MVD engine (Fi, classification, placement, explanations); no I/O |
+| `ml/drift/`, `ml/bandit/` | ML Model 1 (drift predictor) and ML Model 2 (contextual bandit) |
+| `sim/` | Simulated users and synthetic data (always labelled SYNTHETIC) |
+| `notebooks/` | Google Colab notebooks (experiments only) |
+| `docs/` | API contract, decision log, progress log, plans, checkpoint and pre-test documents |
+| `tests/` | pytest suites; `tests/golden/` is the frozen spec |
+
+## Python versions
+
+**Supported: Python 3.11, 3.12 and 3.13.** Developed on 3.13.3. The pinned
+`requirements.txt` resolves to wheels for Linux x86_64 (Google Colab) on 3.10–3.13 and
+for Windows on 3.13 (checked 13 Oct 2026). Colab's runtime Python changes over time:
+the notebooks print it in their first cell.
+
+## Setup and run (from the repo root)
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate    Linux/macOS/Colab: source .venv/bin/activate
+pip install -r requirements.txt -r components/c1_disruption/requirements.txt
+cp .env.example .env               # API_KEY for shared.auth
+uvicorn components.c1_disruption.app.main:app --reload
+pytest                             # whole repo (root pytest.ini)
+pytest components/c1_disruption    # C1 only
+```
+
+Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
+in-memory store behind a repository interface, so no database is needed to run it.

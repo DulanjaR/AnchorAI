@@ -1,0 +1,18 @@
+# Component 1 (Disruption Recovery Planner): pinned (==) so runs are reproducible.
+# Supported Python: 3.11-3.13 (wheel resolution checked for Linux x86_64 = Google Colab,
+# and Windows; developed on 3.13.3). Install from the repo root:
+#   pip install -r components/c1_disruption/requirements.txt
+# Satisfies the team's root requirements.txt ranges for these packages.
+# ML packages (scikit-learn, pandas, numpy, joblib; Vowpal Wabbit) are added with
+# Task 4 / Task 5, not before (docs/TASK4_PLAN.md, DRAFT).
+
+# API (Phase 4) + shared/config.py, shared/auth.py
+fastapi==0.142.2
+starlette==1.7.0
+pydantic==2.13.5
+pydantic-settings==2.15.0
+uvicorn[standard]==0.54.0
+
+# Tests (FastAPI TestClient needs httpx)
+pytest==9.1.1
+httpx==0.28.1
