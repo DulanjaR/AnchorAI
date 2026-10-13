@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C3 Cognitive Checkpointing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo">C3</span>
+      <div>
+        <h1>Cognitive Checkpointing</h1>
+        <p>Anchor AI &middot; task continuity prototype</p>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Views">
+      <button class="tab active" data-tab="board">Task board</button>
+      <button class="tab" data-tab="log">Study log <span id="logCount" class="pill">0</span></button>
+    </nav>
+    <div class="actions">
+      <button class="btn" id="btnIncoming" title="Simulate being notified of an interruption">Simulate incoming interruption</button>
+      <button class="btn primary" id="btnBack" title="Simulate returning after an interruption">I'm back</button>
+      <button class="btn ghost" id="btnRule" title="How difficulty is decided">How it works</button>
+      <button class="btn ghost" id="btnDemo">Load demo data</button>
+      <button class="btn ghost" id="btnReset">Reset</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-board">
+      <p class="hint">Drag a card from <strong>In progress</strong> to <strong>Interrupted</strong> to save a checkpoint. When you come back, press <strong>I'm back</strong> to see your unfinished tasks.</p>
+      <div id="board" class="board"></div>
+    </section>
+
+    <section id="tab-log" hidden>
+      <div class="log-head">
+        <div id="logStats" class="stats"></div>
+        <div class="log-actions">
+          <button class="btn" id="btnExport">Export CSV</button>
+          <button class="btn ghost" id="btnClearLog">Clear log</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="log-table">
+          <thead><tr><th>Time</th><th>Event</th><th>Task</th><th>Details</th></tr></thead>
+          <tbody id="logBody"></tbody>
+        </table>
+        <p id="logEmpty" class="empty">No events yet. Save a checkpoint or resume a task to see the study log.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    C3 only restates what you wrote. It never writes your code or your answers (that is the role of C4).
+    Files are read in your browser only; their text is not stored.
+  </footer>
+
+  <dialog id="cpDialog" class="dialog wide"></dialog>
+  <dialog id="resumeDialog" class="dialog"></dialog>
+  <dialog id="summaryDialog" class="dialog"></dialog>
+  <dialog id="incomingDialog" class="dialog small"></dialog>
+  <dialog id="ruleDialog" class="dialog">
+    <div class="dlg-head"><h2>How the difficulty and depth are decided</h2><button class="x" data-close aria-label="Close">&times;</button></div>
+    <div class="dlg-body">
+      <p>C3 predicts how hard it will be to resume (Low / Medium / High) when you are interrupted. The prediction decides how much the checkpoint asks for and how long the restart summary is.</p>
+      <table class="rule">
+        <tr><th>Factor</th><th>Points</th></tr>
+        <tr><td>Time away: under 15 min / 15-59 min / 1-4 h / 4 h or more</td><td>0 / 1 / 2 / 3</td></tr>
+        <tr><td>Task complexity: simple / moderate / complex</td><td>0 / 1 / 2</td></tr>
+        <tr><td>Unfinished items: 0-1 / 2-4 / 5 or more</td><td>0 / 1 / 2</td></tr>
+        <tr><td>Interrupted by another work task</td><td>+1</td></tr>
+      </table>
+      <p><strong>Score 0-2 = Low (short checkpoint), 3-4 = Medium (standard), 5-8 = High (full checkpoint and fuller summary).</strong></p>
+      <p class="note">This is a preliminary, hand-set rule. Our Model 1b trained on the Hirsch et al. lab data found the same direction (longer interruptions and more complex tasks raise resumption difficulty), but its signal is modest and the lab interruptions last seconds, not hours. The thresholds will be recalibrated with data from our participant study.</p>
+    </div>
+  </dialog>
+
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
