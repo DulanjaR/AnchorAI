@@ -304,8 +304,8 @@ Golden scenarios use only `power_outage` and `transport_delay` with Digital and 
 
 - [x] Tasks 1, 2, 3, 2a — Node project (`anchor-ai-component1`, last commit 2bfedfa): Jest 248/248
 - [x] Port P1 — commit 321f39c (13 Oct 2026): golden spec S1–S16 + 57 API cases frozen as JSON, checked against Node
-- [ ] Port P2 — structure, CLAUDE.md, README, docs, pinned requirements
-- [ ] Port P3 — engine
+- [x] Port P2 — commit 94a8584 (13 Oct 2026): structure, CLAUDE.md, README, docs, pinned requirements
+- [x] Port P3 — 13 Oct 2026: pure Python engine; all 16 golden scenarios match exactly; invariants + the same 500 seeded days as Node (hash-checked); pytest 225/225 from the repo root
 - [ ] Port P4 — API
 - [ ] Port P5 — ML scaffolding, Colab
 - [ ] Port P6 — finish (root pytest, docs, push)
