@@ -2,6 +2,9 @@
 data/raw/**
 !data/raw/**/
 
+# Processed trial-level data (derived from participant data)
+data/processed/**
+
 # Model files and weights
 models/*.pkl
 models/*/

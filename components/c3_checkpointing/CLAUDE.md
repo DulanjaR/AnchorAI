@@ -21,9 +21,21 @@ C3 only summarises the student's own progress and plan. Content assistance = C4 
 
 ## Model 1 – resumption difficulty classifier (MUST for PP1)
 - Data: Hirsch et al. PsychArchives dataset in data/raw/hirsch/ (data + codebook).
-- Label: Low/Medium/High from terciles of resumption reaction time (preliminary proxy label).
+- Codebook facts (verified): blocktype 1=practice, 2=experimental; trialtype 1=no interruption,
+  2=interruption; task 0=interruption task, 1-3 (Exp3: 1-4)=subtasks; one row = one response.
+  Interrupted trial order: subtask1, subtask2, task0, subtask3 -> subtask 3 is the resumption step.
+  Define "interrupted" by the presence of a task-0 response (some Exp3 trialtype labels disagree).
+- Unit of analysis: one interrupted trial (experimental blocks only, resumption step correct,
+  RTs inside 200 ms .. Q3+3*IQR per experiment).
+- Target: resumption cost = RT of subtask 3 after the interruption minus the participant's own
+  median RT of subtask 3 in uninterrupted trials (per sequence). Label Low/Medium/High from
+  terciles of cost, cut points from training participants only (preliminary proxy label).
+- Features (known before resuming only): sequence, block, trial, experiment, interruption_rt,
+  interruption_error, rt_subtask1, rt_subtask2, pre_errors, pp_speed. Never use resumption-step
+  RT or error as a feature.
 - Models: Logistic Regression (baseline), Decision Tree, Random Forest.
-- Participant-wise split (GroupShuffleSplit / GroupKFold). Participant ID is never a feature.
+- Participant-wise split: 80/20 train/test participants plus 5 participant folds on train
+  (assigned in notebook 02, reused by all models). Participant ID is never a feature.
 - Report: accuracy, precision, recall, macro-F1, confusion matrix, feature importance.
 - Save best model with joblib to models/c3_difficulty_model.pkl (git-ignored).
 - Do not invent column names; inspect the data and codebook first.
