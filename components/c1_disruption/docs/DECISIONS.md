@@ -2,6 +2,59 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Team questions stay open
+- Source: planning chat, 2026-10-14.
+- Database (PostgreSQL vs Firestore), base path for orchestration, and whether `/health` needs the API key remain **open team decisions**.
+
+## 2026-10-14 — Special-habit rules approved; P09 long tasks from 120 min
+- Source: planning chat, 2026-10-14.
+- **Approved:** night-shift day = the schedule has an `office` block from 00:00; `titleDrift` **replaces** the type drift (P08).
+- **P09 `longTaskMinutes` = 120** (was 180, which no P09 task reached). Updated in `sim/data/SYNTHETIC_habits.csv` and in the PERSONAS note (`specialHabits` text of P09 in `sim/data/SYNTHETIC_personas.csv`: "Digital tasks of 120 min or more x1.30"). PERSONAS.md itself is not in this repo.
+
+## 2026-10-14 — PROPOSED items 9–15 approved
+- Source: planning chat, 2026-10-14.
+- Approved as written in STATUS.md: metric definitions (METHODOLOGY.md §5, incl. critical task = High priority and due today/tomorrow; completed = `done`); Model 2 reward (Accept 1, Reject 0, Edit 1 − tags changed ÷ total); `TIGHT_SLACK_THRESHOLD` = 0.10; overload-check scope; explanation wording for compress ratios other than 0.5; simulation rules (completion rule, weekly retraining, decisions); schedule rule (a free-time window wins only over travel blocks).
+- **Note:** the simulated accept probabilities 0.85 (preferred strategy shown) / 0.3 (otherwise) are **assumptions**, not measured values; every Model 2 result says so.
+
+## 2026-10-14 — D-HCP: system suggests, student decides
+- Source: planning chat, 2026-10-14.
+- The system suggests; the student decides. Every tag shows its reason (reason code + explanation). Accept / Edit / Reject is logged and fed to Model 2. (Matches CLAUDE.md rule 5 and the existing logging.)
+
+## 2026-10-14 — D-SOURCE: where the daily plan comes from
+- Source: planning chat, 2026-10-14.
+- Daily plan = **calendar import for fixed blocks** (protected time) + **quick task entry** (title, priority, deadline, rough duration). Model 1 corrects the durations.
+
+## 2026-10-14 — D-MOVE carry-over: rules approved, implemented after PP1
+- Source: planning chat, 2026-10-14. Replaces the PROPOSED entry below.
+- Rules (as in the planning handoff): carry over to **tomorrow only**; Fi recomputed with EF 1; a carried task may **swap only with a less urgent flexible task not due tomorrow**; **one swap level**; the bumped task becomes "Needs a slot"; **deadline-today tasks are flagged, not moved**; **no Reduce** on carry-over; **the student confirms**.
+- **Implement after PP1**, test-first: golden S17+ written and approved before the code.
+
+## 2026-10-14 — Strategy settings deferOrder and recoveryTiming; 5-action catalogue
+- Source: planning chat, 2026-10-14.
+- `deferOrder`: `"fi"` (default, the approved order) | `"deadline"`. `recoveryTiming`: `"earliest"` (default) | `"latest"` (fill the latest free gaps first).
+- Action catalogue: `default`, `compress_25`, `no_compress`, `deadline_first`, `evening_first`; run the distinctness check and report it. Golden unchanged with defaults.
+
+## 2026-10-14 — High duration: only for the OVERRUN_RISK warning
+- Source: planning chat, 2026-10-14. Closes the pending definition.
+- Fi, the fit check and the slot length use the **point** estimate; compression % is measured from the point.
+- The **high** estimate is used only for a new warning **`OVERRUN_RISK`**: a Keep task whose high estimate would cross the next fixed block or the end of the window. Golden unchanged.
+
+## 2026-10-14 — Full SYNTHETIC run; calibration rule
+- Source: planning chat, 2026-10-14.
+- Run the notebook 03 logic: 5 seeds × planted / null / misspecified; report Model 1 and Model 2 results (SYNTHETIC).
+- **Calibrate Model 1's range only if q10–q90 coverage is outside 70–90%.**
+
+## 2026-10-14 — Replanning scope approved
+- Source: planning chat, 2026-10-14.
+- Tasks planned to **end before the disruption starts are done** and left out of the replan. A task **in progress** at the start is replanned for its **remaining minutes only** (its estimate, Model 1 correction and true duration are scaled by the remaining share of its planned slot). `sim/events.py` `replan_scope`.
+
+## 2026-10-14 — Layer C = per-persona disruption profile
+- Source: planning chat, 2026-10-14. Replaces the random draw (which stays only for runs without a profile).
+- Profile stored as `sim/data/SYNTHETIC_disruption_profile.csv` (one row per persona and pattern; the planning-chat wording is kept in its `source` column). Severity random 1–3.
+- **Top-up:** a persona with fewer than 10 disruptions overlapping a task gets more, drawn from **its own** profile (row chosen in proportion to its rate), until 10; the no-effect count is reported. `connectivity_failure` events (all EF None) are skipped and counted; they do not count towards the 10.
+- **PROPOSED interpretations** (owner to confirm): weekly count = floor(r) + Bernoulli(frac(r)) with r drawn from [min, max] ("2–3/wk" → 2 or 3, "1 per 2 wks" → 0 or 1), the 2-day last week scaled by 2/7; "evening bus" = a `bus` block starting from 15:00; "evening" for P08 family obligations = 18:00–22:00; missing times = any time of day; missing durations = 30–240 min; P04 "Sat evening" row = urgent_work 18:00–21:00, 60–180 min; starts and durations on 5-minute steps; **several disruptions on one day are each planned on their own** against that day's original plan.
+- First run (seed 11): every persona reaches 10 effective disruptions (top-ups 2–130 per persona; most for P02 and P10, whose profiles are mostly connectivity failures); 8–10 MVDs per persona (a few effective events hit a Meeting's None EF).
+
 ## 2026-10-14 — Disruptions at any time; they matter only when they overlap a task
 - Source: owner, 2026-10-14 (this session; replaces the planning-chat rule of the same day "starts only inside study windows").
 - **Disruptions can start at any time of the 24-hour day**, including protected time (work, campus, family, sleep): they happen naturally and the student has no control over them. Simulation: start drawn uniformly from 00:00–23:45 in 15-minute steps, for every run (with or without a schedule); draw order unchanged.

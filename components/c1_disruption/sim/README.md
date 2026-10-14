@@ -81,6 +81,16 @@ A window wins only over **travel** (`bus`) blocks (tasks on the bus or train); e
 meals, work, campus, family, tutoring) stays protected even inside a window. Without a schedule the
 persona's own `workStart`–`workEnd` and `protectedBlocks` are used.
 
+**Disruption profile** (`SYNTHETIC_disruption_profile.csv`, layer C, `profile.py`): one row per
+persona and pattern — `personaId, type, perWeekMin, perWeekMax, days (any | weekday | weekend |
+Tue;Thu), timeFrom, timeTo, during (schedule kind, e.g. bus), onDaysWith (label text, e.g. Work from
+home), minMinutes, maxMinutes, source`. Each week a rate is drawn from [min, max]; a persona with fewer
+than 10 disruptions overlapping a task is topped up from its own profile. Without a profile, disruptions
+are random (rate 0.3 per day).
+
+**Replanning scope:** tasks planned to end before the disruption starts are done and left out; a task in
+progress is replanned for its remaining minutes only.
+
 **Disruptions** (layer C) can start at any time of the day, even in protected time: they happen
 naturally and the student has no control over them. A disruption only **affects** the day when its
 window overlaps the planned slot of at least one task; only then is an MVD made. The others are

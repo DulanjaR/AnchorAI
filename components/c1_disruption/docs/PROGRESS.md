@@ -4,6 +4,15 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Planning decisions step 1+2: disruption profile, replanning scope — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: sim/profile.py; sim/data/SYNTHETIC_disruption_profile.csv; tests/sim/test_profile.py
+Files changed: sim/generate.py (profile layer C, several disruptions per day, union overlap), sim/events.py (keys (persona, day, n), replan_scope, remaining-minute scaling), sim/experiment.py (profile_csv, top-up and skip counts), notebooks 01–03 (PROFILE path), sim/data/SYNTHETIC_habits.csv + SYNTHETIC_personas.csv (P09 120 min, planning chat), tests/sim/*, sim/README.md, docs/DECISIONS.md (all 14 Oct planning decisions), docs/STATUS.md
+Tests: `pytest` (repo root) → 565 passed; every drawn disruption obeys its profile row; weekly counts follow the rates; top-up gives every persona ≥ 10 effective disruptions (5 seeds); connectivity skipped and counted; replanning scope (done / in progress / remaining minutes) on a small hand-checked day
+Decisions applied: DECISIONS.md 2026-10-14 (layer C profile, replanning scope, special-habit rules, P09 120)
+Open questions for owner: profile interpretations (STATUS.md PROPOSED)
+Next step: full SYNTHETIC run (step 3/4)
+
 ## 2026-10-14 — Disruptions at any time, effect only on overlap — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files changed: sim/generate.py (start anywhere in 24 h), sim/events.py (overlaps_a_task, Skipped.kind no_effect / cannot_plan), sim/experiment.py (both counts in the report), sim/personas.py (free-time wording, label "Outside free time"), notebooks/02, sim/README.md, tests/sim/*, docs/DECISIONS.md, docs/STATUS.md

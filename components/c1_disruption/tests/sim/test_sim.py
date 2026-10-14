@@ -171,10 +171,13 @@ def test_unplannable_events_are_skipped_and_counted():
                          t.planned_end) for t in tasks]
     world = generate(personas, tasks, 11)
     events, skipped = build_events(world, n_estimators=10)
+    # An effective environment event hits the Meeting's None EF when the Meeting is still to do
+    # at the disruption start (replanning scope: tasks that ended before it are done).
     environment = [key for key, d in world.disruptions.items()
-                   if d.type in ("power_outage", "transport_delay") and events_module.overlaps_a_task(world, *key)]
+                   if d.type in ("power_outage", "transport_delay") and events_module.overlaps_a_task(world, *key)
+                   and any(t.type == "Meeting" for t in events_module.replan_scope(world, key)[0])]
     cannot_plan = [s for s in skipped if s.kind == "cannot_plan"]
-    assert len(cannot_plan) == len(environment) > 0  # every effective environment event hits the Meeting's None EF
+    assert len(cannot_plan) == len(environment) > 0
     assert all("Meeting" in s.reason for s in cannot_plan)
 
 

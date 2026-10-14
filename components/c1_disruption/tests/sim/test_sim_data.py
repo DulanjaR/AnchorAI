@@ -65,7 +65,7 @@ def test_habit_fields(data):
     assert (personas["P01"].late_factor, personas["P01"].late_from) == (1.10, "21:30")
     assert personas["P07"].after_night_shift_factor == 1.35
     assert personas["P08"].title_drift == (("Module B assignment: section", 1.6), ("Lit review: write synthesis", 1.6))
-    assert (personas["P09"].long_task_factor, personas["P09"].long_task_minutes) == (1.30, 180)
+    assert (personas["P09"].long_task_factor, personas["P09"].long_task_minutes) == (1.30, 120)  # planning chat 14 Oct
     plain = [p for pid, p in personas.items() if pid not in ("P01", "P07", "P08", "P09")]
     assert all(p.late_factor == 1 and p.after_night_shift_factor == 1 and not p.title_drift and p.long_task_minutes is None
                for p in plain)
@@ -128,16 +128,13 @@ def test_each_special_habit_changes_only_the_tasks_it_should(data):
             expected[key] = math.log(1.35)
         if t.persona_id == "P08" and t.title.startswith(("Module B assignment: section", "Lit review: write synthesis")):
             expected[key] = math.log(1.60) - math.log(personas["P08"].drift[t.type])
-        if t.persona_id == "P09" and t.type in LONG_TASK_TYPES and t.estimated_minutes >= 180:
+        if t.persona_id == "P09" and t.type in LONG_TASK_TYPES and t.estimated_minutes >= 120:
             expected[key] = math.log(1.30)
     assert changed.keys() == expected.keys()
     for key, delta in expected.items():
         assert changed[key] == pytest.approx(delta)
     by_persona = {pid: sum(k[0] == pid for k in changed) for pid in ("P01", "P07", "P08", "P09")}
-    assert by_persona["P01"] > 0 and by_persona["P07"] > 0 and by_persona["P08"] > 0
-    # P09's longest Digital task in this task list is 130 min, so the ≥ 180 min habit never applies.
-    assert by_persona["P09"] == 0
-    assert max(t.estimated_minutes for t in tasks if t.persona_id == "P09" and t.type == "Digital") < 180
+    assert all(by_persona[pid] > 0 for pid in by_persona)  # every habit now applies to some tasks
 
 
 def test_after_night_shift_needs_a_schedule(data):
@@ -166,7 +163,7 @@ def test_disruptions_can_start_at_any_time_of_day(data, seed):
     world = generate(personas, tasks, seed, schedule=schedule)
     starts = [to_minutes(d.start) for d in world.disruptions.values()]
     assert all(m % 15 == 0 and 0 <= m < 24 * 60 for m in starts)
-    outside_free = [key for key, d in world.disruptions.items() if not free_minutes(schedule[key])[to_minutes(d.start)]]
+    outside_free = [key for key, d in world.disruptions.items() if not free_minutes(schedule[key[:2]])[to_minutes(d.start)]]
     assert outside_free, "some disruptions start during work, sleep, travel, …"
     assert min(starts) < 6 * 60 and max(starts) >= 18 * 60  # night and evening alike
 
@@ -180,12 +177,12 @@ def test_a_disruption_matters_only_when_it_overlaps_a_planned_task(data, events)
     def overlap(key):
         d = world.disruptions[key]
         s, e = to_minutes(d.start), min(to_minutes(d.start) + d.minutes, 24 * 60)
-        return any(to_minutes(t.planned_start) < e and s < to_minutes(t.planned_end) for t in by_day.get(key, []))
+        return any(to_minutes(t.planned_start) < e and s < to_minutes(t.planned_end) for t in by_day.get(key[:2], []))
 
     for e in built:
-        assert overlap((e.persona_id, e.day))
+        assert overlap((e.persona_id, e.day, e.index))
     no_effect = [s for s in skipped if s.kind == "no_effect"]
-    assert no_effect and all(not overlap((s.persona_id, s.day)) for s in no_effect)
+    assert no_effect and all(not overlap((s.persona_id, s.day, s.index)) for s in no_effect)
     assert len(built) + len(skipped) == len(world.disruptions)  # every disruption is accounted for
 
 

@@ -24,6 +24,7 @@ from components.c1_disruption.sim import settings
 from components.c1_disruption.sim.events import CANNOT_PLAN, NO_EFFECT, Event, build_events, event_metrics
 from components.c1_disruption.sim.generate import World, generate
 from components.c1_disruption.sim.personas import load_personas, load_schedule, load_tasks
+from components.c1_disruption.sim.profile import load_profile
 
 VARIANTS = ("planted", "null", "misspecified")
 LABEL = "SYNTHETIC — pipeline validation only, not a research finding"
@@ -98,6 +99,10 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
         "events": {"total": len(rows), "compared": len(compared), "summary": summary,
                    "noEffect": sum(s.kind == NO_EFFECT for s in skipped),
                    "skippedUnplannable": sum(s.kind == CANNOT_PLAN for s in skipped),
+                   "skippedByType": {t: sum(s.kind == CANNOT_PLAN and s.type == t for s in skipped)
+                                     for t in sorted({s.type for s in skipped if s.kind == CANNOT_PLAN})},
+                   "perPersona": {pid: sum(e.persona_id == pid for e in events) for pid in sorted(world.personas)},
+                   "profile": world.profile_report,
                    "skippedReasons": sorted({s.reason for s in skipped if s.kind == CANNOT_PLAN}),
                    "decisionChangeRate": mean(changes) if changes else None,
                    "tightSlackEvents": sum(r["tightSlack"] for r in rows), "rows": rows},
@@ -107,16 +112,19 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
 
 def run(personas_csv: str, tasks_csv: str, seeds: Iterable[int] = settings.SEEDS,
         variants: Iterable[str] = VARIANTS, n_estimators: int = settings.SIM_N_ESTIMATORS,
-        schedule_csv: str | None = None, habits_csv: str | None = None) -> dict[str, Any]:
-    """schedule_csv: per-day blocks (free-time windows etc.); habits_csv: special habits.
-    Both optional; without them the persona's fixed work hours and plain drift are used."""
+        schedule_csv: str | None = None, habits_csv: str | None = None,
+        profile_csv: str | None = None) -> dict[str, Any]:
+    """schedule_csv: per-day blocks (free-time windows etc.); habits_csv: special habits;
+    profile_csv: per-persona disruption profile (sim/profile.py). All optional; without
+    them the persona's fixed work hours, plain drift and random disruptions are used."""
     personas = load_personas(personas_csv, habits_csv)
     tasks = load_tasks(tasks_csv, personas)
     schedule = load_schedule(schedule_csv, personas) if schedule_csv else None
-    runs = [run_world(generate(personas, tasks, seed, variant, schedule), n_estimators)
+    profile = load_profile(profile_csv, personas) if profile_csv else None
+    runs = [run_world(generate(personas, tasks, seed, variant, schedule, profile), n_estimators)
             for variant in variants for seed in seeds]
     return {"label": LABEL, "dataset": settings.DATASET, "personas": len(personas), "tasks": len(tasks),
-            "scheduled": schedule is not None, "runs": runs}
+            "scheduled": schedule is not None, "profiled": profile is not None, "runs": runs}
 
 
 def _mean_sd(values: list[float]) -> str:
@@ -149,6 +157,11 @@ def to_markdown(report: dict[str, Any]) -> str:
                      f"{_mean_sd([r['events']['total'] for r in runs])} | {_mean_sd([r['events']['skippedUnplannable'] for r in runs])} |")
         lines.append(f"| disruptions with no effect (overlap no planned task) | "
                      f"{_mean_sd([r['events']['noEffect'] for r in runs])} | |")
+        if runs[0]["events"].get("profile"):
+            lines.append(f"| top-up disruptions drawn (to reach 10 per persona) | "
+                         f"{_mean_sd([sum(p['topUp'] for p in r['events']['profile'].values()) for r in runs])} | |")
+            lines.append(f"| personas short of 10 effective disruptions | "
+                         f"{_mean_sd([sum(p['shortfall'] > 0 for p in r['events']['profile'].values()) for r in runs])} | |")
         lines += ["", "| Model 2 policy | mean simulated acceptance |", "|---|---|"]
         for name in runs[0]["model2"]:
             lines.append(f"| {name} | {_mean_sd([mean(r['model2'][name]) if r['model2'][name] else None for r in runs])} |")

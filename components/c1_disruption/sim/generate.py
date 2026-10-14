@@ -6,7 +6,9 @@ Layer B: actual = estimate × planted drift × noise, where planted drift =
   × lateFactor (start ≥ lateFrom) × longTaskFactor (Digital ≥ longTaskMinutes)
   × afterNightShiftFactor (first task on a day after a night shift; needs a schedule)
   [× a hidden daily factor in the misspecified generator, which the model cannot see].
-Layer C: per day, a confirmed disruption with probability DISRUPTION_RATE. It can
+Layer C: with a disruption profile (sim/profile.py, planning chat 14 Oct 2026) each
+persona's disruptions follow their own profile, topped up to 10 that overlap a task.
+Without one: per day, a confirmed disruption with probability DISRUPTION_RATE. It can
 start at any time of the day (00:00–23:45, 15-minute steps): disruptions happen
 naturally and the student has no control over them (owner, 14 Oct 2026). It only
 matters when it overlaps a planned task (events.py); then the recorded span of that
@@ -51,8 +53,10 @@ class World:
     tasks: list[PlannedTask]
     schedule: Schedule | None = None
     actual_minutes: dict[tuple[str, str], float] = field(default_factory=dict)  # (persona, task) → true minutes
-    disruptions: dict[tuple[str, int], Disruption] = field(default_factory=dict)
+    # (persona, day, n) → disruption; a day may have several (n = 0, 1, …)
+    disruptions: dict[tuple[str, int, int], Disruption] = field(default_factory=dict)
     records: list[dict] = field(default_factory=list)
+    profile_report: dict[str, dict] | None = None  # per persona: drawn, topUp, effective, shortfall
     dataset: str = settings.DATASET
 
 
@@ -123,10 +127,24 @@ def _overlap(task: PlannedTask, d: Disruption | None) -> int:
     return max(0, min(b, e) - max(a, s))
 
 
+def _overlap_all(task: PlannedTask, disruptions: list[Disruption]) -> int:
+    """Minutes of the task's planned slot inside any of the day's disruptions (union,
+    so two overlapping disruptions are not counted twice)."""
+    if not task.planned_start or not disruptions:
+        return 0
+    a, b = to_minutes(task.planned_start), to_minutes(task.planned_end)
+    hit = set()
+    for d in disruptions:
+        s = to_minutes(d.start)
+        hit.update(range(max(a, s), min(b, min(s + d.minutes, 24 * 60))))
+    return len(hit)
+
+
 def generate(
     personas: dict[str, Persona], tasks: list[PlannedTask], seed: int, variant: str = "planted",
-    schedule: Schedule | None = None,
+    schedule: Schedule | None = None, profile: list | None = None,
 ) -> World:
+    """profile: rows from sim/profile.load_profile; None = the random layer C."""
     if variant not in ("planted", "null", "misspecified"):
         raise ValueError(f"Unknown variant '{variant}'")
     # One random stream per layer, so every variant of a seed has the SAME disruptions
@@ -137,9 +155,20 @@ def generate(
     world = World(seed, variant, personas, tasks, schedule)
     days = sorted({(t.persona_id, t.day) for t in tasks})
     hidden = {key: rng_hidden.normal(0, settings.HIDDEN_DAILY_SD) for key in days} if variant == "misspecified" else {}
-    for key in days:  # layer C
-        if rng_disruptions.random() < settings.DISRUPTION_RATE:
-            world.disruptions[key] = _disruption(rng_disruptions, personas[key[0]], key[1])
+    if profile is not None:  # layer C from the persona profiles
+        from components.c1_disruption.sim.profile import draw_profile
+
+        drawn, world.profile_report = draw_profile(rng_disruptions, personas, tasks, profile, schedule)
+        for pid, day, kind, start, minutes, severity, _ in sorted(drawn, key=lambda d: (d[0], d[1], d[3])):
+            n = sum(1 for k in world.disruptions if k[:2] == (pid, day))
+            world.disruptions[(pid, day, n)] = Disruption(pid, day, kind, start, minutes, severity)
+    else:  # random layer C
+        for key in days:
+            if rng_disruptions.random() < settings.DISRUPTION_RATE:
+                world.disruptions[(*key, 0)] = _disruption(rng_disruptions, personas[key[0]], key[1])
+    by_day: dict[tuple[str, int], list[Disruption]] = {}
+    for (pid, day, _), d in world.disruptions.items():
+        by_day.setdefault((pid, day), []).append(d)
     after_night = first_after_night_shift(tasks, personas, schedule)
     for task in tasks:  # layer B
         persona = personas[task.persona_id]
@@ -147,7 +176,7 @@ def generate(
                      + hidden.get((task.persona_id, task.day), 0.0))
         actual = task.estimated_minutes * math.exp(log_drift + rng_noise.normal(0, persona.noise_sd))
         world.actual_minutes[(task.persona_id, task.task_id)] = actual
-        overlap = _overlap(task, world.disruptions.get((task.persona_id, task.day)))
+        overlap = _overlap_all(task, by_day.get((task.persona_id, task.day), []))
         world.records.append({
             "studentId": task.persona_id, "taskType": task.type, "priority": task.priority,
             "estimatedMinutes": float(task.estimated_minutes), "actualMinutes": round(actual + overlap, 1),
