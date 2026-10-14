@@ -94,7 +94,7 @@ def test_day_frame_examples(data):
     work, protected = day_frame(schedule[("P01", 25)])
     assert work == {"start": "17:50", "end": "23:00"}
     assert {"id": "s3", "label": "Module D online quiz", "start": "20:00", "end": "20:45"} in protected  # quiz beats the window
-    assert {"id": "s1", "label": "Not a study window", "start": "18:50", "end": "19:00"} in protected  # gap between windows
+    assert {"id": "s1", "label": "Outside free time", "start": "18:50", "end": "19:00"} in protected  # gap between windows
     assert not any(b["label"].startswith("Bus") for b in protected)  # studying on the bus is allowed
     _, protected = day_frame(schedule[("P06", 25)])
     assert protected == [{"id": "s1", "label": "Dinner", "start": "21:00", "end": "21:30"}]  # dinner beats the window
@@ -160,12 +160,33 @@ def test_p07_first_task_after_each_night_shift(data):
 # --- layer C and reproducibility -------------------------------------------------------------------------------
 
 @pytest.mark.parametrize("seed", [11, 22, 33, 44, 55])
-def test_disruptions_start_only_inside_study_windows(data, seed):
+def test_disruptions_can_start_at_any_time_of_day(data, seed):
+    # Owner, 14 Oct 2026: disruptions happen naturally, at any time, even in protected time.
     personas, tasks, schedule = data
     world = generate(personas, tasks, seed, schedule=schedule)
-    assert world.disruptions
-    for (pid, day), d in world.disruptions.items():
-        assert free_minutes(schedule[(pid, day)])[to_minutes(d.start)], (pid, day, d.start)
+    starts = [to_minutes(d.start) for d in world.disruptions.values()]
+    assert all(m % 15 == 0 and 0 <= m < 24 * 60 for m in starts)
+    outside_free = [key for key, d in world.disruptions.items() if not free_minutes(schedule[key])[to_minutes(d.start)]]
+    assert outside_free, "some disruptions start during work, sleep, travel, …"
+    assert min(starts) < 6 * 60 and max(starts) >= 18 * 60  # night and evening alike
+
+
+def test_a_disruption_matters_only_when_it_overlaps_a_planned_task(data, events):
+    world, built, skipped = events
+    by_day = {}
+    for t in data[1]:
+        by_day.setdefault((t.persona_id, t.day), []).append(t)
+
+    def overlap(key):
+        d = world.disruptions[key]
+        s, e = to_minutes(d.start), min(to_minutes(d.start) + d.minutes, 24 * 60)
+        return any(to_minutes(t.planned_start) < e and s < to_minutes(t.planned_end) for t in by_day.get(key, []))
+
+    for e in built:
+        assert overlap((e.persona_id, e.day))
+    no_effect = [s for s in skipped if s.kind == "no_effect"]
+    assert no_effect and all(not overlap((s.persona_id, s.day)) for s in no_effect)
+    assert len(built) + len(skipped) == len(world.disruptions)  # every disruption is accounted for
 
 
 def test_same_seed_same_output(data):
@@ -206,7 +227,7 @@ def test_scheduled_events_plan_only_in_free_study_time(events):
 
 def test_meeting_tasks_in_environment_disruptions_are_skipped_not_invented(events):
     _, _, skipped = events
-    assert all("EF not defined" in s.reason for s in skipped)
+    assert all("EF not defined" in s.reason for s in skipped if s.kind == "cannot_plan")
 
 
 # --- loader errors ------------------------------------------------------------------------------------------------

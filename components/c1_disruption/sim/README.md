@@ -74,11 +74,16 @@ set for tests.
 | `label` | shown in explanations of protected time |
 | `start`, `end` | `HH:MM`; `end` may be `24:00`; a block crossing midnight is two rows on two days |
 
-With a schedule, each day's engine input is built from it: **workHours** = first study-window start
-to last study-window end; **protectedBlocks** = every non-study block inside that span plus the gaps
-between study windows. A study window wins only over **travel** (`bus`) blocks (studying on the bus or
-train); every other kind (quiz, meals, work, campus, family, tutoring) stays protected even inside a
-study window. Disruption starts are drawn only from free study minutes. Without a schedule the
-persona's own `workStart`–`workEnd` and `protectedBlocks` are used, as before.
+`study_window` (the data's name) means **free time for tasks of any kind**, not only study. With a
+schedule, each day's engine input is built from it: **workHours** = first window start to last
+window end; **protectedBlocks** = every other block inside that span plus the gaps between windows.
+A window wins only over **travel** (`bus`) blocks (tasks on the bus or train); every other kind (quiz,
+meals, work, campus, family, tutoring) stays protected even inside a window. Without a schedule the
+persona's own `workStart`–`workEnd` and `protectedBlocks` are used.
+
+**Disruptions** (layer C) can start at any time of the day, even in protected time: they happen
+naturally and the student has no control over them. A disruption only **affects** the day when its
+window overlaps the planned slot of at least one task; only then is an MVD made. The others are
+counted as `no_effect`; events the engine cannot plan (a None EF value) as `cannot_plan`.
 
 The loaders check every row and name the file, line and column of any problem.

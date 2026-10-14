@@ -16,6 +16,7 @@ from typing import Any
 
 from components.c1_disruption.engine.errors import EngineError
 from components.c1_disruption.engine.mvd import generate_mvd
+from components.c1_disruption.engine.time import to_minutes
 from components.c1_disruption.engine.overload import check_overload
 from components.c1_disruption.metrics import plan_metrics as m
 from components.c1_disruption.ml.drift.data import clean
@@ -44,7 +45,7 @@ def _week_start(day_str: str) -> str:
 
 def day_frame_for(world: World, persona_id: str, day: int) -> tuple[dict[str, str], list[dict[str, str]]]:
     """Work hours and protected blocks of one day: from the schedule when there is one
-    (personas.day_frame: study windows only), otherwise the persona's fixed day."""
+    (personas.day_frame: free-time windows only), otherwise the persona's fixed day."""
     if world.schedule is not None:
         frame = day_frame(world.schedule.get((persona_id, day), []))
         if frame is not None:
@@ -83,14 +84,36 @@ def _corrected_input(data: dict[str, Any], model: DriftModel, persona_id: str) -
     return {**data, "tasks": tasks}
 
 
+NO_EFFECT = "no_effect"
+CANNOT_PLAN = "cannot_plan"
+
+
 @dataclass
 class Skipped:
-    """An event the engine cannot plan, e.g. a None EF value (open research decision).
-    Counted and reported, never given an invented value."""
+    """A disruption that produced no MVD, counted and reported:
+      no_effect    it overlaps none of the day's planned tasks, so nothing changes
+      cannot_plan  the engine cannot plan it, e.g. a None EF value (open research
+                   decision); never given an invented value
+    """
 
     persona_id: str
     day: int
     reason: str
+    kind: str = CANNOT_PLAN
+
+
+def overlaps_a_task(world: World, persona_id: str, day: int) -> bool:
+    """A disruption affects the day only when its window (clipped at midnight, as in
+    the engine) overlaps the planned slot of at least one task (owner, 14 Oct 2026).
+    Tasks without a planned slot cannot overlap anything."""
+    d = world.disruptions[(persona_id, day)]
+    start = to_minutes(d.start)
+    end = min(start + d.minutes, 24 * 60)
+    for t in world.tasks:
+        if t.persona_id == persona_id and t.day == day and t.planned_start:
+            if to_minutes(t.planned_start) < end and start < to_minutes(t.planned_end):
+                return True
+    return False
 
 
 def build_events(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> tuple[list[Event], list[Skipped]]:
@@ -98,11 +121,14 @@ def build_events(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) ->
     events: list[Event] = []
     skipped: list[Skipped] = []
     for (persona_id, day) in sorted(world.disruptions):
+        if not overlaps_a_task(world, persona_id, day):
+            skipped.append(Skipped(persona_id, day, "overlaps no planned task", NO_EFFECT))
+            continue
         data = engine_input(world, persona_id, day)
         try:
             raw = generate_mvd(data)
         except EngineError as err:
-            skipped.append(Skipped(persona_id, day, str(err)))
+            skipped.append(Skipped(persona_id, day, str(err), CANNOT_PLAN))
             continue
         cutoff = _week_start(data["date"])
         if cutoff not in models:

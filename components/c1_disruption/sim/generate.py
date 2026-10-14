@@ -4,13 +4,14 @@ Layer B: actual = estimate × planted drift × noise, where planted drift =
   base (persona.drift[type], or the title drift when the title matches)
   × eveningFactor (start ≥ 18:00) × weekendFactor (Sat/Sun)
   × lateFactor (start ≥ lateFrom) × longTaskFactor (Digital ≥ longTaskMinutes)
-  × afterNightShiftFactor (first study task on a day after a night shift; needs a schedule)
+  × afterNightShiftFactor (first task on a day after a night shift; needs a schedule)
   [× a hidden daily factor in the misspecified generator, which the model cannot see].
-Layer C: per day, a confirmed disruption with probability DISRUPTION_RATE; with a
-schedule its start is drawn only inside the day's study windows (never inside
-work, campus, family or tutoring time). When it overlaps a task's planned slot,
-the recorded span grows by the overlap (overlapMinutes), which the exclusion rule
-(CLAUDE.md §3.6) must remove.
+Layer C: per day, a confirmed disruption with probability DISRUPTION_RATE. It can
+start at any time of the day (00:00–23:45, 15-minute steps): disruptions happen
+naturally and the student has no control over them (owner, 14 Oct 2026). It only
+matters when it overlaps a planned task (events.py); then the recorded span of that
+task grows by the overlap (overlapMinutes), which the exclusion rule (CLAUDE.md §3.6)
+must remove.
 """
 import math
 from dataclasses import dataclass, field
@@ -20,13 +21,7 @@ import numpy as np
 
 from components.c1_disruption.engine.time import to_hhmm, to_minutes
 from components.c1_disruption.sim import settings
-from components.c1_disruption.sim.personas import (
-    Persona,
-    PlannedTask,
-    Schedule,
-    free_minutes,
-    night_shift_days,
-)
+from components.c1_disruption.sim.personas import Persona, PlannedTask, Schedule, night_shift_days
 
 EVENING_FROM = 18 * 60
 LONG_TASK_TYPES = ("Digital",)  # longTaskFactor applies to Digital tasks (persona brief, P09)
@@ -66,7 +61,7 @@ def _start(persona: Persona, task: PlannedTask) -> int:
 
 
 def first_after_night_shift(tasks: list[PlannedTask], personas: dict[str, Persona], schedule: Schedule | None) -> set[tuple[str, str]]:
-    """(persona, task) of the first study task (earliest planned start) on each day
+    """(persona, task) of the first task (earliest planned start) on each day
     after a night shift. Empty without a schedule."""
     if not schedule:
         return set()
@@ -110,23 +105,11 @@ def _draw_type(rng: np.random.Generator) -> str:
     return types[rng.choice(len(types), p=np.array(list(settings.DISRUPTION_MIX.values())))]
 
 
-def _disruption(rng: np.random.Generator, persona: Persona, day: int, schedule: Schedule | None) -> Disruption | None:
-    # Draw order type → minutes → start → severity, as before schedules existed, so a
-    # seed without a schedule gives exactly the same disruptions as earlier versions.
+def _disruption(rng: np.random.Generator, persona: Persona, day: int) -> Disruption:
+    # Draw order type → minutes → start → severity (unchanged).
     kind = _draw_type(rng)
     minutes = _draw_minutes(rng)
-    if schedule is not None:
-        # Start on a 15-minute step at which the student is free to study.
-        free = free_minutes(schedule.get((persona.persona_id, day), []))
-        starts = [m for m in range(0, 24 * 60, 15) if free[m]]
-        if not starts:
-            int(rng.integers(1, 4))  # keep the stream aligned with days that have study time
-            return None  # no study time that day: nothing to disrupt
-        start = starts[int(rng.integers(len(starts)))]
-    else:
-        lo = to_minutes(persona.work_start)
-        hi = max(lo, to_minutes(persona.work_end) - 30)
-        start = int(rng.integers(lo // 15, hi // 15 + 1)) * 15
+    start = int(rng.integers(0, 24 * 60 // 15)) * 15  # any time of the day
     severity = int(rng.integers(1, 4))
     return Disruption(persona.persona_id, day, kind, to_hhmm(start), minutes, severity)
 
@@ -156,9 +139,7 @@ def generate(
     hidden = {key: rng_hidden.normal(0, settings.HIDDEN_DAILY_SD) for key in days} if variant == "misspecified" else {}
     for key in days:  # layer C
         if rng_disruptions.random() < settings.DISRUPTION_RATE:
-            d = _disruption(rng_disruptions, personas[key[0]], key[1], schedule)
-            if d is not None:
-                world.disruptions[key] = d
+            world.disruptions[key] = _disruption(rng_disruptions, personas[key[0]], key[1])
     after_night = first_after_night_shift(tasks, personas, schedule)
     for task in tasks:  # layer B
         persona = personas[task.persona_id]

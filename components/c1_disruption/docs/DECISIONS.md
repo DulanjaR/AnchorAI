@@ -2,6 +2,13 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Disruptions at any time; they matter only when they overlap a task
+- Source: owner, 2026-10-14 (this session; replaces the planning-chat rule of the same day "starts only inside study windows").
+- **Disruptions can start at any time of the 24-hour day**, including protected time (work, campus, family, sleep): they happen naturally and the student has no control over them. Simulation: start drawn uniformly from 00:00–23:45 in 15-minute steps, for every run (with or without a schedule); draw order unchanged.
+- **A disruption affects the day only when its window (clipped at midnight, as in the engine) overlaps the planned slot of at least one task.** Only then is an MVD generated. Disruptions that overlap no task are counted as `no_effect` (no replan); events the engine cannot plan stay `cannot_plan`.
+- **Tasks can be anything, not only study.** The schedule kind `study_window` (data name, unchanged) is read as "free time for tasks"; code, labels ("Outside free time") and docs say so.
+- Consequence (SYNTHETIC data, seeds 11–55): of 71–84 disruptions per seed only 6–20 overlap a task; the rest have no effect. The per-persona disruption profile (owner, pending) sets the real rate and timing.
+
 ## 2026-10-14 — SYNTHETIC persona data, schedules and special habits
 - Source: planning chat, 2026-10-14 (files made from PERSONAS.md).
 - `sim/data/SYNTHETIC_personas.csv`, `SYNTHETIC_tasks_planned.csv`, `SYNTHETIC_schedule.csv` committed **unchanged** (byte-identical to the files provided).

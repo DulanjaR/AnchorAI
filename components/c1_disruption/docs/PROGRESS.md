@@ -4,6 +4,14 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Disruptions at any time, effect only on overlap — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files changed: sim/generate.py (start anywhere in 24 h), sim/events.py (overlaps_a_task, Skipped.kind no_effect / cannot_plan), sim/experiment.py (both counts in the report), sim/personas.py (free-time wording, label "Outside free time"), notebooks/02, sim/README.md, tests/sim/*, docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → 542 passed; starts cover the whole day (incl. protected time, night and evening); every MVD event overlaps a task; every no-effect disruption overlaps none; every disruption accounted for
+Decisions applied: DECISIONS.md 2026-10-14 (disruptions at any time)
+Open questions for owner: disruption profile (rate/timing; only 6–20 effective events per seed now); replanning scope
+Next step: owner's disruption profile
+
 ## 2026-10-14 — SYNTHETIC persona data, schedules, special habits — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: sim/data/SYNTHETIC_{personas,tasks_planned,schedule}.csv (owner's files, unchanged), sim/data/SYNTHETIC_habits.csv; tests/sim/test_sim_data.py

@@ -21,7 +21,7 @@ from components.c1_disruption.ml.drift.data import clean
 from components.c1_disruption.ml.drift.evaluation import leave_one_student_out, learning_curve, rolling_origin, score
 from components.c1_disruption.ml.drift.model import DriftModel
 from components.c1_disruption.sim import settings
-from components.c1_disruption.sim.events import Event, build_events, event_metrics
+from components.c1_disruption.sim.events import CANNOT_PLAN, NO_EFFECT, Event, build_events, event_metrics
 from components.c1_disruption.sim.generate import World, generate
 from components.c1_disruption.sim.personas import load_personas, load_schedule, load_tasks
 
@@ -96,7 +96,9 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
         "dataset": settings.DATASET, "seed": world.seed, "variant": world.variant,
         "model1": model1(world, n_estimators),
         "events": {"total": len(rows), "compared": len(compared), "summary": summary,
-                   "skippedUnplannable": len(skipped), "skippedReasons": sorted({s.reason for s in skipped}),
+                   "noEffect": sum(s.kind == NO_EFFECT for s in skipped),
+                   "skippedUnplannable": sum(s.kind == CANNOT_PLAN for s in skipped),
+                   "skippedReasons": sorted({s.reason for s in skipped if s.kind == CANNOT_PLAN}),
                    "decisionChangeRate": mean(changes) if changes else None,
                    "tightSlackEvents": sum(r["tightSlack"] for r in rows), "rows": rows},
         "model2": model2(world, events, world.seed),
@@ -106,7 +108,7 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
 def run(personas_csv: str, tasks_csv: str, seeds: Iterable[int] = settings.SEEDS,
         variants: Iterable[str] = VARIANTS, n_estimators: int = settings.SIM_N_ESTIMATORS,
         schedule_csv: str | None = None, habits_csv: str | None = None) -> dict[str, Any]:
-    """schedule_csv: per-day blocks (study windows etc.); habits_csv: special habits.
+    """schedule_csv: per-day blocks (free-time windows etc.); habits_csv: special habits.
     Both optional; without them the persona's fixed work hours and plain drift are used."""
     personas = load_personas(personas_csv, habits_csv)
     tasks = load_tasks(tasks_csv, personas)
@@ -145,6 +147,8 @@ def to_markdown(report: dict[str, Any]) -> str:
         lines.append(f"| decision-change rate | {_mean_sd([r['events']['decisionChangeRate'] for r in runs])} | |")
         lines.append(f"| events planned / skipped (engine cannot plan, e.g. None EF) | "
                      f"{_mean_sd([r['events']['total'] for r in runs])} | {_mean_sd([r['events']['skippedUnplannable'] for r in runs])} |")
+        lines.append(f"| disruptions with no effect (overlap no planned task) | "
+                     f"{_mean_sd([r['events']['noEffect'] for r in runs])} | |")
         lines += ["", "| Model 2 policy | mean simulated acceptance |", "|---|---|"]
         for name in runs[0]["model2"]:
             lines.append(f"| {name} | {_mean_sd([mean(r['model2'][name]) if r['model2'][name] else None for r in runs])} |")

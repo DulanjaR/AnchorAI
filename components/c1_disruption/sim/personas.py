@@ -32,7 +32,7 @@ class Persona:
     # Special habits (planted drift beyond type / evening / weekend), from the habits file.
     late_factor: float = 1.0  # x for tasks starting at or after late_from
     late_from: str | None = None
-    after_night_shift_factor: float = 1.0  # x for the first study task on a day after a night shift
+    after_night_shift_factor: float = 1.0  # x for the first task on a day after a night shift
     title_drift: tuple[tuple[str, float], ...] = ()  # (title prefix, drift): replaces the type drift
     long_task_factor: float = 1.0  # x for Digital tasks of at least long_task_minutes
     long_task_minutes: int | None = None
@@ -228,10 +228,11 @@ def load_tasks(path: str | Path, personas: dict[str, Persona]) -> list[PlannedTa
 # --- schedule (one row per block of a persona's day) ------------------------------------------
 
 SCHEDULE_KINDS = ("sleep", "routine", "bus", "office", "campus", "family", "tutor", "fixed", "study_window")
-# Study windows may overlap these (studying on the bus or train); every other kind wins
-# over a study window (e.g. a quiz or dinner inside a study window stays protected).
+# 'study_window' (the data's name) = free time for tasks of any kind, not only study.
+# Free-time windows may overlap these (tasks on the bus or train); every other kind wins
+# over a window (e.g. a quiz or dinner inside a window stays protected).
 TRAVEL_KINDS = ("bus",)
-OUTSIDE_WINDOWS_LABEL = "Not a study window"
+OUTSIDE_WINDOWS_LABEL = "Outside free time"
 DAY_END = 24 * 60
 
 
@@ -288,8 +289,8 @@ def study_windows(blocks: list[ScheduleBlock]) -> list[ScheduleBlock]:
 
 
 def free_minutes(blocks: list[ScheduleBlock]) -> list[bool]:
-    """Per minute of the day: True when the student can study (inside a study window and
-    not inside a non-travel block)."""
+    """Per minute of the day: True when the student is free for tasks (inside a
+    free-time window and not inside a non-travel block)."""
     free = [False] * (DAY_END + 1)
     for w in study_windows(blocks):
         for m in range(w.start, w.end):
@@ -302,12 +303,12 @@ def free_minutes(blocks: list[ScheduleBlock]) -> list[bool]:
 
 
 def day_frame(blocks: list[ScheduleBlock]) -> tuple[dict[str, str], list[dict[str, str]]] | None:
-    """Work hours and protected blocks for one scheduled day, or None without a study window.
+    """Work hours and protected blocks for one scheduled day, or None without a free-time window.
 
-    workHours = first study-window start to last study-window end. Protected blocks =
-    every non-study block inside that span plus the gaps between study windows; a
-    travel block gives way to a study window it overlaps (studying on the bus), any
-    other kind (quiz, dinner, work, campus, family, tutoring) stays protected.
+    workHours = first window start to last window end. Protected blocks = every other
+    block inside that span plus the gaps between windows; a travel block gives way to a
+    window it overlaps (tasks on the bus), any other kind (quiz, dinner, work, campus,
+    family, tutoring) stays protected.
     """
     windows = study_windows(blocks)
     if not windows:

@@ -126,7 +126,8 @@ def world_and_events():
 
 def test_events_compare_raw_and_corrected_with_ptvr_zero(world_and_events):
     world, events, skipped = world_and_events
-    assert skipped == []  # Digital / Analog only: every event can be planned
+    # Digital / Analog only: every disruption that overlaps a task can be planned.
+    assert {s.kind for s in skipped} <= {"no_effect"}
     compared = [e for e in events if e.corrected is not None]
     assert compared and all(e.date >= "2026-09-14" for e in compared)  # week 1 has no training data
     for e in compared:
@@ -170,9 +171,11 @@ def test_unplannable_events_are_skipped_and_counted():
                          t.planned_end) for t in tasks]
     world = generate(personas, tasks, 11)
     events, skipped = build_events(world, n_estimators=10)
-    environment = [d for d in world.disruptions.values() if d.type in ("power_outage", "transport_delay")]
-    assert len(skipped) == len(environment) > 0  # every environment event hits the Meeting's None EF
-    assert all("Meeting" in s.reason for s in skipped)
+    environment = [key for key, d in world.disruptions.items()
+                   if d.type in ("power_outage", "transport_delay") and events_module.overlaps_a_task(world, *key)]
+    cannot_plan = [s for s in skipped if s.kind == "cannot_plan"]
+    assert len(cannot_plan) == len(environment) > 0  # every effective environment event hits the Meeting's None EF
+    assert all("Meeting" in s.reason for s in cannot_plan)
 
 
 def test_run_world_and_report_are_labelled_synthetic():
