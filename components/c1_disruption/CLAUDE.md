@@ -37,6 +37,15 @@
 11. **Never claim something is done unless it is on disk.** Before saying a file is updated, committed or pushed, check it (`git status`, `git log -1`, `git ls-remote origin dev/ravindu`). Report the actual commit hash and the folder you are working in.
 12. **Log your work** in `docs/PROGRESS.md` at the end of every task (format in Section 8). Record decisions in `docs/DECISIONS.md`, newest first, dated.
 
+### 0.3 Sync with the planning chat (permanent, 14 Oct 2026)
+
+The owner plans in a separate chat that reads the repo, so GitHub must always show the real state.
+
+1. **Commit and push to `origin dev/ravindu` before reporting anything to the owner.** Unfinished work may be pushed as a commit whose message starts with `wip:`. **Never end a report with unpushed changes.**
+2. **Keep `docs/STATUS.md` (one page) updated in the same commit as every change**, with these sections: Last commit (hash + date) · Done · In progress · Waiting on owner (decisions/questions) · PROPOSED items not yet approved · Next step · Test count from root pytest. (A commit cannot contain its own hash, so "Last commit" names the commit before it; the report gives the new hash.)
+3. **Every report to the owner ends with:** the commit hash, the output of `git ls-remote origin dev/ravindu`, and the test count from root `pytest`.
+4. **Decisions the owner pastes from the planning chat** are recorded in `docs/DECISIONS.md` with "Source: planning chat, <date>".
+
 ---
 
 ## 1. What Component 1 does

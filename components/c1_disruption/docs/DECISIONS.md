@@ -2,6 +2,14 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Sync rule with the planning chat
+- Source: planning chat, 2026-10-14.
+- Commit and push to `origin dev/ravindu` before every report; unfinished work as a `wip:` commit; never report with unpushed changes.
+- `docs/STATUS.md` (one page) is updated in the same commit as every change.
+- Every report ends with the commit hash, `git ls-remote origin dev/ravindu`, and the root pytest count.
+- Decisions pasted from the planning chat are recorded here with "Source: planning chat, <date>".
+- Recorded in CLAUDE.md §0.3.
+
 ## 2026-10-14 — Synthetic simulation rules (PROPOSED)
 - Input = the owner's persona and task lists (`sim/README.md` format: `personas.csv`, `tasks.csv`); personas named P01–P10 (golden scenarios keep S01–S16). A tiny `sim/examples/` set (X01, X02) exists for tests only.
 - Layers: A planned tasks → B actual = estimate × planted drift (per type, evening, weekend) × log-normal noise → C disruptions (rate 0.3 per day, type mix in `sim/settings.py`, 30–240 min; overlap with planned slots recorded and removed by the exclusion rule) → D MVDs raw vs corrected and simulated decisions.
