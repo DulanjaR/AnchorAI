@@ -6,14 +6,22 @@
 Nothing here happens on its own (CLAUDE.md rule 5): every step is triggered by an
 explicit user request.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from components.c1_disruption.app.api.errors import bad_request, conflict
 from components.c1_disruption.app.api.models import EditChange, ManualReplanItem
 from components.c1_disruption.app.data.repository import Record, Repository
-from components.c1_disruption.app.services.clock import Clock, iso_utc, to_local
+from components.c1_disruption.app.services.clock import Clock, iso_utc, parse_iso, to_local
 from components.c1_disruption.app.services.owned import load_owned
+from components.c1_disruption.app.services.planning import (
+    STRATEGIES,
+    DriftCorrector,
+    FixedOrder,
+    NoDrift,
+    StrategyChooser,
+)
+from components.c1_disruption.engine.diff import diff_plans
 from components.c1_disruption.engine.mvd import generate_mvd
 from components.c1_disruption.engine.time import Interval, block_to_intervals, overlaps, to_minutes
 
@@ -27,6 +35,9 @@ Action = Literal["accept", "edit", "reject"]
 class Deps:
     store: Repository
     clock: Clock
+    # ML hooks (planning.py); the defaults keep the approved behaviour.
+    corrector: DriftCorrector = field(default_factory=NoDrift)
+    chooser: StrategyChooser = field(default_factory=FixedOrder)
 
 
 def _slot_of(entry: Record) -> Record:
@@ -70,6 +81,13 @@ def generate(
         tasks = [t for t in tasks if t["id"] in still_placed]
     protected_blocks = store.list("protectedBlocks", {"userId": user_id})
 
+    # ML Model 1: corrected durations (default: drift 1.0 = the user's estimate).
+    context = {"date": date, "planFrom": plan_from, "disruption": disruption}
+    corrections = {t["id"]: deps.corrector.correct(user_id, t, context) for t in tasks}
+    # ML Model 2: which strategy shapes the MVD (default: fixed order, approved strategy).
+    ranking = deps.chooser.rank(user_id, {**context, "tasks": tasks})
+    strategy_id = ranking.ranking[0]
+
     engine_input = {
         "date": date,
         "workHours": {"start": settings["workStart"], "end": settings["workEnd"]},
@@ -78,11 +96,17 @@ def generate(
         "protectedBlocks": [
             {"id": b["id"], "label": b["label"], "start": b["start"], "end": b["end"]} for b in protected_blocks
         ],
-        # estimatedHours = duration after drift correction; drift = 1.0 until ML Model 1 (Task 4).
+        # estimatedHours = duration after drift correction (point); low/high = Model 1 range.
         "tasks": [
-            {k: t[k] for k in ("id", "title", "type", "priority", "estimatedHours", "deadline", "delegable")}
+            {
+                **{k: t[k] for k in ("id", "title", "type", "priority", "deadline", "delegable")},
+                "estimatedHours": corrections[t["id"]].point_hours,
+                "estimatedHoursLow": corrections[t["id"]].low_hours,
+                "estimatedHoursHigh": corrections[t["id"]].high_hours,
+            }
             for t in tasks
         ],
+        "strategy": dict(STRATEGIES[strategy_id]),
     }
     # An EngineError (e.g. a None EF value) becomes 422 in the error handler.
     plan = generate_mvd(engine_input)
@@ -115,6 +139,26 @@ def generate(
         "finalPlan": None,
         "createdAt": iso_utc(clock.now()),
         "decidedAt": None,
+        # Logging for the evaluation (docs/METHODOLOGY.md §6).
+        "policyMode": ranking.policy_mode,
+        "shownPolicy": ranking.shown_policy,
+        "rankingShown": ranking.ranking,
+        "strategyId": strategy_id,
+        "strategy": engine_input["strategy"],
+        "modelOn": deps.corrector.model_on,
+        "manualReplanFirst": manual is not None,
+        "taskLog": [
+            {
+                "taskId": t["id"],
+                "estimatedHours": t["estimatedHours"],
+                "correctedHours": corrections[t["id"]].point_hours,
+                "correctedLowHours": corrections[t["id"]].low_hours,
+                "correctedHighHours": corrections[t["id"]].high_hours,
+                "correctionSource": corrections[t["id"]].source,
+            }
+            for t in tasks
+        ],
+        "timeToDecisionSeconds": None,
     })
 
 
@@ -197,8 +241,16 @@ def decide(
             "mvdTag": entry["tag"], "mvdStart": entry["start"], "mvdEnd": entry["end"], "mvdId": mvd["id"],
         })
 
-    at = iso_utc(clock.now())
-    # Feedback is the reward signal for the bandit (Task 5): accept +, edit partial, reject −.
+    now = clock.now()
+    at = iso_utc(now)
+    seconds = (now - parse_iso(mvd["createdAt"])).total_seconds()
+    # Structured edit diff: which tags the user changed (decision-change / reward).
+    tag_changes = (
+        diff_plans(mvd["plan"], {"tasks": [{"id": e["taskId"], "tag": e["tag"]} for e in final_plan]})["changed"]
+        if action == "edit"
+        else []
+    )
+    # Feedback is the reward signal for ML Model 2: accept +, edit partial, reject −.
     store.create("feedback", {
         "userId": user_id,
         "mvdId": mvd["id"],
@@ -207,7 +259,13 @@ def decide(
         "edits": edits,
         "reason": reason if action == "reject" else None,
         "at": at,
+        "tagChanges": tag_changes,
+        "totalTasks": len(mvd["plan"]["tasks"]),
+        "timeToDecisionSeconds": seconds,
     })
 
     status: dict[str, Any] = {"accept": "accepted", "edit": "edited", "reject": "rejected"}
-    return store.update("mvds", mvd["id"], {"status": status[action], "finalPlan": final_plan, "decidedAt": at})
+    return store.update(
+        "mvds", mvd["id"],
+        {"status": status[action], "finalPlan": final_plan, "decidedAt": at, "timeToDecisionSeconds": seconds},
+    )

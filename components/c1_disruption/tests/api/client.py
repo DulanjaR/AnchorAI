@@ -58,9 +58,10 @@ class Setup:
         return self.client.request(method, api_path(path), **kwargs)
 
 
-def setup(now: str = "2026-10-07T09:00") -> Setup:
+def setup(now: str = "2026-10-07T09:00", **hooks: Any) -> Setup:
+    """hooks: corrector= / chooser= (ML hooks); default = approved behaviour."""
     store = MemoryStore()
     clock = MovableClock(now)
     # raise_server_exceptions=False: a bug shows as a 500 response, as a client would see it.
-    client = TestClient(create_app(store=store, clock=clock), raise_server_exceptions=False)
+    client = TestClient(create_app(store=store, clock=clock, **hooks), raise_server_exceptions=False)
     return Setup(client, store, clock)
