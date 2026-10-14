@@ -1,0 +1,6 @@
+# GPU training / evaluation / export only (Kaggle or Colab). The data scripts need no packages.
+torch
+transformers>=4.45
+peft>=0.13
+bitsandbytes>=0.44
+accelerate>=1.0

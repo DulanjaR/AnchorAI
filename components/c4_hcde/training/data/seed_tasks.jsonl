@@ -1,0 +1,100 @@
+{"id": "it-001", "module": "Programming Fundamentals", "skill": "conditionals", "difficulty": 1, "task": "Write a Python function that returns the largest of three numbers without using max()."}
+{"id": "it-002", "module": "Programming Fundamentals", "skill": "loops", "difficulty": 1, "task": "Write a program that prints all even numbers between 1 and 50 using a loop."}
+{"id": "it-003", "module": "Programming Fundamentals", "skill": "strings", "difficulty": 1, "task": "Write a Python function that counts the vowels in a string."}
+{"id": "it-004", "module": "Programming Fundamentals", "skill": "conditionals", "difficulty": 2, "task": "Write a function that checks whether a given year is a leap year."}
+{"id": "it-005", "module": "Programming Fundamentals", "skill": "lists", "difficulty": 2, "task": "Write a function that reverses a list without using reverse(), reversed() or slicing."}
+{"id": "it-006", "module": "Programming Fundamentals", "skill": "debugging", "difficulty": 1, "task": "My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?"}
+{"id": "it-007", "module": "Programming Fundamentals", "skill": "dictionaries", "difficulty": 2, "task": "Write a function that returns the frequency of each word in a sentence as a dictionary."}
+{"id": "it-008", "module": "Programming Fundamentals", "skill": "loops", "difficulty": 2, "task": "Write a program that keeps reading integers until the user enters 0, then prints their average."}
+{"id": "it-009", "module": "Programming Fundamentals", "skill": "strings", "difficulty": 2, "task": "Write a function that checks whether a string is a palindrome, ignoring case and spaces."}
+{"id": "it-010", "module": "Programming Fundamentals", "skill": "recursion", "difficulty": 3, "task": "Write a recursive function to compute the factorial of n, and explain what should happen when n is negative."}
+{"id": "it-011", "module": "Programming Fundamentals", "skill": "lists", "difficulty": 3, "task": "Write a function that removes duplicates from a list while keeping the original order."}
+{"id": "it-012", "module": "Programming Fundamentals", "skill": "conditionals", "difficulty": 3, "task": "Write a program that validates a password: at least 8 characters, at least one digit and at least one uppercase letter."}
+{"id": "it-013", "module": "Programming Fundamentals", "skill": "number systems", "difficulty": 3, "task": "Write a function that converts a decimal integer to binary without using bin()."}
+{"id": "it-014", "module": "Object-Oriented Programming", "skill": "encapsulation", "difficulty": 2, "task": "Create a Java class Student with private fields name and gpa, a constructor, and getters and setters that reject a GPA outside 0 to 4."}
+{"id": "it-015", "module": "Object-Oriented Programming", "skill": "polymorphism", "difficulty": 2, "task": "Explain the difference between method overloading and method overriding, with a small Java example of each."}
+{"id": "it-016", "module": "Object-Oriented Programming", "skill": "abstraction", "difficulty": 2, "task": "Design a class hierarchy with an abstract Shape class and Circle and Rectangle subclasses that implement area()."}
+{"id": "it-017", "module": "Object-Oriented Programming", "skill": "exceptions", "difficulty": 3, "task": "Implement a BankAccount class with deposit and withdraw methods that throws an exception when a withdrawal would overdraw the account."}
+{"id": "it-018", "module": "Object-Oriented Programming", "skill": "polymorphism", "difficulty": 2, "task": "Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?"}
+{"id": "it-019", "module": "Object-Oriented Programming", "skill": "interfaces", "difficulty": 3, "task": "When should I use an interface instead of an abstract class? Explain using a payment-processing example."}
+{"id": "it-020", "module": "Object-Oriented Programming", "skill": "object equality", "difficulty": 3, "task": "Implement equals() and hashCode() for a Java Point class with x and y coordinates."}
+{"id": "it-021", "module": "Object-Oriented Programming", "skill": "refactoring", "difficulty": 4, "task": "Refactor a class that uses a long switch statement on vehicle type (car, bike, truck) to calculate tolls into a polymorphic design."}
+{"id": "it-022", "module": "Object-Oriented Programming", "skill": "design patterns", "difficulty": 4, "task": "Implement the Singleton pattern for a database connection manager in Java and discuss thread safety."}
+{"id": "it-023", "module": "Object-Oriented Programming", "skill": "class design", "difficulty": 4, "task": "Design the classes for a library system with books, members, loans and fines, and show how they relate."}
+{"id": "it-024", "module": "Object-Oriented Programming", "skill": "design patterns", "difficulty": 4, "task": "Implement the Observer pattern so that several displays update when a weather station's temperature changes."}
+{"id": "it-025", "module": "Object-Oriented Programming", "skill": "composition", "difficulty": 3, "task": "Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition."}
+{"id": "it-026", "module": "Object-Oriented Programming", "skill": "generics", "difficulty": 3, "task": "Create a generic Java class Pair<K, V> and a method that returns a new Pair with the elements swapped."}
+{"id": "it-027", "module": "Data Structures and Algorithms", "skill": "searching", "difficulty": 1, "task": "Implement linear search in Python and state its time complexity."}
+{"id": "it-028", "module": "Data Structures and Algorithms", "skill": "searching", "difficulty": 2, "task": "Implement binary search on a sorted array and explain why the array must be sorted."}
+{"id": "it-029", "module": "Data Structures and Algorithms", "skill": "stacks", "difficulty": 2, "task": "Implement a stack class in Python with push, pop and peek, handling the empty-stack case."}
+{"id": "it-030", "module": "Data Structures and Algorithms", "skill": "stacks", "difficulty": 3, "task": "Use a stack to check whether the brackets in a string such as \"{[()]}\" are balanced."}
+{"id": "it-031", "module": "Data Structures and Algorithms", "skill": "queues", "difficulty": 3, "task": "Implement a queue using two stacks."}
+{"id": "it-032", "module": "Data Structures and Algorithms", "skill": "sorting", "difficulty": 2, "task": "Implement bubble sort and explain its best-case and worst-case time complexity."}
+{"id": "it-033", "module": "Data Structures and Algorithms", "skill": "sorting", "difficulty": 3, "task": "Implement merge sort and trace it on the array [5, 2, 8, 1, 9, 3]."}
+{"id": "it-034", "module": "Data Structures and Algorithms", "skill": "linked lists", "difficulty": 3, "task": "Reverse a singly linked list in place."}
+{"id": "it-035", "module": "Data Structures and Algorithms", "skill": "linked lists", "difficulty": 4, "task": "Detect whether a singly linked list contains a cycle using O(1) extra space."}
+{"id": "it-036", "module": "Data Structures and Algorithms", "skill": "trees", "difficulty": 3, "task": "Implement insertion and in-order traversal for a binary search tree."}
+{"id": "it-037", "module": "Data Structures and Algorithms", "skill": "trees", "difficulty": 3, "task": "Write a recursive function that returns the height of a binary tree."}
+{"id": "it-038", "module": "Data Structures and Algorithms", "skill": "graphs", "difficulty": 4, "task": "Implement breadth-first search on a graph stored as an adjacency list and return the order in which nodes are visited."}
+{"id": "it-039", "module": "Data Structures and Algorithms", "skill": "hashing", "difficulty": 4, "task": "Given an array of integers and a target, return the indices of the two numbers that add up to the target in O(n) time."}
+{"id": "it-040", "module": "Database Systems", "skill": "select", "difficulty": 1, "task": "Write an SQL query that lists all students with a GPA above 3.0, ordered by GPA from highest to lowest."}
+{"id": "it-041", "module": "Database Systems", "skill": "group by", "difficulty": 2, "task": "Write an SQL query that counts how many students are enrolled in each course."}
+{"id": "it-042", "module": "Database Systems", "skill": "having", "difficulty": 2, "task": "Write an SQL query that lists only the courses with more than 30 enrolled students."}
+{"id": "it-043", "module": "Database Systems", "skill": "joins", "difficulty": 2, "task": "Explain the difference between INNER JOIN and LEFT JOIN using a students and enrollments example."}
+{"id": "it-044", "module": "Database Systems", "skill": "joins", "difficulty": 3, "task": "Write an SQL query that finds the students who are not enrolled in any course."}
+{"id": "it-045", "module": "Database Systems", "skill": "subqueries", "difficulty": 3, "task": "Write an SQL query that finds the second-highest salary in an Employee table."}
+{"id": "it-046", "module": "Database Systems", "skill": "normalisation", "difficulty": 3, "task": "Normalise this table to 3NF: Orders(order_id, customer_name, customer_address, product_id, product_name, quantity)."}
+{"id": "it-047", "module": "Database Systems", "skill": "er modelling", "difficulty": 3, "task": "Describe an ER model for a hospital with patients, doctors, appointments and wards, including cardinalities."}
+{"id": "it-048", "module": "Database Systems", "skill": "transactions", "difficulty": 2, "task": "Explain what a database transaction is and the ACID properties, using a bank transfer example."}
+{"id": "it-049", "module": "Database Systems", "skill": "transactions", "difficulty": 4, "task": "Write a stored procedure that transfers money between two accounts and rolls back if anything fails."}
+{"id": "it-050", "module": "Database Systems", "skill": "indexing", "difficulty": 3, "task": "Explain how an index speeds up queries, and when adding an index can make performance worse."}
+{"id": "it-051", "module": "Database Systems", "skill": "window functions", "difficulty": 4, "task": "Write an SQL query that ranks students by GPA within each department using a window function."}
+{"id": "it-052", "module": "Database Systems", "skill": "schema design", "difficulty": 4, "task": "Design a relational schema for an online shop with customers, products, orders and order items, including primary and foreign keys."}
+{"id": "it-053", "module": "Web Development", "skill": "html", "difficulty": 1, "task": "Create an HTML form with name and email fields and a submit button, where both fields are required."}
+{"id": "it-054", "module": "Web Development", "skill": "css", "difficulty": 1, "task": "Write CSS that centres a div horizontally and vertically using flexbox."}
+{"id": "it-055", "module": "Web Development", "skill": "dom", "difficulty": 1, "task": "Write JavaScript that changes a paragraph's text when a button is clicked."}
+{"id": "it-056", "module": "Web Development", "skill": "responsive css", "difficulty": 2, "task": "Create a three-column layout that becomes a single column on screens narrower than 600px."}
+{"id": "it-057", "module": "Web Development", "skill": "async js", "difficulty": 2, "task": "Use fetch() to load a list of users from a JSON API and show their names in a list on the page."}
+{"id": "it-058", "module": "Web Development", "skill": "js fundamentals", "difficulty": 2, "task": "Explain the difference between let, const and var, with an example of a bug each one can cause or prevent."}
+{"id": "it-059", "module": "Web Development", "skill": "async js", "difficulty": 3, "task": "Why does `console.log(data)` print undefined right after I call an async function that loads the data?"}
+{"id": "it-060", "module": "Web Development", "skill": "backend", "difficulty": 3, "task": "Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist."}
+{"id": "it-061", "module": "Web Development", "skill": "web security", "difficulty": 3, "task": "Explain how a session cookie keeps a user logged in, and describe one way it can be attacked."}
+{"id": "it-062", "module": "Web Development", "skill": "web security", "difficulty": 4, "task": "My Node.js login route builds its SQL query with string concatenation. Show how to prevent SQL injection."}
+{"id": "it-063", "module": "Web Development", "skill": "api design", "difficulty": 3, "task": "Design REST endpoints for a to-do app with users, lists and tasks, including HTTP methods and status codes."}
+{"id": "it-064", "module": "Web Development", "skill": "validation", "difficulty": 3, "task": "Implement client-side validation for a sign-up form, and explain why server-side validation is still needed."}
+{"id": "it-065", "module": "Software Engineering", "skill": "requirements", "difficulty": 2, "task": "Write three user stories with acceptance criteria for a student timetable app."}
+{"id": "it-066", "module": "Software Engineering", "skill": "requirements", "difficulty": 1, "task": "Explain the difference between functional and non-functional requirements, with examples from a food delivery app."}
+{"id": "it-067", "module": "Software Engineering", "skill": "process models", "difficulty": 2, "task": "Compare Waterfall and Scrum for a four-month university group project, and recommend one."}
+{"id": "it-068", "module": "Software Engineering", "skill": "uml", "difficulty": 2, "task": "Describe a use case diagram for an ATM, including actors and main use cases."}
+{"id": "it-069", "module": "Software Engineering", "skill": "testing", "difficulty": 3, "task": "Write unit tests for a function that calculates a discounted price, covering the edge cases."}
+{"id": "it-070", "module": "Software Engineering", "skill": "testing", "difficulty": 2, "task": "Explain the difference between unit, integration and system testing, with one example of each."}
+{"id": "it-071", "module": "Software Engineering", "skill": "uml", "difficulty": 3, "task": "Describe a sequence diagram for a customer placing an order in an online shop."}
+{"id": "it-072", "module": "Software Engineering", "skill": "refactoring", "difficulty": 4, "task": "A 200-line function validates input, queries the database and sends an email. Identify the code smells and propose a refactoring."}
+{"id": "it-073", "module": "Software Engineering", "skill": "estimation", "difficulty": 3, "task": "Estimate the effort for a login feature using story points and explain your reasoning."}
+{"id": "it-074", "module": "Software Engineering", "skill": "version control", "difficulty": 2, "task": "Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict."}
+{"id": "it-075", "module": "Software Engineering", "skill": "project management", "difficulty": 3, "task": "Write a risk register with five risks for a mobile app project, including likelihood, impact and mitigation."}
+{"id": "it-076", "module": "Software Engineering", "skill": "design principles", "difficulty": 4, "task": "Explain the SOLID principles, and give an example that violates the Single Responsibility Principle and how to fix it."}
+{"id": "it-077", "module": "Computer Networks", "skill": "transport", "difficulty": 1, "task": "Explain the difference between TCP and UDP and give one application suited to each."}
+{"id": "it-078", "module": "Computer Networks", "skill": "protocols", "difficulty": 3, "task": "Describe step by step what happens when you type a URL into a browser and press Enter."}
+{"id": "it-079", "module": "Computer Networks", "skill": "subnetting", "difficulty": 3, "task": "Find the network address, broadcast address and number of usable hosts for 192.168.10.37/27."}
+{"id": "it-080", "module": "Computer Networks", "skill": "subnetting", "difficulty": 3, "task": "Divide 10.0.0.0/24 into four equal subnets and list the address range of each."}
+{"id": "it-081", "module": "Computer Networks", "skill": "models", "difficulty": 2, "task": "Explain the layers of the OSI model and map HTTP, TCP, IP and Ethernet to them."}
+{"id": "it-082", "module": "Computer Networks", "skill": "dns", "difficulty": 2, "task": "Explain how DNS resolves a domain name to an IP address, including caching."}
+{"id": "it-083", "module": "Computer Networks", "skill": "transport", "difficulty": 3, "task": "Explain the TCP three-way handshake and why it needs three steps rather than two."}
+{"id": "it-084", "module": "Computer Networks", "skill": "dhcp", "difficulty": 2, "task": "Explain how DHCP gives a new laptop an IP address when it joins a network."}
+{"id": "it-085", "module": "Computer Networks", "skill": "addressing", "difficulty": 2, "task": "Explain NAT and why most home devices have private IP addresses."}
+{"id": "it-086", "module": "Computer Networks", "skill": "troubleshooting", "difficulty": 3, "task": "A PC can ping 8.8.8.8 but cannot open google.com in a browser. What are the likely causes and how would you troubleshoot?"}
+{"id": "it-087", "module": "Computer Networks", "skill": "routing", "difficulty": 4, "task": "Two routers connect the networks 192.168.1.0/24 and 192.168.2.0/24. Describe the static routes needed so the networks can reach each other."}
+{"id": "it-088", "module": "Computer Networks", "skill": "security", "difficulty": 4, "task": "Compare symmetric and asymmetric encryption, and explain how HTTPS uses both."}
+{"id": "it-089", "module": "Operating Systems", "skill": "processes", "difficulty": 1, "task": "Explain the difference between a process and a thread."}
+{"id": "it-090", "module": "Operating Systems", "skill": "processes", "difficulty": 2, "task": "Describe the process state diagram and explain each transition."}
+{"id": "it-091", "module": "Operating Systems", "skill": "scheduling", "difficulty": 3, "task": "Calculate the average waiting time for P1=5, P2=3 and P3=8 (burst times, all arriving at time 0) under FCFS and SJF."}
+{"id": "it-092", "module": "Operating Systems", "skill": "scheduling", "difficulty": 3, "task": "Simulate Round Robin with a time quantum of 2 for P1=5, P2=3 and P3=1, all arriving at time 0, and give each completion time."}
+{"id": "it-093", "module": "Operating Systems", "skill": "synchronisation", "difficulty": 3, "task": "Explain a race condition using two threads incrementing a shared counter, and how a mutex fixes it."}
+{"id": "it-094", "module": "Operating Systems", "skill": "deadlock", "difficulty": 3, "task": "Explain the four necessary conditions for deadlock and one way to prevent each."}
+{"id": "it-095", "module": "Operating Systems", "skill": "synchronisation", "difficulty": 4, "task": "Solve the bounded-buffer producer-consumer problem with semaphores, in pseudocode."}
+{"id": "it-096", "module": "Operating Systems", "skill": "memory", "difficulty": 3, "task": "Explain paging and how a logical address is translated to a physical address."}
+{"id": "it-097", "module": "Operating Systems", "skill": "memory", "difficulty": 4, "task": "Count the page faults for the reference string 7,0,1,2,0,3,0,4,2,3 with 3 frames under FIFO and LRU."}
+{"id": "it-098", "module": "Operating Systems", "skill": "memory", "difficulty": 2, "task": "Explain the difference between internal and external fragmentation."}
+{"id": "it-099", "module": "Operating Systems", "skill": "system calls", "difficulty": 3, "task": "Write a C program that uses fork() so that the parent and the child each print their own PID."}
+{"id": "it-100", "module": "Operating Systems", "skill": "shell", "difficulty": 2, "task": "Write a bash script that copies all .txt files in a folder into a backup archive named with today's date."}

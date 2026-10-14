@@ -20,3 +20,7 @@ checkpoints/
 data/raw/
 data/generated/
 node_modules/
+
+# training outputs
+runs/
+components/c4_hcde/training/data/dataset/*.tmp
