@@ -1,0 +1,43 @@
+SYNTHETIC — distinctness check of the Model 2 action catalogue (14 Oct 2026)
+Share of scenarios in which two actions give a different MVD (any tag or slot).
+
+actions: ['default', 'compress_25', 'no_compress', 'deadline_first', 'evening_first']
+
+golden S1-S16 (15 plannable): 15 scenarios
+  default         vs compress_25     differ in  33.3%
+  default         vs no_compress     differ in  46.7%
+  default         vs deadline_first  differ in   6.7%
+  default         vs evening_first   differ in  40.0%
+  compress_25     vs no_compress     differ in  13.3%
+  compress_25     vs deadline_first  differ in  33.3%
+  compress_25     vs evening_first   differ in  60.0%
+  no_compress     vs deadline_first  differ in  46.7%
+  no_compress     vs evening_first   differ in  60.0%
+  deadline_first  vs evening_first   differ in  46.7%
+  never differ: none
+
+500 seeded test days: 500 scenarios
+  default         vs compress_25     differ in  23.8%
+  default         vs no_compress     differ in  39.6%
+  default         vs deadline_first  differ in  54.6%
+  default         vs evening_first   differ in  39.6%
+  compress_25     vs no_compress     differ in  19.8%
+  compress_25     vs deadline_first  differ in  64.2%
+  compress_25     vs evening_first   differ in  54.6%
+  no_compress     vs deadline_first  differ in  70.6%
+  no_compress     vs evening_first   differ in  64.4%
+  deadline_first  vs evening_first   differ in  68.8%
+  never differ: none
+
+SYNTHETIC persona disruption days (seed 11): 95 scenarios
+  default         vs compress_25     differ in   1.1%
+  default         vs no_compress     differ in   2.1%
+  default         vs deadline_first  differ in  12.6%
+  default         vs evening_first   differ in   9.5%
+  compress_25     vs no_compress     differ in   1.1%
+  compress_25     vs deadline_first  differ in  13.7%
+  compress_25     vs evening_first   differ in  10.5%
+  no_compress     vs deadline_first  differ in  14.7%
+  no_compress     vs evening_first   differ in  10.5%
+  deadline_first  vs evening_first   differ in  22.1%
+  never differ: none

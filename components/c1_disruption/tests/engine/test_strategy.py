@@ -134,3 +134,56 @@ def test_invalid_duration_range_raises(low, high, message):
     data["tasks"][0].update(estimatedHoursLow=low, estimatedHoursHigh=high)
     with pytest.raises(EngineError, match=message):
         generate_mvd(data)
+
+
+# --- deferOrder and recoveryTiming (planning chat, 14 Oct 2026) --------------------------------
+
+@pytest.mark.parametrize("s", PLANS, ids=[s["id"] for s in PLANS])
+def test_explicit_default_order_and_timing_give_the_golden_output(s):
+    data = with_strategy(s["input"], compressRatio=0.5, deferOrder="fi", recoveryTiming="earliest")
+    assert generate_mvd(data) == generate_mvd(s["input"])
+
+
+def test_deadline_order_reduces_the_later_deadline_instead():
+    # Golden S4: K2 (Fi 0.167, due 23:59) is placed first, K3 (Fi 0.208, due 23:59) is
+    # last and reduced. With deadline order K1 (due 17:00) comes first, then K2/K3 by Fi.
+    default = {t["id"]: t for t in generate_mvd(scenario("S4")["input"])["tasks"]}
+    by_deadline = generate_mvd(with_strategy(scenario("S4")["input"], deferOrder="deadline"))
+    assert [t["id"] for t in by_deadline["tasks"]] == ["K1", "K2", "K3"]
+    assert [t["id"] for t in default.values()] == ["K2", "K1", "K3"]
+    assert find_violations(by_deadline, with_strategy(scenario("S4")["input"], deferOrder="deadline")) == []
+
+
+def test_latest_timing_places_tasks_in_the_latest_gap_at_its_end():
+    # Golden S7 (window over, no window-first): K1 10:00–12:00 by default. Latest timing
+    # fills the end of the day first: K1 11:00–13:00, R1 squeezed into 10:00–11:00.
+    latest = {t["id"]: t for t in generate_mvd(with_strategy(scenario("S7")["input"], recoveryTiming="latest"))["tasks"]}
+    assert (latest["K1"]["start"], latest["K1"]["end"]) == ("11:00", "13:00")
+    assert (latest["R1"]["start"], latest["R1"]["end"], latest["R1"]["tag"]) == ("10:00", "11:00", "Reduce")
+
+
+def test_window_first_still_applies_with_latest_timing():
+    # Golden S1: T1 (Analog, EF 1.2) goes into the outage 09:00–11:00 regardless of timing.
+    t1 = next(t for t in generate_mvd(with_strategy(scenario("S1")["input"], recoveryTiming="latest"))["tasks"]
+              if t["id"] == "T1")
+    assert (t1["start"], t1["end"]) == ("09:00", "11:00")
+
+
+def test_hard_rules_hold_for_500_random_days_with_random_strategies():
+    rand = seeded_random(SEED)
+    pick = random.Random(15)
+    failures = []
+    for i in range(500):
+        strategy = {"compressRatio": pick.choice([0, 0.25, 0.5]), "deferOrder": pick.choice(["fi", "deadline"]),
+                    "recoveryTiming": pick.choice(["earliest", "latest"])}
+        day = {**random_day(rand), "strategy": strategy}
+        problems = find_violations(generate_mvd(day), day)
+        if problems:
+            failures.append((i, strategy, problems))
+    assert failures == []
+
+
+@pytest.mark.parametrize(("key", "value"), [("deferOrder", "random"), ("recoveryTiming", "noon")])
+def test_invalid_order_or_timing_raises(key, value):
+    with pytest.raises(EngineError, match=key):
+        generate_mvd({**scenario("S1")["input"], "strategy": {key: value}})

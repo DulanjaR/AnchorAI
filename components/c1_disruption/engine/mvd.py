@@ -13,6 +13,7 @@ from types import ModuleType
 
 from components.c1_disruption.engine import config as default_config
 from components.c1_disruption.engine.classify import (
+    compare_deadline_order,
     compare_placement_order,
     group_for,
     has_deadline_risk,
@@ -158,6 +159,7 @@ def find_slot(
     window_first: bool,
     config: ModuleType = default_config,
     max_compression: float | None = None,
+    latest: bool = False,
 ) -> Interval | None:
     """Finds a slot for one task in the remaining free gaps, or returns None.
 
@@ -165,6 +167,8 @@ def find_slot(
     block or across two gaps. `window_first` is False for an "unavailable"
     disruption: its window has already been removed from the gaps.
     `max_compression` comes from the strategy (default config.MAX_COMPRESSION).
+    `latest` (strategy recoveryTiming "latest"): outside window-first, use the latest
+    gap that holds the task, at its end; compression ties go to the latest gap.
     """
     if max_compression is None:
         max_compression = config.MAX_COMPRESSION
@@ -186,16 +190,16 @@ def find_slot(
             if overlaps(g, window) and _length(g) >= need:
                 return Interval(g.start, g.start + need)
 
-    # Otherwise the earliest gap that holds the full task.
-    for g in feasible:
+    # Otherwise the earliest gap that holds the full task (or the latest, at its end).
+    for g in (reversed(feasible) if latest else feasible):
         if _length(g) >= need:
-            return Interval(g.start, g.start + need)
+            return Interval(g.end - need, g.end) if latest else Interval(g.start, g.start + need)
 
     # Reduce: use the largest gap (least compression = "only as much as needed";
-    # on a tie the earliest gap wins), as long as compression stays within the max.
+    # on a tie the earliest gap wins, or the latest), as long as compression stays within the max.
     largest: Interval | None = None
     for g in feasible:
-        if largest is None or _length(g) > _length(largest):
+        if largest is None or _length(g) > _length(largest) or (latest and _length(g) == _length(largest)):
             largest = g
     if largest is not None and _length(largest) >= need * (1 - max_compression):
         return largest
@@ -229,7 +233,8 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
     scored = [_score_task(task, ctx, config) for task in tasks]
 
     # Steps 5–7: place groups A, B, C in order; group D is never placed (step 8).
-    order = sorted(scored, key=cmp_to_key(compare_placement_order))
+    comparator = compare_deadline_order if strategy.defer_order == "deadline" else compare_placement_order
+    order = sorted(scored, key=cmp_to_key(comparator))
     gaps = build_free_gaps(horizon, protected_blocks)
     # Unavailable kind: the window is taken time, exactly like a protected block.
     if unavailable:
@@ -240,7 +245,8 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
     for item in order:
         if item.group == "D":
             continue
-        slot = find_slot(item, gaps, window, window_first, config, strategy.compress_ratio)
+        slot = find_slot(item, gaps, window, window_first, config, strategy.compress_ratio,
+                         latest=strategy.recovery_timing == "latest")
         if slot is not None:
             slots[item.task["id"]] = slot
             gaps = subtract_interval(gaps, slot)

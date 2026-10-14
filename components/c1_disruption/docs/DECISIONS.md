@@ -2,6 +2,13 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — deferOrder / recoveryTiming implemented; 5-action catalogue (step 6)
+- Implements the planning-chat decision "Strategy settings deferOrder and recoveryTiming; 5-action catalogue" (below). Defaults reproduce the golden spec (tested).
+- **PROPOSED interpretations:** `deferOrder: "deadline"` keeps the candidate groups A–D (locked) and orders **within** each group by earliest absolute deadline, then Fi, then shortest duration. `recoveryTiming: "latest"` keeps window-first (Q6, locked); outside it, a task goes to the **latest** free gap that holds it, at the gap's end; for compression, equal largest gaps go to the latest.
+- Catalogue (`app/services/planning.py` `STRATEGIES`, also Model 2's actions): `default` (first, approved behaviour), `compress_25`, `no_compress`, `deadline_first` (`deferOrder: deadline`), `evening_first` (`recoveryTiming: latest`).
+- **Distinctness check:** no pair of actions never differs on any of the three scenario sets, so none is merged or dropped. On the SYNTHETIC persona disruption days the three compression actions differ in only 1–2% of events (after the replanning scope most days need no shortening); `deadline_first` and `evening_first` differ in 10–22%. Full table in `sim/results/distinctness_SYNTHETIC.txt`.
+- **Finding for Model 2 (PROPOSED change, not made):** the simulated decision rewards the strategy *label* (accept 0.85 if the shown strategy is the persona's `preferredStrategy`), even when the plan shown is identical to the preferred strategy's plan. Proposal: treat the shown plan as "preferred" when it equals the plan the preferred strategy would give.
+
 ## 2026-10-14 — OVERRUN_RISK implemented (step 5)
 - Implements the planning-chat decision "High duration: only for the OVERRUN_RISK warning" (below).
 - `engine/mvd.py` `_warnings`: for every **Keep** task with `estimatedHoursHigh`, if `start + high` runs past the end of the free stretch the task starts in, the MVD's `warnings` get `{taskId, code: "OVERRUN_RISK", message}`. The end of the free stretch = where the next fixed block begins (a protected block, or the window of an unavailable disruption) or the end of the day's free time; other placed tasks do not count. Reduce / Move / Delegate tasks never get it. Planning (Fi, fit, slot, compression %) is unchanged.

@@ -53,6 +53,18 @@ def compare_placement_order(a: Orderable, b: Orderable) -> float:
     return a.duration_minutes - b.duration_minutes
 
 
+def compare_deadline_order(a: Orderable, b: Orderable) -> float:
+    """Strategy deferOrder "deadline": group first (unchanged), then earliest absolute
+    deadline, then Fi ascending, then shortest duration."""
+    if a.group != b.group:
+        return GROUPS.index(a.group) - GROUPS.index(b.group)
+    if a.deadline_key != b.deadline_key:
+        return a.deadline_key - b.deadline_key
+    if abs(a.fi - b.fi) > FI_TIE_TOLERANCE:
+        return a.fi - b.fi
+    return a.duration_minutes - b.duration_minutes
+
+
 def tag_for(*, placed: bool, compressed: bool, delegable: bool) -> str:
     """Tag by outcome (Q2, Q3): placed in full → Keep; placed shorter → Reduce;
     not placed → Delegate if the user flagged it delegable, otherwise Move."""

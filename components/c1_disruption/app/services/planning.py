@@ -20,6 +20,8 @@ STRATEGIES: dict[str, dict[str, Any]] = {
     "default": {"compressRatio": engine_config.MAX_COMPRESSION},  # approved: up to 50%
     "compress_25": {"compressRatio": 0.25},  # shorten less, move more
     "no_compress": {"compressRatio": 0.0},  # never shorten: keep in full or move
+    "deadline_first": {"compressRatio": engine_config.MAX_COMPRESSION, "deferOrder": "deadline"},
+    "evening_first": {"compressRatio": engine_config.MAX_COMPRESSION, "recoveryTiming": "latest"},
 }
 
 POLICY_MODES = ("fixed_order", "bandit", "randomised")

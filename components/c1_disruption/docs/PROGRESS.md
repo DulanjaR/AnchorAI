@@ -4,6 +4,15 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Planning decisions step 6: deferOrder, recoveryTiming, 5-action catalogue — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: sim/results/distinctness_SYNTHETIC.txt
+Files changed: engine/strategy.py (`defer_order`, `recovery_timing` + validation), engine/classify.py (`compare_deadline_order`), engine/mvd.py (deadline order within groups; latest gap first), app/services/planning.py (`STRATEGIES`: default, compress_25, no_compress, deadline_first, evening_first), tests/engine/test_strategy.py, tests/ml/test_bandit.py, docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → 608 passed; explicit defaults give the golden output on every scenario; hard rules hold on 500 random days with random strategies; distinctness: no pair never differs
+Decisions applied: DECISIONS.md 2026-10-14 (deferOrder / recoveryTiming, catalogue)
+Open questions for owner: deadline / latest interpretations; Model 2 label-reward proposal (STATUS.md PROPOSED)
+Next step: rerun the SYNTHETIC simulation with 5 actions
+
 ## 2026-10-14 — Planning decisions step 5: OVERRUN_RISK warning — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: tests/engine/test_overrun.py

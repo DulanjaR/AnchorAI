@@ -117,7 +117,8 @@ def test_most_accepted_baseline_learns_per_student():
     x = np.ones(len(FEATURE_NAMES))
     policy.update("a", x, "compress_25", 1.0)
     policy.update("a", x, "default", 0.0)
-    assert policy.rank("a", x) == ["compress_25", "no_compress", "default"]
+    # Tried and accepted first; untried (prior 0.5) in catalogue order; rejected last.
+    assert policy.rank("a", x) == ["compress_25", "no_compress", "deadline_first", "evening_first", "default"]
     assert policy.rank("b", x) == ACTIONS  # nothing known: catalogue order
 
 

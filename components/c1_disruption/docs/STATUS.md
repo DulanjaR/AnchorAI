@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`59ab967` · 2026-10-14 · "C1 sim: full SYNTHETIC run (5 seeds x 3 variants); Model 1 coverage inside 70-90%, no calibration" (this update is in the commit after it).
+`10b7571` · 2026-10-14 · "C1 engine: OVERRUN_RISK warning from the high duration estimate (planning uses the point)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -12,9 +12,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Step 1+2 of the 14 Oct planning decisions:** layer C = per-persona disruption profile (`SYNTHETIC_disruption_profile.csv`) with top-up to 10 effective disruptions per persona; approved replanning scope (done tasks left out, in-progress tasks replanned for their remaining minutes); P09 long tasks from 120 min; all planning-chat decisions recorded in DECISIONS.md.
 - **Step 3/4:** full SYNTHETIC run (5 seeds × planted / null / misspecified) → `sim/results/c1_simulation_SYNTHETIC.md`; Model 1 warm coverage 0.72–0.75 (inside 70–90%) → no calibration.
 - **Step 5:** `OVERRUN_RISK` warning for Keep tasks whose high estimate would cross the next fixed block or the end of the free time (planning still uses the point).
+- **Step 6:** strategy `deferOrder` (`fi` | `deadline`) and `recoveryTiming` (`earliest` | `latest`); 5-action catalogue (default, compress_25, no_compress, deadline_first, evening_first); distinctness check passed (no pair never differs).
 
 ## In progress
-- Step 6 (`deferOrder`, `recoveryTiming`, 5-action catalogue, distinctness).
+- Rerun of the SYNTHETIC simulation with the 5-action catalogue.
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -22,11 +23,13 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- deferOrder "deadline" keeps the groups and orders within them; recoveryTiming "latest" keeps window-first.
+- Model 2 simulation: count a shown plan as "preferred" when it equals the preferred strategy's plan (today the label decides; on persona days the compression actions rarely change the plan).
 - OVERRUN_RISK message wording; "end of window" read as the end of the free stretch the task starts in.
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
 ## Next step
-Step 6, then rerun the SYNTHETIC simulation with the 5-action catalogue.
+Rerun the SYNTHETIC simulation with the 5-action catalogue; then PP1 demo (Task 6); D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **587 passed** (C1 586 + C4 1), 14 Oct 2026.
+Root `pytest`: **608 passed** (C1 607 + C4 1), 14 Oct 2026.
