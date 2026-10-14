@@ -9,6 +9,7 @@ from typing import Any, Mapping
 from components.c1_disruption.engine import config as default_config
 from components.c1_disruption.engine.fi import lookup_ef
 from components.c1_disruption.engine.strategy import read_strategy
+from components.c1_disruption.metrics.plan_metrics import ptvr
 from components.c1_disruption.engine.time import (
     Interval,
     block_to_intervals,
@@ -27,14 +28,8 @@ def _placed_slots(mvd: Mapping[str, Any]) -> list[tuple[str, Interval]]:
 
 
 def compute_ptvr(mvd: Mapping[str, Any], input: Mapping[str, Any]) -> float:
-    """PTVR (Protected Time Violation Rate) = placed tasks overlapping a protected
-    block ÷ placed tasks. CLAUDE.md §3.3 step 1: must be exactly 0."""
-    slots = _placed_slots(mvd)
-    if not slots:
-        return 0
-    blocks = [iv for b in input.get("protectedBlocks") or [] for iv in block_to_intervals(b)]
-    violations = sum(1 for _, s in slots if any(overlaps(s, b) for b in blocks))
-    return violations / len(slots)
+    """PTVR, the same function the evaluation uses (metrics/plan_metrics.py)."""
+    return ptvr(mvd, input.get("protectedBlocks") or [])
 
 
 def find_violations(
