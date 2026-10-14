@@ -2,6 +2,13 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Model 2 implementation choices (PROPOSED where marked)
+- **Action catalogue (PROPOSED)** in `app/services/planning.py` `STRATEGIES`: `default` (compress up to 50%, the approved behaviour, always first), `compress_25` (up to 25%), `no_compress` (keep in full or move). Defer order and recovery timing will add actions once defined.
+- **Distinctness** (15 golden + 500 seeded test days): default vs compress_25 differ in 24% of scenarios, default vs no_compress 40%, compress_25 vs no_compress 20%; no pair never differs, so none is merged.
+- **Pooled LinUCB** (`ml/bandit/linucb.py`, numpy only): per action a shared ridge model θ_a (λ = 1) and a per-student ridge δ_{s,a} on residuals (λ = 5); score = estimate + α·√(shared + student variance), α = 0.5 (`ml/bandit/settings.py`). A new student uses θ_a only.
+- Context: bias, kind, severity, morning/afternoon/evening, share of digital tasks, slack ratio (engine overload check, clipped to [−1, 1]), weekend, past acceptance (prior 0.5), number of past events (log-scaled).
+- The service logs the context vector (`banditFeatures`) and the reward on every decision, and the chooser **learns in every mode**, so week 1 (`fixed_order`) still trains the bandit. Default chooser = fixed order: golden S1–S16 and the API cases are unchanged.
+
 ## 2026-10-14 — Model 1 library: quantile-forest; ML pins
 - **Quantile regression forest from `quantile-forest` 1.4.2** (`RandomForestQuantileRegressor`, scikit-learn API). *Why:* a real quantile regression forest (Meinshausen 2006) with the same trees as a Random Forest, so one model gives the point (mean) and the q10–q90 range; scikit-learn compatible; binary wheels install cleanly for Linux x86_64 (Colab) on Python 3.11–3.13 and Windows (checked 14 Oct 2026). Alternatives not taken: scikit-learn `GradientBoostingRegressor(loss="quantile")` (one model per quantile, not a forest); hand-made quantiles from tree leaves (more code to defend).
 - Pins (`requirements.txt`): numpy 2.4.6 (2.5 dropped Python 3.11), scipy 1.17.1, scikit-learn 1.9.1, quantile-forest 1.4.2, joblib 1.6.0, pandas 3.0.6. Model 2 needs only numpy.

@@ -20,6 +20,8 @@ from components.c1_disruption.app.services.planning import (
     FixedOrder,
     NoDrift,
     StrategyChooser,
+    learns,
+    reward,
 )
 from components.c1_disruption.engine.diff import diff_plans
 from components.c1_disruption.engine.mvd import generate_mvd
@@ -84,10 +86,6 @@ def generate(
     # ML Model 1: corrected durations (default: drift 1.0 = the user's estimate).
     context = {"date": date, "planFrom": plan_from, "disruption": disruption}
     corrections = {t["id"]: deps.corrector.correct(user_id, t, context) for t in tasks}
-    # ML Model 2: which strategy shapes the MVD (default: fixed order, approved strategy).
-    ranking = deps.chooser.rank(user_id, {**context, "tasks": tasks})
-    strategy_id = ranking.ranking[0]
-
     engine_input = {
         "date": date,
         "workHours": {"start": settings["workStart"], "end": settings["workEnd"]},
@@ -106,8 +104,13 @@ def generate(
             }
             for t in tasks
         ],
-        "strategy": dict(STRATEGIES[strategy_id]),
     }
+    # ML Model 2: which strategy shapes the MVD (default: fixed order → the approved strategy).
+    ranking = deps.chooser.rank(
+        user_id, {**context, "tasks": tasks, "engineInput": engine_input, "severity": disruption["severity"]}
+    )
+    strategy_id = ranking.ranking[0]
+    engine_input["strategy"] = dict(STRATEGIES[strategy_id])
     # An EngineError (e.g. a None EF value) becomes 422 in the error handler.
     plan = generate_mvd(engine_input)
 
@@ -159,6 +162,7 @@ def generate(
             for t in tasks
         ],
         "timeToDecisionSeconds": None,
+        "banditFeatures": ranking.features,
     })
 
 
@@ -250,7 +254,8 @@ def decide(
         if action == "edit"
         else []
     )
-    # Feedback is the reward signal for ML Model 2: accept +, edit partial, reject −.
+    # Reward for ML Model 2 (PROPOSED): accept 1, reject 0, edit 1 − tags changed ÷ tags.
+    value = reward(action, len(tag_changes), len(mvd["plan"]["tasks"]))
     store.create("feedback", {
         "userId": user_id,
         "mvdId": mvd["id"],
@@ -262,7 +267,11 @@ def decide(
         "tagChanges": tag_changes,
         "totalTasks": len(mvd["plan"]["tasks"]),
         "timeToDecisionSeconds": seconds,
+        "reward": value,
     })
+    # Model 2 learns from every decision (in every policy mode).
+    if learns(deps.chooser) and mvd.get("banditFeatures"):
+        deps.chooser.learn(user_id, mvd["banditFeatures"], mvd["strategyId"], value)
 
     status: dict[str, Any] = {"accept": "accepted", "edit": "edited", "reject": "rejected"}
     return store.update(
