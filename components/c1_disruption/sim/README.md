@@ -15,7 +15,15 @@ returns the Model 1 evaluation (leave-one-student-out, rolling-origin, baselines
 event metrics, every table labelled SYNTHETIC. Two extra cases: a **null persona** (no drift) and a
 **misspecified generator** (drift also depends on a hidden daily factor the model cannot see).
 
-## Input format (fill these in; `examples/` has a tiny example)
+## Data
+
+`data/` holds the owner's SYNTHETIC persona set (made in the planning chat from PERSONAS.md):
+`SYNTHETIC_personas.csv` (10 personas, with a free-text `specialHabits` column),
+`SYNTHETIC_habits.csv` (the special habits as explicit fields), `SYNTHETIC_tasks_planned.csv`
+(589 tasks, 30 days), `SYNTHETIC_schedule.csv` (every block of every day). `examples/` is a tiny
+set for tests.
+
+## Input format (`examples/` has a tiny example)
 
 ### `personas.csv` — one row per persona
 
@@ -47,4 +55,30 @@ event metrics, every table labelled SYNTHETIC. Two extra cases: a **null persona
 | `plannedStart`, `plannedEnd` | no | the original plan slot `HH:MM` (both or neither) |
 | `delegable` | no | `true` / `false`, default `false` |
 
-The loader checks every row and names the file, line and column of any problem.
+### `habits.csv` — special habits (optional; explicit fields, one row per persona that has any)
+
+| Column | Meaning |
+|---|---|
+| `personaId` | must exist in `personas.csv` |
+| `lateFactor`, `lateFrom` | × drift for tasks starting at or after `lateFrom` (both or neither) |
+| `afterNightShiftFactor` | × drift for the first study task (earliest planned start) on a day after a night shift; a night-shift day = the schedule has an `office` block from 00:00 (needs a schedule) |
+| `titleDrift` | `title prefix=drift` items separated by `;`: a task whose title starts with the prefix uses this drift **instead of** its type drift |
+| `longTaskFactor`, `longTaskMinutes` | × drift for Digital tasks estimated at `longTaskMinutes` or more (both or neither) |
+
+### `schedule.csv` — one row per block of a persona's day (optional)
+
+| Column | Meaning |
+|---|---|
+| `personaId`, `day`, `date` | `date` must match `day` (day 1 = `START_DATE`) |
+| `kind` | `sleep`, `routine`, `bus` (travel), `office`, `campus`, `family`, `tutor`, `fixed` (e.g. a quiz), `study_window` |
+| `label` | shown in explanations of protected time |
+| `start`, `end` | `HH:MM`; `end` may be `24:00`; a block crossing midnight is two rows on two days |
+
+With a schedule, each day's engine input is built from it: **workHours** = first study-window start
+to last study-window end; **protectedBlocks** = every non-study block inside that span plus the gaps
+between study windows. A study window wins only over **travel** (`bus`) blocks (studying on the bus or
+train); every other kind (quiz, meals, work, campus, family, tutoring) stays protected even inside a
+study window. Disruption starts are drawn only from free study minutes. Without a schedule the
+persona's own `workStart`–`workEnd` and `protectedBlocks` are used, as before.
+
+The loaders check every row and name the file, line and column of any problem.

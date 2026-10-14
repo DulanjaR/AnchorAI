@@ -1,0 +1,11 @@
+personaId,label,workStart,workEnd,protectedBlocks,driftDigital,driftAnalog,driftMeeting,driftFixed,eveningFactor,weekendFactor,noiseSd,preferredStrategy,specialHabits
+P01,"SYNTHETIC: junior developer, bus commuter",05:00,23:59,,1.35,1.1,1.0,1.0,1.0,1.0,0.1,default,lateFactor 1.10 from 21:30
+P02,"SYNTHETIC: QA engineer, hybrid; accurate planner (control)",05:00,23:59,,1.05,1.0,1.0,1.0,1.0,1.0,0.05,no_compress,
+P03,"SYNTHETIC: support engineer, early shift",05:00,23:59,,1.55,1.05,1.0,1.0,1.0,1.0,0.1,compress_25,
+P04,"SYNTHETIC: startup developer, crams",05:00,23:59,,1.25,1.15,1.0,1.0,1.0,1.0,0.1,compress_25,
+P05,"SYNTHETIC: bank IT trainee, reads on the train",05:00,23:59,,1.3,0.95,1.0,1.0,1.0,1.0,0.1,default,
+P06,"SYNTHETIC: network technician, family duties",05:00,23:59,,1.2,1.1,1.0,1.0,1.0,1.0,0.1,compress_25,
+P07,"SYNTHETIC: NOC engineer, rotating shifts",05:00,23:59,,1.25,1.15,1.0,1.0,1.0,1.0,0.1,default,first study task after a night shift x1.35
+P08,"SYNTHETIC: office admin assistant, strong reader",05:00,23:59,,1.2,0.9,1.0,1.0,1.0,1.0,0.1,no_compress,"report-writing tasks (Module B assignment sections, lit review synthesis) drift 1.60 instead of 1.20"
+P09,SYNTHETIC: developer who tutors,05:00,23:59,,1.2,1.05,1.0,1.0,1.0,1.0,0.1,no_compress,Digital tasks of 180 min or more x1.30
+P10,SYNTHETIC: remote web developer,05:00,23:59,,1.15,1.1,1.0,1.0,1.0,1.0,0.1,default,

@@ -1,5 +1,7 @@
-"""Layer A: load and check the owner's persona and task lists (format: sim/README.md)."""
+"""Layer A: load and check the owner's persona, habit, task and schedule files
+(format: sim/README.md). Every problem names the file, line and column."""
 import csv
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
@@ -27,6 +29,13 @@ class Persona:
     weekend_factor: float = 1.0
     noise_sd: float = 0.10
     preferred_strategy: str = "default"
+    # Special habits (planted drift beyond type / evening / weekend), from the habits file.
+    late_factor: float = 1.0  # x for tasks starting at or after late_from
+    late_from: str | None = None
+    after_night_shift_factor: float = 1.0  # x for the first study task on a day after a night shift
+    title_drift: tuple[tuple[str, float], ...] = ()  # (title prefix, drift): replaces the type drift
+    long_task_factor: float = 1.0  # x for Digital tasks of at least long_task_minutes
+    long_task_minutes: int | None = None
 
 
 @dataclass(frozen=True)
@@ -99,7 +108,8 @@ def _blocks(path: Path, line: int, text: str) -> tuple[dict, ...]:
     return tuple(blocks)
 
 
-def load_personas(path: str | Path) -> dict[str, Persona]:
+def load_personas(path: str | Path, habits: str | Path | None = None) -> dict[str, Persona]:
+    """Personas, with their special habits merged in from the habits file if given."""
     path = Path(path)
     personas: dict[str, Persona] = {}
     for line, row in _rows(path):
@@ -130,7 +140,50 @@ def load_personas(path: str | Path) -> dict[str, Persona]:
         )
     if not personas:
         raise FormatError(f"{path.name}: no personas")
-    return personas
+    return load_habits(habits, personas) if habits else personas
+
+
+def _title_drift(path: Path, line: int, text: str) -> tuple[tuple[str, float], ...]:
+    items = []
+    for item in (p.strip() for p in text.split(";") if p.strip()):
+        prefix, sep, value = item.rpartition("=")
+        try:
+            drift = float(value)
+        except ValueError:
+            drift = 0.0
+        if not sep or not prefix.strip() or drift <= 0:
+            raise _fail(path, line, "titleDrift", f"'{item}' is not 'title prefix=drift'")
+        items.append((prefix.strip(), drift))
+    return tuple(items)
+
+
+def load_habits(path: str | Path, personas: dict[str, Persona]) -> dict[str, Persona]:
+    """Special habits as explicit fields (sim/README.md): lateFactor + lateFrom,
+    afterNightShiftFactor, titleDrift, longTaskFactor + longTaskMinutes."""
+    path = Path(path)
+    out = dict(personas)
+    for line, row in _rows(path):
+        pid = row.get("personaId", "")
+        if pid not in personas:
+            raise _fail(path, line, "personaId", f"'{pid}' is not in the personas file")
+        late_from = _time(path, line, row, "lateFrom", required=False)
+        late = _number(path, line, row, "lateFactor", 1.0)
+        if (late != 1.0) != (late_from is not None):
+            raise _fail(path, line, "lateFrom", "lateFactor and lateFrom go together")
+        long_factor = _number(path, line, row, "longTaskFactor", 1.0)
+        long_minutes = _number(path, line, row, "longTaskMinutes", 0, positive=False)
+        if (long_factor != 1.0) != (long_minutes > 0) or long_minutes != int(long_minutes):
+            raise _fail(path, line, "longTaskMinutes", "longTaskFactor and longTaskMinutes (whole minutes) go together")
+        out[pid] = Persona(**{
+            **personas[pid].__dict__,
+            "late_factor": late,
+            "late_from": late_from,
+            "after_night_shift_factor": _number(path, line, row, "afterNightShiftFactor", 1.0),
+            "title_drift": _title_drift(path, line, row.get("titleDrift", "")),
+            "long_task_factor": long_factor,
+            "long_task_minutes": int(long_minutes) or None,
+        })
+    return out
 
 
 def load_tasks(path: str | Path, personas: dict[str, Persona]) -> list[PlannedTask]:
@@ -170,3 +223,122 @@ def load_tasks(path: str | Path, personas: dict[str, Persona]) -> list[PlannedTa
             planned_start=start, planned_end=end, delegable=delegable == "true",
         ))
     return tasks
+
+
+# --- schedule (one row per block of a persona's day) ------------------------------------------
+
+SCHEDULE_KINDS = ("sleep", "routine", "bus", "office", "campus", "family", "tutor", "fixed", "study_window")
+# Study windows may overlap these (studying on the bus or train); every other kind wins
+# over a study window (e.g. a quiz or dinner inside a study window stays protected).
+TRAVEL_KINDS = ("bus",)
+OUTSIDE_WINDOWS_LABEL = "Not a study window"
+DAY_END = 24 * 60
+
+
+@dataclass(frozen=True)
+class ScheduleBlock:
+    kind: str
+    label: str
+    start: int  # minutes after midnight
+    end: int  # minutes after midnight; 1440 = 24:00
+
+
+Schedule = dict[tuple[str, int], list[ScheduleBlock]]
+
+
+def _minutes(path: Path, line: int, row: dict, column: str, allow_24: bool = False) -> int:
+    text = row.get(column, "")
+    if allow_24 and text == "24:00":
+        return DAY_END
+    if not is_time(text):
+        raise _fail(path, line, column, f"'{text}' is not a time HH:MM" + (" (or 24:00)" if allow_24 else ""))
+    return int(text[:2]) * 60 + int(text[3:])
+
+
+def load_schedule(path: str | Path, personas: dict[str, Persona]) -> Schedule:
+    path = Path(path)
+    schedule: Schedule = defaultdict(list)
+    for line, row in _rows(path):
+        pid = row.get("personaId", "")
+        if pid not in personas:
+            raise _fail(path, line, "personaId", f"'{pid}' is not in the personas file")
+        day = _number(path, line, row, "day", 0)
+        if day != int(day) or day < 1:
+            raise _fail(path, line, "day", "must be a whole number >= 1")
+        if row.get("date") != day_to_date(int(day)):
+            raise _fail(path, line, "date", f"'{row.get('date')}' does not match day {int(day)} ({day_to_date(int(day))})")
+        if row.get("kind") not in SCHEDULE_KINDS:
+            raise _fail(path, line, "kind", f"must be one of: {', '.join(SCHEDULE_KINDS)}")
+        if not row.get("label"):
+            raise _fail(path, line, "label", "is required")
+        start = _minutes(path, line, row, "start")
+        end = _minutes(path, line, row, "end", allow_24=True)
+        if end <= start:
+            raise _fail(path, line, "end", "must be after start (a block crossing midnight is split into two days)")
+        schedule[(pid, int(day))].append(ScheduleBlock(row["kind"], row["label"], start, end))
+    return dict(schedule)
+
+
+def _hhmm(minutes: int) -> str:
+    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def study_windows(blocks: list[ScheduleBlock]) -> list[ScheduleBlock]:
+    return sorted((b for b in blocks if b.kind == "study_window"), key=lambda b: b.start)
+
+
+def free_minutes(blocks: list[ScheduleBlock]) -> list[bool]:
+    """Per minute of the day: True when the student can study (inside a study window and
+    not inside a non-travel block)."""
+    free = [False] * (DAY_END + 1)
+    for w in study_windows(blocks):
+        for m in range(w.start, w.end):
+            free[m] = True
+    for b in blocks:
+        if b.kind not in ("study_window", *TRAVEL_KINDS):
+            for m in range(b.start, b.end):
+                free[m] = False
+    return free
+
+
+def day_frame(blocks: list[ScheduleBlock]) -> tuple[dict[str, str], list[dict[str, str]]] | None:
+    """Work hours and protected blocks for one scheduled day, or None without a study window.
+
+    workHours = first study-window start to last study-window end. Protected blocks =
+    every non-study block inside that span plus the gaps between study windows; a
+    travel block gives way to a study window it overlaps (studying on the bus), any
+    other kind (quiz, dinner, work, campus, family, tutoring) stays protected.
+    """
+    windows = study_windows(blocks)
+    if not windows:
+        return None
+    lo, hi = windows[0].start, max(w.end for w in windows)
+    free = free_minutes(blocks)
+    labels: list[str | None] = [None] * (DAY_END + 1)
+    for m in range(lo, hi):
+        if not free[m]:
+            labels[m] = OUTSIDE_WINDOWS_LABEL
+    for b in blocks:  # name a protected minute after the block that takes it
+        if b.kind == "study_window":
+            continue
+        for m in range(max(b.start, lo), min(b.end, hi)):
+            if not free[m]:
+                labels[m] = b.label
+    protected: list[dict[str, str]] = []
+    m = lo
+    while m < hi:
+        if labels[m] is None:
+            m += 1
+            continue
+        start, label = m, labels[m]
+        while m < hi and labels[m] == label:
+            m += 1
+        protected.append({"id": f"s{len(protected) + 1}", "label": label, "start": _hhmm(start), "end": _hhmm(m)})
+    end = _hhmm(hi) if hi < DAY_END else "23:59"
+    return {"start": _hhmm(lo), "end": end}, protected
+
+
+def night_shift_days(schedule: Schedule, persona_id: str) -> set[int]:
+    """Days that begin with work continuing from the night before (an office block from 00:00)."""
+    return {day for (pid, day), blocks in schedule.items()
+            if pid == persona_id and any(b.kind == "office" and b.start == 0 for b in blocks)}

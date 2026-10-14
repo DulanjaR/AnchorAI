@@ -1,0 +1,590 @@
+personaId,day,taskId,title,type,priority,estimatedMinutes,deadlineInDays,deadlineTime,plannedStart,plannedEnd,delegable
+P01,1,t01,Read Module B lecture slides,Analog,Medium,40,5,08:30,17:50,18:30,false
+P01,1,t02,Module B lecture notes review,Analog,Medium,60,5,08:30,19:30,20:30,false
+P01,1,t03,Lab sheet 1: questions 1-2,Digital,Low,90,6,23:59,20:40,22:10,false
+P01,1,t04,Check LMS and plan the week,Digital,High,20,0,23:59,22:20,22:40,false
+P01,2,t05,Re-read lab sheet 1 brief,Analog,Medium,30,5,23:59,17:50,18:20,false
+P01,2,t06,Lab sheet 1: questions 3-4,Digital,Medium,90,5,23:59,19:30,21:00,false
+P01,2,t07,"Module B assignment: read brief, outline",Analog,Low,45,10,23:59,21:10,21:55,false
+P01,2,t08,Group chat: agree lit-review topics,Digital,High,15,1,23:59,22:05,22:20,false
+P01,3,t09,Module D lecture notes review,Analog,Medium,60,4,08:30,19:30,20:30,false
+P01,3,t10,Set up lab environment and tools,Digital,Medium,40,4,23:59,20:40,21:20,false
+P01,4,t11,Skim paper abstracts on phone,Digital,Low,30,10,23:59,17:50,18:20,false
+P01,4,t12,Lit review: search and shortlist papers,Digital,Low,120,10,23:59,19:30,21:30,false
+P01,4,t13,Set up reference manager,Digital,Low,30,10,23:59,21:40,22:10,false
+P01,6,t14,Lab sheet 1: finish and submit,Digital,High,90,1,23:59,16:30,18:00,false
+P01,6,t15,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:10,18:40,false
+P01,7,t16,Lit review: read papers 1-3,Analog,Low,120,7,23:59,13:30,15:30,false
+P01,7,t17,Module B assignment: section 1 draft,Digital,Medium,65,5,23:59,15:40,16:45,false
+P01,7,t18,Plan next week,Digital,High,15,1,19:30,16:45,17:00,false
+P01,8,t19,Lit review: read paper 4,Analog,Low,45,6,23:59,17:50,18:35,false
+P01,8,t20,Module B assignment: section 2,Digital,Medium,120,4,23:59,19:30,21:30,false
+P01,8,t21,Module B assignment: collect sources,Digital,Medium,30,4,23:59,21:40,22:10,false
+P01,8,t22,Check LMS,Digital,High,15,1,23:59,22:20,22:35,false
+P01,9,t23,Notes for assignment section 3,Analog,Medium,30,3,23:59,17:50,18:20,false
+P01,9,t24,Module B assignment: section 3 + diagrams,Digital,Medium,150,3,23:59,19:30,22:00,false
+P01,9,t25,Group chat: lit-review progress,Digital,High,15,1,23:59,22:10,22:25,false
+P01,10,t26,Lit review: read paper 5,Analog,Medium,45,4,23:59,17:50,18:35,false
+P01,10,t27,Lit review: read paper 6 + notes,Analog,Medium,60,4,23:59,19:30,20:30,false
+P01,10,t28,Research group call,Meeting,High,45,0,21:30,20:45,21:30,false
+P01,10,t29,Lit review: outline,Digital,Medium,45,4,23:59,21:40,22:25,false
+P01,11,t30,Module B assignment: finish + references,Digital,High,120,1,23:59,19:30,21:30,false
+P01,11,t31,Module B assignment: proofread,Analog,High,30,1,23:59,21:40,22:10,true
+P01,11,t32,Module B assignment: format references,Digital,High,25,1,23:59,22:15,22:40,true
+P01,12,t33,Module B assignment: final check and submit,Digital,High,45,0,23:59,19:30,20:15,false
+P01,12,t34,Back up coursework files,Digital,Medium,10,2,23:59,20:20,20:30,false
+P01,13,t35,Lit review: write synthesis,Digital,High,120,1,23:59,16:30,18:30,false
+P01,13,t36,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:30,19:00,false
+P01,14,t37,Lit review: finish writing and submit,Digital,High,120,0,23:59,13:30,15:30,false
+P01,14,t38,Module C lecture notes review,Analog,Low,45,6,13:45,15:40,16:25,false
+P01,14,t39,Plan next week,Digital,High,15,1,19:30,16:30,16:45,false
+P01,15,t40,Lab sheet 2: read brief,Analog,Low,30,6,23:59,17:50,18:20,false
+P01,15,t41,Module B lecture notes review,Analog,Medium,45,5,08:30,19:30,20:15,false
+P01,15,t42,Check LMS,Digital,High,15,1,23:59,20:25,20:40,false
+P01,16,t43,Module C lab slides,Analog,Medium,40,5,23:59,17:50,18:30,false
+P01,16,t44,Lab sheet 2: part 1,Digital,Medium,120,5,23:59,19:30,21:30,false
+P01,16,t45,Lab sheet 2: debug code,Digital,Medium,30,5,23:59,21:40,22:10,false
+P01,17,t46,Module D revision: topics 1-2,Analog,Low,60,8,20:00,19:30,20:30,false
+P01,17,t47,Module D flashcards,Analog,Low,20,8,20:00,20:40,21:00,false
+P01,18,t48,Module D past lecture slides,Analog,Low,30,7,20:00,17:50,18:20,false
+P01,18,t49,Lab sheet 2: part 2,Digital,Medium,90,3,23:59,19:30,21:00,false
+P01,18,t50,PP1: list results to present,Digital,Low,30,9,23:59,21:10,21:40,false
+P01,19,t51,Read Module B assignment feedback,Analog,Low,45,7,23:59,19:30,20:15,false
+P01,20,t52,Lab sheet 2: finish and submit,Digital,High,90,1,23:59,16:30,18:00,false
+P01,20,t53,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:10,18:40,false
+P01,21,t54,PP1 slides: outline,Digital,Low,60,6,23:59,13:30,14:30,false
+P01,21,t55,Module D revision: topics 3-4,Analog,Medium,90,4,20:00,14:40,16:10,false
+P01,21,t56,Plan next week,Digital,High,15,1,19:30,16:20,16:35,false
+P01,22,t57,Module D flashcards,Analog,Medium,40,3,20:00,17:50,18:30,false
+P01,22,t58,Module D revision: topics 5-6,Analog,Medium,90,3,20:00,19:30,21:00,false
+P01,22,t59,PP1 slides: results section,Digital,Medium,90,5,23:59,21:10,22:40,false
+P01,23,t60,Module D summary sheet,Analog,Medium,40,2,20:00,17:50,18:30,false
+P01,23,t61,PP1 slides: design and figures,Digital,Medium,120,4,23:59,19:30,21:30,false
+P01,23,t62,Module D past paper,Analog,Medium,60,2,20:00,21:40,22:40,false
+P01,24,t63,Module D definitions review,Analog,High,40,1,20:00,17:50,18:30,false
+P01,24,t64,Module D final revision,Analog,High,120,1,20:00,19:30,21:30,false
+P01,24,t65,PP1 group sync call,Meeting,High,30,0,22:15,21:40,22:10,false
+P01,24,t66,PP1 slides: changes from the call,Digital,Medium,30,3,23:59,22:15,22:45,false
+P01,25,t67,Quiz recap on the bus,Analog,High,40,0,20:00,17:50,18:30,false
+P01,25,t68,Module D quick recap before quiz,Analog,High,25,0,20:00,19:30,19:55,false
+P01,25,t69,PP1 slides: polish,Digital,Medium,60,2,23:59,21:00,22:00,false
+P01,26,t70,PP1 rehearsal with group,Meeting,High,60,0,21:00,20:00,21:00,false
+P01,27,t71,PP1 slides: final check and submit,Digital,High,90,0,23:59,16:30,18:00,false
+P01,27,t72,PP1 speaker notes,Analog,High,45,1,10:45,18:05,18:50,false
+P01,28,t73,Module C lecture notes review,Analog,Low,60,6,13:45,13:30,14:30,false
+P01,28,t74,Plan next week,Digital,High,15,1,19:30,14:40,14:55,false
+P01,29,t75,Module B assignment 2: read brief,Analog,Low,45,11,23:59,17:50,18:35,false
+P01,29,t76,Module C lab feedback review,Analog,Medium,30,5,13:45,19:30,20:00,false
+P01,29,t77,Check LMS and plan the week,Digital,High,15,1,23:59,20:10,20:25,false
+P01,30,t78,Module C lab 3: pre-reading,Analog,Medium,40,5,13:45,17:50,18:30,false
+P01,30,t79,Module B assignment 2: plan and outline,Digital,Low,90,10,23:59,19:30,21:00,false
+P01,30,t80,Module B assignment 2: find sources,Digital,Low,45,10,23:59,21:10,21:55,false
+P02,1,t01,Lab sheet 1: questions 1-2,Digital,Low,90,6,23:59,19:30,21:00,false
+P02,1,t02,Lab sheet 1: read brief,Analog,Low,30,6,23:59,21:10,21:40,false
+P02,1,t03,Check LMS and plan the week,Digital,High,15,1,23:59,21:50,22:05,false
+P02,2,t04,"Module B assignment: read brief, outline",Analog,Low,45,10,23:59,06:30,07:15,false
+P02,2,t05,Module B assignment: section 1,Digital,Low,90,10,23:59,19:30,21:00,false
+P02,3,t06,Module B assignment: section 2,Digital,Low,120,9,23:59,19:30,21:30,false
+P02,4,t07,Lit review: search and shortlist papers,Digital,Low,60,10,23:59,06:30,07:30,false
+P02,4,t08,Lab sheet 1: questions 3-4,Digital,Medium,90,3,23:59,19:30,21:00,false
+P02,5,t09,Lab sheet 1: finish and submit,Digital,Medium,75,2,23:59,19:30,20:45,false
+P02,6,t10,Module B assignment: section 3 + diagrams,Digital,Low,120,6,23:59,16:30,18:30,false
+P02,7,t11,Module B assignment: references,Digital,Medium,30,5,23:59,14:00,14:30,true
+P02,7,t12,Lit review: read papers 1-3,Analog,Low,120,7,23:59,14:40,16:40,false
+P02,8,t13,Module B assignment: proofread,Analog,Medium,30,4,23:59,19:30,20:00,true
+P02,8,t14,Lit review: read papers 4-6,Analog,Low,120,6,23:59,20:10,22:10,false
+P02,9,t15,Lit review: search and shortlist papers (part 2),Digital,Medium,45,5,23:59,06:30,07:15,false
+P02,9,t16,Module B lecture notes review,Analog,Medium,50,4,08:30,19:30,20:20,false
+P02,9,t17,Module C lecture notes review,Analog,Medium,45,4,13:45,20:30,21:15,false
+P02,10,t18,Module B assignment: final check and submit,Digital,Medium,45,2,23:59,19:30,20:15,false
+P02,10,t19,PP1: list results to present,Digital,Low,90,17,23:59,20:25,21:55,false
+P02,10,t20,PP1 slides: outline,Digital,Low,20,17,23:59,22:05,22:25,false
+P02,11,t21,Lit review: outline,Digital,Medium,120,3,23:59,19:30,21:30,false
+P02,12,t22,Lit review: write synthesis,Digital,Medium,90,2,23:59,19:30,21:00,false
+P02,13,t23,PP1 slides: results section,Digital,Low,120,14,23:59,16:30,18:30,false
+P02,14,t24,Lit review: finish and submit,Digital,High,60,0,23:59,14:00,15:00,false
+P02,14,t25,Plan next week,Digital,High,15,1,19:00,15:10,15:25,false
+P02,15,t26,Lab sheet 2: part 1,Digital,Low,120,6,23:59,19:30,21:30,false
+P02,15,t27,Lab sheet 2: read brief,Analog,Low,30,6,23:59,21:40,22:10,false
+P02,16,t28,Write test cases for lab sheet code,Digital,Medium,30,3,23:59,06:30,07:00,false
+P02,16,t29,Check LMS and plan the week,Digital,High,15,0,23:59,07:10,07:25,false
+P02,16,t30,Lab sheet 2: part 2,Digital,Medium,90,5,23:59,19:30,21:00,false
+P02,17,t31,Module D revision: topics 1-2,Analog,Low,75,8,20:00,19:30,20:45,false
+P02,17,t32,Module D revision: topics 3-4,Analog,Low,60,8,20:00,20:55,21:55,false
+P02,18,t33,Lab sheet 2: debug code,Digital,Medium,30,3,23:59,06:30,07:00,false
+P02,18,t34,Module D flashcards,Analog,Low,30,7,20:00,19:30,20:00,false
+P02,18,t35,Module C lecture notes review,Analog,Medium,45,2,13:45,20:10,20:55,false
+P02,18,t36,Module D lecture notes review,Analog,Medium,45,3,08:30,21:05,21:50,false
+P02,19,t37,Lab sheet 2: finish and submit,Digital,Medium,75,2,23:59,19:30,20:45,false
+P02,20,t38,Module D revision: topics 5-6,Analog,Medium,75,5,20:00,16:30,17:45,false
+P02,20,t39,PP1 group sync call,Meeting,Low,30,7,23:59,17:55,18:25,false
+P02,21,t40,Plan next week,Digital,High,15,1,19:00,14:00,14:15,false
+P02,22,t41,Module D past paper,Analog,Medium,60,3,20:00,19:30,20:30,false
+P02,22,t42,PP1 slides: design and figures,Digital,Medium,60,5,23:59,20:40,21:40,false
+P02,22,t43,Check LMS and plan the week,Digital,High,15,1,23:59,21:50,22:05,false
+P02,23,t44,Module B lecture notes review,Analog,Medium,50,4,08:30,06:30,07:20,false
+P02,23,t45,Module D final revision,Analog,Medium,90,2,20:00,19:30,21:00,false
+P02,24,t46,PP1 rehearsal with group,Meeting,Medium,60,3,23:59,19:30,20:30,false
+P02,24,t47,Module C lecture notes review,Analog,Medium,45,3,13:45,20:40,21:25,false
+P02,24,t48,Module D lecture notes review,Analog,Medium,45,4,08:30,21:35,22:20,false
+P02,26,t49,PP1 slides: polish,Digital,High,75,1,23:59,19:30,20:45,false
+P02,27,t50,PP1 slides: final check and submit,Digital,High,30,0,23:59,16:30,17:00,false
+P02,27,t51,PP1 speaker notes,Analog,High,45,1,10:45,17:10,17:55,false
+P02,28,t52,Plan next week,Digital,High,15,1,19:00,14:00,14:15,false
+P02,29,t53,Check LMS and plan the week,Digital,High,15,1,23:59,19:30,19:45,false
+P02,30,t54,Module B lecture notes review,Analog,Medium,50,4,08:30,06:30,07:20,false
+P02,30,t55,Module C lecture notes review,Analog,Medium,45,4,13:45,19:30,20:15,false
+P03,1,t01,Lit review: search and shortlist papers,Digital,Low,110,13,23:59,17:30,19:20,false
+P03,1,t02,Lit review: outline,Digital,Low,40,13,23:59,20:00,20:40,false
+P03,1,t03,Check LMS and plan the week,Digital,High,15,1,23:59,20:50,21:05,false
+P03,2,t04,Lab sheet 1: read brief,Analog,Medium,25,5,23:59,17:30,17:55,false
+P03,2,t05,"Module B assignment: read brief, outline",Analog,Low,40,10,23:59,18:05,18:45,false
+P03,2,t06,Module B lecture notes review,Analog,Medium,45,4,08:30,20:00,20:45,false
+P03,3,t07,Module B assignment: section 1,Digital,Low,110,9,23:59,17:30,19:20,false
+P03,3,t08,Module B assignment: section 2,Digital,Low,80,9,23:59,20:00,21:20,false
+P03,4,t09,Lab sheet 1: questions 1-2,Digital,Medium,80,3,23:59,17:30,18:50,false
+P03,4,t10,CCNA practice lab,Digital,Medium,60,5,23:59,20:00,21:00,false
+P03,6,t11,Lab sheet 1: questions 3-4,Digital,High,70,1,23:59,16:30,17:40,false
+P03,6,t12,Lab sheet 1: finish and submit,Digital,High,80,1,23:59,17:50,19:10,false
+P03,7,t13,Module B assignment: section 3 + diagrams,Digital,Medium,110,5,23:59,13:30,15:20,false
+P03,7,t14,Plan next week,Digital,High,15,1,19:00,15:30,15:45,false
+P03,8,t15,Check LMS and plan the week,Digital,High,15,1,23:59,17:30,17:45,false
+P03,9,t16,Module B assignment: references,Digital,Medium,25,3,23:59,17:30,17:55,true
+P03,9,t17,Module B lecture notes review,Analog,Medium,45,4,08:30,18:05,18:50,false
+P03,9,t18,Module C lecture notes review,Analog,Medium,40,4,13:45,20:00,20:40,false
+P03,10,t19,Module B assignment: proofread,Analog,Medium,25,2,23:59,17:30,17:55,true
+P03,10,t20,CCNA practice lab,Digital,Low,60,6,23:59,18:05,19:05,false
+P03,10,t21,Module D lecture notes review,Analog,Medium,40,4,08:30,20:00,20:40,false
+P03,10,t22,Research group call,Meeting,High,40,1,23:59,20:50,21:30,false
+P03,11,t23,Module B assignment: final check and submit,Digital,High,40,1,23:59,17:30,18:10,false
+P03,11,t24,Lit review: read papers 1-3,Analog,Medium,55,3,23:59,18:20,19:15,false
+P03,11,t25,Lit review: read papers 4-6,Analog,Medium,55,3,23:59,20:00,20:55,false
+P03,13,t26,Lit review: write synthesis,Digital,High,80,1,23:59,16:30,17:50,false
+P03,13,t27,Lit review: finish and submit,Digital,High,55,1,23:59,18:00,18:55,false
+P03,13,t28,Supervisor meeting: update notes,Digital,High,25,1,10:45,19:05,19:30,false
+P03,14,t29,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P03,15,t30,Lab sheet 2: read brief,Analog,Low,25,6,23:59,17:30,17:55,false
+P03,15,t31,Module B lecture notes review,Analog,Medium,45,5,08:30,18:05,18:50,false
+P03,15,t32,Check LMS and plan the week,Digital,High,15,1,23:59,19:00,19:15,false
+P03,16,t33,Lab sheet 2: part 1,Digital,Medium,110,5,23:59,17:30,19:20,false
+P03,16,t34,PP1: list results to present,Digital,Low,25,11,23:59,20:00,20:25,false
+P03,16,t35,Module C lecture notes review,Analog,Medium,40,4,13:45,20:35,21:15,false
+P03,17,t36,Module D revision: topics 1-2,Analog,Low,55,8,20:00,17:30,18:25,false
+P03,17,t37,PP1 slides: outline,Digital,Low,55,10,23:59,18:35,19:30,false
+P03,17,t38,PP1 slides: results section,Digital,Low,80,10,23:59,20:00,21:20,false
+P03,18,t39,Lab sheet 2: part 2,Digital,Medium,80,3,23:59,17:30,18:50,false
+P03,18,t40,Module D revision: topics 3-4,Analog,Low,70,7,20:00,20:00,21:10,false
+P03,20,t41,Lab sheet 2: debug code,Digital,High,70,1,23:59,16:30,17:40,false
+P03,20,t42,Lab sheet 2: finish and submit,Digital,High,25,1,23:59,17:50,18:15,false
+P03,20,t43,Module D flashcards,Analog,Medium,25,5,20:00,18:25,18:50,false
+P03,20,t44,Supervisor meeting: update notes,Digital,High,25,1,10:45,19:00,19:25,false
+P03,21,t45,PP1 slides: design and figures,Digital,Low,110,6,23:59,13:30,15:20,false
+P03,21,t46,Plan next week,Digital,High,15,1,19:00,15:30,15:45,false
+P03,22,t47,Module D revision: topics 5-6,Analog,Medium,70,3,20:00,17:30,18:40,false
+P03,22,t48,PP1 group sync call,Meeting,Medium,25,5,23:59,18:50,19:15,false
+P03,22,t49,Module B lecture notes review,Analog,Medium,45,5,08:30,20:00,20:45,false
+P03,22,t50,Check LMS and plan the week,Digital,High,15,1,23:59,20:55,21:10,false
+P03,23,t51,Module D past paper,Analog,Medium,55,2,20:00,17:30,18:25,false
+P03,23,t52,Module C lecture notes review,Analog,Medium,40,4,13:45,18:35,19:15,false
+P03,24,t53,Module D final revision,Analog,High,80,1,20:00,17:30,18:50,false
+P03,24,t54,PP1 slides: polish,Digital,Medium,55,3,23:59,20:00,20:55,false
+P03,25,t55,PP1 rehearsal with group,Meeting,Medium,55,2,23:59,17:30,18:25,false
+P03,25,t56,Module D lecture notes review,Analog,Medium,40,3,08:30,18:35,19:15,false
+P03,27,t57,PP1 slides: final check and submit,Digital,High,70,0,23:59,16:30,17:40,false
+P03,27,t58,PP1 speaker notes,Analog,High,40,1,10:45,17:50,18:30,false
+P03,27,t59,Supervisor meeting: update notes,Digital,High,25,1,10:45,18:40,19:05,false
+P03,28,t60,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P03,29,t61,Module B lecture notes review,Analog,Medium,45,5,08:30,17:30,18:15,false
+P03,29,t62,Check LMS and plan the week,Digital,High,15,1,23:59,18:25,18:40,false
+P03,30,t63,Module C lecture notes review,Analog,Medium,40,4,13:45,17:30,18:10,false
+P04,1,t01,Lit review: search and shortlist papers,Digital,Low,100,13,23:59,20:00,21:40,false
+P04,1,t02,Module B lecture notes review,Analog,Medium,40,5,08:30,21:50,22:30,false
+P04,1,t03,Check LMS and plan the week,Digital,High,15,1,23:59,22:40,22:55,false
+P04,2,t04,Lit review: read papers 1-3,Analog,Low,100,12,23:59,20:00,21:40,false
+P04,2,t05,Module C lecture notes review,Analog,Medium,40,4,13:45,21:50,22:30,false
+P04,3,t06,Lab sheet 1: questions 1-2,Digital,Medium,75,4,23:59,20:00,21:15,false
+P04,3,t07,Lab sheet 1: read brief,Analog,Medium,25,4,23:59,21:25,21:50,false
+P04,3,t08,Module D lecture notes review,Analog,Medium,40,4,08:30,22:00,22:40,false
+P04,4,t09,Research group call,Meeting,High,40,0,23:59,20:00,20:40,false
+P04,6,t10,Lab sheet 1: questions 3-4,Digital,High,75,1,23:59,17:00,18:15,false
+P04,7,t11,Lab sheet 1: finish and submit,Digital,High,65,0,23:59,13:30,14:35,false
+P04,7,t12,Lit review: read papers 4-6,Analog,Low,100,7,23:59,14:45,16:25,false
+P04,7,t13,Portfolio site: update projects,Digital,Low,60,7,23:59,16:35,17:35,false
+P04,7,t14,Plan next week,Digital,High,15,1,19:00,17:45,18:00,false
+P04,8,t15,Module B assignment: section 1,Digital,Medium,75,4,23:59,20:00,21:15,false
+P04,8,t16,"Module B assignment: read brief, outline",Analog,Medium,40,4,23:59,21:25,22:05,false
+P04,8,t17,Module B lecture notes review,Analog,Medium,40,5,08:30,22:15,22:55,false
+P04,9,t18,Module B assignment: section 2,Digital,Medium,100,3,23:59,20:00,21:40,false
+P04,9,t19,Module C lecture notes review,Analog,Medium,40,4,13:45,21:50,22:30,false
+P04,9,t20,Check LMS and plan the week,Digital,High,15,0,23:59,22:40,22:55,false
+P04,10,t21,Module B assignment: proofread,Analog,Medium,25,2,23:59,20:00,20:25,true
+P04,10,t22,Module B assignment: section 3 + diagrams,Digital,Medium,25,2,23:59,20:35,21:00,false
+P04,10,t23,Module B assignment: references,Digital,Medium,100,2,23:59,21:10,22:50,true
+P04,11,t24,Module B assignment: final check and submit,Digital,High,40,1,23:59,20:00,20:40,false
+P04,13,t25,Lit review: outline,Digital,High,40,1,23:59,17:00,17:40,false
+P04,13,t26,Supervisor meeting: update notes,Digital,High,25,1,10:45,17:50,18:15,false
+P04,14,t27,Lit review: write synthesis,Digital,High,75,0,23:59,13:30,14:45,false
+P04,14,t28,Lit review: finish and submit,Digital,High,100,0,23:59,14:55,16:35,false
+P04,14,t29,Plan next week,Digital,High,15,1,19:00,16:45,17:00,false
+P04,15,t30,Module B lecture notes review,Analog,Medium,40,5,08:30,20:00,20:40,false
+P04,15,t31,Check LMS and plan the week,Digital,High,15,1,23:59,20:50,21:05,false
+P04,16,t32,Module C lecture notes review,Analog,Medium,40,4,13:45,20:00,20:40,false
+P04,17,t33,Lab sheet 2: part 1,Digital,Medium,100,4,23:59,20:00,21:40,false
+P04,17,t34,Lab sheet 2: read brief,Analog,Medium,25,4,23:59,21:50,22:15,false
+P04,18,t35,Lab sheet 2: part 2,Digital,Medium,75,3,23:59,20:00,21:15,false
+P04,18,t36,PP1: list results to present,Digital,Low,25,9,23:59,21:25,21:50,false
+P04,18,t37,PP1 speaker notes,Analog,Low,40,10,10:45,22:00,22:40,false
+P04,20,t38,Lab sheet 2: debug code,Digital,High,25,1,23:59,17:00,17:25,false
+P04,20,t39,PP1 slides: outline,Digital,Low,50,7,23:59,17:35,18:25,false
+P04,21,t40,Lab sheet 2: finish and submit,Digital,High,65,0,23:59,13:30,14:35,false
+P04,21,t41,PP1 slides: results section,Digital,Low,100,6,23:59,14:45,16:25,false
+P04,21,t42,PP1 slides: design and figures,Digital,Low,75,6,23:59,16:35,17:50,false
+P04,22,t43,Module D revision: topics 1-2,Analog,Medium,65,3,20:00,20:00,21:05,false
+P04,22,t44,Module D revision: topics 3-4,Analog,Medium,50,3,20:00,21:15,22:05,false
+P04,22,t45,PP1 group sync call,Meeting,Medium,25,5,23:59,22:15,22:40,false
+P04,23,t46,Module D flashcards,Analog,Medium,65,2,20:00,20:00,21:05,false
+P04,23,t47,Module D revision: topics 5-6,Analog,Medium,25,2,20:00,21:15,21:40,false
+P04,23,t48,PP1 slides: polish,Digital,Medium,50,4,23:59,21:50,22:40,false
+P04,24,t49,Module D past paper,Analog,High,75,1,20:00,20:00,21:15,false
+P04,24,t50,Module D final revision,Analog,High,50,1,20:00,21:25,22:15,false
+P04,25,t51,PP1 rehearsal with group,Meeting,Medium,50,2,23:59,21:25,22:15,false
+P04,27,t52,PP1 slides: final check and submit,Digital,High,65,0,23:59,17:00,18:05,false
+P04,28,t53,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P04,29,t54,Module B lecture notes review,Analog,Medium,40,5,08:30,20:00,20:40,false
+P04,29,t55,Check LMS and plan the week,Digital,High,15,1,23:59,20:50,21:05,false
+P04,30,t56,Module C lecture notes review,Analog,Medium,40,4,13:45,20:00,20:40,false
+P05,1,t01,Lab sheet 1: read brief,Analog,Low,30,6,23:59,06:40,07:10,false
+P05,1,t02,"Module B assignment: read brief, outline",Analog,Low,45,11,23:59,17:25,18:10,false
+P05,1,t03,Module B assignment: section 1,Digital,Low,90,11,23:59,20:30,22:00,false
+P05,1,t04,Check LMS and plan the week,Digital,High,15,1,23:59,22:10,22:25,false
+P05,2,t05,Module B lecture notes review,Analog,Medium,50,4,08:30,06:40,07:30,false
+P05,2,t06,Module C lecture notes review,Analog,Medium,45,4,13:45,17:25,18:10,false
+P05,2,t07,Lab sheet 1: questions 1-2,Digital,Medium,90,5,23:59,20:30,22:00,false
+P05,3,t08,Module D lecture notes review,Analog,Medium,45,4,08:30,06:40,07:25,false
+P05,3,t09,Module B assignment: section 2,Digital,Low,120,9,23:59,20:30,22:30,false
+P05,4,t10,Lab sheet 1: questions 3-4,Digital,Medium,90,3,23:59,20:30,22:00,false
+P05,5,t11,Lit review: read papers 1-3 (part 1),Analog,Low,60,9,23:59,06:40,07:40,false
+P05,5,t12,Lit review: read papers 1-3 (part 2),Analog,Low,60,9,23:59,17:25,18:25,false
+P05,6,t13,Lab sheet 1: finish and submit,Digital,High,75,1,23:59,16:30,17:45,false
+P05,6,t14,Supervisor meeting: update notes,Digital,High,30,1,10:45,17:55,18:25,false
+P05,7,t15,Module B assignment: section 3 + diagrams,Digital,Medium,30,5,23:59,14:00,14:30,false
+P05,7,t16,Module B assignment: references,Digital,Medium,120,5,23:59,14:40,16:40,true
+P05,8,t17,Module B assignment: proofread,Analog,Medium,30,4,23:59,06:40,07:10,true
+P05,8,t18,Lit review: read papers 4-6,Analog,Low,120,6,23:59,20:30,22:30,false
+P05,9,t19,Module B lecture notes review,Analog,Medium,50,4,08:30,06:40,07:30,false
+P05,9,t20,Module C lecture notes review,Analog,Medium,45,4,13:45,17:25,18:10,false
+P05,9,t21,Lit review: search and shortlist papers,Digital,Medium,45,5,23:59,20:30,21:15,false
+P05,9,t22,Check LMS and plan the week,Digital,High,15,0,23:59,21:25,21:40,false
+P05,10,t23,Module D lecture notes review,Analog,Medium,45,4,08:30,06:40,07:25,false
+P05,10,t24,Module B assignment: final check and submit,Digital,Medium,45,2,23:59,20:30,21:15,false
+P05,10,t25,PP1: list results to present,Digital,Low,45,17,23:59,21:25,22:10,false
+P05,11,t26,Lit review: outline,Digital,Medium,120,3,23:59,20:30,22:30,false
+P05,13,t27,Lit review: write synthesis,Digital,High,90,1,23:59,16:30,18:00,false
+P05,13,t28,PP1 slides: outline,Digital,Low,20,14,23:59,18:10,18:30,false
+P05,14,t29,Lit review: finish and submit,Digital,High,60,0,23:59,14:00,15:00,false
+P05,14,t30,Lab sheet 2: read brief,Analog,Low,30,7,23:59,15:10,15:40,false
+P05,14,t31,PP1 slides: results section,Digital,Low,60,13,23:59,15:50,16:50,false
+P05,15,t32,Lab sheet 2: part 1,Digital,Low,120,6,23:59,20:30,22:30,false
+P05,16,t33,Module B lecture notes review,Analog,Medium,50,4,08:30,06:40,07:30,false
+P05,16,t34,Module C lecture notes review,Analog,Medium,45,4,13:45,17:25,18:10,false
+P05,16,t35,Lab sheet 2: part 2,Digital,Medium,90,5,23:59,20:30,22:00,false
+P05,17,t36,Module D revision: topics 1-2,Analog,Low,60,8,20:00,06:40,07:40,false
+P05,17,t37,Module D lecture notes review,Analog,Medium,45,4,08:30,17:25,18:10,false
+P05,17,t38,Module D revision: topics 3-4,Analog,Low,75,8,20:00,20:30,21:45,false
+P05,18,t39,Lab sheet 2: debug code,Digital,Medium,30,3,23:59,20:30,21:00,false
+P05,18,t40,PP1 slides: results section (part 2),Digital,Low,60,9,23:59,21:10,22:10,false
+P05,19,t41,Module D flashcards,Analog,Low,30,6,20:00,06:40,07:10,false
+P05,20,t42,Lab sheet 2: finish and submit,Digital,High,75,1,23:59,16:30,17:45,false
+P05,20,t43,PP1 group sync call,Meeting,Low,30,7,23:59,17:55,18:25,false
+P05,21,t44,Module D revision: topics 5-6,Analog,Medium,75,4,20:00,14:00,15:15,false
+P05,21,t45,PP1 slides: design and figures (part 1),Digital,Low,60,6,23:59,15:25,16:25,false
+P05,21,t46,Plan next week,Digital,High,15,1,19:00,16:35,16:50,false
+P05,22,t47,Module D past paper,Analog,Medium,60,3,20:00,06:40,07:40,false
+P05,22,t48,Module B lecture notes review,Analog,Medium,50,5,08:30,17:25,18:15,false
+P05,22,t49,PP1 rehearsal with group,Meeting,Medium,60,5,23:59,20:30,21:30,false
+P05,22,t50,Check LMS and plan the week,Digital,High,15,1,23:59,21:40,21:55,false
+P05,23,t51,Module C lecture notes review,Analog,Medium,45,4,13:45,06:40,07:25,false
+P05,23,t52,Module D final revision,Analog,Medium,90,2,20:00,20:30,22:00,false
+P05,24,t53,Module D lecture notes review,Analog,Medium,45,4,08:30,06:40,07:25,false
+P05,24,t54,PP1 slides: design and figures (part 2),Digital,Medium,75,3,23:59,20:30,21:45,false
+P05,26,t55,PP1 speaker notes,Analog,Medium,45,2,10:45,06:40,07:25,false
+P05,27,t56,PP1 slides: polish,Digital,High,45,0,23:59,16:30,17:15,false
+P05,27,t57,PP1 slides: final check and submit,Digital,High,30,0,23:59,17:25,17:55,false
+P05,28,t58,Plan next week,Digital,High,15,1,19:00,14:00,14:15,false
+P05,29,t59,Module B lecture notes review,Analog,Medium,50,5,08:30,06:40,07:30,false
+P05,29,t60,Check LMS and plan the week,Digital,High,15,1,23:59,20:30,20:45,false
+P05,30,t61,Module C lecture notes review,Analog,Medium,45,4,13:45,06:40,07:25,false
+P06,1,t01,Module B assignment: section 1,Digital,Low,95,11,23:59,21:00,22:35,false
+P06,1,t02,Check LMS and plan the week,Digital,High,10,1,23:59,22:45,22:55,false
+P06,2,t03,Lab sheet 1: questions 1-2,Digital,Medium,70,5,23:59,21:00,22:10,false
+P06,2,t04,Lab sheet 1: read brief,Analog,Medium,25,5,23:59,22:20,22:45,false
+P06,3,t05,Lit review: read papers 1-3,Analog,Low,95,11,23:59,21:00,22:35,false
+P06,4,t06,Lab sheet 1: questions 3-4,Digital,Medium,70,3,23:59,21:00,22:10,false
+P06,4,t07,Module C lecture notes review,Analog,Medium,35,2,13:45,22:20,22:55,false
+P06,7,t08,Lab sheet 1: finish and submit,Digital,High,60,0,23:59,13:30,14:30,false
+P06,7,t09,Module B assignment: section 2,Digital,Medium,95,5,23:59,14:40,16:15,false
+P06,7,t10,Plan next week,Digital,High,10,1,19:00,16:25,16:35,false
+P06,8,t11,Lit review: read papers 4-6,Analog,Low,95,6,23:59,21:00,22:35,false
+P06,8,t12,Check LMS and plan the week,Digital,High,10,1,23:59,22:45,22:55,false
+P06,9,t13,Module B assignment: section 3 + diagrams,Digital,Medium,25,3,23:59,21:00,21:25,false
+P06,9,t14,Module B assignment: proofread,Analog,Medium,20,3,23:59,21:35,21:55,true
+P06,9,t15,Module B lecture notes review,Analog,Medium,40,4,08:30,22:05,22:45,false
+P06,10,t16,"Module B assignment: read brief, outline",Analog,Medium,25,2,23:59,21:00,21:25,false
+P06,10,t17,Lit review: search and shortlist papers,Digital,Medium,35,4,23:59,21:35,22:10,false
+P06,10,t18,PP1: list results to present,Digital,Low,30,17,23:59,22:20,22:50,false
+P06,11,t19,Module B assignment: references,Digital,High,35,1,23:59,21:00,21:35,true
+P06,11,t20,Module B assignment: final check and submit,Digital,High,35,1,23:59,21:45,22:20,false
+P06,14,t21,Lit review: outline,Digital,High,70,0,23:59,13:30,14:40,false
+P06,14,t22,Lit review: write synthesis,Digital,High,95,0,23:59,14:50,16:25,false
+P06,14,t23,Lit review: finish and submit,Digital,High,50,0,23:59,16:35,17:25,false
+P06,15,t24,Lab sheet 2: read brief,Analog,Low,25,6,23:59,21:00,21:25,false
+P06,15,t25,PP1 slides: outline,Digital,Low,40,12,23:59,21:35,22:15,false
+P06,15,t26,PP1 slides: results section (part 1),Digital,Low,30,12,23:59,22:25,22:55,false
+P06,16,t27,Lab sheet 2: part 1,Digital,Medium,95,5,23:59,21:00,22:35,false
+P06,16,t28,Check LMS and plan the week,Digital,High,10,0,23:59,22:45,22:55,false
+P06,17,t29,Module D revision: topics 1-2,Analog,Low,50,8,20:00,21:00,21:50,false
+P06,17,t30,PP1 slides: results section (part 2),Digital,Low,40,10,23:59,22:00,22:40,false
+P06,18,t31,Lab sheet 2: part 2,Digital,Medium,25,3,23:59,21:00,21:25,false
+P06,18,t32,Lab sheet 2: debug code,Digital,Medium,70,3,23:59,21:35,22:45,false
+P06,21,t33,Lab sheet 2: finish and submit,Digital,High,60,0,23:59,13:30,14:30,false
+P06,21,t34,Module D revision: topics 3-4,Analog,Medium,25,4,20:00,14:40,15:05,false
+P06,21,t35,Module D flashcards,Analog,Medium,60,4,20:00,15:15,16:15,false
+P06,21,t36,PP1 group sync call,Meeting,Low,25,6,23:59,16:25,16:50,false
+P06,21,t37,PP1 slides: design and figures (part 1),Digital,Low,15,6,23:59,17:00,17:15,false
+P06,22,t38,Module D revision: topics 5-6,Analog,Medium,60,3,20:00,21:00,22:00,false
+P06,22,t39,PP1 slides: design and figures (part 2),Digital,Medium,50,5,23:59,22:10,23:00,false
+P06,23,t40,Module D past paper,Analog,Medium,50,2,20:00,21:00,21:50,false
+P06,23,t41,PP1 rehearsal with group,Meeting,Medium,50,4,23:59,22:00,22:50,false
+P06,24,t42,Module D final revision,Analog,High,70,1,20:00,21:00,22:10,false
+P06,24,t43,PP1 slides: polish,Digital,Medium,25,3,23:59,22:20,22:45,false
+P06,25,t44,PP1 slides: final check and submit,Digital,Medium,60,2,23:59,21:40,22:40,false
+P06,28,t45,Plan next week,Digital,High,10,1,19:00,13:30,13:40,false
+P06,29,t46,Module B lecture notes review,Analog,Medium,40,5,08:30,21:00,21:40,false
+P06,29,t47,Check LMS and plan the week,Digital,High,10,1,23:59,21:50,22:00,false
+P06,30,t48,Module C lecture notes review,Analog,Medium,35,4,13:45,21:00,21:35,false
+P07,1,t01,Lit review: read papers 1-3,Analog,Low,125,13,23:59,16:30,18:35,false
+P07,1,t02,Check LMS and plan the week,Digital,High,15,1,23:59,18:45,19:00,false
+P07,2,t03,Lab sheet 1: read brief,Analog,Medium,30,5,23:59,16:30,17:00,false
+P07,2,t04,Module B assignment: section 1,Digital,Low,95,10,23:59,17:10,18:45,false
+P07,2,t05,"Module B assignment: read brief, outline",Analog,Low,45,10,23:59,18:55,19:40,false
+P07,3,t06,Module B assignment: section 2,Digital,Low,125,9,23:59,16:30,18:35,false
+P07,3,t07,Module C lecture notes review,Analog,Medium,45,3,13:45,18:45,19:30,false
+P07,4,t08,Lab sheet 1: questions 1-2,Digital,Medium,95,3,23:59,16:30,18:05,false
+P07,4,t09,Module D lecture notes review,Analog,Medium,45,3,08:30,18:15,19:00,false
+P07,5,t10,Lab sheet 1: questions 3-4,Digital,Medium,95,2,23:59,16:30,18:05,false
+P07,6,t11,Lab sheet 1: finish and submit,Digital,High,80,1,23:59,16:45,18:05,false
+P07,6,t12,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:15,18:45,false
+P07,7,t13,Module B assignment: section 3 + diagrams,Digital,Medium,125,5,23:59,13:30,15:35,false
+P07,7,t14,Plan next week,Digital,High,15,1,19:00,15:45,16:00,false
+P07,8,t15,Shift handover notes for study plan,Digital,High,15,0,23:59,14:00,14:15,false
+P07,8,t16,Check LMS and plan the week,Digital,High,15,1,23:59,14:25,14:40,false
+P07,9,t17,Module B assignment: references,Digital,Medium,30,3,23:59,14:00,14:30,true
+P07,9,t18,Lit review: read papers 4-6,Analog,Medium,125,5,23:59,14:40,16:45,false
+P07,10,t19,Module B assignment: proofread,Analog,Medium,30,2,23:59,14:00,14:30,true
+P07,10,t20,PP1: list results to present,Digital,Low,30,17,23:59,14:40,15:10,false
+P07,10,t21,Module B lecture notes review,Analog,Medium,50,3,08:30,15:20,16:10,false
+P07,10,t22,Module C lecture notes review,Analog,Medium,45,3,13:45,16:20,17:05,false
+P07,11,t23,Module B assignment: final check and submit,Digital,High,45,1,23:59,14:00,14:45,false
+P07,11,t24,Lit review: search and shortlist papers,Digital,Medium,45,3,23:59,14:55,15:40,false
+P07,11,t25,PP1 slides: outline,Digital,Low,65,16,23:59,15:50,16:55,false
+P07,12,t26,Lit review: outline,Digital,Medium,125,2,23:59,14:00,16:05,false
+P07,12,t27,Module D lecture notes review,Analog,Medium,45,2,08:30,16:15,17:00,false
+P07,14,t28,Lit review: write synthesis,Digital,High,95,0,23:59,13:30,15:05,false
+P07,14,t29,Lit review: finish and submit,Digital,High,60,0,23:59,15:15,16:15,false
+P07,14,t30,Plan next week,Digital,High,15,1,19:00,16:25,16:40,false
+P07,15,t31,Lab sheet 2: read brief,Analog,Low,30,6,23:59,16:30,17:00,false
+P07,15,t32,PP1 slides: results section,Digital,Low,95,12,23:59,17:10,18:45,false
+P07,15,t33,Check LMS and plan the week,Digital,High,15,1,23:59,18:55,19:10,false
+P07,16,t34,Lab sheet 2: part 1,Digital,Medium,125,5,23:59,16:30,18:35,false
+P07,16,t35,Module C lecture notes review,Analog,Medium,45,4,13:45,18:45,19:30,false
+P07,18,t36,Lab sheet 2: part 2,Digital,Medium,95,3,23:59,16:30,18:05,false
+P07,18,t37,Module D revision: topics 1-2,Analog,Low,65,7,20:00,18:15,19:20,false
+P07,19,t38,Lab sheet 2: debug code,Digital,Medium,30,2,23:59,16:30,17:00,false
+P07,19,t39,Module D revision: topics 3-4,Analog,Low,80,6,20:00,17:10,18:30,false
+P07,19,t40,Module D lecture notes review,Analog,Medium,45,2,08:30,18:40,19:25,false
+P07,20,t41,Lab sheet 2: finish and submit,Digital,High,80,1,23:59,16:45,18:05,false
+P07,20,t42,Module D flashcards,Analog,Medium,30,5,20:00,18:15,18:45,false
+P07,21,t43,PP1 slides: design and figures,Digital,Low,125,6,23:59,13:30,15:35,false
+P07,21,t44,Plan next week,Digital,High,15,1,19:00,15:45,16:00,false
+P07,22,t45,PP1 group sync call,Meeting,Medium,30,5,23:59,14:00,14:30,false
+P07,23,t46,Module D revision: topics 5-6,Analog,Medium,65,2,20:00,14:00,15:05,false
+P07,23,t47,Module D past paper,Analog,Medium,80,2,20:00,15:15,16:35,false
+P07,23,t48,Check LMS and plan the week,Digital,High,15,0,23:59,16:45,17:00,false
+P07,24,t49,Module D final revision,Analog,High,95,1,20:00,14:00,15:35,false
+P07,24,t50,PP1 slides: polish,Digital,Medium,65,3,23:59,15:45,16:50,false
+P07,25,t51,PP1 rehearsal with group,Meeting,Medium,65,2,23:59,14:00,15:05,false
+P07,25,t52,Module C lecture notes review,Analog,Medium,45,2,13:45,15:15,16:00,false
+P07,25,t53,Module D lecture notes review,Analog,Medium,45,3,08:30,16:10,16:55,false
+P07,26,t54,PP1 slides: final check and submit,Digital,High,80,1,23:59,14:00,15:20,false
+P07,26,t55,PP1 speaker notes,Analog,Medium,45,2,10:45,15:30,16:15,false
+P07,28,t56,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P07,29,t57,Module B lecture notes review,Analog,Medium,50,5,08:30,16:30,17:20,false
+P07,29,t58,Check LMS and plan the week,Digital,High,15,1,23:59,17:30,17:45,false
+P07,30,t59,Module C lecture notes review,Analog,Medium,45,4,13:45,16:30,17:15,false
+P08,1,t01,Lab sheet 1: read brief,Analog,Low,30,6,23:59,17:15,17:45,false
+P08,1,t02,Module B assignment: section 1,Digital,Low,90,11,23:59,19:00,20:30,false
+P08,1,t03,"Module B assignment: read brief, outline",Analog,Low,45,11,23:59,20:40,21:25,false
+P08,2,t04,Lab sheet 1: questions 1-2,Digital,Medium,90,5,23:59,19:00,20:30,false
+P08,2,t05,Lit review: search and shortlist papers,Digital,Low,60,12,23:59,20:40,21:40,false
+P08,3,t06,Module B assignment: section 2,Digital,Low,120,9,23:59,19:00,21:00,false
+P08,3,t07,Module B lecture notes review,Analog,Medium,50,3,08:30,21:10,22:00,false
+P08,4,t08,Lab sheet 1: questions 3-4,Digital,Medium,90,3,23:59,19:00,20:30,false
+P08,4,t09,Lit review: read papers 1-3 (part 1),Analog,Low,60,10,23:59,20:40,21:40,false
+P08,5,t10,Lit review: read papers 1-3 (part 2),Analog,Low,60,9,23:59,19:00,20:00,false
+P08,6,t11,Lab sheet 1: finish and submit,Digital,High,75,1,23:59,16:30,17:45,false
+P08,6,t12,Supervisor meeting: update notes,Digital,High,30,1,10:45,17:55,18:25,false
+P08,7,t13,Module B assignment: section 3 + diagrams,Digital,Medium,30,5,23:59,13:30,14:00,false
+P08,7,t14,Module B assignment: references,Digital,Medium,120,5,23:59,14:10,16:10,true
+P08,7,t15,Plan next week,Digital,High,15,1,19:00,16:20,16:35,false
+P08,8,t16,Module B assignment: proofread,Analog,Medium,30,4,23:59,17:15,17:45,true
+P08,8,t17,Lit review: read papers 4-6,Analog,Low,120,6,23:59,19:00,21:00,false
+P08,8,t18,Check LMS and plan the week,Digital,High,15,1,23:59,21:10,21:25,false
+P08,9,t19,Lit review: search and shortlist papers (part 2),Digital,Medium,45,5,23:59,19:00,19:45,false
+P08,9,t20,Module B lecture notes review,Analog,Medium,50,4,08:30,19:55,20:45,false
+P08,9,t21,Module C lecture notes review,Analog,Medium,45,4,13:45,20:55,21:40,false
+P08,10,t22,Module B assignment: final check and submit,Digital,Medium,45,2,23:59,19:00,19:45,false
+P08,10,t23,Lit review: outline,Digital,Medium,120,4,23:59,19:55,21:55,false
+P08,11,t24,PP1: list results to present,Digital,Low,90,16,23:59,19:00,20:30,false
+P08,11,t25,PP1 slides: outline,Digital,Low,60,16,23:59,20:40,21:40,false
+P08,12,t26,Module D lecture notes review,Analog,Medium,45,2,08:30,19:00,19:45,false
+P08,13,t27,Lit review: write synthesis,Digital,High,90,1,23:59,16:30,18:00,false
+P08,14,t28,Lit review: finish and submit,Digital,High,60,0,23:59,13:30,14:30,false
+P08,14,t29,PP1 slides: results section,Digital,Low,120,13,23:59,14:40,16:40,false
+P08,15,t30,Lab sheet 2: read brief,Analog,Low,30,6,23:59,17:15,17:45,false
+P08,15,t31,Lab sheet 2: part 1,Digital,Low,120,6,23:59,19:00,21:00,false
+P08,15,t32,Check LMS and plan the week,Digital,High,15,1,23:59,21:10,21:25,false
+P08,16,t33,Lab sheet 2: part 2,Digital,Medium,90,5,23:59,19:00,20:30,false
+P08,16,t34,Module B lecture notes review,Analog,Medium,50,4,08:30,20:40,21:30,false
+P08,17,t35,Module D revision: topics 1-2,Analog,Low,75,8,20:00,19:00,20:15,false
+P08,17,t36,Module D revision: topics 3-4,Analog,Low,60,8,20:00,20:25,21:25,false
+P08,18,t37,Lab sheet 2: debug code,Digital,Medium,30,3,23:59,19:00,19:30,false
+P08,19,t38,Module D flashcards,Analog,Low,30,6,20:00,19:00,19:30,false
+P08,20,t39,Lab sheet 2: finish and submit,Digital,High,75,1,23:59,16:30,17:45,false
+P08,20,t40,PP1 group sync call,Meeting,Low,30,7,23:59,17:55,18:25,false
+P08,21,t41,Module D revision: topics 5-6,Analog,Medium,75,4,20:00,13:30,14:45,false
+P08,21,t42,Plan next week,Digital,High,15,1,19:00,14:55,15:10,false
+P08,22,t43,Module D past paper,Analog,Medium,60,3,20:00,19:00,20:00,false
+P08,22,t44,PP1 slides: design and figures,Digital,Medium,60,5,23:59,20:10,21:10,false
+P08,22,t45,Check LMS and plan the week,Digital,High,15,1,23:59,21:20,21:35,false
+P08,23,t46,Module D final revision,Analog,Medium,90,2,20:00,19:00,20:30,false
+P08,23,t47,Module B lecture notes review,Analog,Medium,50,4,08:30,20:40,21:30,false
+P08,24,t48,PP1 slides: polish,Digital,Medium,75,3,23:59,19:00,20:15,false
+P08,24,t49,PP1 rehearsal with group,Meeting,Medium,60,3,23:59,20:25,21:25,false
+P08,25,t50,Module C lecture notes review,Analog,Medium,45,2,13:45,19:00,19:45,false
+P08,26,t51,PP1 speaker notes,Analog,Medium,45,2,10:45,19:00,19:45,false
+P08,27,t52,PP1 slides: final check and submit,Digital,High,15,0,23:59,16:30,16:45,false
+P08,27,t53,Supervisor meeting: update notes,Digital,High,30,1,10:45,16:55,17:25,false
+P08,28,t54,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P08,29,t55,Module B lecture notes review,Analog,Medium,50,5,08:30,19:00,19:50,false
+P08,29,t56,Check LMS and plan the week,Digital,High,15,1,23:59,20:00,20:15,false
+P08,30,t57,Module C lecture notes review,Analog,Medium,45,4,13:45,19:00,19:45,false
+P09,1,t01,Lab sheet 1: questions 1-2,Digital,Low,100,6,23:59,19:00,20:40,false
+P09,1,t02,Lab sheet 1: read brief,Analog,Low,35,6,23:59,20:50,21:25,false
+P09,1,t03,Prepare tutoring material,Analog,High,45,1,23:59,21:35,22:20,false
+P09,2,t04,"Module B assignment: read brief, outline",Analog,Low,50,10,23:59,21:00,21:50,false
+P09,2,t05,Check LMS and plan the week,Digital,High,15,0,23:59,22:00,22:15,false
+P09,3,t06,Lab sheet 1: questions 3-4,Digital,Medium,100,4,23:59,19:00,20:40,false
+P09,3,t07,Module B assignment: section 1 (part 1),Digital,Low,55,9,23:59,20:50,21:45,false
+P09,4,t08,Module B assignment: section 1 (part 2),Digital,Low,55,8,23:59,21:00,21:55,false
+P09,6,t09,Lab sheet 1: finish and submit,Digital,High,80,1,23:59,16:45,18:05,false
+P09,7,t10,Module B assignment: section 2,Digital,Medium,130,5,23:59,13:30,15:40,false
+P09,7,t11,Module B assignment: section 3 + diagrams,Digital,Medium,130,5,23:59,15:50,18:00,false
+P09,8,t12,Lit review: search and shortlist papers,Digital,Low,50,6,23:59,19:00,19:50,false
+P09,8,t13,Lit review: read papers 1-3,Analog,Low,130,6,23:59,20:00,22:10,false
+P09,9,t14,Module B assignment: references,Digital,Medium,35,3,23:59,21:00,21:35,true
+P09,9,t15,Prepare tutoring material,Analog,High,45,0,23:59,21:45,22:30,false
+P09,10,t16,Module B assignment: proofread,Analog,Medium,35,2,23:59,19:00,19:35,true
+P09,10,t17,Lit review: outline,Digital,Medium,130,4,23:59,19:45,21:55,false
+P09,10,t18,PP1: list results to present,Digital,Low,25,17,23:59,22:05,22:30,false
+P09,11,t19,Module B assignment: final check and submit,Digital,High,50,1,23:59,21:00,21:50,false
+P09,11,t20,PP1 slides: outline,Digital,Low,30,16,23:59,22:00,22:30,false
+P09,13,t21,Lit review: write synthesis,Digital,High,100,1,23:59,16:45,18:25,false
+P09,14,t22,Lit review: read papers 4-6,Analog,High,65,0,23:59,13:30,14:35,false
+P09,14,t23,Lit review: finish and submit,Digital,High,65,0,23:59,14:45,15:50,false
+P09,14,t24,PP1 group sync call,Meeting,Low,35,13,23:59,16:00,16:35,false
+P09,14,t25,PP1 slides: results section,Digital,Low,70,13,23:59,16:45,17:55,false
+P09,15,t26,Lab sheet 2: part 1,Digital,Low,130,6,23:59,19:00,21:10,false
+P09,15,t27,Lab sheet 2: read brief,Analog,Low,35,6,23:59,21:20,21:55,false
+P09,15,t28,Check LMS and plan the week,Digital,High,15,1,23:59,22:05,22:20,false
+P09,16,t29,PP1 slides: design and figures,Digital,Low,65,11,23:59,21:00,22:05,false
+P09,17,t30,Lab sheet 2: part 2,Digital,Medium,100,4,23:59,19:00,20:40,false
+P09,17,t31,Module D revision: topics 1-2,Analog,Low,65,8,20:00,20:50,21:55,false
+P09,18,t32,Lab sheet 2: debug code,Digital,Medium,35,3,23:59,21:00,21:35,false
+P09,20,t33,Lab sheet 2: finish and submit,Digital,High,80,1,23:59,16:45,18:05,false
+P09,21,t34,Module D revision: topics 3-4,Analog,Medium,80,4,20:00,13:30,14:50,false
+P09,21,t35,Module D flashcards,Analog,Medium,35,4,20:00,15:00,15:35,false
+P09,21,t36,Module D revision: topics 5-6,Analog,Medium,80,4,20:00,15:45,17:05,false
+P09,21,t37,Plan next week,Digital,High,15,1,19:00,17:15,17:30,false
+P09,22,t38,Module D past paper,Analog,Medium,100,3,20:00,19:00,20:40,false
+P09,22,t39,Module D final revision,Analog,Medium,65,3,20:00,20:50,21:55,false
+P09,22,t40,Check LMS and plan the week,Digital,High,15,1,23:59,22:05,22:20,false
+P09,23,t41,PP1 rehearsal with group,Meeting,Medium,65,4,23:59,21:00,22:05,false
+P09,24,t42,PP1 slides: design and figures (part 2),Digital,Medium,65,3,23:59,19:00,20:05,false
+P09,24,t43,PP1 slides: polish,Digital,Medium,50,3,23:59,20:15,21:05,false
+P09,24,t44,PP1 speaker notes,Analog,Medium,50,4,10:45,21:15,22:05,false
+P09,27,t45,PP1 slides: final check and submit,Digital,High,80,0,23:59,16:45,18:05,false
+P09,28,t46,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P09,29,t47,Prepare tutoring material,Analog,High,45,1,23:59,19:00,19:45,false
+P09,29,t48,Module B lecture notes review,Analog,Medium,55,5,08:30,19:55,20:50,false
+P09,29,t49,Check LMS and plan the week,Digital,High,15,1,23:59,21:00,21:15,false
+P09,30,t50,Module C lecture notes review,Analog,Medium,50,4,13:45,21:00,21:50,false
+P10,1,t01,Check LMS and plan the week,Digital,High,15,1,23:59,13:20,13:35,false
+P10,1,t02,Lit review: search and shortlist papers,Digital,Low,115,13,23:59,19:00,20:55,false
+P10,1,t03,Module B lecture notes review,Analog,Medium,50,5,08:30,21:05,21:55,false
+P10,2,t04,Lab sheet 1: read brief,Analog,Medium,30,5,23:59,13:20,13:50,false
+P10,3,t05,Module B assignment: section 1,Digital,Low,85,9,23:59,19:00,20:25,false
+P10,3,t06,"Module B assignment: read brief, outline",Analog,Low,45,9,23:59,20:35,21:20,false
+P10,3,t07,Module C lecture notes review,Analog,Medium,45,3,13:45,21:30,22:15,false
+P10,4,t08,Lab sheet 1: questions 1-2,Digital,Medium,85,3,23:59,19:00,20:25,false
+P10,4,t09,Module B assignment: section 2,Digital,Low,115,8,23:59,20:35,22:30,false
+P10,5,t10,Lab sheet 1: questions 3-4,Digital,Medium,85,2,23:59,19:00,20:25,false
+P10,6,t11,Lab sheet 1: finish and submit,Digital,High,70,1,23:59,16:50,18:00,false
+P10,6,t12,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:10,18:40,false
+P10,7,t13,Module B assignment: section 3 + diagrams,Digital,Medium,115,5,23:59,13:30,15:25,false
+P10,7,t14,Freelance-style practice: small web feature,Digital,Medium,60,4,23:59,15:35,16:35,false
+P10,7,t15,Plan next week,Digital,High,15,1,19:00,16:45,17:00,false
+P10,8,t16,Check LMS and plan the week,Digital,High,15,1,23:59,13:20,13:35,false
+P10,8,t17,Lit review: read papers 1-3,Analog,Low,115,6,23:59,19:00,20:55,false
+P10,8,t18,Module B lecture notes review,Analog,Medium,50,5,08:30,21:05,21:55,false
+P10,9,t19,Module B assignment: references,Digital,Medium,30,3,23:59,13:20,13:50,true
+P10,9,t20,Lit review: read papers 4-6,Analog,Medium,115,5,23:59,19:00,20:55,false
+P10,9,t21,Module C lecture notes review,Analog,Medium,45,4,13:45,21:05,21:50,false
+P10,10,t22,Module B assignment: proofread,Analog,Medium,30,2,23:59,13:20,13:50,true
+P10,10,t23,Module D lecture notes review,Analog,Medium,45,4,08:30,19:00,19:45,false
+P10,10,t24,Research group call,Meeting,High,45,1,23:59,19:55,20:40,false
+P10,11,t25,Module B assignment: final check and submit,Digital,High,45,1,23:59,19:00,19:45,false
+P10,11,t26,Lit review: outline,Digital,Medium,45,3,23:59,19:55,20:40,false
+P10,12,t27,Lit review: write synthesis,Digital,Medium,115,2,23:59,19:00,20:55,false
+P10,13,t28,Lit review: finish and submit,Digital,High,85,1,23:59,16:50,18:15,false
+P10,13,t29,Supervisor meeting: update notes,Digital,High,30,1,10:45,18:25,18:55,false
+P10,14,t30,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P10,15,t31,Lab sheet 2: read brief,Analog,Low,30,6,23:59,13:20,13:50,false
+P10,15,t32,Module B lecture notes review,Analog,Medium,50,5,08:30,19:00,19:50,false
+P10,15,t33,Check LMS and plan the week,Digital,High,15,1,23:59,20:00,20:15,false
+P10,16,t34,Lab sheet 2: part 1,Digital,Medium,115,5,23:59,19:00,20:55,false
+P10,16,t35,Module C lecture notes review,Analog,Medium,45,4,13:45,21:05,21:50,false
+P10,17,t36,PP1: list results to present,Digital,Low,30,10,23:59,13:20,13:50,false
+P10,17,t37,Module D lecture notes review,Analog,Medium,45,4,08:30,19:00,19:45,false
+P10,18,t38,Lab sheet 2: part 2,Digital,Medium,85,3,23:59,19:00,20:25,false
+P10,18,t39,Module D revision: topics 1-2,Analog,Low,55,7,20:00,20:35,21:30,false
+P10,18,t40,PP1 slides: outline,Digital,Low,55,9,23:59,21:40,22:35,false
+P10,19,t41,Lab sheet 2: debug code,Digital,Medium,30,2,23:59,19:00,19:30,false
+P10,19,t42,Module D revision: topics 3-4,Analog,Low,70,6,20:00,19:40,20:50,false
+P10,20,t43,Lab sheet 2: finish and submit,Digital,High,70,1,23:59,16:50,18:00,false
+P10,20,t44,Module D flashcards,Analog,Medium,30,5,20:00,18:10,18:40,false
+P10,21,t45,PP1 slides: results section,Digital,Low,115,6,23:59,13:30,15:25,false
+P10,21,t46,PP1 slides: design and figures,Digital,Low,85,6,23:59,15:35,17:00,false
+P10,22,t47,PP1 group sync call,Meeting,Medium,30,5,23:59,13:20,13:50,false
+P10,22,t48,Module D revision: topics 5-6,Analog,Medium,70,3,20:00,19:00,20:10,false
+P10,22,t49,PP1 slides: polish,Digital,Medium,55,5,23:59,20:20,21:15,false
+P10,22,t50,Check LMS and plan the week,Digital,High,15,1,23:59,21:25,21:40,false
+P10,24,t51,Module D past paper,Analog,High,85,1,20:00,19:00,20:25,false
+P10,24,t52,Module D final revision,Analog,High,55,1,20:00,20:35,21:30,false
+P10,24,t53,PP1 rehearsal with group,Meeting,Medium,55,3,23:59,21:40,22:35,false
+P10,26,t54,PP1 slides: final check and submit,Digital,High,70,1,23:59,19:00,20:10,false
+P10,27,t55,PP1 speaker notes,Analog,High,45,1,10:45,16:50,17:35,false
+P10,27,t56,Supervisor meeting: update notes,Digital,High,30,1,10:45,17:45,18:15,false
+P10,28,t57,Plan next week,Digital,High,15,1,19:00,13:30,13:45,false
+P10,29,t58,Check LMS and plan the week,Digital,High,15,1,23:59,13:20,13:35,false
+P10,29,t59,Module B lecture notes review,Analog,Medium,50,5,08:30,19:00,19:50,false
+P10,30,t60,Module C lecture notes review,Analog,Medium,45,4,13:45,19:00,19:45,false

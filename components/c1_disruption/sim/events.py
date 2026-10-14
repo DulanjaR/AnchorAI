@@ -22,6 +22,7 @@ from components.c1_disruption.ml.drift.data import clean
 from components.c1_disruption.ml.drift.model import DriftModel
 from components.c1_disruption.sim import settings
 from components.c1_disruption.sim.generate import World
+from components.c1_disruption.sim.personas import day_frame
 
 
 @dataclass
@@ -41,16 +42,27 @@ def _week_start(day_str: str) -> str:
     return (d - timedelta(days=d.weekday())).isoformat()
 
 
-def engine_input(world: World, persona_id: str, day: int) -> dict[str, Any]:
+def day_frame_for(world: World, persona_id: str, day: int) -> tuple[dict[str, str], list[dict[str, str]]]:
+    """Work hours and protected blocks of one day: from the schedule when there is one
+    (personas.day_frame: study windows only), otherwise the persona's fixed day."""
+    if world.schedule is not None:
+        frame = day_frame(world.schedule.get((persona_id, day), []))
+        if frame is not None:
+            return frame
     persona = world.personas[persona_id]
+    return {"start": persona.work_start, "end": persona.work_end}, [dict(b) for b in persona.protected_blocks]
+
+
+def engine_input(world: World, persona_id: str, day: int) -> dict[str, Any]:
     d = world.disruptions[(persona_id, day)]
     tasks = [t for t in world.tasks if t.persona_id == persona_id and t.day == day]
+    work_hours, protected = day_frame_for(world, persona_id, day)
     return {
         "date": tasks[0].date,
-        "workHours": {"start": persona.work_start, "end": persona.work_end},
-        "planFrom": max(d.start, persona.work_start),  # the student replans when the disruption starts
+        "workHours": work_hours,
+        "planFrom": max(d.start, work_hours["start"]),  # the student replans when the disruption starts
         "disruption": {"type": d.type, "start": d.start, "end": d.end},
-        "protectedBlocks": [dict(b) for b in persona.protected_blocks],
+        "protectedBlocks": protected,
         "tasks": [
             {"id": t.task_id, "title": t.title, "type": t.type, "priority": t.priority,
              "estimatedHours": t.estimated_minutes / 60, "deadline": t.deadline, "delegable": t.delegable,

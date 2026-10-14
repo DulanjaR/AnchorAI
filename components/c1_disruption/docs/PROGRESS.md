@@ -4,6 +4,15 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — SYNTHETIC persona data, schedules, special habits — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: sim/data/SYNTHETIC_{personas,tasks_planned,schedule}.csv (owner's files, unchanged), sim/data/SYNTHETIC_habits.csv; tests/sim/test_sim_data.py
+Files changed: sim/personas.py (habit fields, habits + schedule loaders, day_frame, night-shift days), sim/generate.py (habits in planted drift, disruption starts inside study windows), sim/events.py (engine input from the schedule), sim/experiment.py (schedule_csv, habits_csv), notebooks 01–03 (default paths sim/data/), sim/README.md, docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → 541 passed; every task inside a study window and clear of fixed blocks; each habit changes exactly its tasks; disruptions start in study windows for all 5 seeds; same seed same output; without a schedule the old disruptions are identical; notebooks 01–03 run locally on the new data
+Decisions applied: DECISIONS.md 2026-10-14 (SYNTHETIC persona data, schedules and special habits)
+Open questions for owner: see STATUS.md (replanning scope, disruption profile, P09 habit never applies)
+Next step: owner decisions → full notebook 03 run
+
 ## 2026-10-14 — Colab-trained Model 1 connected to the API — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: ml/drift/persist.py; components/c1_disruption/.gitignore; tests/ml/test_persist.py

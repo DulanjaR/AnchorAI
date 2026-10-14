@@ -23,7 +23,7 @@ from components.c1_disruption.ml.drift.model import DriftModel
 from components.c1_disruption.sim import settings
 from components.c1_disruption.sim.events import Event, build_events, event_metrics
 from components.c1_disruption.sim.generate import World, generate
-from components.c1_disruption.sim.personas import load_personas, load_tasks
+from components.c1_disruption.sim.personas import load_personas, load_schedule, load_tasks
 
 VARIANTS = ("planted", "null", "misspecified")
 LABEL = "SYNTHETIC — pipeline validation only, not a research finding"
@@ -104,11 +104,17 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
 
 
 def run(personas_csv: str, tasks_csv: str, seeds: Iterable[int] = settings.SEEDS,
-        variants: Iterable[str] = VARIANTS, n_estimators: int = settings.SIM_N_ESTIMATORS) -> dict[str, Any]:
-    personas = load_personas(personas_csv)
+        variants: Iterable[str] = VARIANTS, n_estimators: int = settings.SIM_N_ESTIMATORS,
+        schedule_csv: str | None = None, habits_csv: str | None = None) -> dict[str, Any]:
+    """schedule_csv: per-day blocks (study windows etc.); habits_csv: special habits.
+    Both optional; without them the persona's fixed work hours and plain drift are used."""
+    personas = load_personas(personas_csv, habits_csv)
     tasks = load_tasks(tasks_csv, personas)
-    runs = [run_world(generate(personas, tasks, seed, variant), n_estimators) for variant in variants for seed in seeds]
-    return {"label": LABEL, "dataset": settings.DATASET, "personas": len(personas), "tasks": len(tasks), "runs": runs}
+    schedule = load_schedule(schedule_csv, personas) if schedule_csv else None
+    runs = [run_world(generate(personas, tasks, seed, variant, schedule), n_estimators)
+            for variant in variants for seed in seeds]
+    return {"label": LABEL, "dataset": settings.DATASET, "personas": len(personas), "tasks": len(tasks),
+            "scheduled": schedule is not None, "runs": runs}
 
 
 def _mean_sd(values: list[float]) -> str:

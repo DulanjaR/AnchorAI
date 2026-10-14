@@ -1,0 +1,5 @@
+personaId,lateFactor,lateFrom,afterNightShiftFactor,titleDrift,longTaskFactor,longTaskMinutes
+P01,1.10,21:30,,,,
+P07,,,1.35,,,
+P08,,,,Module B assignment: section=1.60; Lit review: write synthesis=1.60,,
+P09,,,,,1.30,180

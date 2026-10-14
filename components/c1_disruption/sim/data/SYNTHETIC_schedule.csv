@@ -1,0 +1,2606 @@
+personaId,day,date,kind,label,start,end
+P01,1,2026-09-07,sleep,Sleep,00:00,06:00
+P01,1,2026-09-07,routine,Morning routine,06:00,07:15
+P01,1,2026-09-07,bus,Bus to office,07:15,08:20
+P01,1,2026-09-07,office,Office (incl. lunch),08:30,17:30
+P01,1,2026-09-07,bus,Bus home,17:45,18:50
+P01,1,2026-09-07,routine,Dinner,19:00,19:30
+P01,1,2026-09-07,sleep,Sleep,23:30,24:00
+P01,1,2026-09-07,study_window,Study window (bus),17:50,18:50
+P01,1,2026-09-07,study_window,Study window (home),19:30,23:00
+P01,2,2026-09-08,sleep,Sleep,00:00,06:00
+P01,2,2026-09-08,routine,Morning routine,06:00,07:15
+P01,2,2026-09-08,bus,Bus to office,07:15,08:20
+P01,2,2026-09-08,office,Office (incl. lunch),08:30,17:30
+P01,2,2026-09-08,bus,Bus home,17:45,18:50
+P01,2,2026-09-08,routine,Dinner,19:00,19:30
+P01,2,2026-09-08,sleep,Sleep,23:30,24:00
+P01,2,2026-09-08,study_window,Study window (bus),17:50,18:50
+P01,2,2026-09-08,study_window,Study window (home),19:30,23:00
+P01,3,2026-09-09,sleep,Sleep,00:00,06:00
+P01,3,2026-09-09,routine,Morning routine,06:00,07:15
+P01,3,2026-09-09,bus,Bus to office,07:15,08:20
+P01,3,2026-09-09,office,Office (incl. lunch),08:30,17:30
+P01,3,2026-09-09,bus,Bus home,17:45,18:50
+P01,3,2026-09-09,routine,Dinner,19:00,19:30
+P01,3,2026-09-09,sleep,Sleep,23:30,24:00
+P01,3,2026-09-09,study_window,Study window (bus),17:50,18:50
+P01,3,2026-09-09,study_window,Study window (home),19:30,23:00
+P01,4,2026-09-10,sleep,Sleep,00:00,06:00
+P01,4,2026-09-10,routine,Morning routine,06:00,07:15
+P01,4,2026-09-10,bus,Bus to office,07:15,08:20
+P01,4,2026-09-10,office,Office (incl. lunch),08:30,17:30
+P01,4,2026-09-10,bus,Bus home,17:45,18:50
+P01,4,2026-09-10,routine,Dinner,19:00,19:30
+P01,4,2026-09-10,sleep,Sleep,23:30,24:00
+P01,4,2026-09-10,study_window,Study window (bus),17:50,18:50
+P01,4,2026-09-10,study_window,Study window (home),19:30,23:00
+P01,5,2026-09-11,sleep,Sleep,00:00,06:00
+P01,5,2026-09-11,routine,Morning routine,06:00,07:15
+P01,5,2026-09-11,bus,Bus to office,07:15,08:20
+P01,5,2026-09-11,office,Office (incl. lunch),08:30,17:30
+P01,5,2026-09-11,bus,Bus home,17:45,18:50
+P01,5,2026-09-11,routine,Dinner,19:00,19:30
+P01,5,2026-09-11,sleep,Sleep,23:30,24:00
+P01,5,2026-09-11,study_window,Study window (bus),17:50,18:50
+P01,5,2026-09-11,study_window,Study window (home),19:30,22:00
+P01,6,2026-09-12,sleep,Sleep,00:00,06:30
+P01,6,2026-09-12,routine,Morning routine,06:30,07:30
+P01,6,2026-09-12,bus,Bus to campus,07:30,08:20
+P01,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P01,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P01,6,2026-09-12,routine,Lunch,12:45,13:45
+P01,6,2026-09-12,campus,Module C lab,13:45,15:45
+P01,6,2026-09-12,bus,Bus home,19:05,19:55
+P01,6,2026-09-12,routine,Dinner,20:00,20:30
+P01,6,2026-09-12,study_window,Study window (home),16:30,19:00
+P01,7,2026-09-13,sleep,Sleep,00:00,06:30
+P01,7,2026-09-13,routine,Morning routine,06:30,07:30
+P01,7,2026-09-13,bus,Bus to campus,07:30,08:20
+P01,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P01,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P01,7,2026-09-13,bus,Bus home,12:20,13:00
+P01,7,2026-09-13,routine,Lunch,13:00,13:30
+P01,7,2026-09-13,routine,Dinner,19:00,19:30
+P01,7,2026-09-13,sleep,Sleep,23:30,24:00
+P01,7,2026-09-13,study_window,Study window (home),13:30,17:00
+P01,8,2026-09-14,sleep,Sleep,00:00,06:00
+P01,8,2026-09-14,routine,Morning routine,06:00,07:15
+P01,8,2026-09-14,bus,Bus to office,07:15,08:20
+P01,8,2026-09-14,office,Office (incl. lunch),08:30,17:30
+P01,8,2026-09-14,bus,Bus home,17:45,18:50
+P01,8,2026-09-14,routine,Dinner,19:00,19:30
+P01,8,2026-09-14,sleep,Sleep,23:30,24:00
+P01,8,2026-09-14,study_window,Study window (bus),17:50,18:50
+P01,8,2026-09-14,study_window,Study window (home),19:30,23:00
+P01,9,2026-09-15,sleep,Sleep,00:00,06:00
+P01,9,2026-09-15,routine,Morning routine,06:00,07:15
+P01,9,2026-09-15,bus,Bus to office,07:15,08:20
+P01,9,2026-09-15,office,Office (incl. lunch),08:30,17:30
+P01,9,2026-09-15,bus,Bus home,17:45,18:50
+P01,9,2026-09-15,routine,Dinner,19:00,19:30
+P01,9,2026-09-15,sleep,Sleep,23:30,24:00
+P01,9,2026-09-15,study_window,Study window (bus),17:50,18:50
+P01,9,2026-09-15,study_window,Study window (home),19:30,23:00
+P01,10,2026-09-16,sleep,Sleep,00:00,06:00
+P01,10,2026-09-16,routine,Morning routine,06:00,07:15
+P01,10,2026-09-16,bus,Bus to office,07:15,08:20
+P01,10,2026-09-16,office,Office (incl. lunch),08:30,17:30
+P01,10,2026-09-16,bus,Bus home,17:45,18:50
+P01,10,2026-09-16,routine,Dinner,19:00,19:30
+P01,10,2026-09-16,sleep,Sleep,23:30,24:00
+P01,10,2026-09-16,study_window,Study window (bus),17:50,18:50
+P01,10,2026-09-16,study_window,Study window (home),19:30,23:00
+P01,11,2026-09-17,sleep,Sleep,00:00,06:00
+P01,11,2026-09-17,routine,Morning routine,06:00,07:15
+P01,11,2026-09-17,bus,Bus to office,07:15,08:20
+P01,11,2026-09-17,office,Office (incl. lunch),08:30,17:30
+P01,11,2026-09-17,bus,Bus home,17:45,18:50
+P01,11,2026-09-17,routine,Dinner,19:00,19:30
+P01,11,2026-09-17,sleep,Sleep,23:30,24:00
+P01,11,2026-09-17,study_window,Study window (bus),17:50,18:50
+P01,11,2026-09-17,study_window,Study window (home),19:30,23:00
+P01,12,2026-09-18,sleep,Sleep,00:00,06:00
+P01,12,2026-09-18,routine,Morning routine,06:00,07:15
+P01,12,2026-09-18,bus,Bus to office,07:15,08:20
+P01,12,2026-09-18,office,Office (incl. lunch),08:30,17:30
+P01,12,2026-09-18,bus,Bus home,17:45,18:50
+P01,12,2026-09-18,routine,Dinner,19:00,19:30
+P01,12,2026-09-18,sleep,Sleep,23:30,24:00
+P01,12,2026-09-18,study_window,Study window (bus),17:50,18:50
+P01,12,2026-09-18,study_window,Study window (home),19:30,22:00
+P01,13,2026-09-19,sleep,Sleep,00:00,06:30
+P01,13,2026-09-19,routine,Morning routine,06:30,07:30
+P01,13,2026-09-19,bus,Bus to campus,07:30,08:20
+P01,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P01,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P01,13,2026-09-19,routine,Lunch,12:45,13:45
+P01,13,2026-09-19,campus,Module C lab,13:45,15:45
+P01,13,2026-09-19,bus,Bus home,19:05,19:55
+P01,13,2026-09-19,routine,Dinner,20:00,20:30
+P01,13,2026-09-19,study_window,Study window (home),16:30,19:00
+P01,14,2026-09-20,sleep,Sleep,00:00,06:30
+P01,14,2026-09-20,routine,Morning routine,06:30,07:30
+P01,14,2026-09-20,bus,Bus to campus,07:30,08:20
+P01,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P01,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P01,14,2026-09-20,bus,Bus home,12:20,13:00
+P01,14,2026-09-20,routine,Lunch,13:00,13:30
+P01,14,2026-09-20,routine,Dinner,19:00,19:30
+P01,14,2026-09-20,sleep,Sleep,23:30,24:00
+P01,14,2026-09-20,study_window,Study window (home),13:30,17:00
+P01,15,2026-09-21,sleep,Sleep,00:00,06:00
+P01,15,2026-09-21,routine,Morning routine,06:00,07:15
+P01,15,2026-09-21,bus,Bus to office,07:15,08:20
+P01,15,2026-09-21,office,Office (incl. lunch),08:30,17:30
+P01,15,2026-09-21,bus,Bus home,17:45,18:50
+P01,15,2026-09-21,routine,Dinner,19:00,19:30
+P01,15,2026-09-21,sleep,Sleep,23:30,24:00
+P01,15,2026-09-21,study_window,Study window (bus),17:50,18:50
+P01,15,2026-09-21,study_window,Study window (home),19:30,23:00
+P01,16,2026-09-22,sleep,Sleep,00:00,06:00
+P01,16,2026-09-22,routine,Morning routine,06:00,07:15
+P01,16,2026-09-22,bus,Bus to office,07:15,08:20
+P01,16,2026-09-22,office,Office (incl. lunch),08:30,17:30
+P01,16,2026-09-22,bus,Bus home,17:45,18:50
+P01,16,2026-09-22,routine,Dinner,19:00,19:30
+P01,16,2026-09-22,sleep,Sleep,23:30,24:00
+P01,16,2026-09-22,study_window,Study window (bus),17:50,18:50
+P01,16,2026-09-22,study_window,Study window (home),19:30,23:00
+P01,17,2026-09-23,sleep,Sleep,00:00,06:00
+P01,17,2026-09-23,routine,Morning routine,06:00,07:15
+P01,17,2026-09-23,bus,Bus to office,07:15,08:20
+P01,17,2026-09-23,office,Office (incl. lunch),08:30,17:30
+P01,17,2026-09-23,bus,Bus home,17:45,18:50
+P01,17,2026-09-23,routine,Dinner,19:00,19:30
+P01,17,2026-09-23,sleep,Sleep,23:30,24:00
+P01,17,2026-09-23,study_window,Study window (bus),17:50,18:50
+P01,17,2026-09-23,study_window,Study window (home),19:30,23:00
+P01,18,2026-09-24,sleep,Sleep,00:00,06:00
+P01,18,2026-09-24,routine,Morning routine,06:00,07:15
+P01,18,2026-09-24,bus,Bus to office,07:15,08:20
+P01,18,2026-09-24,office,Office (incl. lunch),08:30,17:30
+P01,18,2026-09-24,bus,Bus home,17:45,18:50
+P01,18,2026-09-24,routine,Dinner,19:00,19:30
+P01,18,2026-09-24,sleep,Sleep,23:30,24:00
+P01,18,2026-09-24,study_window,Study window (bus),17:50,18:50
+P01,18,2026-09-24,study_window,Study window (home),19:30,23:00
+P01,19,2026-09-25,sleep,Sleep,00:00,06:00
+P01,19,2026-09-25,routine,Morning routine,06:00,07:15
+P01,19,2026-09-25,bus,Bus to office,07:15,08:20
+P01,19,2026-09-25,office,Office (incl. lunch),08:30,17:30
+P01,19,2026-09-25,bus,Bus home,17:45,18:50
+P01,19,2026-09-25,routine,Dinner,19:00,19:30
+P01,19,2026-09-25,sleep,Sleep,23:30,24:00
+P01,19,2026-09-25,study_window,Study window (bus),17:50,18:50
+P01,19,2026-09-25,study_window,Study window (home),19:30,22:00
+P01,20,2026-09-26,sleep,Sleep,00:00,06:30
+P01,20,2026-09-26,routine,Morning routine,06:30,07:30
+P01,20,2026-09-26,bus,Bus to campus,07:30,08:20
+P01,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P01,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P01,20,2026-09-26,routine,Lunch,12:45,13:45
+P01,20,2026-09-26,campus,Module C lab,13:45,15:45
+P01,20,2026-09-26,bus,Bus home,19:05,19:55
+P01,20,2026-09-26,routine,Dinner,20:00,20:30
+P01,20,2026-09-26,study_window,Study window (home),16:30,19:00
+P01,21,2026-09-27,sleep,Sleep,00:00,06:30
+P01,21,2026-09-27,routine,Morning routine,06:30,07:30
+P01,21,2026-09-27,bus,Bus to campus,07:30,08:20
+P01,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P01,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P01,21,2026-09-27,bus,Bus home,12:20,13:00
+P01,21,2026-09-27,routine,Lunch,13:00,13:30
+P01,21,2026-09-27,routine,Dinner,19:00,19:30
+P01,21,2026-09-27,sleep,Sleep,23:30,24:00
+P01,21,2026-09-27,study_window,Study window (home),13:30,17:00
+P01,22,2026-09-28,sleep,Sleep,00:00,06:00
+P01,22,2026-09-28,routine,Morning routine,06:00,07:15
+P01,22,2026-09-28,bus,Bus to office,07:15,08:20
+P01,22,2026-09-28,office,Office (incl. lunch),08:30,17:30
+P01,22,2026-09-28,bus,Bus home,17:45,18:50
+P01,22,2026-09-28,routine,Dinner,19:00,19:30
+P01,22,2026-09-28,sleep,Sleep,23:30,24:00
+P01,22,2026-09-28,study_window,Study window (bus),17:50,18:50
+P01,22,2026-09-28,study_window,Study window (home),19:30,23:00
+P01,23,2026-09-29,sleep,Sleep,00:00,06:00
+P01,23,2026-09-29,routine,Morning routine,06:00,07:15
+P01,23,2026-09-29,bus,Bus to office,07:15,08:20
+P01,23,2026-09-29,office,Office (incl. lunch),08:30,17:30
+P01,23,2026-09-29,bus,Bus home,17:45,18:50
+P01,23,2026-09-29,routine,Dinner,19:00,19:30
+P01,23,2026-09-29,sleep,Sleep,23:30,24:00
+P01,23,2026-09-29,study_window,Study window (bus),17:50,18:50
+P01,23,2026-09-29,study_window,Study window (home),19:30,23:00
+P01,24,2026-09-30,sleep,Sleep,00:00,06:00
+P01,24,2026-09-30,routine,Morning routine,06:00,07:15
+P01,24,2026-09-30,bus,Bus to office,07:15,08:20
+P01,24,2026-09-30,office,Office (incl. lunch),08:30,17:30
+P01,24,2026-09-30,bus,Bus home,17:45,18:50
+P01,24,2026-09-30,routine,Dinner,19:00,19:30
+P01,24,2026-09-30,sleep,Sleep,23:30,24:00
+P01,24,2026-09-30,study_window,Study window (bus),17:50,18:50
+P01,24,2026-09-30,study_window,Study window (home),19:30,23:00
+P01,25,2026-10-01,sleep,Sleep,00:00,06:00
+P01,25,2026-10-01,routine,Morning routine,06:00,07:15
+P01,25,2026-10-01,bus,Bus to office,07:15,08:20
+P01,25,2026-10-01,office,Office (incl. lunch),08:30,17:30
+P01,25,2026-10-01,bus,Bus home,17:45,18:50
+P01,25,2026-10-01,routine,Dinner,19:00,19:30
+P01,25,2026-10-01,sleep,Sleep,23:30,24:00
+P01,25,2026-10-01,fixed,Module D online quiz,20:00,20:45
+P01,25,2026-10-01,study_window,Study window (bus),17:50,18:50
+P01,25,2026-10-01,study_window,Study window (home),19:30,23:00
+P01,26,2026-10-02,sleep,Sleep,00:00,06:00
+P01,26,2026-10-02,routine,Morning routine,06:00,07:15
+P01,26,2026-10-02,bus,Bus to office,07:15,08:20
+P01,26,2026-10-02,office,Office (incl. lunch),08:30,17:30
+P01,26,2026-10-02,bus,Bus home,17:45,18:50
+P01,26,2026-10-02,routine,Dinner,19:00,19:30
+P01,26,2026-10-02,sleep,Sleep,23:30,24:00
+P01,26,2026-10-02,study_window,Study window (bus),17:50,18:50
+P01,26,2026-10-02,study_window,Study window (home),19:30,22:00
+P01,27,2026-10-03,sleep,Sleep,00:00,06:30
+P01,27,2026-10-03,routine,Morning routine,06:30,07:30
+P01,27,2026-10-03,bus,Bus to campus,07:30,08:20
+P01,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P01,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P01,27,2026-10-03,routine,Lunch,12:45,13:45
+P01,27,2026-10-03,campus,Module C lab,13:45,15:45
+P01,27,2026-10-03,bus,Bus home,19:05,19:55
+P01,27,2026-10-03,routine,Dinner,20:00,20:30
+P01,27,2026-10-03,study_window,Study window (home),16:30,19:00
+P01,28,2026-10-04,sleep,Sleep,00:00,06:30
+P01,28,2026-10-04,routine,Morning routine,06:30,07:30
+P01,28,2026-10-04,bus,Bus to campus,07:30,08:20
+P01,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P01,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P01,28,2026-10-04,bus,Bus home,12:20,13:00
+P01,28,2026-10-04,routine,Lunch,13:00,13:30
+P01,28,2026-10-04,routine,Dinner,19:00,19:30
+P01,28,2026-10-04,sleep,Sleep,23:30,24:00
+P01,28,2026-10-04,study_window,Study window (home),13:30,17:00
+P01,29,2026-10-05,sleep,Sleep,00:00,06:00
+P01,29,2026-10-05,routine,Morning routine,06:00,07:15
+P01,29,2026-10-05,bus,Bus to office,07:15,08:20
+P01,29,2026-10-05,office,Office (incl. lunch),08:30,17:30
+P01,29,2026-10-05,bus,Bus home,17:45,18:50
+P01,29,2026-10-05,routine,Dinner,19:00,19:30
+P01,29,2026-10-05,sleep,Sleep,23:30,24:00
+P01,29,2026-10-05,study_window,Study window (bus),17:50,18:50
+P01,29,2026-10-05,study_window,Study window (home),19:30,23:00
+P01,30,2026-10-06,sleep,Sleep,00:00,06:00
+P01,30,2026-10-06,routine,Morning routine,06:00,07:15
+P01,30,2026-10-06,bus,Bus to office,07:15,08:20
+P01,30,2026-10-06,office,Office (incl. lunch),08:30,17:30
+P01,30,2026-10-06,bus,Bus home,17:45,18:50
+P01,30,2026-10-06,routine,Dinner,19:00,19:30
+P01,30,2026-10-06,sleep,Sleep,23:30,24:00
+P01,30,2026-10-06,study_window,Study window (bus),17:50,18:50
+P01,30,2026-10-06,study_window,Study window (home),19:30,23:00
+P02,1,2026-09-07,sleep,Sleep,00:00,06:00
+P02,1,2026-09-07,routine,Morning routine,06:00,07:30
+P02,1,2026-09-07,bus,Bus to office,07:30,08:20
+P02,1,2026-09-07,office,Office (incl. lunch),08:30,17:30
+P02,1,2026-09-07,bus,Bus home,17:45,18:35
+P02,1,2026-09-07,routine,Dinner,19:00,19:30
+P02,1,2026-09-07,sleep,Sleep,23:00,24:00
+P02,1,2026-09-07,study_window,Study window (home),19:30,22:30
+P02,2,2026-09-08,sleep,Sleep,00:00,06:00
+P02,2,2026-09-08,routine,Morning routine,06:00,06:30
+P02,2,2026-09-08,routine,Breakfast,07:30,08:30
+P02,2,2026-09-08,office,Work from home,08:30,17:30
+P02,2,2026-09-08,routine,Dinner,19:00,19:30
+P02,2,2026-09-08,sleep,Sleep,23:00,24:00
+P02,2,2026-09-08,study_window,Study window (home),06:30,07:30
+P02,2,2026-09-08,study_window,Study window (home),19:30,22:30
+P02,3,2026-09-09,sleep,Sleep,00:00,06:00
+P02,3,2026-09-09,routine,Morning routine,06:00,07:30
+P02,3,2026-09-09,bus,Bus to office,07:30,08:20
+P02,3,2026-09-09,office,Office (incl. lunch),08:30,17:30
+P02,3,2026-09-09,bus,Bus home,17:45,18:35
+P02,3,2026-09-09,routine,Dinner,19:00,19:30
+P02,3,2026-09-09,sleep,Sleep,23:00,24:00
+P02,3,2026-09-09,study_window,Study window (home),19:30,22:30
+P02,4,2026-09-10,sleep,Sleep,00:00,06:00
+P02,4,2026-09-10,routine,Morning routine,06:00,06:30
+P02,4,2026-09-10,routine,Breakfast,07:30,08:30
+P02,4,2026-09-10,office,Work from home,08:30,17:30
+P02,4,2026-09-10,routine,Dinner,19:00,19:30
+P02,4,2026-09-10,sleep,Sleep,23:00,24:00
+P02,4,2026-09-10,study_window,Study window (home),06:30,07:30
+P02,4,2026-09-10,study_window,Study window (home),19:30,22:30
+P02,5,2026-09-11,sleep,Sleep,00:00,06:00
+P02,5,2026-09-11,routine,Morning routine,06:00,07:30
+P02,5,2026-09-11,bus,Bus to office,07:30,08:20
+P02,5,2026-09-11,office,Office (incl. lunch),08:30,17:30
+P02,5,2026-09-11,bus,Bus home,17:45,18:35
+P02,5,2026-09-11,routine,Dinner,19:00,19:30
+P02,5,2026-09-11,sleep,Sleep,23:00,24:00
+P02,5,2026-09-11,study_window,Study window (home),19:30,21:00
+P02,6,2026-09-12,sleep,Sleep,00:00,06:30
+P02,6,2026-09-12,routine,Morning routine,06:30,07:40
+P02,6,2026-09-12,bus,Bus to campus,07:40,08:20
+P02,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P02,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P02,6,2026-09-12,routine,Lunch,12:45,13:45
+P02,6,2026-09-12,campus,Module C lab,13:45,15:45
+P02,6,2026-09-12,bus,Bus home,16:00,16:30
+P02,6,2026-09-12,routine,Dinner,19:00,19:30
+P02,6,2026-09-12,study_window,Study window (home),16:30,18:30
+P02,7,2026-09-13,sleep,Sleep,00:00,06:30
+P02,7,2026-09-13,routine,Morning routine,06:30,07:40
+P02,7,2026-09-13,bus,Bus to campus,07:40,08:20
+P02,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P02,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P02,7,2026-09-13,bus,Bus home,12:25,13:05
+P02,7,2026-09-13,routine,Dinner,19:00,19:30
+P02,7,2026-09-13,study_window,Study window (home),14:00,17:00
+P02,8,2026-09-14,sleep,Sleep,00:00,06:00
+P02,8,2026-09-14,routine,Morning routine,06:00,07:30
+P02,8,2026-09-14,bus,Bus to office,07:30,08:20
+P02,8,2026-09-14,office,Office (incl. lunch),08:30,17:30
+P02,8,2026-09-14,bus,Bus home,17:45,18:35
+P02,8,2026-09-14,routine,Dinner,19:00,19:30
+P02,8,2026-09-14,sleep,Sleep,23:00,24:00
+P02,8,2026-09-14,study_window,Study window (home),19:30,22:30
+P02,9,2026-09-15,sleep,Sleep,00:00,06:00
+P02,9,2026-09-15,routine,Morning routine,06:00,06:30
+P02,9,2026-09-15,routine,Breakfast,07:30,08:30
+P02,9,2026-09-15,office,Work from home,08:30,17:30
+P02,9,2026-09-15,routine,Dinner,19:00,19:30
+P02,9,2026-09-15,sleep,Sleep,23:00,24:00
+P02,9,2026-09-15,study_window,Study window (home),06:30,07:30
+P02,9,2026-09-15,study_window,Study window (home),19:30,22:30
+P02,10,2026-09-16,sleep,Sleep,00:00,06:00
+P02,10,2026-09-16,routine,Morning routine,06:00,07:30
+P02,10,2026-09-16,bus,Bus to office,07:30,08:20
+P02,10,2026-09-16,office,Office (incl. lunch),08:30,17:30
+P02,10,2026-09-16,bus,Bus home,17:45,18:35
+P02,10,2026-09-16,routine,Dinner,19:00,19:30
+P02,10,2026-09-16,sleep,Sleep,23:00,24:00
+P02,10,2026-09-16,study_window,Study window (home),19:30,22:30
+P02,11,2026-09-17,sleep,Sleep,00:00,06:00
+P02,11,2026-09-17,routine,Morning routine,06:00,06:30
+P02,11,2026-09-17,routine,Breakfast,07:30,08:30
+P02,11,2026-09-17,office,Work from home,08:30,17:30
+P02,11,2026-09-17,routine,Dinner,19:00,19:30
+P02,11,2026-09-17,sleep,Sleep,23:00,24:00
+P02,11,2026-09-17,study_window,Study window (home),06:30,07:30
+P02,11,2026-09-17,study_window,Study window (home),19:30,22:30
+P02,12,2026-09-18,sleep,Sleep,00:00,06:00
+P02,12,2026-09-18,routine,Morning routine,06:00,07:30
+P02,12,2026-09-18,bus,Bus to office,07:30,08:20
+P02,12,2026-09-18,office,Office (incl. lunch),08:30,17:30
+P02,12,2026-09-18,bus,Bus home,17:45,18:35
+P02,12,2026-09-18,routine,Dinner,19:00,19:30
+P02,12,2026-09-18,sleep,Sleep,23:00,24:00
+P02,12,2026-09-18,study_window,Study window (home),19:30,21:00
+P02,13,2026-09-19,sleep,Sleep,00:00,06:30
+P02,13,2026-09-19,routine,Morning routine,06:30,07:40
+P02,13,2026-09-19,bus,Bus to campus,07:40,08:20
+P02,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P02,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P02,13,2026-09-19,routine,Lunch,12:45,13:45
+P02,13,2026-09-19,campus,Module C lab,13:45,15:45
+P02,13,2026-09-19,bus,Bus home,16:00,16:30
+P02,13,2026-09-19,routine,Dinner,19:00,19:30
+P02,13,2026-09-19,study_window,Study window (home),16:30,18:30
+P02,14,2026-09-20,sleep,Sleep,00:00,06:30
+P02,14,2026-09-20,routine,Morning routine,06:30,07:40
+P02,14,2026-09-20,bus,Bus to campus,07:40,08:20
+P02,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P02,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P02,14,2026-09-20,bus,Bus home,12:25,13:05
+P02,14,2026-09-20,routine,Dinner,19:00,19:30
+P02,14,2026-09-20,study_window,Study window (home),14:00,17:00
+P02,15,2026-09-21,sleep,Sleep,00:00,06:00
+P02,15,2026-09-21,routine,Morning routine,06:00,07:30
+P02,15,2026-09-21,bus,Bus to office,07:30,08:20
+P02,15,2026-09-21,office,Office (incl. lunch),08:30,17:30
+P02,15,2026-09-21,bus,Bus home,17:45,18:35
+P02,15,2026-09-21,routine,Dinner,19:00,19:30
+P02,15,2026-09-21,sleep,Sleep,23:00,24:00
+P02,15,2026-09-21,study_window,Study window (home),19:30,22:30
+P02,16,2026-09-22,sleep,Sleep,00:00,06:00
+P02,16,2026-09-22,routine,Morning routine,06:00,06:30
+P02,16,2026-09-22,routine,Breakfast,07:30,08:30
+P02,16,2026-09-22,office,Work from home,08:30,17:30
+P02,16,2026-09-22,routine,Dinner,19:00,19:30
+P02,16,2026-09-22,sleep,Sleep,23:00,24:00
+P02,16,2026-09-22,study_window,Study window (home),06:30,07:30
+P02,16,2026-09-22,study_window,Study window (home),19:30,22:30
+P02,17,2026-09-23,sleep,Sleep,00:00,06:00
+P02,17,2026-09-23,routine,Morning routine,06:00,07:30
+P02,17,2026-09-23,bus,Bus to office,07:30,08:20
+P02,17,2026-09-23,office,Office (incl. lunch),08:30,17:30
+P02,17,2026-09-23,bus,Bus home,17:45,18:35
+P02,17,2026-09-23,routine,Dinner,19:00,19:30
+P02,17,2026-09-23,sleep,Sleep,23:00,24:00
+P02,17,2026-09-23,study_window,Study window (home),19:30,22:30
+P02,18,2026-09-24,sleep,Sleep,00:00,06:00
+P02,18,2026-09-24,routine,Morning routine,06:00,06:30
+P02,18,2026-09-24,routine,Breakfast,07:30,08:30
+P02,18,2026-09-24,office,Work from home,08:30,17:30
+P02,18,2026-09-24,routine,Dinner,19:00,19:30
+P02,18,2026-09-24,sleep,Sleep,23:00,24:00
+P02,18,2026-09-24,study_window,Study window (home),06:30,07:30
+P02,18,2026-09-24,study_window,Study window (home),19:30,22:30
+P02,19,2026-09-25,sleep,Sleep,00:00,06:00
+P02,19,2026-09-25,routine,Morning routine,06:00,07:30
+P02,19,2026-09-25,bus,Bus to office,07:30,08:20
+P02,19,2026-09-25,office,Office (incl. lunch),08:30,17:30
+P02,19,2026-09-25,bus,Bus home,17:45,18:35
+P02,19,2026-09-25,routine,Dinner,19:00,19:30
+P02,19,2026-09-25,sleep,Sleep,23:00,24:00
+P02,19,2026-09-25,study_window,Study window (home),19:30,21:00
+P02,20,2026-09-26,sleep,Sleep,00:00,06:30
+P02,20,2026-09-26,routine,Morning routine,06:30,07:40
+P02,20,2026-09-26,bus,Bus to campus,07:40,08:20
+P02,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P02,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P02,20,2026-09-26,routine,Lunch,12:45,13:45
+P02,20,2026-09-26,campus,Module C lab,13:45,15:45
+P02,20,2026-09-26,bus,Bus home,16:00,16:30
+P02,20,2026-09-26,routine,Dinner,19:00,19:30
+P02,20,2026-09-26,study_window,Study window (home),16:30,18:30
+P02,21,2026-09-27,sleep,Sleep,00:00,06:30
+P02,21,2026-09-27,routine,Morning routine,06:30,07:40
+P02,21,2026-09-27,bus,Bus to campus,07:40,08:20
+P02,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P02,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P02,21,2026-09-27,bus,Bus home,12:25,13:05
+P02,21,2026-09-27,routine,Dinner,19:00,19:30
+P02,21,2026-09-27,study_window,Study window (home),14:00,17:00
+P02,22,2026-09-28,sleep,Sleep,00:00,06:00
+P02,22,2026-09-28,routine,Morning routine,06:00,07:30
+P02,22,2026-09-28,bus,Bus to office,07:30,08:20
+P02,22,2026-09-28,office,Office (incl. lunch),08:30,17:30
+P02,22,2026-09-28,bus,Bus home,17:45,18:35
+P02,22,2026-09-28,routine,Dinner,19:00,19:30
+P02,22,2026-09-28,sleep,Sleep,23:00,24:00
+P02,22,2026-09-28,study_window,Study window (home),19:30,22:30
+P02,23,2026-09-29,sleep,Sleep,00:00,06:00
+P02,23,2026-09-29,routine,Morning routine,06:00,06:30
+P02,23,2026-09-29,routine,Breakfast,07:30,08:30
+P02,23,2026-09-29,office,Work from home,08:30,17:30
+P02,23,2026-09-29,routine,Dinner,19:00,19:30
+P02,23,2026-09-29,sleep,Sleep,23:00,24:00
+P02,23,2026-09-29,study_window,Study window (home),06:30,07:30
+P02,23,2026-09-29,study_window,Study window (home),19:30,22:30
+P02,24,2026-09-30,sleep,Sleep,00:00,06:00
+P02,24,2026-09-30,routine,Morning routine,06:00,07:30
+P02,24,2026-09-30,bus,Bus to office,07:30,08:20
+P02,24,2026-09-30,office,Office (incl. lunch),08:30,17:30
+P02,24,2026-09-30,bus,Bus home,17:45,18:35
+P02,24,2026-09-30,routine,Dinner,19:00,19:30
+P02,24,2026-09-30,sleep,Sleep,23:00,24:00
+P02,24,2026-09-30,study_window,Study window (home),19:30,22:30
+P02,25,2026-10-01,sleep,Sleep,00:00,06:00
+P02,25,2026-10-01,routine,Morning routine,06:00,06:30
+P02,25,2026-10-01,routine,Breakfast,07:30,08:30
+P02,25,2026-10-01,office,Work from home,08:30,17:30
+P02,25,2026-10-01,routine,Dinner,19:00,19:30
+P02,25,2026-10-01,sleep,Sleep,23:00,24:00
+P02,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:00,20:45
+P02,25,2026-10-01,study_window,Study window (home),06:30,07:30
+P02,25,2026-10-01,study_window,Study window (home),19:30,22:30
+P02,26,2026-10-02,sleep,Sleep,00:00,06:00
+P02,26,2026-10-02,routine,Morning routine,06:00,07:30
+P02,26,2026-10-02,bus,Bus to office,07:30,08:20
+P02,26,2026-10-02,office,Office (incl. lunch),08:30,17:30
+P02,26,2026-10-02,bus,Bus home,17:45,18:35
+P02,26,2026-10-02,routine,Dinner,19:00,19:30
+P02,26,2026-10-02,sleep,Sleep,23:00,24:00
+P02,26,2026-10-02,study_window,Study window (home),19:30,21:00
+P02,27,2026-10-03,sleep,Sleep,00:00,06:30
+P02,27,2026-10-03,routine,Morning routine,06:30,07:40
+P02,27,2026-10-03,bus,Bus to campus,07:40,08:20
+P02,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P02,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P02,27,2026-10-03,routine,Lunch,12:45,13:45
+P02,27,2026-10-03,campus,Module C lab,13:45,15:45
+P02,27,2026-10-03,bus,Bus home,16:00,16:30
+P02,27,2026-10-03,routine,Dinner,19:00,19:30
+P02,27,2026-10-03,study_window,Study window (home),16:30,18:30
+P02,28,2026-10-04,sleep,Sleep,00:00,06:30
+P02,28,2026-10-04,routine,Morning routine,06:30,07:40
+P02,28,2026-10-04,bus,Bus to campus,07:40,08:20
+P02,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P02,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P02,28,2026-10-04,bus,Bus home,12:25,13:05
+P02,28,2026-10-04,routine,Dinner,19:00,19:30
+P02,28,2026-10-04,study_window,Study window (home),14:00,17:00
+P02,29,2026-10-05,sleep,Sleep,00:00,06:00
+P02,29,2026-10-05,routine,Morning routine,06:00,07:30
+P02,29,2026-10-05,bus,Bus to office,07:30,08:20
+P02,29,2026-10-05,office,Office (incl. lunch),08:30,17:30
+P02,29,2026-10-05,bus,Bus home,17:45,18:35
+P02,29,2026-10-05,routine,Dinner,19:00,19:30
+P02,29,2026-10-05,sleep,Sleep,23:00,24:00
+P02,29,2026-10-05,study_window,Study window (home),19:30,22:30
+P02,30,2026-10-06,sleep,Sleep,00:00,06:00
+P02,30,2026-10-06,routine,Morning routine,06:00,06:30
+P02,30,2026-10-06,routine,Breakfast,07:30,08:30
+P02,30,2026-10-06,office,Work from home,08:30,17:30
+P02,30,2026-10-06,routine,Dinner,19:00,19:30
+P02,30,2026-10-06,sleep,Sleep,23:00,24:00
+P02,30,2026-10-06,study_window,Study window (home),06:30,07:30
+P02,30,2026-10-06,study_window,Study window (home),19:30,22:30
+P03,1,2026-09-07,sleep,Sleep,00:00,05:30
+P03,1,2026-09-07,routine,Morning routine,05:30,06:20
+P03,1,2026-09-07,bus,Ride to work,06:20,06:50
+P03,1,2026-09-07,office,Support shift (incl. lunch),07:00,16:00
+P03,1,2026-09-07,bus,Ride home,16:10,16:45
+P03,1,2026-09-07,routine,Dinner,19:30,20:00
+P03,1,2026-09-07,sleep,Sleep,22:30,24:00
+P03,1,2026-09-07,study_window,Study window (home),17:30,19:30
+P03,1,2026-09-07,study_window,Study window (home),20:00,21:30
+P03,2,2026-09-08,sleep,Sleep,00:00,05:30
+P03,2,2026-09-08,routine,Morning routine,05:30,06:20
+P03,2,2026-09-08,bus,Ride to work,06:20,06:50
+P03,2,2026-09-08,office,Support shift (incl. lunch),07:00,16:00
+P03,2,2026-09-08,bus,Ride home,16:10,16:45
+P03,2,2026-09-08,routine,Dinner,19:30,20:00
+P03,2,2026-09-08,sleep,Sleep,22:30,24:00
+P03,2,2026-09-08,study_window,Study window (home),17:30,19:30
+P03,2,2026-09-08,study_window,Study window (home),20:00,21:30
+P03,3,2026-09-09,sleep,Sleep,00:00,05:30
+P03,3,2026-09-09,routine,Morning routine,05:30,06:20
+P03,3,2026-09-09,bus,Ride to work,06:20,06:50
+P03,3,2026-09-09,office,Support shift (incl. lunch),07:00,16:00
+P03,3,2026-09-09,bus,Ride home,16:10,16:45
+P03,3,2026-09-09,routine,Dinner,19:30,20:00
+P03,3,2026-09-09,sleep,Sleep,22:30,24:00
+P03,3,2026-09-09,study_window,Study window (home),17:30,19:30
+P03,3,2026-09-09,study_window,Study window (home),20:00,21:30
+P03,4,2026-09-10,sleep,Sleep,00:00,05:30
+P03,4,2026-09-10,routine,Morning routine,05:30,06:20
+P03,4,2026-09-10,bus,Ride to work,06:20,06:50
+P03,4,2026-09-10,office,Support shift (incl. lunch),07:00,16:00
+P03,4,2026-09-10,bus,Ride home,16:10,16:45
+P03,4,2026-09-10,routine,Dinner,19:30,20:00
+P03,4,2026-09-10,sleep,Sleep,22:30,24:00
+P03,4,2026-09-10,study_window,Study window (home),17:30,19:30
+P03,4,2026-09-10,study_window,Study window (home),20:00,21:30
+P03,5,2026-09-11,sleep,Sleep,00:00,05:30
+P03,5,2026-09-11,routine,Morning routine,05:30,06:20
+P03,5,2026-09-11,bus,Ride to work,06:20,06:50
+P03,5,2026-09-11,office,Support shift (incl. lunch),07:00,16:00
+P03,5,2026-09-11,bus,Ride home,16:10,16:45
+P03,5,2026-09-11,routine,Dinner,19:30,20:00
+P03,5,2026-09-11,sleep,Sleep,22:30,24:00
+P03,6,2026-09-12,sleep,Sleep,00:00,06:45
+P03,6,2026-09-12,routine,Morning routine,06:45,07:45
+P03,6,2026-09-12,bus,Ride to campus,07:45,08:20
+P03,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P03,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P03,6,2026-09-12,routine,Lunch,12:45,13:45
+P03,6,2026-09-12,campus,Module C lab,13:45,15:45
+P03,6,2026-09-12,bus,Ride home,16:00,16:30
+P03,6,2026-09-12,routine,Dinner,19:30,20:00
+P03,6,2026-09-12,study_window,Study window (home),16:30,19:30
+P03,7,2026-09-13,sleep,Sleep,00:00,06:45
+P03,7,2026-09-13,routine,Morning routine,06:45,07:45
+P03,7,2026-09-13,bus,Ride to campus,07:45,08:20
+P03,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P03,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P03,7,2026-09-13,bus,Ride home,12:25,13:00
+P03,7,2026-09-13,routine,Dinner,19:30,20:00
+P03,7,2026-09-13,study_window,Study window (home),13:30,16:30
+P03,8,2026-09-14,sleep,Sleep,00:00,05:30
+P03,8,2026-09-14,routine,Morning routine,05:30,06:20
+P03,8,2026-09-14,bus,Ride to work,06:20,06:50
+P03,8,2026-09-14,office,Support shift (incl. lunch),07:00,16:00
+P03,8,2026-09-14,bus,Ride home,16:10,16:45
+P03,8,2026-09-14,routine,Dinner,19:30,20:00
+P03,8,2026-09-14,sleep,Sleep,22:30,24:00
+P03,8,2026-09-14,study_window,Study window (home),17:30,19:30
+P03,8,2026-09-14,study_window,Study window (home),20:00,21:30
+P03,9,2026-09-15,sleep,Sleep,00:00,05:30
+P03,9,2026-09-15,routine,Morning routine,05:30,06:20
+P03,9,2026-09-15,bus,Ride to work,06:20,06:50
+P03,9,2026-09-15,office,Support shift (incl. lunch),07:00,16:00
+P03,9,2026-09-15,bus,Ride home,16:10,16:45
+P03,9,2026-09-15,routine,Dinner,19:30,20:00
+P03,9,2026-09-15,sleep,Sleep,22:30,24:00
+P03,9,2026-09-15,study_window,Study window (home),17:30,19:30
+P03,9,2026-09-15,study_window,Study window (home),20:00,21:30
+P03,10,2026-09-16,sleep,Sleep,00:00,05:30
+P03,10,2026-09-16,routine,Morning routine,05:30,06:20
+P03,10,2026-09-16,bus,Ride to work,06:20,06:50
+P03,10,2026-09-16,office,Support shift (incl. lunch),07:00,16:00
+P03,10,2026-09-16,bus,Ride home,16:10,16:45
+P03,10,2026-09-16,routine,Dinner,19:30,20:00
+P03,10,2026-09-16,sleep,Sleep,22:30,24:00
+P03,10,2026-09-16,study_window,Study window (home),17:30,19:30
+P03,10,2026-09-16,study_window,Study window (home),20:00,21:30
+P03,11,2026-09-17,sleep,Sleep,00:00,05:30
+P03,11,2026-09-17,routine,Morning routine,05:30,06:20
+P03,11,2026-09-17,bus,Ride to work,06:20,06:50
+P03,11,2026-09-17,office,Support shift (incl. lunch),07:00,16:00
+P03,11,2026-09-17,bus,Ride home,16:10,16:45
+P03,11,2026-09-17,routine,Dinner,19:30,20:00
+P03,11,2026-09-17,sleep,Sleep,22:30,24:00
+P03,11,2026-09-17,study_window,Study window (home),17:30,19:30
+P03,11,2026-09-17,study_window,Study window (home),20:00,21:30
+P03,12,2026-09-18,sleep,Sleep,00:00,05:30
+P03,12,2026-09-18,routine,Morning routine,05:30,06:20
+P03,12,2026-09-18,bus,Ride to work,06:20,06:50
+P03,12,2026-09-18,office,Support shift (incl. lunch),07:00,16:00
+P03,12,2026-09-18,bus,Ride home,16:10,16:45
+P03,12,2026-09-18,routine,Dinner,19:30,20:00
+P03,12,2026-09-18,sleep,Sleep,22:30,24:00
+P03,13,2026-09-19,sleep,Sleep,00:00,06:45
+P03,13,2026-09-19,routine,Morning routine,06:45,07:45
+P03,13,2026-09-19,bus,Ride to campus,07:45,08:20
+P03,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P03,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P03,13,2026-09-19,routine,Lunch,12:45,13:45
+P03,13,2026-09-19,campus,Module C lab,13:45,15:45
+P03,13,2026-09-19,bus,Ride home,16:00,16:30
+P03,13,2026-09-19,routine,Dinner,19:30,20:00
+P03,13,2026-09-19,study_window,Study window (home),16:30,19:30
+P03,14,2026-09-20,sleep,Sleep,00:00,06:45
+P03,14,2026-09-20,routine,Morning routine,06:45,07:45
+P03,14,2026-09-20,bus,Ride to campus,07:45,08:20
+P03,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P03,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P03,14,2026-09-20,bus,Ride home,12:25,13:00
+P03,14,2026-09-20,routine,Dinner,19:30,20:00
+P03,14,2026-09-20,study_window,Study window (home),13:30,16:30
+P03,15,2026-09-21,sleep,Sleep,00:00,05:30
+P03,15,2026-09-21,routine,Morning routine,05:30,06:20
+P03,15,2026-09-21,bus,Ride to work,06:20,06:50
+P03,15,2026-09-21,office,Support shift (incl. lunch),07:00,16:00
+P03,15,2026-09-21,bus,Ride home,16:10,16:45
+P03,15,2026-09-21,routine,Dinner,19:30,20:00
+P03,15,2026-09-21,sleep,Sleep,22:30,24:00
+P03,15,2026-09-21,study_window,Study window (home),17:30,19:30
+P03,15,2026-09-21,study_window,Study window (home),20:00,21:30
+P03,16,2026-09-22,sleep,Sleep,00:00,05:30
+P03,16,2026-09-22,routine,Morning routine,05:30,06:20
+P03,16,2026-09-22,bus,Ride to work,06:20,06:50
+P03,16,2026-09-22,office,Support shift (incl. lunch),07:00,16:00
+P03,16,2026-09-22,bus,Ride home,16:10,16:45
+P03,16,2026-09-22,routine,Dinner,19:30,20:00
+P03,16,2026-09-22,sleep,Sleep,22:30,24:00
+P03,16,2026-09-22,study_window,Study window (home),17:30,19:30
+P03,16,2026-09-22,study_window,Study window (home),20:00,21:30
+P03,17,2026-09-23,sleep,Sleep,00:00,05:30
+P03,17,2026-09-23,routine,Morning routine,05:30,06:20
+P03,17,2026-09-23,bus,Ride to work,06:20,06:50
+P03,17,2026-09-23,office,Support shift (incl. lunch),07:00,16:00
+P03,17,2026-09-23,bus,Ride home,16:10,16:45
+P03,17,2026-09-23,routine,Dinner,19:30,20:00
+P03,17,2026-09-23,sleep,Sleep,22:30,24:00
+P03,17,2026-09-23,study_window,Study window (home),17:30,19:30
+P03,17,2026-09-23,study_window,Study window (home),20:00,21:30
+P03,18,2026-09-24,sleep,Sleep,00:00,05:30
+P03,18,2026-09-24,routine,Morning routine,05:30,06:20
+P03,18,2026-09-24,bus,Ride to work,06:20,06:50
+P03,18,2026-09-24,office,Support shift (incl. lunch),07:00,16:00
+P03,18,2026-09-24,bus,Ride home,16:10,16:45
+P03,18,2026-09-24,routine,Dinner,19:30,20:00
+P03,18,2026-09-24,sleep,Sleep,22:30,24:00
+P03,18,2026-09-24,study_window,Study window (home),17:30,19:30
+P03,18,2026-09-24,study_window,Study window (home),20:00,21:30
+P03,19,2026-09-25,sleep,Sleep,00:00,05:30
+P03,19,2026-09-25,routine,Morning routine,05:30,06:20
+P03,19,2026-09-25,bus,Ride to work,06:20,06:50
+P03,19,2026-09-25,office,Support shift (incl. lunch),07:00,16:00
+P03,19,2026-09-25,bus,Ride home,16:10,16:45
+P03,19,2026-09-25,routine,Dinner,19:30,20:00
+P03,19,2026-09-25,sleep,Sleep,22:30,24:00
+P03,20,2026-09-26,sleep,Sleep,00:00,06:45
+P03,20,2026-09-26,routine,Morning routine,06:45,07:45
+P03,20,2026-09-26,bus,Ride to campus,07:45,08:20
+P03,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P03,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P03,20,2026-09-26,routine,Lunch,12:45,13:45
+P03,20,2026-09-26,campus,Module C lab,13:45,15:45
+P03,20,2026-09-26,bus,Ride home,16:00,16:30
+P03,20,2026-09-26,routine,Dinner,19:30,20:00
+P03,20,2026-09-26,study_window,Study window (home),16:30,19:30
+P03,21,2026-09-27,sleep,Sleep,00:00,06:45
+P03,21,2026-09-27,routine,Morning routine,06:45,07:45
+P03,21,2026-09-27,bus,Ride to campus,07:45,08:20
+P03,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P03,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P03,21,2026-09-27,bus,Ride home,12:25,13:00
+P03,21,2026-09-27,routine,Dinner,19:30,20:00
+P03,21,2026-09-27,study_window,Study window (home),13:30,16:30
+P03,22,2026-09-28,sleep,Sleep,00:00,05:30
+P03,22,2026-09-28,routine,Morning routine,05:30,06:20
+P03,22,2026-09-28,bus,Ride to work,06:20,06:50
+P03,22,2026-09-28,office,Support shift (incl. lunch),07:00,16:00
+P03,22,2026-09-28,bus,Ride home,16:10,16:45
+P03,22,2026-09-28,routine,Dinner,19:30,20:00
+P03,22,2026-09-28,sleep,Sleep,22:30,24:00
+P03,22,2026-09-28,study_window,Study window (home),17:30,19:30
+P03,22,2026-09-28,study_window,Study window (home),20:00,21:30
+P03,23,2026-09-29,sleep,Sleep,00:00,05:30
+P03,23,2026-09-29,routine,Morning routine,05:30,06:20
+P03,23,2026-09-29,bus,Ride to work,06:20,06:50
+P03,23,2026-09-29,office,Support shift (incl. lunch),07:00,16:00
+P03,23,2026-09-29,bus,Ride home,16:10,16:45
+P03,23,2026-09-29,routine,Dinner,19:30,20:00
+P03,23,2026-09-29,sleep,Sleep,22:30,24:00
+P03,23,2026-09-29,study_window,Study window (home),17:30,19:30
+P03,23,2026-09-29,study_window,Study window (home),20:00,21:30
+P03,24,2026-09-30,sleep,Sleep,00:00,05:30
+P03,24,2026-09-30,routine,Morning routine,05:30,06:20
+P03,24,2026-09-30,bus,Ride to work,06:20,06:50
+P03,24,2026-09-30,office,Support shift (incl. lunch),07:00,16:00
+P03,24,2026-09-30,bus,Ride home,16:10,16:45
+P03,24,2026-09-30,routine,Dinner,19:30,20:00
+P03,24,2026-09-30,sleep,Sleep,22:30,24:00
+P03,24,2026-09-30,study_window,Study window (home),17:30,19:30
+P03,24,2026-09-30,study_window,Study window (home),20:00,21:30
+P03,25,2026-10-01,sleep,Sleep,00:00,05:30
+P03,25,2026-10-01,routine,Morning routine,05:30,06:20
+P03,25,2026-10-01,bus,Ride to work,06:20,06:50
+P03,25,2026-10-01,office,Support shift (incl. lunch),07:00,16:00
+P03,25,2026-10-01,bus,Ride home,16:10,16:45
+P03,25,2026-10-01,routine,Dinner,19:30,20:00
+P03,25,2026-10-01,sleep,Sleep,22:30,24:00
+P03,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:00,20:45
+P03,25,2026-10-01,study_window,Study window (home),17:30,19:30
+P03,25,2026-10-01,study_window,Study window (home),20:00,21:30
+P03,26,2026-10-02,sleep,Sleep,00:00,05:30
+P03,26,2026-10-02,routine,Morning routine,05:30,06:20
+P03,26,2026-10-02,bus,Ride to work,06:20,06:50
+P03,26,2026-10-02,office,Support shift (incl. lunch),07:00,16:00
+P03,26,2026-10-02,bus,Ride home,16:10,16:45
+P03,26,2026-10-02,routine,Dinner,19:30,20:00
+P03,26,2026-10-02,sleep,Sleep,22:30,24:00
+P03,27,2026-10-03,sleep,Sleep,00:00,06:45
+P03,27,2026-10-03,routine,Morning routine,06:45,07:45
+P03,27,2026-10-03,bus,Ride to campus,07:45,08:20
+P03,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P03,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P03,27,2026-10-03,routine,Lunch,12:45,13:45
+P03,27,2026-10-03,campus,Module C lab,13:45,15:45
+P03,27,2026-10-03,bus,Ride home,16:00,16:30
+P03,27,2026-10-03,routine,Dinner,19:30,20:00
+P03,27,2026-10-03,study_window,Study window (home),16:30,19:30
+P03,28,2026-10-04,sleep,Sleep,00:00,06:45
+P03,28,2026-10-04,routine,Morning routine,06:45,07:45
+P03,28,2026-10-04,bus,Ride to campus,07:45,08:20
+P03,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P03,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P03,28,2026-10-04,bus,Ride home,12:25,13:00
+P03,28,2026-10-04,routine,Dinner,19:30,20:00
+P03,28,2026-10-04,study_window,Study window (home),13:30,16:30
+P03,29,2026-10-05,sleep,Sleep,00:00,05:30
+P03,29,2026-10-05,routine,Morning routine,05:30,06:20
+P03,29,2026-10-05,bus,Ride to work,06:20,06:50
+P03,29,2026-10-05,office,Support shift (incl. lunch),07:00,16:00
+P03,29,2026-10-05,bus,Ride home,16:10,16:45
+P03,29,2026-10-05,routine,Dinner,19:30,20:00
+P03,29,2026-10-05,sleep,Sleep,22:30,24:00
+P03,29,2026-10-05,study_window,Study window (home),17:30,19:30
+P03,29,2026-10-05,study_window,Study window (home),20:00,21:30
+P03,30,2026-10-06,sleep,Sleep,00:00,05:30
+P03,30,2026-10-06,routine,Morning routine,05:30,06:20
+P03,30,2026-10-06,bus,Ride to work,06:20,06:50
+P03,30,2026-10-06,office,Support shift (incl. lunch),07:00,16:00
+P03,30,2026-10-06,bus,Ride home,16:10,16:45
+P03,30,2026-10-06,routine,Dinner,19:30,20:00
+P03,30,2026-10-06,sleep,Sleep,22:30,24:00
+P03,30,2026-10-06,study_window,Study window (home),17:30,19:30
+P03,30,2026-10-06,study_window,Study window (home),20:00,21:30
+P04,1,2026-09-07,sleep,Sleep,00:00,07:00
+P04,1,2026-09-07,routine,Morning routine,07:00,08:15
+P04,1,2026-09-07,bus,Bus to office,08:15,08:50
+P04,1,2026-09-07,office,Office (incl. lunch),09:00,18:00
+P04,1,2026-09-07,bus,Bus home,18:10,18:50
+P04,1,2026-09-07,routine,Dinner,19:15,19:45
+P04,1,2026-09-07,study_window,Study window (home),20:00,23:00
+P04,2,2026-09-08,sleep,Sleep,00:00,07:00
+P04,2,2026-09-08,routine,Morning routine,07:00,08:15
+P04,2,2026-09-08,bus,Bus to office,08:15,08:50
+P04,2,2026-09-08,office,Office (incl. lunch),09:00,18:00
+P04,2,2026-09-08,bus,Bus home,18:10,18:50
+P04,2,2026-09-08,routine,Dinner,19:15,19:45
+P04,2,2026-09-08,study_window,Study window (home),20:00,23:00
+P04,3,2026-09-09,sleep,Sleep,00:00,07:00
+P04,3,2026-09-09,routine,Morning routine,07:00,08:15
+P04,3,2026-09-09,bus,Bus to office,08:15,08:50
+P04,3,2026-09-09,office,Office (incl. lunch),09:00,18:00
+P04,3,2026-09-09,bus,Bus home,18:10,18:50
+P04,3,2026-09-09,routine,Dinner,19:15,19:45
+P04,3,2026-09-09,study_window,Study window (home),20:00,23:00
+P04,4,2026-09-10,sleep,Sleep,00:00,07:00
+P04,4,2026-09-10,routine,Morning routine,07:00,08:15
+P04,4,2026-09-10,bus,Bus to office,08:15,08:50
+P04,4,2026-09-10,office,Office (incl. lunch),09:00,18:00
+P04,4,2026-09-10,bus,Bus home,18:10,18:50
+P04,4,2026-09-10,routine,Dinner,19:15,19:45
+P04,4,2026-09-10,study_window,Study window (home),20:00,23:00
+P04,5,2026-09-11,sleep,Sleep,00:00,07:00
+P04,5,2026-09-11,routine,Morning routine,07:00,08:15
+P04,5,2026-09-11,bus,Bus to office,08:15,08:50
+P04,5,2026-09-11,office,Office (incl. lunch),09:00,18:00
+P04,5,2026-09-11,bus,Bus home,18:10,18:50
+P04,5,2026-09-11,routine,Dinner,19:15,19:45
+P04,6,2026-09-12,sleep,Sleep,00:00,06:45
+P04,6,2026-09-12,routine,Morning routine,06:45,07:45
+P04,6,2026-09-12,bus,Bus to campus,07:45,08:20
+P04,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P04,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P04,6,2026-09-12,routine,Lunch,12:45,13:45
+P04,6,2026-09-12,campus,Module C lab,13:45,15:45
+P04,6,2026-09-12,bus,Bus home,16:00,16:40
+P04,6,2026-09-12,routine,Dinner,20:00,20:30
+P04,6,2026-09-12,study_window,Study window (home),17:00,18:30
+P04,7,2026-09-13,sleep,Sleep,00:00,06:45
+P04,7,2026-09-13,routine,Morning routine,06:45,07:45
+P04,7,2026-09-13,bus,Bus to campus,07:45,08:20
+P04,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P04,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P04,7,2026-09-13,bus,Bus home,12:25,13:05
+P04,7,2026-09-13,routine,Dinner,20:00,20:30
+P04,7,2026-09-13,study_window,Study window (home),13:30,18:00
+P04,8,2026-09-14,sleep,Sleep,00:00,07:00
+P04,8,2026-09-14,routine,Morning routine,07:00,08:15
+P04,8,2026-09-14,bus,Bus to office,08:15,08:50
+P04,8,2026-09-14,office,Office (incl. lunch),09:00,18:00
+P04,8,2026-09-14,bus,Bus home,18:10,18:50
+P04,8,2026-09-14,routine,Dinner,19:15,19:45
+P04,8,2026-09-14,study_window,Study window (home),20:00,23:00
+P04,9,2026-09-15,sleep,Sleep,00:00,07:00
+P04,9,2026-09-15,routine,Morning routine,07:00,08:15
+P04,9,2026-09-15,bus,Bus to office,08:15,08:50
+P04,9,2026-09-15,office,Office (incl. lunch),09:00,18:00
+P04,9,2026-09-15,bus,Bus home,18:10,18:50
+P04,9,2026-09-15,routine,Dinner,19:15,19:45
+P04,9,2026-09-15,study_window,Study window (home),20:00,23:00
+P04,10,2026-09-16,sleep,Sleep,00:00,07:00
+P04,10,2026-09-16,routine,Morning routine,07:00,08:15
+P04,10,2026-09-16,bus,Bus to office,08:15,08:50
+P04,10,2026-09-16,office,Office (incl. lunch),09:00,18:00
+P04,10,2026-09-16,bus,Bus home,18:10,18:50
+P04,10,2026-09-16,routine,Dinner,19:15,19:45
+P04,10,2026-09-16,study_window,Study window (home),20:00,23:00
+P04,11,2026-09-17,sleep,Sleep,00:00,07:00
+P04,11,2026-09-17,routine,Morning routine,07:00,08:15
+P04,11,2026-09-17,bus,Bus to office,08:15,08:50
+P04,11,2026-09-17,office,Office (incl. lunch),09:00,18:00
+P04,11,2026-09-17,bus,Bus home,18:10,18:50
+P04,11,2026-09-17,routine,Dinner,19:15,19:45
+P04,11,2026-09-17,study_window,Study window (home),20:00,23:00
+P04,12,2026-09-18,sleep,Sleep,00:00,07:00
+P04,12,2026-09-18,routine,Morning routine,07:00,08:15
+P04,12,2026-09-18,bus,Bus to office,08:15,08:50
+P04,12,2026-09-18,office,Office (incl. lunch),09:00,18:00
+P04,12,2026-09-18,bus,Bus home,18:10,18:50
+P04,12,2026-09-18,routine,Dinner,19:15,19:45
+P04,13,2026-09-19,sleep,Sleep,00:00,06:45
+P04,13,2026-09-19,routine,Morning routine,06:45,07:45
+P04,13,2026-09-19,bus,Bus to campus,07:45,08:20
+P04,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P04,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P04,13,2026-09-19,routine,Lunch,12:45,13:45
+P04,13,2026-09-19,campus,Module C lab,13:45,15:45
+P04,13,2026-09-19,bus,Bus home,16:00,16:40
+P04,13,2026-09-19,routine,Dinner,20:00,20:30
+P04,13,2026-09-19,study_window,Study window (home),17:00,18:30
+P04,14,2026-09-20,sleep,Sleep,00:00,06:45
+P04,14,2026-09-20,routine,Morning routine,06:45,07:45
+P04,14,2026-09-20,bus,Bus to campus,07:45,08:20
+P04,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P04,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P04,14,2026-09-20,bus,Bus home,12:25,13:05
+P04,14,2026-09-20,routine,Dinner,20:00,20:30
+P04,14,2026-09-20,study_window,Study window (home),13:30,18:00
+P04,15,2026-09-21,sleep,Sleep,00:00,07:00
+P04,15,2026-09-21,routine,Morning routine,07:00,08:15
+P04,15,2026-09-21,bus,Bus to office,08:15,08:50
+P04,15,2026-09-21,office,Office (incl. lunch),09:00,18:00
+P04,15,2026-09-21,bus,Bus home,18:10,18:50
+P04,15,2026-09-21,routine,Dinner,19:15,19:45
+P04,15,2026-09-21,study_window,Study window (home),20:00,23:00
+P04,16,2026-09-22,sleep,Sleep,00:00,07:00
+P04,16,2026-09-22,routine,Morning routine,07:00,08:15
+P04,16,2026-09-22,bus,Bus to office,08:15,08:50
+P04,16,2026-09-22,office,Office (incl. lunch),09:00,18:00
+P04,16,2026-09-22,bus,Bus home,18:10,18:50
+P04,16,2026-09-22,routine,Dinner,19:15,19:45
+P04,16,2026-09-22,study_window,Study window (home),20:00,23:00
+P04,17,2026-09-23,sleep,Sleep,00:00,07:00
+P04,17,2026-09-23,routine,Morning routine,07:00,08:15
+P04,17,2026-09-23,bus,Bus to office,08:15,08:50
+P04,17,2026-09-23,office,Office (incl. lunch),09:00,18:00
+P04,17,2026-09-23,bus,Bus home,18:10,18:50
+P04,17,2026-09-23,routine,Dinner,19:15,19:45
+P04,17,2026-09-23,study_window,Study window (home),20:00,23:00
+P04,18,2026-09-24,sleep,Sleep,00:00,07:00
+P04,18,2026-09-24,routine,Morning routine,07:00,08:15
+P04,18,2026-09-24,bus,Bus to office,08:15,08:50
+P04,18,2026-09-24,office,Office (incl. lunch),09:00,18:00
+P04,18,2026-09-24,bus,Bus home,18:10,18:50
+P04,18,2026-09-24,routine,Dinner,19:15,19:45
+P04,18,2026-09-24,study_window,Study window (home),20:00,23:00
+P04,19,2026-09-25,sleep,Sleep,00:00,07:00
+P04,19,2026-09-25,routine,Morning routine,07:00,08:15
+P04,19,2026-09-25,bus,Bus to office,08:15,08:50
+P04,19,2026-09-25,office,Office (incl. lunch),09:00,18:00
+P04,19,2026-09-25,bus,Bus home,18:10,18:50
+P04,19,2026-09-25,routine,Dinner,19:15,19:45
+P04,20,2026-09-26,sleep,Sleep,00:00,06:45
+P04,20,2026-09-26,routine,Morning routine,06:45,07:45
+P04,20,2026-09-26,bus,Bus to campus,07:45,08:20
+P04,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P04,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P04,20,2026-09-26,routine,Lunch,12:45,13:45
+P04,20,2026-09-26,campus,Module C lab,13:45,15:45
+P04,20,2026-09-26,bus,Bus home,16:00,16:40
+P04,20,2026-09-26,routine,Dinner,20:00,20:30
+P04,20,2026-09-26,study_window,Study window (home),17:00,18:30
+P04,21,2026-09-27,sleep,Sleep,00:00,06:45
+P04,21,2026-09-27,routine,Morning routine,06:45,07:45
+P04,21,2026-09-27,bus,Bus to campus,07:45,08:20
+P04,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P04,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P04,21,2026-09-27,bus,Bus home,12:25,13:05
+P04,21,2026-09-27,routine,Dinner,20:00,20:30
+P04,21,2026-09-27,study_window,Study window (home),13:30,18:00
+P04,22,2026-09-28,sleep,Sleep,00:00,07:00
+P04,22,2026-09-28,routine,Morning routine,07:00,08:15
+P04,22,2026-09-28,bus,Bus to office,08:15,08:50
+P04,22,2026-09-28,office,Office (incl. lunch),09:00,18:00
+P04,22,2026-09-28,bus,Bus home,18:10,18:50
+P04,22,2026-09-28,routine,Dinner,19:15,19:45
+P04,22,2026-09-28,study_window,Study window (home),20:00,23:00
+P04,23,2026-09-29,sleep,Sleep,00:00,07:00
+P04,23,2026-09-29,routine,Morning routine,07:00,08:15
+P04,23,2026-09-29,bus,Bus to office,08:15,08:50
+P04,23,2026-09-29,office,Office (incl. lunch),09:00,18:00
+P04,23,2026-09-29,bus,Bus home,18:10,18:50
+P04,23,2026-09-29,routine,Dinner,19:15,19:45
+P04,23,2026-09-29,study_window,Study window (home),20:00,23:00
+P04,24,2026-09-30,sleep,Sleep,00:00,07:00
+P04,24,2026-09-30,routine,Morning routine,07:00,08:15
+P04,24,2026-09-30,bus,Bus to office,08:15,08:50
+P04,24,2026-09-30,office,Office (incl. lunch),09:00,18:00
+P04,24,2026-09-30,bus,Bus home,18:10,18:50
+P04,24,2026-09-30,routine,Dinner,19:15,19:45
+P04,24,2026-09-30,study_window,Study window (home),20:00,23:00
+P04,25,2026-10-01,sleep,Sleep,00:00,07:00
+P04,25,2026-10-01,routine,Morning routine,07:00,08:15
+P04,25,2026-10-01,bus,Bus to office,08:15,08:50
+P04,25,2026-10-01,office,Office (incl. lunch),09:00,18:00
+P04,25,2026-10-01,bus,Bus home,18:10,18:50
+P04,25,2026-10-01,routine,Dinner,19:15,19:45
+P04,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:00,20:45
+P04,25,2026-10-01,study_window,Study window (home),20:00,23:00
+P04,26,2026-10-02,sleep,Sleep,00:00,07:00
+P04,26,2026-10-02,routine,Morning routine,07:00,08:15
+P04,26,2026-10-02,bus,Bus to office,08:15,08:50
+P04,26,2026-10-02,office,Office (incl. lunch),09:00,18:00
+P04,26,2026-10-02,bus,Bus home,18:10,18:50
+P04,26,2026-10-02,routine,Dinner,19:15,19:45
+P04,27,2026-10-03,sleep,Sleep,00:00,06:45
+P04,27,2026-10-03,routine,Morning routine,06:45,07:45
+P04,27,2026-10-03,bus,Bus to campus,07:45,08:20
+P04,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P04,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P04,27,2026-10-03,routine,Lunch,12:45,13:45
+P04,27,2026-10-03,campus,Module C lab,13:45,15:45
+P04,27,2026-10-03,bus,Bus home,16:00,16:40
+P04,27,2026-10-03,routine,Dinner,20:00,20:30
+P04,27,2026-10-03,study_window,Study window (home),17:00,18:30
+P04,28,2026-10-04,sleep,Sleep,00:00,06:45
+P04,28,2026-10-04,routine,Morning routine,06:45,07:45
+P04,28,2026-10-04,bus,Bus to campus,07:45,08:20
+P04,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P04,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P04,28,2026-10-04,bus,Bus home,12:25,13:05
+P04,28,2026-10-04,routine,Dinner,20:00,20:30
+P04,28,2026-10-04,study_window,Study window (home),13:30,18:00
+P04,29,2026-10-05,sleep,Sleep,00:00,07:00
+P04,29,2026-10-05,routine,Morning routine,07:00,08:15
+P04,29,2026-10-05,bus,Bus to office,08:15,08:50
+P04,29,2026-10-05,office,Office (incl. lunch),09:00,18:00
+P04,29,2026-10-05,bus,Bus home,18:10,18:50
+P04,29,2026-10-05,routine,Dinner,19:15,19:45
+P04,29,2026-10-05,study_window,Study window (home),20:00,23:00
+P04,30,2026-10-06,sleep,Sleep,00:00,07:00
+P04,30,2026-10-06,routine,Morning routine,07:00,08:15
+P04,30,2026-10-06,bus,Bus to office,08:15,08:50
+P04,30,2026-10-06,office,Office (incl. lunch),09:00,18:00
+P04,30,2026-10-06,bus,Bus home,18:10,18:50
+P04,30,2026-10-06,routine,Dinner,19:15,19:45
+P04,30,2026-10-06,study_window,Study window (home),20:00,23:00
+P05,1,2026-09-07,sleep,Sleep,00:00,05:30
+P05,1,2026-09-07,routine,Morning routine,05:30,06:20
+P05,1,2026-09-07,bus,Train to work,06:30,08:00
+P05,1,2026-09-07,office,Bank office (incl. lunch),08:30,17:00
+P05,1,2026-09-07,bus,Train home,17:15,18:45
+P05,1,2026-09-07,routine,Dinner,19:30,20:15
+P05,1,2026-09-07,sleep,Sleep,22:45,24:00
+P05,1,2026-09-07,study_window,Study window (train),06:40,07:50
+P05,1,2026-09-07,study_window,Study window (train),17:25,18:35
+P05,1,2026-09-07,study_window,Study window (home),20:30,22:30
+P05,2,2026-09-08,sleep,Sleep,00:00,05:30
+P05,2,2026-09-08,routine,Morning routine,05:30,06:20
+P05,2,2026-09-08,bus,Train to work,06:30,08:00
+P05,2,2026-09-08,office,Bank office (incl. lunch),08:30,17:00
+P05,2,2026-09-08,bus,Train home,17:15,18:45
+P05,2,2026-09-08,routine,Dinner,19:30,20:15
+P05,2,2026-09-08,sleep,Sleep,22:45,24:00
+P05,2,2026-09-08,study_window,Study window (train),06:40,07:50
+P05,2,2026-09-08,study_window,Study window (train),17:25,18:35
+P05,2,2026-09-08,study_window,Study window (home),20:30,22:30
+P05,3,2026-09-09,sleep,Sleep,00:00,05:30
+P05,3,2026-09-09,routine,Morning routine,05:30,06:20
+P05,3,2026-09-09,bus,Train to work,06:30,08:00
+P05,3,2026-09-09,office,Bank office (incl. lunch),08:30,17:00
+P05,3,2026-09-09,bus,Train home,17:15,18:45
+P05,3,2026-09-09,routine,Dinner,19:30,20:15
+P05,3,2026-09-09,sleep,Sleep,22:45,24:00
+P05,3,2026-09-09,study_window,Study window (train),06:40,07:50
+P05,3,2026-09-09,study_window,Study window (train),17:25,18:35
+P05,3,2026-09-09,study_window,Study window (home),20:30,22:30
+P05,4,2026-09-10,sleep,Sleep,00:00,05:30
+P05,4,2026-09-10,routine,Morning routine,05:30,06:20
+P05,4,2026-09-10,bus,Train to work,06:30,08:00
+P05,4,2026-09-10,office,Bank office (incl. lunch),08:30,17:00
+P05,4,2026-09-10,bus,Train home,17:15,18:45
+P05,4,2026-09-10,routine,Dinner,19:30,20:15
+P05,4,2026-09-10,sleep,Sleep,22:45,24:00
+P05,4,2026-09-10,study_window,Study window (train),06:40,07:50
+P05,4,2026-09-10,study_window,Study window (train),17:25,18:35
+P05,4,2026-09-10,study_window,Study window (home),20:30,22:30
+P05,5,2026-09-11,sleep,Sleep,00:00,05:30
+P05,5,2026-09-11,routine,Morning routine,05:30,06:20
+P05,5,2026-09-11,bus,Train to work,06:30,08:00
+P05,5,2026-09-11,office,Bank office (incl. lunch),08:30,17:00
+P05,5,2026-09-11,bus,Train home,17:15,18:45
+P05,5,2026-09-11,routine,Dinner,19:30,20:15
+P05,5,2026-09-11,sleep,Sleep,22:45,24:00
+P05,5,2026-09-11,study_window,Study window (train),06:40,07:50
+P05,5,2026-09-11,study_window,Study window (train),17:25,18:35
+P05,6,2026-09-12,sleep,Sleep,00:00,06:00
+P05,6,2026-09-12,routine,Morning routine,06:00,07:00
+P05,6,2026-09-12,bus,Train to campus,07:00,08:15
+P05,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P05,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P05,6,2026-09-12,routine,Lunch,12:45,13:45
+P05,6,2026-09-12,campus,Module C lab,13:45,15:45
+P05,6,2026-09-12,bus,Train home,16:00,17:15
+P05,6,2026-09-12,routine,Dinner,19:00,19:30
+P05,6,2026-09-12,study_window,Study window (home),16:30,18:30
+P05,7,2026-09-13,sleep,Sleep,00:00,06:00
+P05,7,2026-09-13,routine,Morning routine,06:00,07:00
+P05,7,2026-09-13,bus,Train to campus,07:00,08:15
+P05,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P05,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P05,7,2026-09-13,bus,Train home,12:25,13:40
+P05,7,2026-09-13,routine,Dinner,19:00,19:30
+P05,7,2026-09-13,study_window,Study window (home),14:00,17:00
+P05,8,2026-09-14,sleep,Sleep,00:00,05:30
+P05,8,2026-09-14,routine,Morning routine,05:30,06:20
+P05,8,2026-09-14,bus,Train to work,06:30,08:00
+P05,8,2026-09-14,office,Bank office (incl. lunch),08:30,17:00
+P05,8,2026-09-14,bus,Train home,17:15,18:45
+P05,8,2026-09-14,routine,Dinner,19:30,20:15
+P05,8,2026-09-14,sleep,Sleep,22:45,24:00
+P05,8,2026-09-14,study_window,Study window (train),06:40,07:50
+P05,8,2026-09-14,study_window,Study window (train),17:25,18:35
+P05,8,2026-09-14,study_window,Study window (home),20:30,22:30
+P05,9,2026-09-15,sleep,Sleep,00:00,05:30
+P05,9,2026-09-15,routine,Morning routine,05:30,06:20
+P05,9,2026-09-15,bus,Train to work,06:30,08:00
+P05,9,2026-09-15,office,Bank office (incl. lunch),08:30,17:00
+P05,9,2026-09-15,bus,Train home,17:15,18:45
+P05,9,2026-09-15,routine,Dinner,19:30,20:15
+P05,9,2026-09-15,sleep,Sleep,22:45,24:00
+P05,9,2026-09-15,study_window,Study window (train),06:40,07:50
+P05,9,2026-09-15,study_window,Study window (train),17:25,18:35
+P05,9,2026-09-15,study_window,Study window (home),20:30,22:30
+P05,10,2026-09-16,sleep,Sleep,00:00,05:30
+P05,10,2026-09-16,routine,Morning routine,05:30,06:20
+P05,10,2026-09-16,bus,Train to work,06:30,08:00
+P05,10,2026-09-16,office,Bank office (incl. lunch),08:30,17:00
+P05,10,2026-09-16,bus,Train home,17:15,18:45
+P05,10,2026-09-16,routine,Dinner,19:30,20:15
+P05,10,2026-09-16,sleep,Sleep,22:45,24:00
+P05,10,2026-09-16,study_window,Study window (train),06:40,07:50
+P05,10,2026-09-16,study_window,Study window (train),17:25,18:35
+P05,10,2026-09-16,study_window,Study window (home),20:30,22:30
+P05,11,2026-09-17,sleep,Sleep,00:00,05:30
+P05,11,2026-09-17,routine,Morning routine,05:30,06:20
+P05,11,2026-09-17,bus,Train to work,06:30,08:00
+P05,11,2026-09-17,office,Bank office (incl. lunch),08:30,17:00
+P05,11,2026-09-17,bus,Train home,17:15,18:45
+P05,11,2026-09-17,routine,Dinner,19:30,20:15
+P05,11,2026-09-17,sleep,Sleep,22:45,24:00
+P05,11,2026-09-17,study_window,Study window (train),06:40,07:50
+P05,11,2026-09-17,study_window,Study window (train),17:25,18:35
+P05,11,2026-09-17,study_window,Study window (home),20:30,22:30
+P05,12,2026-09-18,sleep,Sleep,00:00,05:30
+P05,12,2026-09-18,routine,Morning routine,05:30,06:20
+P05,12,2026-09-18,bus,Train to work,06:30,08:00
+P05,12,2026-09-18,office,Bank office (incl. lunch),08:30,17:00
+P05,12,2026-09-18,bus,Train home,17:15,18:45
+P05,12,2026-09-18,routine,Dinner,19:30,20:15
+P05,12,2026-09-18,sleep,Sleep,22:45,24:00
+P05,12,2026-09-18,study_window,Study window (train),06:40,07:50
+P05,12,2026-09-18,study_window,Study window (train),17:25,18:35
+P05,13,2026-09-19,sleep,Sleep,00:00,06:00
+P05,13,2026-09-19,routine,Morning routine,06:00,07:00
+P05,13,2026-09-19,bus,Train to campus,07:00,08:15
+P05,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P05,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P05,13,2026-09-19,routine,Lunch,12:45,13:45
+P05,13,2026-09-19,campus,Module C lab,13:45,15:45
+P05,13,2026-09-19,bus,Train home,16:00,17:15
+P05,13,2026-09-19,routine,Dinner,19:00,19:30
+P05,13,2026-09-19,study_window,Study window (home),16:30,18:30
+P05,14,2026-09-20,sleep,Sleep,00:00,06:00
+P05,14,2026-09-20,routine,Morning routine,06:00,07:00
+P05,14,2026-09-20,bus,Train to campus,07:00,08:15
+P05,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P05,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P05,14,2026-09-20,bus,Train home,12:25,13:40
+P05,14,2026-09-20,routine,Dinner,19:00,19:30
+P05,14,2026-09-20,study_window,Study window (home),14:00,17:00
+P05,15,2026-09-21,sleep,Sleep,00:00,05:30
+P05,15,2026-09-21,routine,Morning routine,05:30,06:20
+P05,15,2026-09-21,bus,Train to work,06:30,08:00
+P05,15,2026-09-21,office,Bank office (incl. lunch),08:30,17:00
+P05,15,2026-09-21,bus,Train home,17:15,18:45
+P05,15,2026-09-21,routine,Dinner,19:30,20:15
+P05,15,2026-09-21,sleep,Sleep,22:45,24:00
+P05,15,2026-09-21,study_window,Study window (train),06:40,07:50
+P05,15,2026-09-21,study_window,Study window (train),17:25,18:35
+P05,15,2026-09-21,study_window,Study window (home),20:30,22:30
+P05,16,2026-09-22,sleep,Sleep,00:00,05:30
+P05,16,2026-09-22,routine,Morning routine,05:30,06:20
+P05,16,2026-09-22,bus,Train to work,06:30,08:00
+P05,16,2026-09-22,office,Bank office (incl. lunch),08:30,17:00
+P05,16,2026-09-22,bus,Train home,17:15,18:45
+P05,16,2026-09-22,routine,Dinner,19:30,20:15
+P05,16,2026-09-22,sleep,Sleep,22:45,24:00
+P05,16,2026-09-22,study_window,Study window (train),06:40,07:50
+P05,16,2026-09-22,study_window,Study window (train),17:25,18:35
+P05,16,2026-09-22,study_window,Study window (home),20:30,22:30
+P05,17,2026-09-23,sleep,Sleep,00:00,05:30
+P05,17,2026-09-23,routine,Morning routine,05:30,06:20
+P05,17,2026-09-23,bus,Train to work,06:30,08:00
+P05,17,2026-09-23,office,Bank office (incl. lunch),08:30,17:00
+P05,17,2026-09-23,bus,Train home,17:15,18:45
+P05,17,2026-09-23,routine,Dinner,19:30,20:15
+P05,17,2026-09-23,sleep,Sleep,22:45,24:00
+P05,17,2026-09-23,study_window,Study window (train),06:40,07:50
+P05,17,2026-09-23,study_window,Study window (train),17:25,18:35
+P05,17,2026-09-23,study_window,Study window (home),20:30,22:30
+P05,18,2026-09-24,sleep,Sleep,00:00,05:30
+P05,18,2026-09-24,routine,Morning routine,05:30,06:20
+P05,18,2026-09-24,bus,Train to work,06:30,08:00
+P05,18,2026-09-24,office,Bank office (incl. lunch),08:30,17:00
+P05,18,2026-09-24,bus,Train home,17:15,18:45
+P05,18,2026-09-24,routine,Dinner,19:30,20:15
+P05,18,2026-09-24,sleep,Sleep,22:45,24:00
+P05,18,2026-09-24,study_window,Study window (train),06:40,07:50
+P05,18,2026-09-24,study_window,Study window (train),17:25,18:35
+P05,18,2026-09-24,study_window,Study window (home),20:30,22:30
+P05,19,2026-09-25,sleep,Sleep,00:00,05:30
+P05,19,2026-09-25,routine,Morning routine,05:30,06:20
+P05,19,2026-09-25,bus,Train to work,06:30,08:00
+P05,19,2026-09-25,office,Bank office (incl. lunch),08:30,17:00
+P05,19,2026-09-25,bus,Train home,17:15,18:45
+P05,19,2026-09-25,routine,Dinner,19:30,20:15
+P05,19,2026-09-25,sleep,Sleep,22:45,24:00
+P05,19,2026-09-25,study_window,Study window (train),06:40,07:50
+P05,19,2026-09-25,study_window,Study window (train),17:25,18:35
+P05,20,2026-09-26,sleep,Sleep,00:00,06:00
+P05,20,2026-09-26,routine,Morning routine,06:00,07:00
+P05,20,2026-09-26,bus,Train to campus,07:00,08:15
+P05,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P05,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P05,20,2026-09-26,routine,Lunch,12:45,13:45
+P05,20,2026-09-26,campus,Module C lab,13:45,15:45
+P05,20,2026-09-26,bus,Train home,16:00,17:15
+P05,20,2026-09-26,routine,Dinner,19:00,19:30
+P05,20,2026-09-26,study_window,Study window (home),16:30,18:30
+P05,21,2026-09-27,sleep,Sleep,00:00,06:00
+P05,21,2026-09-27,routine,Morning routine,06:00,07:00
+P05,21,2026-09-27,bus,Train to campus,07:00,08:15
+P05,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P05,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P05,21,2026-09-27,bus,Train home,12:25,13:40
+P05,21,2026-09-27,routine,Dinner,19:00,19:30
+P05,21,2026-09-27,study_window,Study window (home),14:00,17:00
+P05,22,2026-09-28,sleep,Sleep,00:00,05:30
+P05,22,2026-09-28,routine,Morning routine,05:30,06:20
+P05,22,2026-09-28,bus,Train to work,06:30,08:00
+P05,22,2026-09-28,office,Bank office (incl. lunch),08:30,17:00
+P05,22,2026-09-28,bus,Train home,17:15,18:45
+P05,22,2026-09-28,routine,Dinner,19:30,20:15
+P05,22,2026-09-28,sleep,Sleep,22:45,24:00
+P05,22,2026-09-28,study_window,Study window (train),06:40,07:50
+P05,22,2026-09-28,study_window,Study window (train),17:25,18:35
+P05,22,2026-09-28,study_window,Study window (home),20:30,22:30
+P05,23,2026-09-29,sleep,Sleep,00:00,05:30
+P05,23,2026-09-29,routine,Morning routine,05:30,06:20
+P05,23,2026-09-29,bus,Train to work,06:30,08:00
+P05,23,2026-09-29,office,Bank office (incl. lunch),08:30,17:00
+P05,23,2026-09-29,bus,Train home,17:15,18:45
+P05,23,2026-09-29,routine,Dinner,19:30,20:15
+P05,23,2026-09-29,sleep,Sleep,22:45,24:00
+P05,23,2026-09-29,study_window,Study window (train),06:40,07:50
+P05,23,2026-09-29,study_window,Study window (train),17:25,18:35
+P05,23,2026-09-29,study_window,Study window (home),20:30,22:30
+P05,24,2026-09-30,sleep,Sleep,00:00,05:30
+P05,24,2026-09-30,routine,Morning routine,05:30,06:20
+P05,24,2026-09-30,bus,Train to work,06:30,08:00
+P05,24,2026-09-30,office,Bank office (incl. lunch),08:30,17:00
+P05,24,2026-09-30,bus,Train home,17:15,18:45
+P05,24,2026-09-30,routine,Dinner,19:30,20:15
+P05,24,2026-09-30,sleep,Sleep,22:45,24:00
+P05,24,2026-09-30,study_window,Study window (train),06:40,07:50
+P05,24,2026-09-30,study_window,Study window (train),17:25,18:35
+P05,24,2026-09-30,study_window,Study window (home),20:30,22:30
+P05,25,2026-10-01,sleep,Sleep,00:00,05:30
+P05,25,2026-10-01,routine,Morning routine,05:30,06:20
+P05,25,2026-10-01,bus,Train to work,06:30,08:00
+P05,25,2026-10-01,office,Bank office (incl. lunch),08:30,17:00
+P05,25,2026-10-01,bus,Train home,17:15,18:45
+P05,25,2026-10-01,routine,Dinner,19:30,20:15
+P05,25,2026-10-01,sleep,Sleep,22:45,24:00
+P05,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:30,21:15
+P05,25,2026-10-01,study_window,Study window (train),06:40,07:50
+P05,25,2026-10-01,study_window,Study window (train),17:25,18:35
+P05,25,2026-10-01,study_window,Study window (home),20:30,22:30
+P05,26,2026-10-02,sleep,Sleep,00:00,05:30
+P05,26,2026-10-02,routine,Morning routine,05:30,06:20
+P05,26,2026-10-02,bus,Train to work,06:30,08:00
+P05,26,2026-10-02,office,Bank office (incl. lunch),08:30,17:00
+P05,26,2026-10-02,bus,Train home,17:15,18:45
+P05,26,2026-10-02,routine,Dinner,19:30,20:15
+P05,26,2026-10-02,sleep,Sleep,22:45,24:00
+P05,26,2026-10-02,study_window,Study window (train),06:40,07:50
+P05,26,2026-10-02,study_window,Study window (train),17:25,18:35
+P05,27,2026-10-03,sleep,Sleep,00:00,06:00
+P05,27,2026-10-03,routine,Morning routine,06:00,07:00
+P05,27,2026-10-03,bus,Train to campus,07:00,08:15
+P05,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P05,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P05,27,2026-10-03,routine,Lunch,12:45,13:45
+P05,27,2026-10-03,campus,Module C lab,13:45,15:45
+P05,27,2026-10-03,bus,Train home,16:00,17:15
+P05,27,2026-10-03,routine,Dinner,19:00,19:30
+P05,27,2026-10-03,study_window,Study window (home),16:30,18:30
+P05,28,2026-10-04,sleep,Sleep,00:00,06:00
+P05,28,2026-10-04,routine,Morning routine,06:00,07:00
+P05,28,2026-10-04,bus,Train to campus,07:00,08:15
+P05,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P05,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P05,28,2026-10-04,bus,Train home,12:25,13:40
+P05,28,2026-10-04,routine,Dinner,19:00,19:30
+P05,28,2026-10-04,study_window,Study window (home),14:00,17:00
+P05,29,2026-10-05,sleep,Sleep,00:00,05:30
+P05,29,2026-10-05,routine,Morning routine,05:30,06:20
+P05,29,2026-10-05,bus,Train to work,06:30,08:00
+P05,29,2026-10-05,office,Bank office (incl. lunch),08:30,17:00
+P05,29,2026-10-05,bus,Train home,17:15,18:45
+P05,29,2026-10-05,routine,Dinner,19:30,20:15
+P05,29,2026-10-05,sleep,Sleep,22:45,24:00
+P05,29,2026-10-05,study_window,Study window (train),06:40,07:50
+P05,29,2026-10-05,study_window,Study window (train),17:25,18:35
+P05,29,2026-10-05,study_window,Study window (home),20:30,22:30
+P05,30,2026-10-06,sleep,Sleep,00:00,05:30
+P05,30,2026-10-06,routine,Morning routine,05:30,06:20
+P05,30,2026-10-06,bus,Train to work,06:30,08:00
+P05,30,2026-10-06,office,Bank office (incl. lunch),08:30,17:00
+P05,30,2026-10-06,bus,Train home,17:15,18:45
+P05,30,2026-10-06,routine,Dinner,19:30,20:15
+P05,30,2026-10-06,sleep,Sleep,22:45,24:00
+P05,30,2026-10-06,study_window,Study window (train),06:40,07:50
+P05,30,2026-10-06,study_window,Study window (train),17:25,18:35
+P05,30,2026-10-06,study_window,Study window (home),20:30,22:30
+P06,1,2026-09-07,sleep,Sleep,00:00,05:45
+P06,1,2026-09-07,routine,Morning routine,05:45,07:10
+P06,1,2026-09-07,bus,Bus to work,07:10,07:50
+P06,1,2026-09-07,office,Network technician job (incl. lunch),08:00,17:00
+P06,1,2026-09-07,bus,Bus home,17:10,17:45
+P06,1,2026-09-07,family,Family duties,18:00,20:30
+P06,1,2026-09-07,routine,Dinner,20:30,21:00
+P06,1,2026-09-07,sleep,Sleep,23:15,24:00
+P06,1,2026-09-07,study_window,Study window (home),21:00,23:00
+P06,2,2026-09-08,sleep,Sleep,00:00,05:45
+P06,2,2026-09-08,routine,Morning routine,05:45,07:10
+P06,2,2026-09-08,bus,Bus to work,07:10,07:50
+P06,2,2026-09-08,office,Network technician job (incl. lunch),08:00,17:00
+P06,2,2026-09-08,bus,Bus home,17:10,17:45
+P06,2,2026-09-08,family,Family duties,18:00,20:30
+P06,2,2026-09-08,routine,Dinner,20:30,21:00
+P06,2,2026-09-08,sleep,Sleep,23:15,24:00
+P06,2,2026-09-08,study_window,Study window (home),21:00,23:00
+P06,3,2026-09-09,sleep,Sleep,00:00,05:45
+P06,3,2026-09-09,routine,Morning routine,05:45,07:10
+P06,3,2026-09-09,bus,Bus to work,07:10,07:50
+P06,3,2026-09-09,office,Network technician job (incl. lunch),08:00,17:00
+P06,3,2026-09-09,bus,Bus home,17:10,17:45
+P06,3,2026-09-09,family,Family duties,18:00,20:30
+P06,3,2026-09-09,routine,Dinner,20:30,21:00
+P06,3,2026-09-09,sleep,Sleep,23:15,24:00
+P06,3,2026-09-09,study_window,Study window (home),21:00,23:00
+P06,4,2026-09-10,sleep,Sleep,00:00,05:45
+P06,4,2026-09-10,routine,Morning routine,05:45,07:10
+P06,4,2026-09-10,bus,Bus to work,07:10,07:50
+P06,4,2026-09-10,office,Network technician job (incl. lunch),08:00,17:00
+P06,4,2026-09-10,bus,Bus home,17:10,17:45
+P06,4,2026-09-10,family,Family duties,18:00,20:30
+P06,4,2026-09-10,routine,Dinner,20:30,21:00
+P06,4,2026-09-10,sleep,Sleep,23:15,24:00
+P06,4,2026-09-10,study_window,Study window (home),21:00,23:00
+P06,5,2026-09-11,sleep,Sleep,00:00,05:45
+P06,5,2026-09-11,routine,Morning routine,05:45,07:10
+P06,5,2026-09-11,bus,Bus to work,07:10,07:50
+P06,5,2026-09-11,office,Network technician job (incl. lunch),08:00,17:00
+P06,5,2026-09-11,bus,Bus home,17:10,17:45
+P06,5,2026-09-11,family,Family duties,18:00,20:30
+P06,5,2026-09-11,routine,Dinner,20:30,21:00
+P06,5,2026-09-11,sleep,Sleep,23:15,24:00
+P06,6,2026-09-12,sleep,Sleep,00:00,06:30
+P06,6,2026-09-12,routine,Morning routine,06:30,07:35
+P06,6,2026-09-12,bus,Bus to campus,07:35,08:20
+P06,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P06,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P06,6,2026-09-12,routine,Lunch,12:45,13:45
+P06,6,2026-09-12,campus,Module C lab,13:45,15:45
+P06,6,2026-09-12,bus,Bus home,16:00,16:45
+P06,6,2026-09-12,family,Family time,17:00,21:00
+P06,6,2026-09-12,routine,Dinner,21:00,21:30
+P06,7,2026-09-13,sleep,Sleep,00:00,06:30
+P06,7,2026-09-13,routine,Morning routine,06:30,07:35
+P06,7,2026-09-13,bus,Bus to campus,07:35,08:20
+P06,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P06,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P06,7,2026-09-13,bus,Bus home,12:25,13:10
+P06,7,2026-09-13,routine,Dinner,19:30,20:00
+P06,7,2026-09-13,study_window,Study window (home),13:30,17:30
+P06,8,2026-09-14,sleep,Sleep,00:00,05:45
+P06,8,2026-09-14,routine,Morning routine,05:45,07:10
+P06,8,2026-09-14,bus,Bus to work,07:10,07:50
+P06,8,2026-09-14,office,Network technician job (incl. lunch),08:00,17:00
+P06,8,2026-09-14,bus,Bus home,17:10,17:45
+P06,8,2026-09-14,family,Family duties,18:00,20:30
+P06,8,2026-09-14,routine,Dinner,20:30,21:00
+P06,8,2026-09-14,sleep,Sleep,23:15,24:00
+P06,8,2026-09-14,study_window,Study window (home),21:00,23:00
+P06,9,2026-09-15,sleep,Sleep,00:00,05:45
+P06,9,2026-09-15,routine,Morning routine,05:45,07:10
+P06,9,2026-09-15,bus,Bus to work,07:10,07:50
+P06,9,2026-09-15,office,Network technician job (incl. lunch),08:00,17:00
+P06,9,2026-09-15,bus,Bus home,17:10,17:45
+P06,9,2026-09-15,family,Family duties,18:00,20:30
+P06,9,2026-09-15,routine,Dinner,20:30,21:00
+P06,9,2026-09-15,sleep,Sleep,23:15,24:00
+P06,9,2026-09-15,study_window,Study window (home),21:00,23:00
+P06,10,2026-09-16,sleep,Sleep,00:00,05:45
+P06,10,2026-09-16,routine,Morning routine,05:45,07:10
+P06,10,2026-09-16,bus,Bus to work,07:10,07:50
+P06,10,2026-09-16,office,Network technician job (incl. lunch),08:00,17:00
+P06,10,2026-09-16,bus,Bus home,17:10,17:45
+P06,10,2026-09-16,family,Family duties,18:00,20:30
+P06,10,2026-09-16,routine,Dinner,20:30,21:00
+P06,10,2026-09-16,sleep,Sleep,23:15,24:00
+P06,10,2026-09-16,study_window,Study window (home),21:00,23:00
+P06,11,2026-09-17,sleep,Sleep,00:00,05:45
+P06,11,2026-09-17,routine,Morning routine,05:45,07:10
+P06,11,2026-09-17,bus,Bus to work,07:10,07:50
+P06,11,2026-09-17,office,Network technician job (incl. lunch),08:00,17:00
+P06,11,2026-09-17,bus,Bus home,17:10,17:45
+P06,11,2026-09-17,family,Family duties,18:00,20:30
+P06,11,2026-09-17,routine,Dinner,20:30,21:00
+P06,11,2026-09-17,sleep,Sleep,23:15,24:00
+P06,11,2026-09-17,study_window,Study window (home),21:00,23:00
+P06,12,2026-09-18,sleep,Sleep,00:00,05:45
+P06,12,2026-09-18,routine,Morning routine,05:45,07:10
+P06,12,2026-09-18,bus,Bus to work,07:10,07:50
+P06,12,2026-09-18,office,Network technician job (incl. lunch),08:00,17:00
+P06,12,2026-09-18,bus,Bus home,17:10,17:45
+P06,12,2026-09-18,family,Family duties,18:00,20:30
+P06,12,2026-09-18,routine,Dinner,20:30,21:00
+P06,12,2026-09-18,sleep,Sleep,23:15,24:00
+P06,13,2026-09-19,sleep,Sleep,00:00,06:30
+P06,13,2026-09-19,routine,Morning routine,06:30,07:35
+P06,13,2026-09-19,bus,Bus to campus,07:35,08:20
+P06,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P06,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P06,13,2026-09-19,routine,Lunch,12:45,13:45
+P06,13,2026-09-19,campus,Module C lab,13:45,15:45
+P06,13,2026-09-19,bus,Bus home,16:00,16:45
+P06,13,2026-09-19,family,Family time,17:00,21:00
+P06,13,2026-09-19,routine,Dinner,21:00,21:30
+P06,14,2026-09-20,sleep,Sleep,00:00,06:30
+P06,14,2026-09-20,routine,Morning routine,06:30,07:35
+P06,14,2026-09-20,bus,Bus to campus,07:35,08:20
+P06,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P06,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P06,14,2026-09-20,bus,Bus home,12:25,13:10
+P06,14,2026-09-20,routine,Dinner,19:30,20:00
+P06,14,2026-09-20,study_window,Study window (home),13:30,17:30
+P06,15,2026-09-21,sleep,Sleep,00:00,05:45
+P06,15,2026-09-21,routine,Morning routine,05:45,07:10
+P06,15,2026-09-21,bus,Bus to work,07:10,07:50
+P06,15,2026-09-21,office,Network technician job (incl. lunch),08:00,17:00
+P06,15,2026-09-21,bus,Bus home,17:10,17:45
+P06,15,2026-09-21,family,Family duties,18:00,20:30
+P06,15,2026-09-21,routine,Dinner,20:30,21:00
+P06,15,2026-09-21,sleep,Sleep,23:15,24:00
+P06,15,2026-09-21,study_window,Study window (home),21:00,23:00
+P06,16,2026-09-22,sleep,Sleep,00:00,05:45
+P06,16,2026-09-22,routine,Morning routine,05:45,07:10
+P06,16,2026-09-22,bus,Bus to work,07:10,07:50
+P06,16,2026-09-22,office,Network technician job (incl. lunch),08:00,17:00
+P06,16,2026-09-22,bus,Bus home,17:10,17:45
+P06,16,2026-09-22,family,Family duties,18:00,20:30
+P06,16,2026-09-22,routine,Dinner,20:30,21:00
+P06,16,2026-09-22,sleep,Sleep,23:15,24:00
+P06,16,2026-09-22,study_window,Study window (home),21:00,23:00
+P06,17,2026-09-23,sleep,Sleep,00:00,05:45
+P06,17,2026-09-23,routine,Morning routine,05:45,07:10
+P06,17,2026-09-23,bus,Bus to work,07:10,07:50
+P06,17,2026-09-23,office,Network technician job (incl. lunch),08:00,17:00
+P06,17,2026-09-23,bus,Bus home,17:10,17:45
+P06,17,2026-09-23,family,Family duties,18:00,20:30
+P06,17,2026-09-23,routine,Dinner,20:30,21:00
+P06,17,2026-09-23,sleep,Sleep,23:15,24:00
+P06,17,2026-09-23,study_window,Study window (home),21:00,23:00
+P06,18,2026-09-24,sleep,Sleep,00:00,05:45
+P06,18,2026-09-24,routine,Morning routine,05:45,07:10
+P06,18,2026-09-24,bus,Bus to work,07:10,07:50
+P06,18,2026-09-24,office,Network technician job (incl. lunch),08:00,17:00
+P06,18,2026-09-24,bus,Bus home,17:10,17:45
+P06,18,2026-09-24,family,Family duties,18:00,20:30
+P06,18,2026-09-24,routine,Dinner,20:30,21:00
+P06,18,2026-09-24,sleep,Sleep,23:15,24:00
+P06,18,2026-09-24,study_window,Study window (home),21:00,23:00
+P06,19,2026-09-25,sleep,Sleep,00:00,05:45
+P06,19,2026-09-25,routine,Morning routine,05:45,07:10
+P06,19,2026-09-25,bus,Bus to work,07:10,07:50
+P06,19,2026-09-25,office,Network technician job (incl. lunch),08:00,17:00
+P06,19,2026-09-25,bus,Bus home,17:10,17:45
+P06,19,2026-09-25,family,Family duties,18:00,20:30
+P06,19,2026-09-25,routine,Dinner,20:30,21:00
+P06,19,2026-09-25,sleep,Sleep,23:15,24:00
+P06,20,2026-09-26,sleep,Sleep,00:00,06:30
+P06,20,2026-09-26,routine,Morning routine,06:30,07:35
+P06,20,2026-09-26,bus,Bus to campus,07:35,08:20
+P06,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P06,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P06,20,2026-09-26,routine,Lunch,12:45,13:45
+P06,20,2026-09-26,campus,Module C lab,13:45,15:45
+P06,20,2026-09-26,bus,Bus home,16:00,16:45
+P06,20,2026-09-26,family,Family time,17:00,21:00
+P06,20,2026-09-26,routine,Dinner,21:00,21:30
+P06,21,2026-09-27,sleep,Sleep,00:00,06:30
+P06,21,2026-09-27,routine,Morning routine,06:30,07:35
+P06,21,2026-09-27,bus,Bus to campus,07:35,08:20
+P06,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P06,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P06,21,2026-09-27,bus,Bus home,12:25,13:10
+P06,21,2026-09-27,routine,Dinner,19:30,20:00
+P06,21,2026-09-27,study_window,Study window (home),13:30,17:30
+P06,22,2026-09-28,sleep,Sleep,00:00,05:45
+P06,22,2026-09-28,routine,Morning routine,05:45,07:10
+P06,22,2026-09-28,bus,Bus to work,07:10,07:50
+P06,22,2026-09-28,office,Network technician job (incl. lunch),08:00,17:00
+P06,22,2026-09-28,bus,Bus home,17:10,17:45
+P06,22,2026-09-28,family,Family duties,18:00,20:30
+P06,22,2026-09-28,routine,Dinner,20:30,21:00
+P06,22,2026-09-28,sleep,Sleep,23:15,24:00
+P06,22,2026-09-28,study_window,Study window (home),21:00,23:00
+P06,23,2026-09-29,sleep,Sleep,00:00,05:45
+P06,23,2026-09-29,routine,Morning routine,05:45,07:10
+P06,23,2026-09-29,bus,Bus to work,07:10,07:50
+P06,23,2026-09-29,office,Network technician job (incl. lunch),08:00,17:00
+P06,23,2026-09-29,bus,Bus home,17:10,17:45
+P06,23,2026-09-29,family,Family duties,18:00,20:30
+P06,23,2026-09-29,routine,Dinner,20:30,21:00
+P06,23,2026-09-29,sleep,Sleep,23:15,24:00
+P06,23,2026-09-29,study_window,Study window (home),21:00,23:00
+P06,24,2026-09-30,sleep,Sleep,00:00,05:45
+P06,24,2026-09-30,routine,Morning routine,05:45,07:10
+P06,24,2026-09-30,bus,Bus to work,07:10,07:50
+P06,24,2026-09-30,office,Network technician job (incl. lunch),08:00,17:00
+P06,24,2026-09-30,bus,Bus home,17:10,17:45
+P06,24,2026-09-30,family,Family duties,18:00,20:30
+P06,24,2026-09-30,routine,Dinner,20:30,21:00
+P06,24,2026-09-30,sleep,Sleep,23:15,24:00
+P06,24,2026-09-30,study_window,Study window (home),21:00,23:00
+P06,25,2026-10-01,sleep,Sleep,00:00,05:45
+P06,25,2026-10-01,routine,Morning routine,05:45,07:10
+P06,25,2026-10-01,bus,Bus to work,07:10,07:50
+P06,25,2026-10-01,office,Network technician job (incl. lunch),08:00,17:00
+P06,25,2026-10-01,bus,Bus home,17:10,17:45
+P06,25,2026-10-01,family,Family duties,18:00,20:15
+P06,25,2026-10-01,routine,Dinner,21:00,21:30
+P06,25,2026-10-01,sleep,Sleep,23:15,24:00
+P06,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:15,21:00
+P06,25,2026-10-01,study_window,Study window (home),21:00,23:00
+P06,26,2026-10-02,sleep,Sleep,00:00,05:45
+P06,26,2026-10-02,routine,Morning routine,05:45,07:10
+P06,26,2026-10-02,bus,Bus to work,07:10,07:50
+P06,26,2026-10-02,office,Network technician job (incl. lunch),08:00,17:00
+P06,26,2026-10-02,bus,Bus home,17:10,17:45
+P06,26,2026-10-02,family,Family duties,18:00,20:30
+P06,26,2026-10-02,routine,Dinner,20:30,21:00
+P06,26,2026-10-02,sleep,Sleep,23:15,24:00
+P06,27,2026-10-03,sleep,Sleep,00:00,06:30
+P06,27,2026-10-03,routine,Morning routine,06:30,07:35
+P06,27,2026-10-03,bus,Bus to campus,07:35,08:20
+P06,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P06,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P06,27,2026-10-03,routine,Lunch,12:45,13:45
+P06,27,2026-10-03,campus,Module C lab,13:45,15:45
+P06,27,2026-10-03,bus,Bus home,16:00,16:45
+P06,27,2026-10-03,family,Family time,17:00,21:00
+P06,27,2026-10-03,routine,Dinner,21:00,21:30
+P06,28,2026-10-04,sleep,Sleep,00:00,06:30
+P06,28,2026-10-04,routine,Morning routine,06:30,07:35
+P06,28,2026-10-04,bus,Bus to campus,07:35,08:20
+P06,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P06,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P06,28,2026-10-04,bus,Bus home,12:25,13:10
+P06,28,2026-10-04,routine,Dinner,19:30,20:00
+P06,28,2026-10-04,study_window,Study window (home),13:30,17:30
+P06,29,2026-10-05,sleep,Sleep,00:00,05:45
+P06,29,2026-10-05,routine,Morning routine,05:45,07:10
+P06,29,2026-10-05,bus,Bus to work,07:10,07:50
+P06,29,2026-10-05,office,Network technician job (incl. lunch),08:00,17:00
+P06,29,2026-10-05,bus,Bus home,17:10,17:45
+P06,29,2026-10-05,family,Family duties,18:00,20:30
+P06,29,2026-10-05,routine,Dinner,20:30,21:00
+P06,29,2026-10-05,sleep,Sleep,23:15,24:00
+P06,29,2026-10-05,study_window,Study window (home),21:00,23:00
+P06,30,2026-10-06,sleep,Sleep,00:00,05:45
+P06,30,2026-10-06,routine,Morning routine,05:45,07:10
+P06,30,2026-10-06,bus,Bus to work,07:10,07:50
+P06,30,2026-10-06,office,Network technician job (incl. lunch),08:00,17:00
+P06,30,2026-10-06,bus,Bus home,17:10,17:45
+P06,30,2026-10-06,family,Family duties,18:00,20:30
+P06,30,2026-10-06,routine,Dinner,20:30,21:00
+P06,30,2026-10-06,sleep,Sleep,23:15,24:00
+P06,30,2026-10-06,study_window,Study window (home),21:00,23:00
+P07,1,2026-09-07,sleep,Sleep,00:00,05:30
+P07,1,2026-09-07,routine,Morning routine,05:30,06:15
+P07,1,2026-09-07,bus,Ride to work,06:15,06:50
+P07,1,2026-09-07,office,Day shift (incl. lunch),07:00,15:00
+P07,1,2026-09-07,bus,Ride home,15:10,15:45
+P07,1,2026-09-07,routine,Dinner,20:30,21:00
+P07,1,2026-09-07,sleep,Sleep,22:30,24:00
+P07,1,2026-09-07,study_window,Study window (home),16:30,20:30
+P07,2,2026-09-08,sleep,Sleep,00:00,05:30
+P07,2,2026-09-08,routine,Morning routine,05:30,06:15
+P07,2,2026-09-08,bus,Ride to work,06:15,06:50
+P07,2,2026-09-08,office,Day shift (incl. lunch),07:00,15:00
+P07,2,2026-09-08,bus,Ride home,15:10,15:45
+P07,2,2026-09-08,routine,Dinner,20:30,21:00
+P07,2,2026-09-08,sleep,Sleep,22:30,24:00
+P07,2,2026-09-08,study_window,Study window (home),16:30,20:30
+P07,3,2026-09-09,sleep,Sleep,00:00,05:30
+P07,3,2026-09-09,routine,Morning routine,05:30,06:15
+P07,3,2026-09-09,bus,Ride to work,06:15,06:50
+P07,3,2026-09-09,office,Day shift (incl. lunch),07:00,15:00
+P07,3,2026-09-09,bus,Ride home,15:10,15:45
+P07,3,2026-09-09,routine,Dinner,20:30,21:00
+P07,3,2026-09-09,sleep,Sleep,22:30,24:00
+P07,3,2026-09-09,study_window,Study window (home),16:30,20:30
+P07,4,2026-09-10,sleep,Sleep,00:00,05:30
+P07,4,2026-09-10,routine,Morning routine,05:30,06:15
+P07,4,2026-09-10,bus,Ride to work,06:15,06:50
+P07,4,2026-09-10,office,Day shift (incl. lunch),07:00,15:00
+P07,4,2026-09-10,bus,Ride home,15:10,15:45
+P07,4,2026-09-10,routine,Dinner,20:30,21:00
+P07,4,2026-09-10,sleep,Sleep,22:30,24:00
+P07,4,2026-09-10,study_window,Study window (home),16:30,20:30
+P07,5,2026-09-11,sleep,Sleep,00:00,05:30
+P07,5,2026-09-11,routine,Morning routine,05:30,06:15
+P07,5,2026-09-11,bus,Ride to work,06:15,06:50
+P07,5,2026-09-11,office,Day shift (incl. lunch),07:00,15:00
+P07,5,2026-09-11,bus,Ride home,15:10,15:45
+P07,5,2026-09-11,routine,Dinner,20:30,21:00
+P07,5,2026-09-11,sleep,Sleep,22:30,24:00
+P07,5,2026-09-11,study_window,Study window (home),16:30,20:30
+P07,6,2026-09-12,sleep,Sleep,00:00,06:30
+P07,6,2026-09-12,routine,Morning routine,06:30,07:45
+P07,6,2026-09-12,bus,Ride to campus,07:45,08:20
+P07,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P07,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P07,6,2026-09-12,routine,Lunch,12:45,13:45
+P07,6,2026-09-12,campus,Module C lab,13:45,15:45
+P07,6,2026-09-12,bus,Ride home,16:00,16:35
+P07,6,2026-09-12,routine,Dinner,19:30,20:00
+P07,6,2026-09-12,study_window,Study window (home),16:45,18:45
+P07,7,2026-09-13,sleep,Sleep,00:00,06:30
+P07,7,2026-09-13,routine,Morning routine,06:30,07:45
+P07,7,2026-09-13,bus,Ride to campus,07:45,08:20
+P07,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P07,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P07,7,2026-09-13,bus,Ride home,12:25,13:00
+P07,7,2026-09-13,routine,Dinner,19:30,20:00
+P07,7,2026-09-13,study_window,Study window (home),13:30,17:00
+P07,8,2026-09-14,sleep,Sleep after night shift,06:00,13:00
+P07,8,2026-09-14,routine,Lunch,13:00,13:45
+P07,8,2026-09-14,routine,Dinner,18:30,19:15
+P07,8,2026-09-14,bus,Ride to work,20:20,20:55
+P07,8,2026-09-14,office,Night shift,21:00,24:00
+P07,8,2026-09-14,study_window,Study window (home),14:00,18:00
+P07,9,2026-09-15,office,Night shift (from yesterday),00:00,05:00
+P07,9,2026-09-15,bus,Ride home,05:10,05:50
+P07,9,2026-09-15,sleep,Sleep after night shift,06:00,13:00
+P07,9,2026-09-15,routine,Lunch,13:00,13:45
+P07,9,2026-09-15,routine,Dinner,18:30,19:15
+P07,9,2026-09-15,bus,Ride to work,20:20,20:55
+P07,9,2026-09-15,office,Night shift,21:00,24:00
+P07,9,2026-09-15,study_window,Study window (home),14:00,18:00
+P07,10,2026-09-16,office,Night shift (from yesterday),00:00,05:00
+P07,10,2026-09-16,bus,Ride home,05:10,05:50
+P07,10,2026-09-16,sleep,Sleep after night shift,06:00,13:00
+P07,10,2026-09-16,routine,Lunch,13:00,13:45
+P07,10,2026-09-16,routine,Dinner,18:30,19:15
+P07,10,2026-09-16,bus,Ride to work,20:20,20:55
+P07,10,2026-09-16,office,Night shift,21:00,24:00
+P07,10,2026-09-16,study_window,Study window (home),14:00,18:00
+P07,11,2026-09-17,office,Night shift (from yesterday),00:00,05:00
+P07,11,2026-09-17,bus,Ride home,05:10,05:50
+P07,11,2026-09-17,sleep,Sleep after night shift,06:00,13:00
+P07,11,2026-09-17,routine,Lunch,13:00,13:45
+P07,11,2026-09-17,routine,Dinner,18:30,19:15
+P07,11,2026-09-17,bus,Ride to work,20:20,20:55
+P07,11,2026-09-17,office,Night shift,21:00,24:00
+P07,11,2026-09-17,study_window,Study window (home),14:00,18:00
+P07,12,2026-09-18,office,Night shift (from yesterday),00:00,05:00
+P07,12,2026-09-18,bus,Ride home,05:10,05:50
+P07,12,2026-09-18,sleep,Sleep after night shift,06:00,13:00
+P07,12,2026-09-18,routine,Lunch,13:00,13:45
+P07,12,2026-09-18,routine,Dinner,18:30,19:15
+P07,12,2026-09-18,bus,Ride to work,20:20,20:55
+P07,12,2026-09-18,office,Night shift,21:00,24:00
+P07,12,2026-09-18,study_window,Study window (home),14:00,18:00
+P07,13,2026-09-19,office,Night shift (from Friday),00:00,05:00
+P07,13,2026-09-19,bus,Ride home,05:10,05:50
+P07,13,2026-09-19,sleep,Short sleep,06:00,07:30
+P07,13,2026-09-19,bus,Ride to campus,07:45,08:20
+P07,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P07,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P07,13,2026-09-19,routine,Lunch,12:45,13:45
+P07,13,2026-09-19,campus,Module C lab,13:45,15:45
+P07,13,2026-09-19,bus,Ride home,16:00,16:35
+P07,13,2026-09-19,sleep,Nap,16:45,18:30
+P07,13,2026-09-19,routine,Dinner,19:30,20:00
+P07,14,2026-09-20,sleep,Sleep,00:00,06:30
+P07,14,2026-09-20,routine,Morning routine,06:30,07:45
+P07,14,2026-09-20,bus,Ride to campus,07:45,08:20
+P07,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P07,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P07,14,2026-09-20,bus,Ride home,12:25,13:00
+P07,14,2026-09-20,routine,Dinner,19:30,20:00
+P07,14,2026-09-20,study_window,Study window (home),13:30,17:00
+P07,15,2026-09-21,sleep,Sleep,00:00,05:30
+P07,15,2026-09-21,routine,Morning routine,05:30,06:15
+P07,15,2026-09-21,bus,Ride to work,06:15,06:50
+P07,15,2026-09-21,office,Day shift (incl. lunch),07:00,15:00
+P07,15,2026-09-21,bus,Ride home,15:10,15:45
+P07,15,2026-09-21,routine,Dinner,20:30,21:00
+P07,15,2026-09-21,sleep,Sleep,22:30,24:00
+P07,15,2026-09-21,study_window,Study window (home),16:30,20:30
+P07,16,2026-09-22,sleep,Sleep,00:00,05:30
+P07,16,2026-09-22,routine,Morning routine,05:30,06:15
+P07,16,2026-09-22,bus,Ride to work,06:15,06:50
+P07,16,2026-09-22,office,Day shift (incl. lunch),07:00,15:00
+P07,16,2026-09-22,bus,Ride home,15:10,15:45
+P07,16,2026-09-22,routine,Dinner,20:30,21:00
+P07,16,2026-09-22,sleep,Sleep,22:30,24:00
+P07,16,2026-09-22,study_window,Study window (home),16:30,20:30
+P07,17,2026-09-23,sleep,Sleep,00:00,05:30
+P07,17,2026-09-23,routine,Morning routine,05:30,06:15
+P07,17,2026-09-23,bus,Ride to work,06:15,06:50
+P07,17,2026-09-23,office,Day shift (incl. lunch),07:00,15:00
+P07,17,2026-09-23,bus,Ride home,15:10,15:45
+P07,17,2026-09-23,routine,Dinner,20:30,21:00
+P07,17,2026-09-23,sleep,Sleep,22:30,24:00
+P07,17,2026-09-23,study_window,Study window (home),16:30,20:30
+P07,18,2026-09-24,sleep,Sleep,00:00,05:30
+P07,18,2026-09-24,routine,Morning routine,05:30,06:15
+P07,18,2026-09-24,bus,Ride to work,06:15,06:50
+P07,18,2026-09-24,office,Day shift (incl. lunch),07:00,15:00
+P07,18,2026-09-24,bus,Ride home,15:10,15:45
+P07,18,2026-09-24,routine,Dinner,20:30,21:00
+P07,18,2026-09-24,sleep,Sleep,22:30,24:00
+P07,18,2026-09-24,study_window,Study window (home),16:30,20:30
+P07,19,2026-09-25,sleep,Sleep,00:00,05:30
+P07,19,2026-09-25,routine,Morning routine,05:30,06:15
+P07,19,2026-09-25,bus,Ride to work,06:15,06:50
+P07,19,2026-09-25,office,Day shift (incl. lunch),07:00,15:00
+P07,19,2026-09-25,bus,Ride home,15:10,15:45
+P07,19,2026-09-25,routine,Dinner,20:30,21:00
+P07,19,2026-09-25,sleep,Sleep,22:30,24:00
+P07,19,2026-09-25,study_window,Study window (home),16:30,20:30
+P07,20,2026-09-26,sleep,Sleep,00:00,06:30
+P07,20,2026-09-26,routine,Morning routine,06:30,07:45
+P07,20,2026-09-26,bus,Ride to campus,07:45,08:20
+P07,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P07,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P07,20,2026-09-26,routine,Lunch,12:45,13:45
+P07,20,2026-09-26,campus,Module C lab,13:45,15:45
+P07,20,2026-09-26,bus,Ride home,16:00,16:35
+P07,20,2026-09-26,routine,Dinner,19:30,20:00
+P07,20,2026-09-26,study_window,Study window (home),16:45,18:45
+P07,21,2026-09-27,sleep,Sleep,00:00,06:30
+P07,21,2026-09-27,routine,Morning routine,06:30,07:45
+P07,21,2026-09-27,bus,Ride to campus,07:45,08:20
+P07,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P07,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P07,21,2026-09-27,bus,Ride home,12:25,13:00
+P07,21,2026-09-27,routine,Dinner,19:30,20:00
+P07,21,2026-09-27,study_window,Study window (home),13:30,17:00
+P07,22,2026-09-28,sleep,Sleep after night shift,06:00,13:00
+P07,22,2026-09-28,routine,Lunch,13:00,13:45
+P07,22,2026-09-28,routine,Dinner,18:30,19:15
+P07,22,2026-09-28,bus,Ride to work,20:20,20:55
+P07,22,2026-09-28,office,Night shift,21:00,24:00
+P07,22,2026-09-28,study_window,Study window (home),14:00,18:00
+P07,23,2026-09-29,office,Night shift (from yesterday),00:00,05:00
+P07,23,2026-09-29,bus,Ride home,05:10,05:50
+P07,23,2026-09-29,sleep,Sleep after night shift,06:00,13:00
+P07,23,2026-09-29,routine,Lunch,13:00,13:45
+P07,23,2026-09-29,routine,Dinner,18:30,19:15
+P07,23,2026-09-29,bus,Ride to work,20:20,20:55
+P07,23,2026-09-29,office,Night shift,21:00,24:00
+P07,23,2026-09-29,study_window,Study window (home),14:00,18:00
+P07,24,2026-09-30,office,Night shift (from yesterday),00:00,05:00
+P07,24,2026-09-30,bus,Ride home,05:10,05:50
+P07,24,2026-09-30,sleep,Sleep after night shift,06:00,13:00
+P07,24,2026-09-30,routine,Lunch,13:00,13:45
+P07,24,2026-09-30,routine,Dinner,18:30,19:15
+P07,24,2026-09-30,bus,Ride to work,20:20,20:55
+P07,24,2026-09-30,office,Night shift,21:00,24:00
+P07,24,2026-09-30,study_window,Study window (home),14:00,18:00
+P07,25,2026-10-01,office,Night shift (from yesterday),00:00,05:00
+P07,25,2026-10-01,bus,Ride home,05:10,05:50
+P07,25,2026-10-01,sleep,Sleep after night shift,06:00,13:00
+P07,25,2026-10-01,routine,Lunch,13:00,13:45
+P07,25,2026-10-01,routine,Dinner,18:30,19:15
+P07,25,2026-10-01,bus,Ride to work,20:20,20:55
+P07,25,2026-10-01,office,Night shift,21:00,24:00
+P07,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",19:30,20:15
+P07,25,2026-10-01,study_window,Study window (home),14:00,18:00
+P07,26,2026-10-02,office,Night shift (from yesterday),00:00,05:00
+P07,26,2026-10-02,bus,Ride home,05:10,05:50
+P07,26,2026-10-02,sleep,Sleep after night shift,06:00,13:00
+P07,26,2026-10-02,routine,Lunch,13:00,13:45
+P07,26,2026-10-02,routine,Dinner,18:30,19:15
+P07,26,2026-10-02,bus,Ride to work,20:20,20:55
+P07,26,2026-10-02,office,Night shift,21:00,24:00
+P07,26,2026-10-02,study_window,Study window (home),14:00,18:00
+P07,27,2026-10-03,office,Night shift (from Friday),00:00,05:00
+P07,27,2026-10-03,bus,Ride home,05:10,05:50
+P07,27,2026-10-03,sleep,Short sleep,06:00,07:30
+P07,27,2026-10-03,bus,Ride to campus,07:45,08:20
+P07,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P07,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P07,27,2026-10-03,routine,Lunch,12:45,13:45
+P07,27,2026-10-03,campus,Module C lab,13:45,15:45
+P07,27,2026-10-03,bus,Ride home,16:00,16:35
+P07,27,2026-10-03,sleep,Nap,16:45,18:30
+P07,27,2026-10-03,routine,Dinner,19:30,20:00
+P07,28,2026-10-04,sleep,Sleep,00:00,06:30
+P07,28,2026-10-04,routine,Morning routine,06:30,07:45
+P07,28,2026-10-04,bus,Ride to campus,07:45,08:20
+P07,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P07,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P07,28,2026-10-04,bus,Ride home,12:25,13:00
+P07,28,2026-10-04,routine,Dinner,19:30,20:00
+P07,28,2026-10-04,study_window,Study window (home),13:30,17:00
+P07,29,2026-10-05,sleep,Sleep,00:00,05:30
+P07,29,2026-10-05,routine,Morning routine,05:30,06:15
+P07,29,2026-10-05,bus,Ride to work,06:15,06:50
+P07,29,2026-10-05,office,Day shift (incl. lunch),07:00,15:00
+P07,29,2026-10-05,bus,Ride home,15:10,15:45
+P07,29,2026-10-05,routine,Dinner,20:30,21:00
+P07,29,2026-10-05,sleep,Sleep,22:30,24:00
+P07,29,2026-10-05,study_window,Study window (home),16:30,20:30
+P07,30,2026-10-06,sleep,Sleep,00:00,05:30
+P07,30,2026-10-06,routine,Morning routine,05:30,06:15
+P07,30,2026-10-06,bus,Ride to work,06:15,06:50
+P07,30,2026-10-06,office,Day shift (incl. lunch),07:00,15:00
+P07,30,2026-10-06,bus,Ride home,15:10,15:45
+P07,30,2026-10-06,routine,Dinner,20:30,21:00
+P07,30,2026-10-06,sleep,Sleep,22:30,24:00
+P07,30,2026-10-06,study_window,Study window (home),16:30,20:30
+P08,1,2026-09-07,sleep,Sleep,00:00,06:00
+P08,1,2026-09-07,routine,Morning routine,06:00,07:30
+P08,1,2026-09-07,bus,Bus to office,07:30,08:20
+P08,1,2026-09-07,office,Office (incl. lunch),08:30,17:00
+P08,1,2026-09-07,bus,Bus home,17:10,18:00
+P08,1,2026-09-07,routine,Dinner,18:15,18:50
+P08,1,2026-09-07,sleep,Sleep,22:45,24:00
+P08,1,2026-09-07,study_window,Study window (bus),17:15,17:55
+P08,1,2026-09-07,study_window,Study window (home),19:00,22:00
+P08,2,2026-09-08,sleep,Sleep,00:00,06:00
+P08,2,2026-09-08,routine,Morning routine,06:00,07:30
+P08,2,2026-09-08,bus,Bus to office,07:30,08:20
+P08,2,2026-09-08,office,Office (incl. lunch),08:30,17:00
+P08,2,2026-09-08,bus,Bus home,17:10,18:00
+P08,2,2026-09-08,routine,Dinner,18:15,18:50
+P08,2,2026-09-08,sleep,Sleep,22:45,24:00
+P08,2,2026-09-08,study_window,Study window (bus),17:15,17:55
+P08,2,2026-09-08,study_window,Study window (home),19:00,22:00
+P08,3,2026-09-09,sleep,Sleep,00:00,06:00
+P08,3,2026-09-09,routine,Morning routine,06:00,07:30
+P08,3,2026-09-09,bus,Bus to office,07:30,08:20
+P08,3,2026-09-09,office,Office (incl. lunch),08:30,17:00
+P08,3,2026-09-09,bus,Bus home,17:10,18:00
+P08,3,2026-09-09,routine,Dinner,18:15,18:50
+P08,3,2026-09-09,sleep,Sleep,22:45,24:00
+P08,3,2026-09-09,study_window,Study window (bus),17:15,17:55
+P08,3,2026-09-09,study_window,Study window (home),19:00,22:00
+P08,4,2026-09-10,sleep,Sleep,00:00,06:00
+P08,4,2026-09-10,routine,Morning routine,06:00,07:30
+P08,4,2026-09-10,bus,Bus to office,07:30,08:20
+P08,4,2026-09-10,office,Office (incl. lunch),08:30,17:00
+P08,4,2026-09-10,bus,Bus home,17:10,18:00
+P08,4,2026-09-10,routine,Dinner,18:15,18:50
+P08,4,2026-09-10,sleep,Sleep,22:45,24:00
+P08,4,2026-09-10,study_window,Study window (bus),17:15,17:55
+P08,4,2026-09-10,study_window,Study window (home),19:00,22:00
+P08,5,2026-09-11,sleep,Sleep,00:00,06:00
+P08,5,2026-09-11,routine,Morning routine,06:00,07:30
+P08,5,2026-09-11,bus,Bus to office,07:30,08:20
+P08,5,2026-09-11,office,Office (incl. lunch),08:30,17:00
+P08,5,2026-09-11,bus,Bus home,17:10,18:00
+P08,5,2026-09-11,routine,Dinner,18:15,18:50
+P08,5,2026-09-11,sleep,Sleep,22:45,24:00
+P08,5,2026-09-11,study_window,Study window (home),19:00,20:00
+P08,6,2026-09-12,sleep,Sleep,00:00,06:30
+P08,6,2026-09-12,routine,Morning routine,06:30,07:40
+P08,6,2026-09-12,bus,Bus to campus,07:40,08:20
+P08,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P08,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P08,6,2026-09-12,routine,Lunch,12:45,13:45
+P08,6,2026-09-12,campus,Module C lab,13:45,15:45
+P08,6,2026-09-12,bus,Bus home,16:00,16:30
+P08,6,2026-09-12,routine,Dinner,19:00,19:30
+P08,6,2026-09-12,study_window,Study window (home),16:30,18:30
+P08,7,2026-09-13,sleep,Sleep,00:00,06:30
+P08,7,2026-09-13,routine,Morning routine,06:30,07:40
+P08,7,2026-09-13,bus,Bus to campus,07:40,08:20
+P08,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P08,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P08,7,2026-09-13,bus,Bus home,12:25,13:00
+P08,7,2026-09-13,routine,Dinner,19:00,19:30
+P08,7,2026-09-13,study_window,Study window (home),13:30,17:00
+P08,8,2026-09-14,sleep,Sleep,00:00,06:00
+P08,8,2026-09-14,routine,Morning routine,06:00,07:30
+P08,8,2026-09-14,bus,Bus to office,07:30,08:20
+P08,8,2026-09-14,office,Office (incl. lunch),08:30,17:00
+P08,8,2026-09-14,bus,Bus home,17:10,18:00
+P08,8,2026-09-14,routine,Dinner,18:15,18:50
+P08,8,2026-09-14,sleep,Sleep,22:45,24:00
+P08,8,2026-09-14,study_window,Study window (bus),17:15,17:55
+P08,8,2026-09-14,study_window,Study window (home),19:00,22:00
+P08,9,2026-09-15,sleep,Sleep,00:00,06:00
+P08,9,2026-09-15,routine,Morning routine,06:00,07:30
+P08,9,2026-09-15,bus,Bus to office,07:30,08:20
+P08,9,2026-09-15,office,Office (incl. lunch),08:30,17:00
+P08,9,2026-09-15,bus,Bus home,17:10,18:00
+P08,9,2026-09-15,routine,Dinner,18:15,18:50
+P08,9,2026-09-15,sleep,Sleep,22:45,24:00
+P08,9,2026-09-15,study_window,Study window (bus),17:15,17:55
+P08,9,2026-09-15,study_window,Study window (home),19:00,22:00
+P08,10,2026-09-16,sleep,Sleep,00:00,06:00
+P08,10,2026-09-16,routine,Morning routine,06:00,07:30
+P08,10,2026-09-16,bus,Bus to office,07:30,08:20
+P08,10,2026-09-16,office,Office (incl. lunch),08:30,17:00
+P08,10,2026-09-16,bus,Bus home,17:10,18:00
+P08,10,2026-09-16,routine,Dinner,18:15,18:50
+P08,10,2026-09-16,sleep,Sleep,22:45,24:00
+P08,10,2026-09-16,study_window,Study window (bus),17:15,17:55
+P08,10,2026-09-16,study_window,Study window (home),19:00,22:00
+P08,11,2026-09-17,sleep,Sleep,00:00,06:00
+P08,11,2026-09-17,routine,Morning routine,06:00,07:30
+P08,11,2026-09-17,bus,Bus to office,07:30,08:20
+P08,11,2026-09-17,office,Office (incl. lunch),08:30,17:00
+P08,11,2026-09-17,bus,Bus home,17:10,18:00
+P08,11,2026-09-17,routine,Dinner,18:15,18:50
+P08,11,2026-09-17,sleep,Sleep,22:45,24:00
+P08,11,2026-09-17,study_window,Study window (bus),17:15,17:55
+P08,11,2026-09-17,study_window,Study window (home),19:00,22:00
+P08,12,2026-09-18,sleep,Sleep,00:00,06:00
+P08,12,2026-09-18,routine,Morning routine,06:00,07:30
+P08,12,2026-09-18,bus,Bus to office,07:30,08:20
+P08,12,2026-09-18,office,Office (incl. lunch),08:30,17:00
+P08,12,2026-09-18,bus,Bus home,17:10,18:00
+P08,12,2026-09-18,routine,Dinner,18:15,18:50
+P08,12,2026-09-18,sleep,Sleep,22:45,24:00
+P08,12,2026-09-18,study_window,Study window (home),19:00,20:00
+P08,13,2026-09-19,sleep,Sleep,00:00,06:30
+P08,13,2026-09-19,routine,Morning routine,06:30,07:40
+P08,13,2026-09-19,bus,Bus to campus,07:40,08:20
+P08,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P08,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P08,13,2026-09-19,routine,Lunch,12:45,13:45
+P08,13,2026-09-19,campus,Module C lab,13:45,15:45
+P08,13,2026-09-19,bus,Bus home,16:00,16:30
+P08,13,2026-09-19,routine,Dinner,19:00,19:30
+P08,13,2026-09-19,study_window,Study window (home),16:30,18:30
+P08,14,2026-09-20,sleep,Sleep,00:00,06:30
+P08,14,2026-09-20,routine,Morning routine,06:30,07:40
+P08,14,2026-09-20,bus,Bus to campus,07:40,08:20
+P08,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P08,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P08,14,2026-09-20,bus,Bus home,12:25,13:00
+P08,14,2026-09-20,routine,Dinner,19:00,19:30
+P08,14,2026-09-20,study_window,Study window (home),13:30,17:00
+P08,15,2026-09-21,sleep,Sleep,00:00,06:00
+P08,15,2026-09-21,routine,Morning routine,06:00,07:30
+P08,15,2026-09-21,bus,Bus to office,07:30,08:20
+P08,15,2026-09-21,office,Office (incl. lunch),08:30,17:00
+P08,15,2026-09-21,bus,Bus home,17:10,18:00
+P08,15,2026-09-21,routine,Dinner,18:15,18:50
+P08,15,2026-09-21,sleep,Sleep,22:45,24:00
+P08,15,2026-09-21,study_window,Study window (bus),17:15,17:55
+P08,15,2026-09-21,study_window,Study window (home),19:00,22:00
+P08,16,2026-09-22,sleep,Sleep,00:00,06:00
+P08,16,2026-09-22,routine,Morning routine,06:00,07:30
+P08,16,2026-09-22,bus,Bus to office,07:30,08:20
+P08,16,2026-09-22,office,Office (incl. lunch),08:30,17:00
+P08,16,2026-09-22,bus,Bus home,17:10,18:00
+P08,16,2026-09-22,routine,Dinner,18:15,18:50
+P08,16,2026-09-22,sleep,Sleep,22:45,24:00
+P08,16,2026-09-22,study_window,Study window (bus),17:15,17:55
+P08,16,2026-09-22,study_window,Study window (home),19:00,22:00
+P08,17,2026-09-23,sleep,Sleep,00:00,06:00
+P08,17,2026-09-23,routine,Morning routine,06:00,07:30
+P08,17,2026-09-23,bus,Bus to office,07:30,08:20
+P08,17,2026-09-23,office,Office (incl. lunch),08:30,17:00
+P08,17,2026-09-23,bus,Bus home,17:10,18:00
+P08,17,2026-09-23,routine,Dinner,18:15,18:50
+P08,17,2026-09-23,sleep,Sleep,22:45,24:00
+P08,17,2026-09-23,study_window,Study window (bus),17:15,17:55
+P08,17,2026-09-23,study_window,Study window (home),19:00,22:00
+P08,18,2026-09-24,sleep,Sleep,00:00,06:00
+P08,18,2026-09-24,routine,Morning routine,06:00,07:30
+P08,18,2026-09-24,bus,Bus to office,07:30,08:20
+P08,18,2026-09-24,office,Office (incl. lunch),08:30,17:00
+P08,18,2026-09-24,bus,Bus home,17:10,18:00
+P08,18,2026-09-24,routine,Dinner,18:15,18:50
+P08,18,2026-09-24,sleep,Sleep,22:45,24:00
+P08,18,2026-09-24,study_window,Study window (bus),17:15,17:55
+P08,18,2026-09-24,study_window,Study window (home),19:00,22:00
+P08,19,2026-09-25,sleep,Sleep,00:00,06:00
+P08,19,2026-09-25,routine,Morning routine,06:00,07:30
+P08,19,2026-09-25,bus,Bus to office,07:30,08:20
+P08,19,2026-09-25,office,Office (incl. lunch),08:30,17:00
+P08,19,2026-09-25,bus,Bus home,17:10,18:00
+P08,19,2026-09-25,routine,Dinner,18:15,18:50
+P08,19,2026-09-25,sleep,Sleep,22:45,24:00
+P08,19,2026-09-25,study_window,Study window (home),19:00,20:00
+P08,20,2026-09-26,sleep,Sleep,00:00,06:30
+P08,20,2026-09-26,routine,Morning routine,06:30,07:40
+P08,20,2026-09-26,bus,Bus to campus,07:40,08:20
+P08,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P08,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P08,20,2026-09-26,routine,Lunch,12:45,13:45
+P08,20,2026-09-26,campus,Module C lab,13:45,15:45
+P08,20,2026-09-26,bus,Bus home,16:00,16:30
+P08,20,2026-09-26,routine,Dinner,19:00,19:30
+P08,20,2026-09-26,study_window,Study window (home),16:30,18:30
+P08,21,2026-09-27,sleep,Sleep,00:00,06:30
+P08,21,2026-09-27,routine,Morning routine,06:30,07:40
+P08,21,2026-09-27,bus,Bus to campus,07:40,08:20
+P08,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P08,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P08,21,2026-09-27,bus,Bus home,12:25,13:00
+P08,21,2026-09-27,routine,Dinner,19:00,19:30
+P08,21,2026-09-27,study_window,Study window (home),13:30,17:00
+P08,22,2026-09-28,sleep,Sleep,00:00,06:00
+P08,22,2026-09-28,routine,Morning routine,06:00,07:30
+P08,22,2026-09-28,bus,Bus to office,07:30,08:20
+P08,22,2026-09-28,office,Office (incl. lunch),08:30,17:00
+P08,22,2026-09-28,bus,Bus home,17:10,18:00
+P08,22,2026-09-28,routine,Dinner,18:15,18:50
+P08,22,2026-09-28,sleep,Sleep,22:45,24:00
+P08,22,2026-09-28,study_window,Study window (bus),17:15,17:55
+P08,22,2026-09-28,study_window,Study window (home),19:00,22:00
+P08,23,2026-09-29,sleep,Sleep,00:00,06:00
+P08,23,2026-09-29,routine,Morning routine,06:00,07:30
+P08,23,2026-09-29,bus,Bus to office,07:30,08:20
+P08,23,2026-09-29,office,Office (incl. lunch),08:30,17:00
+P08,23,2026-09-29,bus,Bus home,17:10,18:00
+P08,23,2026-09-29,routine,Dinner,18:15,18:50
+P08,23,2026-09-29,sleep,Sleep,22:45,24:00
+P08,23,2026-09-29,study_window,Study window (bus),17:15,17:55
+P08,23,2026-09-29,study_window,Study window (home),19:00,22:00
+P08,24,2026-09-30,sleep,Sleep,00:00,06:00
+P08,24,2026-09-30,routine,Morning routine,06:00,07:30
+P08,24,2026-09-30,bus,Bus to office,07:30,08:20
+P08,24,2026-09-30,office,Office (incl. lunch),08:30,17:00
+P08,24,2026-09-30,bus,Bus home,17:10,18:00
+P08,24,2026-09-30,routine,Dinner,18:15,18:50
+P08,24,2026-09-30,sleep,Sleep,22:45,24:00
+P08,24,2026-09-30,study_window,Study window (bus),17:15,17:55
+P08,24,2026-09-30,study_window,Study window (home),19:00,22:00
+P08,25,2026-10-01,sleep,Sleep,00:00,06:00
+P08,25,2026-10-01,routine,Morning routine,06:00,07:30
+P08,25,2026-10-01,bus,Bus to office,07:30,08:20
+P08,25,2026-10-01,office,Office (incl. lunch),08:30,17:00
+P08,25,2026-10-01,bus,Bus home,17:10,18:00
+P08,25,2026-10-01,routine,Dinner,18:15,18:50
+P08,25,2026-10-01,sleep,Sleep,22:45,24:00
+P08,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:00,20:45
+P08,25,2026-10-01,study_window,Study window (bus),17:15,17:55
+P08,25,2026-10-01,study_window,Study window (home),19:00,22:00
+P08,26,2026-10-02,sleep,Sleep,00:00,06:00
+P08,26,2026-10-02,routine,Morning routine,06:00,07:30
+P08,26,2026-10-02,bus,Bus to office,07:30,08:20
+P08,26,2026-10-02,office,Office (incl. lunch),08:30,17:00
+P08,26,2026-10-02,bus,Bus home,17:10,18:00
+P08,26,2026-10-02,routine,Dinner,18:15,18:50
+P08,26,2026-10-02,sleep,Sleep,22:45,24:00
+P08,26,2026-10-02,study_window,Study window (home),19:00,20:00
+P08,27,2026-10-03,sleep,Sleep,00:00,06:30
+P08,27,2026-10-03,routine,Morning routine,06:30,07:40
+P08,27,2026-10-03,bus,Bus to campus,07:40,08:20
+P08,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P08,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P08,27,2026-10-03,routine,Lunch,12:45,13:45
+P08,27,2026-10-03,campus,Module C lab,13:45,15:45
+P08,27,2026-10-03,bus,Bus home,16:00,16:30
+P08,27,2026-10-03,routine,Dinner,19:00,19:30
+P08,27,2026-10-03,study_window,Study window (home),16:30,18:30
+P08,28,2026-10-04,sleep,Sleep,00:00,06:30
+P08,28,2026-10-04,routine,Morning routine,06:30,07:40
+P08,28,2026-10-04,bus,Bus to campus,07:40,08:20
+P08,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P08,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P08,28,2026-10-04,bus,Bus home,12:25,13:00
+P08,28,2026-10-04,routine,Dinner,19:00,19:30
+P08,28,2026-10-04,study_window,Study window (home),13:30,17:00
+P08,29,2026-10-05,sleep,Sleep,00:00,06:00
+P08,29,2026-10-05,routine,Morning routine,06:00,07:30
+P08,29,2026-10-05,bus,Bus to office,07:30,08:20
+P08,29,2026-10-05,office,Office (incl. lunch),08:30,17:00
+P08,29,2026-10-05,bus,Bus home,17:10,18:00
+P08,29,2026-10-05,routine,Dinner,18:15,18:50
+P08,29,2026-10-05,sleep,Sleep,22:45,24:00
+P08,29,2026-10-05,study_window,Study window (bus),17:15,17:55
+P08,29,2026-10-05,study_window,Study window (home),19:00,22:00
+P08,30,2026-10-06,sleep,Sleep,00:00,06:00
+P08,30,2026-10-06,routine,Morning routine,06:00,07:30
+P08,30,2026-10-06,bus,Bus to office,07:30,08:20
+P08,30,2026-10-06,office,Office (incl. lunch),08:30,17:00
+P08,30,2026-10-06,bus,Bus home,17:10,18:00
+P08,30,2026-10-06,routine,Dinner,18:15,18:50
+P08,30,2026-10-06,sleep,Sleep,22:45,24:00
+P08,30,2026-10-06,study_window,Study window (bus),17:15,17:55
+P08,30,2026-10-06,study_window,Study window (home),19:00,22:00
+P09,1,2026-09-07,sleep,Sleep,00:00,06:15
+P09,1,2026-09-07,routine,Morning routine,06:15,07:40
+P09,1,2026-09-07,bus,Bus to office,07:40,08:20
+P09,1,2026-09-07,office,Office (incl. lunch),08:30,17:30
+P09,1,2026-09-07,bus,Bus home,17:40,18:20
+P09,1,2026-09-07,routine,Dinner,18:30,19:00
+P09,1,2026-09-07,sleep,Sleep,23:00,24:00
+P09,1,2026-09-07,study_window,Study window (home),19:00,22:30
+P09,2,2026-09-08,sleep,Sleep,00:00,06:15
+P09,2,2026-09-08,routine,Morning routine,06:15,07:40
+P09,2,2026-09-08,bus,Bus to office,07:40,08:20
+P09,2,2026-09-08,office,Office (incl. lunch),08:30,17:30
+P09,2,2026-09-08,bus,Bus home,17:40,18:20
+P09,2,2026-09-08,tutor,Tutoring (paid),18:30,20:30
+P09,2,2026-09-08,routine,Dinner,20:30,21:00
+P09,2,2026-09-08,sleep,Sleep,23:00,24:00
+P09,2,2026-09-08,study_window,Study window (home),21:00,22:30
+P09,3,2026-09-09,sleep,Sleep,00:00,06:15
+P09,3,2026-09-09,routine,Morning routine,06:15,07:40
+P09,3,2026-09-09,bus,Bus to office,07:40,08:20
+P09,3,2026-09-09,office,Office (incl. lunch),08:30,17:30
+P09,3,2026-09-09,bus,Bus home,17:40,18:20
+P09,3,2026-09-09,routine,Dinner,18:30,19:00
+P09,3,2026-09-09,sleep,Sleep,23:00,24:00
+P09,3,2026-09-09,study_window,Study window (home),19:00,22:30
+P09,4,2026-09-10,sleep,Sleep,00:00,06:15
+P09,4,2026-09-10,routine,Morning routine,06:15,07:40
+P09,4,2026-09-10,bus,Bus to office,07:40,08:20
+P09,4,2026-09-10,office,Office (incl. lunch),08:30,17:30
+P09,4,2026-09-10,bus,Bus home,17:40,18:20
+P09,4,2026-09-10,tutor,Tutoring (paid),18:30,20:30
+P09,4,2026-09-10,routine,Dinner,20:30,21:00
+P09,4,2026-09-10,sleep,Sleep,23:00,24:00
+P09,4,2026-09-10,study_window,Study window (home),21:00,22:30
+P09,5,2026-09-11,sleep,Sleep,00:00,06:15
+P09,5,2026-09-11,routine,Morning routine,06:15,07:40
+P09,5,2026-09-11,bus,Bus to office,07:40,08:20
+P09,5,2026-09-11,office,Office (incl. lunch),08:30,17:30
+P09,5,2026-09-11,bus,Bus home,17:40,18:20
+P09,5,2026-09-11,routine,Dinner,18:30,19:00
+P09,5,2026-09-11,sleep,Sleep,23:00,24:00
+P09,6,2026-09-12,sleep,Sleep,00:00,06:30
+P09,6,2026-09-12,routine,Morning routine,06:30,07:40
+P09,6,2026-09-12,bus,Bus to campus,07:40,08:20
+P09,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P09,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P09,6,2026-09-12,routine,Lunch,12:45,13:45
+P09,6,2026-09-12,campus,Module C lab,13:45,15:45
+P09,6,2026-09-12,bus,Bus home,16:00,16:40
+P09,6,2026-09-12,routine,Dinner,19:00,19:30
+P09,6,2026-09-12,study_window,Study window (home),16:45,18:30
+P09,7,2026-09-13,sleep,Sleep,00:00,06:30
+P09,7,2026-09-13,routine,Morning routine,06:30,07:40
+P09,7,2026-09-13,bus,Bus to campus,07:40,08:20
+P09,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P09,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P09,7,2026-09-13,bus,Bus home,12:25,13:05
+P09,7,2026-09-13,routine,Dinner,19:00,19:30
+P09,7,2026-09-13,study_window,Study window (home),13:30,18:00
+P09,8,2026-09-14,sleep,Sleep,00:00,06:15
+P09,8,2026-09-14,routine,Morning routine,06:15,07:40
+P09,8,2026-09-14,bus,Bus to office,07:40,08:20
+P09,8,2026-09-14,office,Office (incl. lunch),08:30,17:30
+P09,8,2026-09-14,bus,Bus home,17:40,18:20
+P09,8,2026-09-14,routine,Dinner,18:30,19:00
+P09,8,2026-09-14,sleep,Sleep,23:00,24:00
+P09,8,2026-09-14,study_window,Study window (home),19:00,22:30
+P09,9,2026-09-15,sleep,Sleep,00:00,06:15
+P09,9,2026-09-15,routine,Morning routine,06:15,07:40
+P09,9,2026-09-15,bus,Bus to office,07:40,08:20
+P09,9,2026-09-15,office,Office (incl. lunch),08:30,17:30
+P09,9,2026-09-15,bus,Bus home,17:40,18:20
+P09,9,2026-09-15,tutor,Tutoring (paid),18:30,20:30
+P09,9,2026-09-15,routine,Dinner,20:30,21:00
+P09,9,2026-09-15,sleep,Sleep,23:00,24:00
+P09,9,2026-09-15,study_window,Study window (home),21:00,22:30
+P09,10,2026-09-16,sleep,Sleep,00:00,06:15
+P09,10,2026-09-16,routine,Morning routine,06:15,07:40
+P09,10,2026-09-16,bus,Bus to office,07:40,08:20
+P09,10,2026-09-16,office,Office (incl. lunch),08:30,17:30
+P09,10,2026-09-16,bus,Bus home,17:40,18:20
+P09,10,2026-09-16,routine,Dinner,18:30,19:00
+P09,10,2026-09-16,sleep,Sleep,23:00,24:00
+P09,10,2026-09-16,study_window,Study window (home),19:00,22:30
+P09,11,2026-09-17,sleep,Sleep,00:00,06:15
+P09,11,2026-09-17,routine,Morning routine,06:15,07:40
+P09,11,2026-09-17,bus,Bus to office,07:40,08:20
+P09,11,2026-09-17,office,Office (incl. lunch),08:30,17:30
+P09,11,2026-09-17,bus,Bus home,17:40,18:20
+P09,11,2026-09-17,tutor,Tutoring (paid),18:30,20:30
+P09,11,2026-09-17,routine,Dinner,20:30,21:00
+P09,11,2026-09-17,sleep,Sleep,23:00,24:00
+P09,11,2026-09-17,study_window,Study window (home),21:00,22:30
+P09,12,2026-09-18,sleep,Sleep,00:00,06:15
+P09,12,2026-09-18,routine,Morning routine,06:15,07:40
+P09,12,2026-09-18,bus,Bus to office,07:40,08:20
+P09,12,2026-09-18,office,Office (incl. lunch),08:30,17:30
+P09,12,2026-09-18,bus,Bus home,17:40,18:20
+P09,12,2026-09-18,routine,Dinner,18:30,19:00
+P09,12,2026-09-18,sleep,Sleep,23:00,24:00
+P09,13,2026-09-19,sleep,Sleep,00:00,06:30
+P09,13,2026-09-19,routine,Morning routine,06:30,07:40
+P09,13,2026-09-19,bus,Bus to campus,07:40,08:20
+P09,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P09,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P09,13,2026-09-19,routine,Lunch,12:45,13:45
+P09,13,2026-09-19,campus,Module C lab,13:45,15:45
+P09,13,2026-09-19,bus,Bus home,16:00,16:40
+P09,13,2026-09-19,routine,Dinner,19:00,19:30
+P09,13,2026-09-19,study_window,Study window (home),16:45,18:30
+P09,14,2026-09-20,sleep,Sleep,00:00,06:30
+P09,14,2026-09-20,routine,Morning routine,06:30,07:40
+P09,14,2026-09-20,bus,Bus to campus,07:40,08:20
+P09,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P09,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P09,14,2026-09-20,bus,Bus home,12:25,13:05
+P09,14,2026-09-20,routine,Dinner,19:00,19:30
+P09,14,2026-09-20,study_window,Study window (home),13:30,18:00
+P09,15,2026-09-21,sleep,Sleep,00:00,06:15
+P09,15,2026-09-21,routine,Morning routine,06:15,07:40
+P09,15,2026-09-21,bus,Bus to office,07:40,08:20
+P09,15,2026-09-21,office,Office (incl. lunch),08:30,17:30
+P09,15,2026-09-21,bus,Bus home,17:40,18:20
+P09,15,2026-09-21,routine,Dinner,18:30,19:00
+P09,15,2026-09-21,sleep,Sleep,23:00,24:00
+P09,15,2026-09-21,study_window,Study window (home),19:00,22:30
+P09,16,2026-09-22,sleep,Sleep,00:00,06:15
+P09,16,2026-09-22,routine,Morning routine,06:15,07:40
+P09,16,2026-09-22,bus,Bus to office,07:40,08:20
+P09,16,2026-09-22,office,Office (incl. lunch),08:30,17:30
+P09,16,2026-09-22,bus,Bus home,17:40,18:20
+P09,16,2026-09-22,tutor,Tutoring (paid),18:30,20:30
+P09,16,2026-09-22,routine,Dinner,20:30,21:00
+P09,16,2026-09-22,sleep,Sleep,23:00,24:00
+P09,16,2026-09-22,study_window,Study window (home),21:00,22:30
+P09,17,2026-09-23,sleep,Sleep,00:00,06:15
+P09,17,2026-09-23,routine,Morning routine,06:15,07:40
+P09,17,2026-09-23,bus,Bus to office,07:40,08:20
+P09,17,2026-09-23,office,Office (incl. lunch),08:30,17:30
+P09,17,2026-09-23,bus,Bus home,17:40,18:20
+P09,17,2026-09-23,routine,Dinner,18:30,19:00
+P09,17,2026-09-23,sleep,Sleep,23:00,24:00
+P09,17,2026-09-23,study_window,Study window (home),19:00,22:30
+P09,18,2026-09-24,sleep,Sleep,00:00,06:15
+P09,18,2026-09-24,routine,Morning routine,06:15,07:40
+P09,18,2026-09-24,bus,Bus to office,07:40,08:20
+P09,18,2026-09-24,office,Office (incl. lunch),08:30,17:30
+P09,18,2026-09-24,bus,Bus home,17:40,18:20
+P09,18,2026-09-24,tutor,Tutoring (paid),18:30,20:30
+P09,18,2026-09-24,routine,Dinner,20:30,21:00
+P09,18,2026-09-24,sleep,Sleep,23:00,24:00
+P09,18,2026-09-24,study_window,Study window (home),21:00,22:30
+P09,19,2026-09-25,sleep,Sleep,00:00,06:15
+P09,19,2026-09-25,routine,Morning routine,06:15,07:40
+P09,19,2026-09-25,bus,Bus to office,07:40,08:20
+P09,19,2026-09-25,office,Office (incl. lunch),08:30,17:30
+P09,19,2026-09-25,bus,Bus home,17:40,18:20
+P09,19,2026-09-25,routine,Dinner,18:30,19:00
+P09,19,2026-09-25,sleep,Sleep,23:00,24:00
+P09,20,2026-09-26,sleep,Sleep,00:00,06:30
+P09,20,2026-09-26,routine,Morning routine,06:30,07:40
+P09,20,2026-09-26,bus,Bus to campus,07:40,08:20
+P09,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P09,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P09,20,2026-09-26,routine,Lunch,12:45,13:45
+P09,20,2026-09-26,campus,Module C lab,13:45,15:45
+P09,20,2026-09-26,bus,Bus home,16:00,16:40
+P09,20,2026-09-26,routine,Dinner,19:00,19:30
+P09,20,2026-09-26,study_window,Study window (home),16:45,18:30
+P09,21,2026-09-27,sleep,Sleep,00:00,06:30
+P09,21,2026-09-27,routine,Morning routine,06:30,07:40
+P09,21,2026-09-27,bus,Bus to campus,07:40,08:20
+P09,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P09,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P09,21,2026-09-27,bus,Bus home,12:25,13:05
+P09,21,2026-09-27,routine,Dinner,19:00,19:30
+P09,21,2026-09-27,study_window,Study window (home),13:30,18:00
+P09,22,2026-09-28,sleep,Sleep,00:00,06:15
+P09,22,2026-09-28,routine,Morning routine,06:15,07:40
+P09,22,2026-09-28,bus,Bus to office,07:40,08:20
+P09,22,2026-09-28,office,Office (incl. lunch),08:30,17:30
+P09,22,2026-09-28,bus,Bus home,17:40,18:20
+P09,22,2026-09-28,routine,Dinner,18:30,19:00
+P09,22,2026-09-28,sleep,Sleep,23:00,24:00
+P09,22,2026-09-28,study_window,Study window (home),19:00,22:30
+P09,23,2026-09-29,sleep,Sleep,00:00,06:15
+P09,23,2026-09-29,routine,Morning routine,06:15,07:40
+P09,23,2026-09-29,bus,Bus to office,07:40,08:20
+P09,23,2026-09-29,office,Office (incl. lunch),08:30,17:30
+P09,23,2026-09-29,bus,Bus home,17:40,18:20
+P09,23,2026-09-29,tutor,Tutoring (paid),18:30,20:30
+P09,23,2026-09-29,routine,Dinner,20:30,21:00
+P09,23,2026-09-29,sleep,Sleep,23:00,24:00
+P09,23,2026-09-29,study_window,Study window (home),21:00,22:30
+P09,24,2026-09-30,sleep,Sleep,00:00,06:15
+P09,24,2026-09-30,routine,Morning routine,06:15,07:40
+P09,24,2026-09-30,bus,Bus to office,07:40,08:20
+P09,24,2026-09-30,office,Office (incl. lunch),08:30,17:30
+P09,24,2026-09-30,bus,Bus home,17:40,18:20
+P09,24,2026-09-30,routine,Dinner,18:30,19:00
+P09,24,2026-09-30,sleep,Sleep,23:00,24:00
+P09,24,2026-09-30,study_window,Study window (home),19:00,22:30
+P09,25,2026-10-01,sleep,Sleep,00:00,06:15
+P09,25,2026-10-01,routine,Morning routine,06:15,07:40
+P09,25,2026-10-01,bus,Bus to office,07:40,08:20
+P09,25,2026-10-01,office,Office (incl. lunch),08:30,17:30
+P09,25,2026-10-01,bus,Bus home,17:40,18:20
+P09,25,2026-10-01,tutor,Tutoring (paid),18:30,20:30
+P09,25,2026-10-01,routine,Dinner,21:20,21:50
+P09,25,2026-10-01,sleep,Sleep,23:00,24:00
+P09,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:35,21:20
+P09,25,2026-10-01,study_window,Study window (home),21:00,22:30
+P09,26,2026-10-02,sleep,Sleep,00:00,06:15
+P09,26,2026-10-02,routine,Morning routine,06:15,07:40
+P09,26,2026-10-02,bus,Bus to office,07:40,08:20
+P09,26,2026-10-02,office,Office (incl. lunch),08:30,17:30
+P09,26,2026-10-02,bus,Bus home,17:40,18:20
+P09,26,2026-10-02,routine,Dinner,18:30,19:00
+P09,26,2026-10-02,sleep,Sleep,23:00,24:00
+P09,27,2026-10-03,sleep,Sleep,00:00,06:30
+P09,27,2026-10-03,routine,Morning routine,06:30,07:40
+P09,27,2026-10-03,bus,Bus to campus,07:40,08:20
+P09,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P09,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P09,27,2026-10-03,routine,Lunch,12:45,13:45
+P09,27,2026-10-03,campus,Module C lab,13:45,15:45
+P09,27,2026-10-03,bus,Bus home,16:00,16:40
+P09,27,2026-10-03,routine,Dinner,19:00,19:30
+P09,27,2026-10-03,study_window,Study window (home),16:45,18:30
+P09,28,2026-10-04,sleep,Sleep,00:00,06:30
+P09,28,2026-10-04,routine,Morning routine,06:30,07:40
+P09,28,2026-10-04,bus,Bus to campus,07:40,08:20
+P09,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P09,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P09,28,2026-10-04,bus,Bus home,12:25,13:05
+P09,28,2026-10-04,routine,Dinner,19:00,19:30
+P09,28,2026-10-04,study_window,Study window (home),13:30,18:00
+P09,29,2026-10-05,sleep,Sleep,00:00,06:15
+P09,29,2026-10-05,routine,Morning routine,06:15,07:40
+P09,29,2026-10-05,bus,Bus to office,07:40,08:20
+P09,29,2026-10-05,office,Office (incl. lunch),08:30,17:30
+P09,29,2026-10-05,bus,Bus home,17:40,18:20
+P09,29,2026-10-05,routine,Dinner,18:30,19:00
+P09,29,2026-10-05,sleep,Sleep,23:00,24:00
+P09,29,2026-10-05,study_window,Study window (home),19:00,22:30
+P09,30,2026-10-06,sleep,Sleep,00:00,06:15
+P09,30,2026-10-06,routine,Morning routine,06:15,07:40
+P09,30,2026-10-06,bus,Bus to office,07:40,08:20
+P09,30,2026-10-06,office,Office (incl. lunch),08:30,17:30
+P09,30,2026-10-06,bus,Bus home,17:40,18:20
+P09,30,2026-10-06,tutor,Tutoring (paid),18:30,20:30
+P09,30,2026-10-06,routine,Dinner,20:30,21:00
+P09,30,2026-10-06,sleep,Sleep,23:00,24:00
+P09,30,2026-10-06,study_window,Study window (home),21:00,22:30
+P10,1,2026-09-07,sleep,Sleep,00:00,06:30
+P10,1,2026-09-07,routine,Morning routine,06:30,08:00
+P10,1,2026-09-07,office,Remote work (home),09:00,13:00
+P10,1,2026-09-07,routine,Lunch,13:00,13:20
+P10,1,2026-09-07,office,Remote work (home),14:00,18:00
+P10,1,2026-09-07,routine,Dinner,18:30,19:00
+P10,1,2026-09-07,sleep,Sleep,23:30,24:00
+P10,1,2026-09-07,study_window,Study window (home),13:20,14:00
+P10,1,2026-09-07,study_window,Study window (home),19:00,23:00
+P10,2,2026-09-08,sleep,Sleep,00:00,06:30
+P10,2,2026-09-08,routine,Morning routine,06:30,08:00
+P10,2,2026-09-08,office,Remote work (home),09:00,13:00
+P10,2,2026-09-08,routine,Lunch,13:00,13:20
+P10,2,2026-09-08,office,Remote work (home),14:00,18:00
+P10,2,2026-09-08,routine,Dinner,18:30,19:00
+P10,2,2026-09-08,sleep,Sleep,23:30,24:00
+P10,2,2026-09-08,study_window,Study window (home),13:20,14:00
+P10,2,2026-09-08,study_window,Study window (home),19:00,23:00
+P10,3,2026-09-09,sleep,Sleep,00:00,06:30
+P10,3,2026-09-09,routine,Morning routine,06:30,08:00
+P10,3,2026-09-09,office,Remote work (home),09:00,13:00
+P10,3,2026-09-09,routine,Lunch,13:00,13:20
+P10,3,2026-09-09,office,Remote work (home),14:00,18:00
+P10,3,2026-09-09,routine,Dinner,18:30,19:00
+P10,3,2026-09-09,sleep,Sleep,23:30,24:00
+P10,3,2026-09-09,study_window,Study window (home),13:20,14:00
+P10,3,2026-09-09,study_window,Study window (home),19:00,23:00
+P10,4,2026-09-10,sleep,Sleep,00:00,06:30
+P10,4,2026-09-10,routine,Morning routine,06:30,08:00
+P10,4,2026-09-10,office,Remote work (home),09:00,13:00
+P10,4,2026-09-10,routine,Lunch,13:00,13:20
+P10,4,2026-09-10,office,Remote work (home),14:00,18:00
+P10,4,2026-09-10,routine,Dinner,18:30,19:00
+P10,4,2026-09-10,sleep,Sleep,23:30,24:00
+P10,4,2026-09-10,study_window,Study window (home),13:20,14:00
+P10,4,2026-09-10,study_window,Study window (home),19:00,23:00
+P10,5,2026-09-11,sleep,Sleep,00:00,06:30
+P10,5,2026-09-11,routine,Morning routine,06:30,08:00
+P10,5,2026-09-11,office,Remote work (home),09:00,13:00
+P10,5,2026-09-11,routine,Lunch,13:00,13:20
+P10,5,2026-09-11,office,Remote work (home),14:00,18:00
+P10,5,2026-09-11,routine,Dinner,18:30,19:00
+P10,5,2026-09-11,sleep,Sleep,23:30,24:00
+P10,5,2026-09-11,study_window,Study window (home),19:00,21:00
+P10,6,2026-09-12,sleep,Sleep,00:00,06:30
+P10,6,2026-09-12,routine,Morning routine,06:30,07:30
+P10,6,2026-09-12,bus,Bus to campus,07:30,08:20
+P10,6,2026-09-12,campus,Module B lecture,08:30,10:30
+P10,6,2026-09-12,campus,Module C lecture,10:45,12:45
+P10,6,2026-09-12,routine,Lunch,12:45,13:45
+P10,6,2026-09-12,campus,Module C lab,13:45,15:45
+P10,6,2026-09-12,bus,Bus home,16:00,16:50
+P10,6,2026-09-12,routine,Dinner,19:30,20:00
+P10,6,2026-09-12,study_window,Study window (home),16:50,19:00
+P10,7,2026-09-13,sleep,Sleep,00:00,06:30
+P10,7,2026-09-13,routine,Morning routine,06:30,07:30
+P10,7,2026-09-13,bus,Bus to campus,07:30,08:20
+P10,7,2026-09-13,campus,Module D lecture,08:30,10:30
+P10,7,2026-09-13,campus,Research meeting (IT4010),10:45,12:15
+P10,7,2026-09-13,bus,Bus home,12:25,13:15
+P10,7,2026-09-13,routine,Dinner,19:30,20:00
+P10,7,2026-09-13,study_window,Study window (home),13:30,17:00
+P10,8,2026-09-14,sleep,Sleep,00:00,06:30
+P10,8,2026-09-14,routine,Morning routine,06:30,08:00
+P10,8,2026-09-14,office,Remote work (home),09:00,13:00
+P10,8,2026-09-14,routine,Lunch,13:00,13:20
+P10,8,2026-09-14,office,Remote work (home),14:00,18:00
+P10,8,2026-09-14,routine,Dinner,18:30,19:00
+P10,8,2026-09-14,sleep,Sleep,23:30,24:00
+P10,8,2026-09-14,study_window,Study window (home),13:20,14:00
+P10,8,2026-09-14,study_window,Study window (home),19:00,23:00
+P10,9,2026-09-15,sleep,Sleep,00:00,06:30
+P10,9,2026-09-15,routine,Morning routine,06:30,08:00
+P10,9,2026-09-15,office,Remote work (home),09:00,13:00
+P10,9,2026-09-15,routine,Lunch,13:00,13:20
+P10,9,2026-09-15,office,Remote work (home),14:00,18:00
+P10,9,2026-09-15,routine,Dinner,18:30,19:00
+P10,9,2026-09-15,sleep,Sleep,23:30,24:00
+P10,9,2026-09-15,study_window,Study window (home),13:20,14:00
+P10,9,2026-09-15,study_window,Study window (home),19:00,23:00
+P10,10,2026-09-16,sleep,Sleep,00:00,06:30
+P10,10,2026-09-16,routine,Morning routine,06:30,08:00
+P10,10,2026-09-16,office,Remote work (home),09:00,13:00
+P10,10,2026-09-16,routine,Lunch,13:00,13:20
+P10,10,2026-09-16,office,Remote work (home),14:00,18:00
+P10,10,2026-09-16,routine,Dinner,18:30,19:00
+P10,10,2026-09-16,sleep,Sleep,23:30,24:00
+P10,10,2026-09-16,study_window,Study window (home),13:20,14:00
+P10,10,2026-09-16,study_window,Study window (home),19:00,23:00
+P10,11,2026-09-17,sleep,Sleep,00:00,06:30
+P10,11,2026-09-17,routine,Morning routine,06:30,08:00
+P10,11,2026-09-17,office,Remote work (home),09:00,13:00
+P10,11,2026-09-17,routine,Lunch,13:00,13:20
+P10,11,2026-09-17,office,Remote work (home),14:00,18:00
+P10,11,2026-09-17,routine,Dinner,18:30,19:00
+P10,11,2026-09-17,sleep,Sleep,23:30,24:00
+P10,11,2026-09-17,study_window,Study window (home),13:20,14:00
+P10,11,2026-09-17,study_window,Study window (home),19:00,23:00
+P10,12,2026-09-18,sleep,Sleep,00:00,06:30
+P10,12,2026-09-18,routine,Morning routine,06:30,08:00
+P10,12,2026-09-18,office,Remote work (home),09:00,13:00
+P10,12,2026-09-18,routine,Lunch,13:00,13:20
+P10,12,2026-09-18,office,Remote work (home),14:00,18:00
+P10,12,2026-09-18,routine,Dinner,18:30,19:00
+P10,12,2026-09-18,sleep,Sleep,23:30,24:00
+P10,12,2026-09-18,study_window,Study window (home),19:00,21:00
+P10,13,2026-09-19,sleep,Sleep,00:00,06:30
+P10,13,2026-09-19,routine,Morning routine,06:30,07:30
+P10,13,2026-09-19,bus,Bus to campus,07:30,08:20
+P10,13,2026-09-19,campus,Module B lecture,08:30,10:30
+P10,13,2026-09-19,campus,Module C lecture,10:45,12:45
+P10,13,2026-09-19,routine,Lunch,12:45,13:45
+P10,13,2026-09-19,campus,Module C lab,13:45,15:45
+P10,13,2026-09-19,bus,Bus home,16:00,16:50
+P10,13,2026-09-19,routine,Dinner,19:30,20:00
+P10,13,2026-09-19,study_window,Study window (home),16:50,19:00
+P10,14,2026-09-20,sleep,Sleep,00:00,06:30
+P10,14,2026-09-20,routine,Morning routine,06:30,07:30
+P10,14,2026-09-20,bus,Bus to campus,07:30,08:20
+P10,14,2026-09-20,campus,Module D lecture,08:30,10:30
+P10,14,2026-09-20,campus,Research meeting (IT4010),10:45,12:15
+P10,14,2026-09-20,bus,Bus home,12:25,13:15
+P10,14,2026-09-20,routine,Dinner,19:30,20:00
+P10,14,2026-09-20,study_window,Study window (home),13:30,17:00
+P10,15,2026-09-21,sleep,Sleep,00:00,06:30
+P10,15,2026-09-21,routine,Morning routine,06:30,08:00
+P10,15,2026-09-21,office,Remote work (home),09:00,13:00
+P10,15,2026-09-21,routine,Lunch,13:00,13:20
+P10,15,2026-09-21,office,Remote work (home),14:00,18:00
+P10,15,2026-09-21,routine,Dinner,18:30,19:00
+P10,15,2026-09-21,sleep,Sleep,23:30,24:00
+P10,15,2026-09-21,study_window,Study window (home),13:20,14:00
+P10,15,2026-09-21,study_window,Study window (home),19:00,23:00
+P10,16,2026-09-22,sleep,Sleep,00:00,06:30
+P10,16,2026-09-22,routine,Morning routine,06:30,08:00
+P10,16,2026-09-22,office,Remote work (home),09:00,13:00
+P10,16,2026-09-22,routine,Lunch,13:00,13:20
+P10,16,2026-09-22,office,Remote work (home),14:00,18:00
+P10,16,2026-09-22,routine,Dinner,18:30,19:00
+P10,16,2026-09-22,sleep,Sleep,23:30,24:00
+P10,16,2026-09-22,study_window,Study window (home),13:20,14:00
+P10,16,2026-09-22,study_window,Study window (home),19:00,23:00
+P10,17,2026-09-23,sleep,Sleep,00:00,06:30
+P10,17,2026-09-23,routine,Morning routine,06:30,08:00
+P10,17,2026-09-23,office,Remote work (home),09:00,13:00
+P10,17,2026-09-23,routine,Lunch,13:00,13:20
+P10,17,2026-09-23,office,Remote work (home),14:00,18:00
+P10,17,2026-09-23,routine,Dinner,18:30,19:00
+P10,17,2026-09-23,sleep,Sleep,23:30,24:00
+P10,17,2026-09-23,study_window,Study window (home),13:20,14:00
+P10,17,2026-09-23,study_window,Study window (home),19:00,23:00
+P10,18,2026-09-24,sleep,Sleep,00:00,06:30
+P10,18,2026-09-24,routine,Morning routine,06:30,08:00
+P10,18,2026-09-24,office,Remote work (home),09:00,13:00
+P10,18,2026-09-24,routine,Lunch,13:00,13:20
+P10,18,2026-09-24,office,Remote work (home),14:00,18:00
+P10,18,2026-09-24,routine,Dinner,18:30,19:00
+P10,18,2026-09-24,sleep,Sleep,23:30,24:00
+P10,18,2026-09-24,study_window,Study window (home),13:20,14:00
+P10,18,2026-09-24,study_window,Study window (home),19:00,23:00
+P10,19,2026-09-25,sleep,Sleep,00:00,06:30
+P10,19,2026-09-25,routine,Morning routine,06:30,08:00
+P10,19,2026-09-25,office,Remote work (home),09:00,13:00
+P10,19,2026-09-25,routine,Lunch,13:00,13:20
+P10,19,2026-09-25,office,Remote work (home),14:00,18:00
+P10,19,2026-09-25,routine,Dinner,18:30,19:00
+P10,19,2026-09-25,sleep,Sleep,23:30,24:00
+P10,19,2026-09-25,study_window,Study window (home),19:00,21:00
+P10,20,2026-09-26,sleep,Sleep,00:00,06:30
+P10,20,2026-09-26,routine,Morning routine,06:30,07:30
+P10,20,2026-09-26,bus,Bus to campus,07:30,08:20
+P10,20,2026-09-26,campus,Module B lecture,08:30,10:30
+P10,20,2026-09-26,campus,Module C lecture,10:45,12:45
+P10,20,2026-09-26,routine,Lunch,12:45,13:45
+P10,20,2026-09-26,campus,Module C lab,13:45,15:45
+P10,20,2026-09-26,bus,Bus home,16:00,16:50
+P10,20,2026-09-26,routine,Dinner,19:30,20:00
+P10,20,2026-09-26,study_window,Study window (home),16:50,19:00
+P10,21,2026-09-27,sleep,Sleep,00:00,06:30
+P10,21,2026-09-27,routine,Morning routine,06:30,07:30
+P10,21,2026-09-27,bus,Bus to campus,07:30,08:20
+P10,21,2026-09-27,campus,Module D lecture,08:30,10:30
+P10,21,2026-09-27,campus,Research meeting (IT4010),10:45,12:15
+P10,21,2026-09-27,bus,Bus home,12:25,13:15
+P10,21,2026-09-27,routine,Dinner,19:30,20:00
+P10,21,2026-09-27,study_window,Study window (home),13:30,17:00
+P10,22,2026-09-28,sleep,Sleep,00:00,06:30
+P10,22,2026-09-28,routine,Morning routine,06:30,08:00
+P10,22,2026-09-28,office,Remote work (home),09:00,13:00
+P10,22,2026-09-28,routine,Lunch,13:00,13:20
+P10,22,2026-09-28,office,Remote work (home),14:00,18:00
+P10,22,2026-09-28,routine,Dinner,18:30,19:00
+P10,22,2026-09-28,sleep,Sleep,23:30,24:00
+P10,22,2026-09-28,study_window,Study window (home),13:20,14:00
+P10,22,2026-09-28,study_window,Study window (home),19:00,23:00
+P10,23,2026-09-29,sleep,Sleep,00:00,06:30
+P10,23,2026-09-29,routine,Morning routine,06:30,08:00
+P10,23,2026-09-29,office,Remote work (home),09:00,13:00
+P10,23,2026-09-29,routine,Lunch,13:00,13:20
+P10,23,2026-09-29,office,Remote work (home),14:00,18:00
+P10,23,2026-09-29,routine,Dinner,18:30,19:00
+P10,23,2026-09-29,sleep,Sleep,23:30,24:00
+P10,23,2026-09-29,study_window,Study window (home),13:20,14:00
+P10,23,2026-09-29,study_window,Study window (home),19:00,23:00
+P10,24,2026-09-30,sleep,Sleep,00:00,06:30
+P10,24,2026-09-30,routine,Morning routine,06:30,08:00
+P10,24,2026-09-30,office,Remote work (home),09:00,13:00
+P10,24,2026-09-30,routine,Lunch,13:00,13:20
+P10,24,2026-09-30,office,Remote work (home),14:00,18:00
+P10,24,2026-09-30,routine,Dinner,18:30,19:00
+P10,24,2026-09-30,sleep,Sleep,23:30,24:00
+P10,24,2026-09-30,study_window,Study window (home),13:20,14:00
+P10,24,2026-09-30,study_window,Study window (home),19:00,23:00
+P10,25,2026-10-01,sleep,Sleep,00:00,06:30
+P10,25,2026-10-01,routine,Morning routine,06:30,08:00
+P10,25,2026-10-01,office,Remote work (home),09:00,13:00
+P10,25,2026-10-01,routine,Lunch,13:00,13:20
+P10,25,2026-10-01,office,Remote work (home),14:00,18:00
+P10,25,2026-10-01,routine,Dinner,18:30,19:00
+P10,25,2026-10-01,sleep,Sleep,23:30,24:00
+P10,25,2026-10-01,fixed,"Module D online quiz (opens 18:00, closes 21:30)",20:00,20:45
+P10,25,2026-10-01,study_window,Study window (home),13:20,14:00
+P10,25,2026-10-01,study_window,Study window (home),19:00,23:00
+P10,26,2026-10-02,sleep,Sleep,00:00,06:30
+P10,26,2026-10-02,routine,Morning routine,06:30,08:00
+P10,26,2026-10-02,office,Remote work (home),09:00,13:00
+P10,26,2026-10-02,routine,Lunch,13:00,13:20
+P10,26,2026-10-02,office,Remote work (home),14:00,18:00
+P10,26,2026-10-02,routine,Dinner,18:30,19:00
+P10,26,2026-10-02,sleep,Sleep,23:30,24:00
+P10,26,2026-10-02,study_window,Study window (home),19:00,21:00
+P10,27,2026-10-03,sleep,Sleep,00:00,06:30
+P10,27,2026-10-03,routine,Morning routine,06:30,07:30
+P10,27,2026-10-03,bus,Bus to campus,07:30,08:20
+P10,27,2026-10-03,campus,Module B lecture,08:30,10:30
+P10,27,2026-10-03,campus,Module C lecture,10:45,12:45
+P10,27,2026-10-03,routine,Lunch,12:45,13:45
+P10,27,2026-10-03,campus,Module C lab,13:45,15:45
+P10,27,2026-10-03,bus,Bus home,16:00,16:50
+P10,27,2026-10-03,routine,Dinner,19:30,20:00
+P10,27,2026-10-03,study_window,Study window (home),16:50,19:00
+P10,28,2026-10-04,sleep,Sleep,00:00,06:30
+P10,28,2026-10-04,routine,Morning routine,06:30,07:30
+P10,28,2026-10-04,bus,Bus to campus,07:30,08:20
+P10,28,2026-10-04,campus,Module D lecture,08:30,10:30
+P10,28,2026-10-04,campus,PP1 presentation (research meeting),10:45,12:15
+P10,28,2026-10-04,bus,Bus home,12:25,13:15
+P10,28,2026-10-04,routine,Dinner,19:30,20:00
+P10,28,2026-10-04,study_window,Study window (home),13:30,17:00
+P10,29,2026-10-05,sleep,Sleep,00:00,06:30
+P10,29,2026-10-05,routine,Morning routine,06:30,08:00
+P10,29,2026-10-05,office,Remote work (home),09:00,13:00
+P10,29,2026-10-05,routine,Lunch,13:00,13:20
+P10,29,2026-10-05,office,Remote work (home),14:00,18:00
+P10,29,2026-10-05,routine,Dinner,18:30,19:00
+P10,29,2026-10-05,sleep,Sleep,23:30,24:00
+P10,29,2026-10-05,study_window,Study window (home),13:20,14:00
+P10,29,2026-10-05,study_window,Study window (home),19:00,23:00
+P10,30,2026-10-06,sleep,Sleep,00:00,06:30
+P10,30,2026-10-06,routine,Morning routine,06:30,08:00
+P10,30,2026-10-06,office,Remote work (home),09:00,13:00
+P10,30,2026-10-06,routine,Lunch,13:00,13:20
+P10,30,2026-10-06,office,Remote work (home),14:00,18:00
+P10,30,2026-10-06,routine,Dinner,18:30,19:00
+P10,30,2026-10-06,sleep,Sleep,23:30,24:00
+P10,30,2026-10-06,study_window,Study window (home),13:20,14:00
+P10,30,2026-10-06,study_window,Study window (home),19:00,23:00

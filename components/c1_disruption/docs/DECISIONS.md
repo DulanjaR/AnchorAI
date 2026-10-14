@@ -2,6 +2,17 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — SYNTHETIC persona data, schedules and special habits
+- Source: planning chat, 2026-10-14 (files made from PERSONAS.md).
+- `sim/data/SYNTHETIC_personas.csv`, `SYNTHETIC_tasks_planned.csv`, `SYNTHETIC_schedule.csv` committed **unchanged** (byte-identical to the files provided).
+- **Special habits as explicit persona fields** (`sim/personas.py` `Persona`), values in `sim/data/SYNTHETIC_habits.csv`, transcribed from the `specialHabits` text (a test checks every number matches the text):
+  - P01 `lateFactor` 1.10 for tasks starting at or after `lateFrom` 21:30;
+  - P07 `afterNightShiftFactor` 1.35 on the first study task (earliest planned start) of a day that begins with a night shift (`office` block from 00:00 in the schedule): days 9–12 and 23–26;
+  - P08 `titleDrift` 1.60 **instead of** the Digital drift 1.20 for titles starting "Module B assignment: section" or "Lit review: write synthesis" (4 tasks);
+  - P09 `longTaskFactor` 1.30 for Digital tasks ≥ `longTaskMinutes` 180. **Note:** P09's longest Digital task in this task list is 130 min, so this habit never applies to the current data.
+- **Schedule → engine input:** workHours = first study-window start to last study-window end; protectedBlocks = non-study blocks inside that span + gaps between windows. **PROPOSED rule:** a study window wins only over travel (`bus`) blocks (studying on the bus/train, 45 tasks); quizzes (8 overlaps), meals (P06 day 25 dinner) and every other kind stay protected. `24:00` is accepted as an end time.
+- **Layer C:** no disruptions in the data files; the random disruptions stay, but with a schedule their start is drawn only from free study-window minutes (15-minute steps). Without a schedule the draw is exactly as before (tested). A per-persona disruption profile will replace this (owner).
+
 ## 2026-10-14 — Colab-trained Model 1 file used by the API
 - Source: planning chat, 2026-10-14.
 - `ml/drift/persist.py`: `save_model` writes `c1_drift_model.joblib` (the fitted model) and `c1_drift_model.joblib.json` (format version, training date, record and student count, dataset + `synthetic` flag, k, quantiles, library versions); `load_model` checks the format and that it is a trained C1 drift model, and reports whether library versions match.
