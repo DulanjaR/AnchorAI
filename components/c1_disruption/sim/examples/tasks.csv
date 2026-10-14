@@ -1,0 +1,11 @@
+personaId,day,taskId,title,type,priority,estimatedMinutes,deadlineInDays,deadlineTime,plannedStart,plannedEnd,delegable
+X01,1,t1,Code lab sheet,Digital,High,120,0,23:59,08:00,10:00,false
+X01,1,t2,Read chapter 3,Analog,Medium,90,1,,10:00,11:30,false
+X01,1,t3,Group call,Meeting,High,60,0,17:00,14:00,15:00,false
+X01,2,t4,Write report,Digital,High,180,1,,09:00,12:00,false
+X01,2,t5,Collect forms,Analog,Low,30,3,,15:00,15:30,true
+X01,3,t6,Fix bug,Digital,High,90,0,,18:00,19:30,false
+X02,1,u1,Revise notes,Analog,High,120,0,,09:00,11:00,false
+X02,1,u2,Upload slides,Digital,Medium,30,1,,11:00,11:30,false
+X02,2,u3,Lab session,Fixed,High,120,0,,13:00,15:00,false
+X02,3,u4,Essay draft,Digital,High,150,1,,09:00,11:30,false

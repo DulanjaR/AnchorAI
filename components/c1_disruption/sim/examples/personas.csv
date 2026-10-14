@@ -1,0 +1,3 @@
+personaId,label,workStart,workEnd,protectedBlocks,driftDigital,driftAnalog,driftMeeting,driftFixed,eveningFactor,weekendFactor,noiseSd,preferredStrategy
+X01,EXAMPLE SYNTHETIC: over-runs on laptop work,08:00,20:00,Lunch 12:30-13:30; Sleep 22:00-06:00,1.4,1.1,1.0,1.0,1.2,1.0,0.10,no_compress
+X02,EXAMPLE SYNTHETIC: accurate planner,09:00,18:00,Lunch 12:00-13:00,1.0,1.0,1.0,1.0,1.0,1.0,0.05,default

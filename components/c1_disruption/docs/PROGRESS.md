@@ -1,7 +1,25 @@
 # Progress log
 
 Newest first. Format: see CLAUDE.md Section 8.
-Working copy: `D:\RESEARCH PROJECT\anchor-ai-component1` → GitHub `ravindu912/anchor-ai-component1`.
+Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
+Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
+
+## 2026-10-14 — Methodology update: engine extensions, logging, metrics, Model 1, Model 2, simulation, Colab — done (waiting for persona task lists)
+Commits (dev/ravindu): 43f8ff5 engine strategy/range/diff · 453794e docs (METHODOLOGY.md, CLAUDE.md §3.6–3.8, DECISIONS) · 15de920 overload check · 1a0495c logging + ML hooks · 9cad504 metrics · 9f6f6a1 Model 1 · 577b841 Model 2 · next commit: simulation, notebooks, docs
+Files created: engine/{strategy,diff,overload}.py; app/services/planning.py; metrics/{config,plan_metrics,records}.py; ml/drift/{settings,data,model,baselines,evaluation,corrector}.py; ml/bandit/{settings,actions,context,linucb,policies}.py; sim/{README.md,settings,personas,generate,events,experiment}.py, sim/examples/{personas,tasks}.csv; notebooks/01–03 *.ipynb; docs/METHODOLOGY.md; tests for each
+Files changed: engine/{mvd,explain,schema}.py (strategy + range, defaults = approved); app/services/mvd_service.py, app/main.py (logging, ML hooks); requirements.txt (ML pins); CLAUDE.md §3.6–3.8, §5, §6, §7; docs/API.md (log fields); docs/DECISIONS.md; docs/TASK4_PLAN.md (superseded)
+Tests: `pytest` (repo root) → 500 passed (C1 499 + C4 1); golden S1–S16 and all 57 API cases unchanged at every step; planted bugs caught (strategy ignored, no per-student bandit part, training leak in the simulation)
+Decisions applied: DECISIONS.md 2026-10-14 (methodology revision, Model 1 redesign + library, Model 2 redesign + implementation, D-EVAL, D-MOVE PROPOSED, simulation rules, Colab notebooks)
+Open questions for owner: use of the high duration in the Keep check; defer order and recovery timing values; D-MOVE rules; contents of D-SOURCE and D-HCP; all PROPOSED items (metric definitions, overload scope, explanation wording for other compress ratios, reward, simulation rules, TIGHT_SLACK_THRESHOLD 0.10); Model 1 range looked conservative on the test fixture (95% vs nominal 80%)
+Next step: owner sends the persona task lists (P01–P10, sim/README.md format) → run notebooks/03 for the SYNTHETIC results
+
+## 2026-10-13 — Port to the team repo (Python/FastAPI), phases 1–4 — done
+Commits (dev/ravindu): 321f39c P1 golden spec frozen as JSON · 94a8584 P2 structure, CLAUDE.md v3.0, README, docs, pins · 21f23f1 P3 engine · 7897adf golden S11 text change · 5f99856 P4 FastAPI app
+Files created: tests/golden/ (scenarios S01–S16.json, api_cases.json, README, tools/golden_from_node.js); engine/*; app/* (api, services, data); tests/{engine,golden,api,data}/*; CLAUDE.md, README.md, requirements.txt; docs copied from the Node project
+Tests: `pytest` (repo root) → 337 passed after P4; `golden_from_node.js --check` → 16 scenarios + 57 API cases match the Node project; Node Jest 248/248 (unchanged); every Node test has a Python counterpart (mapping in the P4 report)
+Decisions applied: DECISIONS.md 2026-10-13 (port, S11 golden text, impossible dates refused)
+Open questions for owner: database (PostgreSQL vs Firestore); base path for orchestration; /health needs X-API-Key (team rule), see docs/API.md §7
+Next step: methodology update (14 Oct)
 
 ## 2026-10-12 — Housekeeping: checkpoint v3 + draft survey committed — done
 Commit: "Add checkpoint v3; survey marked DRAFT" (hash in `git log`), pushed to origin/main

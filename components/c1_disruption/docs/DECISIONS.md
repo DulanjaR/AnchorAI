@@ -2,6 +2,26 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Synthetic simulation rules (PROPOSED)
+- Input = the owner's persona and task lists (`sim/README.md` format: `personas.csv`, `tasks.csv`); personas named P01–P10 (golden scenarios keep S01–S16). A tiny `sim/examples/` set (X01, X02) exists for tests only.
+- Layers: A planned tasks → B actual = estimate × planted drift (per type, evening, weekend) × log-normal noise → C disruptions (rate 0.3 per day, type mix in `sim/settings.py`, 30–240 min; overlap with planned slots recorded and removed by the exclusion rule) → D MVDs raw vs corrected and simulated decisions.
+- **One random stream per layer**, so the planted, null and misspecified variants of a seed share the same disruptions and noise (paired comparison).
+- Model 1 inside the simulation is **retrained weekly** on records from earlier weeks only (tested).
+- **Simulated completion:** a placed task is done when its true minutes ≤ the minutes the engine planned with.
+- **Simulated decisions:** accept 0.85 if the shown strategy is the persona's `preferredStrategy`, else 0.3; half of the rest are edits (one tag changed), half rejects.
+- Events the engine cannot plan (a None EF value, e.g. a Meeting during a power cut) are **skipped and counted**, never given an invented value; the count is evidence for the open EF question (CLAUDE.md §6 Q1).
+
+## 2026-10-14 — Colab notebooks
+- Experiments run in **Google Colab** notebooks (`notebooks/`): the first cell clones the `dev/ravindu` branch, installs C1's pinned requirements and prints the Python version; every other cell calls repo code (`ml/`, `sim/`) and explains the step in plain English. Notebooks hold no logic of their own and are committed without outputs; a test checks that every code cell parses.
+- *Why:* the owner and examiners can rerun every result in the browser, on the same pinned versions.
+
+## 2026-10-13 — Port to the team repo (Python/FastAPI)
+- Component 1 moved from `anchor-ai-component1` (Node.js/Express) into the team repo `components/c1_disruption/`, rewritten in Python/FastAPI. **Reason: align with the team's Python/FastAPI stack and shared modules** (`shared.auth`, `shared.config`).
+- The approved behaviour was first frozen as language-neutral JSON (`tests/golden/`: S1–S16 and 57 API cases), checked against the Node engine and API; the Python engine and API match it exactly (one deliberate change: the S11 message, 2026-10-13 above).
+- Every route checks the team `X-API-Key` (`shared.auth.require_api_key`); `X-User-Id` stays as the user stand-in; the API prefix `/api` is one setting (`C1_API_PREFIX`).
+- **Open questions recorded:** (1) **database: PostgreSQL vs Firestore** (team decision) — C1 keeps a repository interface with an in-memory store, and a database store must pass the same contract tests; (2) **base path for orchestration** (`/api` now).
+- Differences from Node: `docs/API.md` §7.
+
 ## 2026-10-14 — Model 2 implementation choices (PROPOSED where marked)
 - **Action catalogue (PROPOSED)** in `app/services/planning.py` `STRATEGIES`: `default` (compress up to 50%, the approved behaviour, always first), `compress_25` (up to 25%), `no_compress` (keep in full or move). Defer order and recovery timing will add actions once defined.
 - **Distinctness** (15 golden + 500 seeded test days): default vs compress_25 differ in 24% of scenarios, default vs no_compress 40%, compress_25 vs no_compress 20%; no pair never differs, so none is merged.

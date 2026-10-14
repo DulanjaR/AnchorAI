@@ -261,21 +261,22 @@ components/c1_disruption/
 │   ├── api/             routers (settings, protected blocks, tasks, disruptions, mvds, reviews), errors, auth (X-User-Id stand-in + shared X-API-Key)
 │   ├── services/        mvd service (stored data ↔ engine, decisions), clock, ownership checks
 │   └── data/            repository interface + in-memory store (real DB store after the team decision)
-├── engine/              pure Python: config, time, fi, classify, explain, mvd (no I/O, no framework)
+├── engine/              pure Python: config, time, fi, classify, explain, mvd, strategy, diff, overload (no I/O, no framework)
 ├── ml/
-│   ├── drift/           ML Model 1 (Task 4)
-│   ├── bandit/          ML Model 2 (Task 5)
-│   └── data/            pretest_priors.json (PROVISIONAL), small SYNTHETIC samples
+│   ├── drift/           ML Model 1: data, model (quantile forest + shrinkage), baselines, evaluation, corrector (MVD hook)
+│   └── bandit/          ML Model 2: actions (+ distinctness), context, linucb, policies (BanditChooser, baselines)
 ├── metrics/             evaluation metrics (CTRR, PTVR, feasibility, completion, decision change, …)
-├── sim/                 synthetic personas and event generators (SYNTHETIC)
+├── sim/                 SYNTHETIC simulation: personas.py (layer A loader), generate.py (B, C), events.py (D), experiment.py; examples/ (tiny test set)
 ├── notebooks/           Google Colab notebooks (experiments only; first cell clones dev/ravindu + installs requirements)
-├── docs/                API.md, DECISIONS.md, PROGRESS.md, TASK4_PLAN.md (DRAFT), Component1_Checkpoint_v3.docx, Pre_test_PartA_C1_C2_C3.docx (DRAFT)
+├── docs/                METHODOLOGY.md, API.md, DECISIONS.md, PROGRESS.md, TASK4_PLAN.md (superseded), Component1_Checkpoint_v3.docx, Pre_test_PartA_C1_C2_C3.docx (DRAFT)
 └── tests/
     ├── golden/          frozen spec: scenarios/S01–S16.json, api_cases.json, README.md, tools/ (Node checker)
     ├── engine/          unit tests, invariants (PTVR = 0 and other hard rules), 500-day seeded stress test
     ├── api/             route tests from api_cases.json + golden flows over HTTP
     ├── data/            store contract tests (run against every store)
-    └── ml/              ML tests
+    ├── metrics/         metric definitions on golden scenarios
+    ├── ml/              Model 1 / Model 2 (SYNTHETIC fixtures)
+    └── sim/             simulation layers A–D
 ```
 
 Data records (repository collections): `users`, `tasks`, `protectedBlocks`, `disruptions`, `mvds` (tags, slots, reason codes, explanations, `parentMvdId`), `feedback` (accept/edit/reject + edit content), `signals` (passive signal events), `completions`.
@@ -320,11 +321,11 @@ Golden scenarios use only `power_outage` and `transport_delay` with Digital and 
 - [x] Port P2 — commit 94a8584 (13 Oct 2026): structure, CLAUDE.md, README, docs, pinned requirements
 - [x] Port P3 — 13 Oct 2026: pure Python engine; all 16 golden scenarios match exactly; invariants + the same 500 seeded days as Node (hash-checked); pytest 225/225 from the repo root
 - [x] Port P4 — 13 Oct 2026: FastAPI app (same endpoints as docs/API.md, shared X-API-Key, Pydantic models, repository + in-memory store); all 57 API cases and S1–S16 over HTTP pass
-- [ ] Port P5 — ML scaffolding, Colab
-- [ ] Port P6 — finish (root pytest, docs, push)
-- [ ] Task 4
-- [ ] Task 5
+- [x] Methodology update (14 Oct 2026): engine extensions with defaults (strategy, duration range, plan diff, overload check), logging, metrics, Model 1, Model 2, simulation framework, Colab notebooks (replaces port P5); docs (P6). pytest 500/500 from the repo root
+- [~] Task 4 — Model 1 code and evaluation done; waiting for the owner's persona task lists for the SYNTHETIC simulation results
+- [~] Task 5 — Model 2 code done; same
 - [ ] Task 6
+- [ ] Pending owner definitions: high duration in the Keep check, defer order, recovery timing, D-MOVE rules, D-SOURCE / D-HCP entries
 
 ---
 
