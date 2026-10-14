@@ -8,6 +8,7 @@ from typing import Any, Mapping
 
 from components.c1_disruption.engine import config as default_config
 from components.c1_disruption.engine.fi import lookup_ef
+from components.c1_disruption.engine.strategy import read_strategy
 from components.c1_disruption.engine.time import (
     Interval,
     block_to_intervals,
@@ -60,6 +61,7 @@ def find_violations(
         if s.start < horizon_start or s.end > horizon_end:
             problems.append(f"{task_id} is outside the planning horizon")
 
+    max_pct = read_strategy(input.get("strategy"), config).compress_ratio * 100  # default 50
     window = window_to_interval(input["disruption"])  # same clipping as the engine
     unavailable = config.DISRUPTION_KINDS[input["disruption"]["type"]] == "unavailable"
     for t in mvd["tasks"]:
@@ -73,8 +75,8 @@ def find_violations(
                 ef = lookup_ef(input["disruption"]["type"], t["type"], config)
                 if ef < config.FEASIBILITY_GATE and overlaps(slot, window):
                     problems.append(f"{t['id']} (EF {ef}) is placed inside the disruption window")
-            if not 0 <= t["compressionPct"] <= config.MAX_COMPRESSION * 100:
-                problems.append(f"{t['id']} compression {t['compressionPct']}% is outside 0–{config.MAX_COMPRESSION * 100}%")
+            if not 0 <= t["compressionPct"] <= max_pct:
+                problems.append(f"{t['id']} compression {t['compressionPct']}% is outside 0–{max_pct}%")
         if not isinstance(t["explanation"], str) or not t["explanation"]:
             problems.append(f"{t['id']} has no explanation")
 

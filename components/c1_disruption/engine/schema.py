@@ -33,6 +33,9 @@ class TaskInput(TypedDict):
     estimatedHours: float  # AFTER drift correction (drift = 1.0 until ML Model 1)
     deadline: str  # 'YYYY-MM-DDTHH:MM' (a bare date = end of that day)
     delegable: NotRequired[bool]
+    # Optional range from ML Model 1 (hours); default low = high = estimatedHours.
+    estimatedHoursLow: NotRequired[float | None]
+    estimatedHoursHigh: NotRequired[float | None]
 
 
 class MvdInput(TypedDict):
@@ -42,6 +45,7 @@ class MvdInput(TypedDict):
     disruption: Disruption
     protectedBlocks: NotRequired[list[ProtectedBlock]]
     tasks: NotRequired[list[TaskInput]]
+    strategy: NotRequired[dict[str, float]]  # engine/strategy.py; absent = approved defaults
 
 
 class MvdTask(TypedDict):

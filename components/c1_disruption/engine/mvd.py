@@ -31,6 +31,7 @@ from components.c1_disruption.engine.fi import (
 )
 from components.c1_disruption.engine.jsnum import js_round
 from components.c1_disruption.engine.schema import Mvd, MvdInput, MvdTask, ProtectedBlock, TaskInput
+from components.c1_disruption.engine.strategy import Strategy, read_strategy
 from components.c1_disruption.engine.time import (
     MINUTES_PER_HOUR,
     Interval,
@@ -101,9 +102,30 @@ def _feasibility_for(task: TaskInput, ctx: _Context, config: ModuleType) -> tupl
     )
 
 
+def _check_duration_range(task: TaskInput) -> None:
+    """Optional duration range from ML Model 1: low ≤ point ≤ high (hours).
+
+    Fi and placement use the point value (estimatedHours). The range is checked
+    here so a bad range is caught early; how 'high' is used is pending owner
+    definition (methodology update, 14 Oct 2026).
+    """
+    point = task["estimatedHours"]
+    for key in ("estimatedHoursLow", "estimatedHoursHigh"):
+        value = task.get(key)
+        if value is not None and (isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0):
+            raise EngineError(f"Task '{task['id']}': '{key}' must be a positive number, got {value!r}")
+    low = point if task.get("estimatedHoursLow") is None else task["estimatedHoursLow"]
+    high = point if task.get("estimatedHoursHigh") is None else task["estimatedHoursHigh"]
+    if not low <= point <= high:
+        raise EngineError(
+            f"Task '{task['id']}': duration range must satisfy low ≤ estimatedHours ≤ high, got {low} / {point} / {high}"
+        )
+
+
 def _score_task(task: TaskInput, ctx: _Context, config: ModuleType) -> ScoredTask:
     """Steps 3–4: EF, Fi and placement group for one task."""
     blocked, ef_used = _feasibility_for(task, ctx, config)
+    _check_duration_range(task)
     fi = compute_fi(
         deadline_days=deadline_proximity(ctx.date, task["deadline"], config),
         priority=task["priority"],
@@ -124,14 +146,22 @@ def _score_task(task: TaskInput, ctx: _Context, config: ModuleType) -> ScoredTas
 
 
 def find_slot(
-    item: ScoredTask, gaps: list[Interval], window: Interval, window_first: bool, config: ModuleType = default_config
+    item: ScoredTask,
+    gaps: list[Interval],
+    window: Interval,
+    window_first: bool,
+    config: ModuleType = default_config,
+    max_compression: float | None = None,
 ) -> Interval | None:
     """Finds a slot for one task in the remaining free gaps, or returns None.
 
     A task always gets ONE contiguous slot; it is never split across a protected
     block or across two gaps. `window_first` is False for an "unavailable"
     disruption: its window has already been removed from the gaps.
+    `max_compression` comes from the strategy (default config.MAX_COMPRESSION).
     """
+    if max_compression is None:
+        max_compression = config.MAX_COMPRESSION
     # Feasibility gate (step 3): a blocked task may only use time outside the window.
     feasible = subtract_interval(gaps, window) if item.blocked else gaps
     need = item.duration_minutes
@@ -161,12 +191,15 @@ def find_slot(
     for g in feasible:
         if largest is None or _length(g) > _length(largest):
             largest = g
-    if largest is not None and _length(largest) >= need * (1 - config.MAX_COMPRESSION):
+    if largest is not None and _length(largest) >= need * (1 - max_compression):
         return largest
     return None  # cannot fit even at maximum compression
 
 
 def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
+    """Builds the MVD. `input["strategy"]` is optional (engine/strategy.py); without
+    it every setting is the approved default and the output is the golden one."""
+    strategy: Strategy = read_strategy(input.get("strategy"), config)
     date = input["date"]
     work_hours = input["workHours"]
     disruption = input["disruption"]
@@ -200,7 +233,7 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
     for item in order:
         if item.group == "D":
             continue
-        slot = find_slot(item, gaps, window, window_first, config)
+        slot = find_slot(item, gaps, window, window_first, config, strategy.compress_ratio)
         if slot is not None:
             slots[item.task["id"]] = slot
             gaps = subtract_interval(gaps, slot)
@@ -213,6 +246,7 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
         "windowStart": disruption["start"],
         "windowEnd": disruption["end"],
         "freeMinutesLeft": free_minutes_left,
+        "maxCompression": strategy.compress_ratio,
     }
     results: list[MvdTask] = []
     for item in order:

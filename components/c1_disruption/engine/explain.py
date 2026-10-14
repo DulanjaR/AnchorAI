@@ -15,6 +15,7 @@ class ExplainContext(TypedDict):
     windowStart: str  # as reported, not clipped (e.g. 20:00–02:00)
     windowEnd: str
     freeMinutesLeft: NotRequired[int]
+    maxCompression: NotRequired[float]  # from the strategy; default 0.5
 
 
 # A task result as produced by mvd.py (camelCase keys, see schema.MvdTask).
@@ -42,6 +43,21 @@ def disruption_text(context: ExplainContext) -> str:
 
 
 FREE_TIME_NOTE = "You have free time today, so you can start it early if you like."
+
+
+def shortening_text(context: ExplainContext) -> str:
+    """End of a "not enough time" sentence, true for the strategy's compress ratio.
+
+    0.5 (the approved default) gives the golden text ", even at half length.".
+    Other ratios: PROPOSED wording (methodology update, 14 Oct 2026), not yet
+    approved by the owner.
+    """
+    ratio = context.get("maxCompression", 0.5)
+    if ratio == 0.5:
+        return ", even at half length."
+    if ratio == 0:
+        return "."
+    return f", even shortened by {number_text(to_fixed_number(ratio * 100, 1))}%."
 
 
 def _low_urgency(t: Task, c: ExplainContext) -> str:
@@ -75,16 +91,14 @@ TEMPLATES: dict[str, Callable[[Task, ExplainContext], str]] = {
     ),
     "BLOCKED_BY_DISRUPTION": lambda t, c: (
         f"Moved to tomorrow: it cannot be done during the {disruption_text(c)}, and there is not enough "
-        "free time outside it, even at half length."
+        f"free time outside it{shortening_text(c)}"
     ),
     "LOW_URGENCY": _low_urgency,
     "TIME_TAKEN_BY_DISRUPTION": lambda t, c: (
         f"Moved to tomorrow: this time is taken by {disruption_text(c)}, and there is not enough "
-        "free time left today, even at half length."
+        f"free time left today{shortening_text(c)}"
     ),
-    "BUDGET_EXCEEDED": lambda t, c: (
-        "Moved to tomorrow: there is not enough free time left today, even at half length."
-    ),
+    "BUDGET_EXCEEDED": lambda t, c: f"Moved to tomorrow: there is not enough free time left today{shortening_text(c)}",
     "DELEGABLE": lambda t, c: (
         "Not enough time for you today, but you marked it as delegable: ask someone else or use AI help."
     ),
