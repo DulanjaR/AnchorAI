@@ -1,5 +1,7 @@
 # Task 4 plan — ML Model 1 (Timeline Drift Predictor) on SYNTHETIC data
 
+> **SUPERSEDED 14 Oct 2026** by the Model 1 redesign (`docs/METHODOLOGY.md` §3, DECISIONS.md 2026-10-14). Kept for the record.
+>
 > **DRAFT.** Copied unchanged from the old project (`anchor-ai-component1/docs/TASK4_PLAN.md`,
 > 12 Oct 2026) during the port to the team repo. The body below is **not** up to date.
 > Changes approved by the owner after it was written, which the next version of this

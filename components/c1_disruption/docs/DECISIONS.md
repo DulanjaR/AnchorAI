@@ -2,6 +2,41 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — D-MOVE carry-over: PROPOSED (not final, not implemented)
+- Moved tasks are carried over to the next day's plan. The detailed rules are **waiting for the owner's approval**; nothing is implemented until the Python port matches all golden scenarios (done) **and** the owner approves the rules.
+- The metrics that depend on it (carry-over placement rate, post-move deadline misses) are reserved in `metrics/` but not computed.
+
+## 2026-10-14 — D-EVAL: evaluation design
+- Model 1 is judged by **plan completion rate** and **realised feasibility**, raw vs corrected durations on the same events.
+- **Week 1 of the pilot is the fixed-order baseline** for Model 2 (policy mode `fixed_order`); `randomised` mode afterwards logs which ranking was shown.
+- **Decision-change rate** (plan diff, model off vs on, same event) shows how often the model changes what the student is told.
+- Results are split by the **tight-slack** flag; the threshold is set in config (`TIGHT_SLACK_THRESHOLD`, PROPOSED 0.10) and fixed **before** analysis.
+- Metric definitions: `docs/METHODOLOGY.md` §5 (**PROPOSED** where the brief left them open: what counts as a critical task, completed = `done`, feasibility = slot holds the required minutes after allowed compression).
+
+## 2026-10-14 — Model 2 redesign: strategy personalizer with pooled LinUCB
+- Replaces the Vowpal Wabbit plan (CLAUDE.md §3.7 rewritten).
+- Actions = concrete strategy configs (compress ratio × defer order × recovery timing), with a **distinctness check**: actions whose MVDs never differ on synthetic scenarios are merged or dropped.
+- Policy: **pooled LinUCB**, shared component + per-student component. Context: disruption kind, severity, time-of-day bucket, share of digital tasks, slack ratio, weekday/weekend, student history.
+- Reward: Accept = 1, Reject = 0, Edit = 1 − (tags changed ÷ total tags) — **PROPOSED**, owner to confirm.
+- Baselines: fixed order, per-student most-accepted counter, random. Policy modes: `fixed_order` (default), `bandit`, `randomised`.
+- *Why:* lightweight, explainable, works with few events per student; no hard-to-install dependency.
+
+## 2026-10-14 — Model 1 redesign: pooled regressor on log drift with shrinkage and quantiles
+- Replaces the RandomForest-on-ratio plan and the "below 30 records → drift 1.0" rule (CLAUDE.md §3.6 rewritten; `docs/TASK4_PLAN.md` superseded).
+- **Regressor** on `log(actual ÷ estimated)`; **pooled Random Forest** across students; **per-student shrinkage** `w = n / (n + k)`, k by cross-validation; day-1 students get the pooled estimate.
+- **Quantile output** (default q10–q90) for a range; library chosen by what installs cleanly (recorded when chosen).
+- Baselines B0 (drift 1.0), B1 (global mean ratio), B2 (per-student mean, global when n = 0), B3 (shrinkage only). Evaluation: leave-one-student-out, rolling-origin, MAE (minutes and log ratio), interval coverage, learning curve against n.
+- Fallback: model unavailable or untrained → drift 1.0, engine keeps working.
+- *Why:* the log ratio treats over- and under-runs alike; pooling plus shrinkage serves students with little data; the range lets the plan show uncertainty instead of one number.
+
+## 2026-10-14 — Methodology revision; engine extensions with defaults
+- Revised methodology: `docs/METHODOLOGY.md`. The engine rules (Fi, tags, reason codes, hard gate, group placement) do **not** change; the ML layer, logging and evaluation do.
+- **Hard rule:** golden S1–S16 and the 57 API cases keep passing exactly; every new engine parameter defaults to the old behaviour.
+- Built: optional duration range `estimatedHoursLow/High` (Fi uses the point); strategy `compressRatio` (default 0.5); plan diff (`engine/diff.py`).
+- **PROPOSED explanation wording** for compress ratios other than 0.5 (0.5 keeps the golden "even at half length"): ratio 0 → "…not enough free time left today."; e.g. 0.25 → "…, even shortened by 25%."
+- **PROPOSED overload check** scope: one plan day; available = work hours from planFrom minus protected blocks; early deadline warning for tasks due that day, in deadline order (`docs/METHODOLOGY.md` §2.1).
+- **Pending definitions:** use of the high duration in the Keep check; values of `deferOrder` and `recoveryTiming`.
+
 ## 2026-10-13 — Impossible dates are refused (intentional difference from Node)
 - **Decision (owner-approved, Phase 3 review):** a date that does not exist in the calendar, e.g. `2026-02-30`, is an error.
   - Engine: `engine/time.py` `parse_date` raises `EngineError("Invalid date '2026-02-30', expected YYYY-MM-DD")`.

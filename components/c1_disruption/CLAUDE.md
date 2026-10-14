@@ -171,31 +171,41 @@ After +30 min the app goes silent. On return: "What happened?" → completed / d
 - **Backup:** end-of-day review at the user's configured work-end time (not a fixed clock time): Done / Partial (25/50/75%) / Not Done.
 - Overruns are captured as data, never cascaded.
 
-### 3.6 ML Model 1 — Timeline Drift Predictor
+### 3.6 ML Model 1 — Timeline Drift Predictor (redesigned 14 Oct 2026; main ML contribution)
 
-- RandomForestRegressor. Target = **drift = actual duration ÷ estimated duration**.
-- Features: task type, estimated duration, time of day, day of week, priority.
-- MVD uses `corrected_duration = estimate × drift_score`.
-- Needs ~30 completed records per task type; below that, **drift = 1.0** (graceful fallback).
+Full method: `docs/METHODOLOGY.md` §3. Replaces the earlier RandomForest-on-ratio plan (`docs/TASK4_PLAN.md`, superseded).
+
+- **Regressor, not a classifier.** Target = **log(actual ÷ estimated)** (log drift: overruns and underruns are symmetric; 0 = on time).
+- **Pooled Random Forest** across all students + **per-student shrinkage**: the student's mean residual is added with weight `w = n / (n + k)`, n = the student's completed records, **k chosen by cross-validation**. A day-1 student (n = 0) gets the pooled estimate.
+- **Quantile output**: a range (default q10–q90) as well as the point, from a quantile regression forest or equivalent (library chosen by what installs cleanly; recorded in DECISIONS.md).
+- Features: task type, estimated duration, time of day, day of week, priority (+ the shrinkage term).
+- MVD uses `corrected = estimate × exp(predicted log drift)`; the range feeds the engine's `estimatedHoursLow/High`.
+- **Baselines in code:** B0 drift = 1.0; B1 global mean ratio; B2 per-student mean ratio (global when n = 0); B3 shrinkage only, no forest.
+- **Evaluation:** leave-one-student-out (cold start), rolling-origin (warm), MAE in minutes, MAE of the log ratio, interval coverage, learning curve against n.
+- **Graceful fallback:** model unavailable or untrained → drift = 1.0; the engine keeps working.
 - **Exclusion rule (decided 9 Oct 2026):** training data must not count time lost to a disruption as task time. For a completed task whose start–done span overlaps a **confirmed** disruption, subtract the overlap from the actual duration, or drop the record if that is not reliable.
 - **Starting drift per task type** comes from the pre-test (C1 Q4–Q5, §3.8) and is PROVISIONAL; the model itself is trained on pilot data, not on the survey.
-- Pilot reality: a shared model with user-level features is the practical start.
-- Plan: `docs/TASK4_PLAN.md` (**DRAFT**; its header lists the later approved changes).
 
-### 3.7 ML Model 2 — Contextual Bandit Personalizer
+### 3.7 ML Model 2 — Strategy Personalizer (redesigned 14 Oct 2026; lightweight)
 
-- Vowpal Wabbit contextual bandit.
-- Context: disruption **kind** (environment / unavailable) and **type**, disruption **duration**, **time of day**, affected task types, severity, user's past responses. Kind, type, duration and time of day come from the recorded disruption times (decided 9 Oct 2026).
-- **Starting strategy ranking per disruption kind** comes from the pre-test (C1 Q8–Q9, §3.8) and is PROVISIONAL; it replaces the plain shared default for cold start. The bandit then learns from pilot feedback, not from the survey.
-- Actions: **compress, defer, delegate, hybrid**. Output: a **ranked strategy list**; the top one shapes the MVD.
-- Effect on the engine: compress = prefer Reduce over Move (and how hard, up to 50%); defer = prefer Move; delegate = push delegable tasks out first; hybrid = mix.
-- Reward: Accept positive, Edit partial (edit content is the richest signal), Reject negative.
-- **Evidence it works: MVD acceptance rate rising over successive disruptions per user.**
-- Cold start from a shared default ranking. Honest limitation: ~3–5 disruptions per pilot user, so no full convergence.
+Full method: `docs/METHODOLOGY.md` §4. Replaces the Vowpal Wabbit plan.
 
-### 3.8 Evaluation (for later)
+- **Actions are concrete strategy configs** for the engine (`engine/strategy.py`): compress ratio × defer order × recovery timing. A **distinctness check** on synthetic scenarios reports how often each pair of actions gives different MVDs; actions that never differ are merged or dropped.
+- **Pooled LinUCB** with a shared component + a per-student component.
+- Context: disruption kind, severity, time-of-day bucket, share of digital tasks, slack ratio, weekday/weekend, student history.
+- Reward: Accept = 1, Reject = 0, Edit = 1 − (tags changed ÷ total tags) (**PROPOSED**, owner to confirm).
+- Baselines: fixed order, per-student most-accepted counter, random.
+- **Policy modes** (config): `fixed_order` (pilot week 1, **default**), `bandit`, `randomised` (per event, randomly show the bandit or the fixed ranking, and log which).
+- Output: a ranked strategy list; the top one shapes the MVD. The user still Accepts / Edits / Rejects (rule 5).
+- **Starting ranking per disruption kind** may come from the pre-test (C1 Q8–Q9, §3.8), PROVISIONAL. Honest limitation: ~3–5 disruptions per pilot user, so no full convergence.
 
-CTRR (Critical Task Retention Rate), PTVR (must be 0%), MVD Acceptance Rate (trend), Explanation Acceptance Rate, Comparative Realism Rating (vs Baseline A no-change and Baseline B manual replan), SUS ≥ 70. Pilot: 10–20 SLIIT students, 2–3 weeks, real + mock disruptions. Manual-replan baseline mainly in mock scenarios.
+### 3.8 Evaluation and logging (revised 14 Oct 2026)
+
+Metrics (`metrics/`, definitions in `docs/METHODOLOGY.md` §5): CTRR (planned and realised), PTVR (must be 0%; property test on every generated plan), feasibility and realised feasibility (raw vs corrected durations, same event), plan completion rate, decision-change rate (`engine/diff.py`), acceptance, edits per MVD, time-to-decision, tight-slack flag (threshold fixed in config before analysis); after D-MOVE: carry-over placement rate, post-move deadline misses. Also from the original plan: MVD Acceptance Rate trend, Explanation Acceptance Rate, Comparative Realism Rating (vs no-change and manual replan), SUS ≥ 70. Pilot: 10–20 SLIIT students, 2–3 weeks; **week 1 = fixed-order baseline**.
+
+Logged per MVD: ranking shown, policy mode, model on/off, strategy config, tags, Accept/Edit/Reject, structured edit diff, time-to-decision, manual replan first. Logged per task: estimated, corrected (point/low/high), actual, completion status.
+
+Synthetic simulation (`sim/`, always **SYNTHETIC**): 10 personas × 5 seeds, plus a null persona (no drift) and a misspecified generator (drift depends on features the model does not see). Persona task lists come from the owner.
 
 **Pre-test (decided 10 Oct 2026):** Component 1 has 10 questions (C1 Q1–Q10) in the team survey `docs/Pre_test_PartA_C1_C2_C3.docx` (**DRAFT**, DECISIONS.md 2026-10-12). The answers set the **starting values** only:
 
@@ -256,7 +266,8 @@ components/c1_disruption/
 │   ├── drift/           ML Model 1 (Task 4)
 │   ├── bandit/          ML Model 2 (Task 5)
 │   └── data/            pretest_priors.json (PROVISIONAL), small SYNTHETIC samples
-├── sim/                 simulated users / synthetic generators (SYNTHETIC)
+├── metrics/             evaluation metrics (CTRR, PTVR, feasibility, completion, decision change, …)
+├── sim/                 synthetic personas and event generators (SYNTHETIC)
 ├── notebooks/           Google Colab notebooks (experiments only; first cell clones dev/ravindu + installs requirements)
 ├── docs/                API.md, DECISIONS.md, PROGRESS.md, TASK4_PLAN.md (DRAFT), Component1_Checkpoint_v3.docx, Pre_test_PartA_C1_C2_C3.docx (DRAFT)
 └── tests/
@@ -280,6 +291,8 @@ Data records (repository collections): `users`, `tasks`, `protectedBlocks`, `dis
 5. **Gate: "after" or "outside"?** The C:\ v2 draft said gated tasks may only go *after* the window. The approved rule and scenario S9 allow *before or after*. This file uses "before or after".
 6. **Database (team decision): PostgreSQL vs Firestore.** C1 keeps the repository interface + in-memory store until it is decided. (Added 13 Oct 2026.)
 7. **Base path for orchestration:** C1 serves `/api/...` as in `docs/API.md`; the prefix is one setting, so it can become e.g. `/c1/api` when `orchestration/` is designed. (Added 13 Oct 2026.)
+8. **Engine details pending (14 Oct 2026):** how the high duration is used in the Keep check; the values of `defer_order` and `recovery_timing`; the scope of the overload check. Built with defaults = old behaviour; see DECISIONS.md PROPOSED entries.
+9. **D-MOVE carry-over** rules: PROPOSED, not implemented until approved.
 
 Resolved: slot choice (Q6 revision), reason-code names, deadline-risk rule, midnight-crossing disruptions (all 6 Oct 2026; see DECISIONS.md).
 
@@ -294,8 +307,8 @@ Resolved: slot choice (Q6 revision), reason-code names, deadline-risk rule, midn
 | 3 | API around the engine | Oct 9–10 | Done (Node) |
 | 2a | Disruption kinds | Oct 12 | Done (Node) |
 | P | **Port to the team repo (Python/FastAPI)** | Oct 13 | P1 golden spec frozen as JSON; P2 structure; P3 engine matches all golden JSON + invariants + 500-day stress test; P4 FastAPI app passes api_cases.json and golden flows over HTTP; P5 ML scaffolding + Colab notebooks; P6 root pytest green, docs updated, pushed |
-| 4 | ML Model 1 on synthetic data | after the port | Plan `docs/TASK4_PLAN.md` (DRAFT) updated with the approved changes and approved; then code |
-| 5 | ML Model 2 simulation | after Task 4 | Simulated users with hidden preferences; VW bandit; rising acceptance-rate chart; two users get different top strategies for the same disruption |
+| 4 | ML Model 1 (redesign 14 Oct) | after the port | Pooled RF on log drift + shrinkage + quantiles; B0–B3; LOSO + rolling-origin evaluation on SYNTHETIC personas; fallback drift 1.0 |
+| 5 | ML Model 2 (redesign 14 Oct) | after Task 4 | Strategy actions + distinctness check; pooled LinUCB; baselines; policy modes; simulated acceptance |
 | 6 | PP1 demo prep | Oct 15 | One disruption scenario end to end; tests and chart ready |
 
 Golden scenarios use only `power_outage` and `transport_delay` with Digital and Analog tasks until the null EF values are filled, plus the "unavailable" kinds (S15, S16), which need no EF.
