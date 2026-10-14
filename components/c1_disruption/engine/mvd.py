@@ -102,7 +102,7 @@ def _feasibility_for(task: TaskInput, ctx: _Context, config: ModuleType) -> tupl
     )
 
 
-def _check_duration_range(task: TaskInput) -> None:
+def check_duration_range(task: TaskInput) -> None:
     """Optional duration range from ML Model 1: low ≤ point ≤ high (hours).
 
     Fi and placement use the point value (estimatedHours). The range is checked
@@ -125,7 +125,7 @@ def _check_duration_range(task: TaskInput) -> None:
 def _score_task(task: TaskInput, ctx: _Context, config: ModuleType) -> ScoredTask:
     """Steps 3–4: EF, Fi and placement group for one task."""
     blocked, ef_used = _feasibility_for(task, ctx, config)
-    _check_duration_range(task)
+    check_duration_range(task)
     fi = compute_fi(
         deadline_days=deadline_proximity(ctx.date, task["deadline"], config),
         priority=task["priority"],
