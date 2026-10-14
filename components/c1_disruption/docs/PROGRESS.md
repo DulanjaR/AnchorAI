@@ -4,6 +4,15 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Colab-trained Model 1 connected to the API — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: ml/drift/persist.py; components/c1_disruption/.gitignore; tests/ml/test_persist.py
+Files changed: ml/drift/model.py (record count), ml/drift/corrector.py (load_corrector), app/settings.py (drift_model_path), app/main.py (default corrector from the setting), notebooks/01 (train on all, save, download), README.md, docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → see STATUS.md; save/load round trip identical, every bad-file case → NoDrift, API MVD with the loaded file → modelOn true and corrected durations; notebook 01 run locally → files written; real uvicorn with C1_DRIFT_MODEL_PATH → modelOn true (2 h → 2.58 h, range 2.06–3.07 h)
+Decisions applied: DECISIONS.md 2026-10-14 (Colab-trained Model 1 file)
+Open questions for owner: see STATUS.md
+Next step: persona task lists → notebooks 01 and 03
+
 ## 2026-10-14 — Methodology update: engine extensions, logging, metrics, Model 1, Model 2, simulation, Colab — done (waiting for persona task lists)
 Commits (dev/ravindu): 43f8ff5 engine strategy/range/diff · 453794e docs (METHODOLOGY.md, CLAUDE.md §3.6–3.8, DECISIONS) · 15de920 overload check · 1a0495c logging + ML hooks · 9cad504 metrics · 9f6f6a1 Model 1 · 577b841 Model 2 · next commit: simulation, notebooks, docs
 Files created: engine/{strategy,diff,overload}.py; app/services/planning.py; metrics/{config,plan_metrics,records}.py; ml/drift/{settings,data,model,baselines,evaluation,corrector}.py; ml/bandit/{settings,actions,context,linucb,policies}.py; sim/{README.md,settings,personas,generate,events,experiment}.py, sim/examples/{personas,tasks}.csv; notebooks/01–03 *.ipynb; docs/METHODOLOGY.md; tests for each

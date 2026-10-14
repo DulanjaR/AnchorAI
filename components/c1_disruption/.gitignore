@@ -1,0 +1,4 @@
+# C1's own ignore rules (the root .gitignore is the team's).
+# Trained ML Model 1 files (ml/drift/persist.py) are made in Colab and never committed.
+*.joblib
+*.joblib.json

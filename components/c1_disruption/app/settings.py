@@ -13,5 +13,9 @@ class C1Settings(BaseSettings):
     # (open question: the base path for orchestration, CLAUDE.md §6 Q7).
     api_prefix: str = "/api"
 
+    # Trained ML Model 1 file (ml/drift/persist.py), e.g. a c1_drift_model.joblib made in
+    # notebooks/01. Empty or missing file → drift 1.0 (NoDrift), the approved fallback.
+    drift_model_path: str = ""
+
 
 c1_settings = C1Settings()

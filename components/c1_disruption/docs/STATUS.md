@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`c89a93a` · 2026-10-14 · "C1 simulation framework, Colab notebooks, docs (port record, progress)" (this file is added by the commit after it).
+`1c35891` · 2026-10-14 · "docs: sync rule and STATUS.md" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -13,6 +13,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
   - Model 1: pooled quantile forest on log drift + per-student shrinkage (k by CV), q10–q90, baselines B0–B3, cold/warm evaluation, drift-1.0 fallback.
   - Model 2: 3 strategy actions (distinctness checked), pooled LinUCB, 3 baselines, policy modes (default `fixed_order`).
   - Simulation layers A–D (planted / null / misspecified, 5 seeds, SYNTHETIC); 3 Colab notebooks.
+- **Colab → API for Model 1** (14 Oct): notebook 01 trains on all records and downloads `c1_drift_model.joblib` + `.joblib.json`; the API loads it from `C1_DRIFT_MODEL_PATH` (empty / missing / bad file → drift 1.0). Model files are git-ignored inside C1. Checked end to end with a real server.
 
 ## In progress
 - Nothing running. Tasks 4–5 (Models 1–2): code done; SYNTHETIC results wait for the persona task lists.
@@ -39,4 +40,4 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 Owner sends the persona task lists → run `notebooks/03_simulation_report.ipynb` → report the SYNTHETIC results.
 
 ## Test count
-Root `pytest`: **500 passed** (C1 499 + C4 1), 14 Oct 2026.
+Root `pytest`: **513 passed** (C1 512 + C4 1), 14 Oct 2026.

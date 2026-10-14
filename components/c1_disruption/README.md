@@ -50,5 +50,10 @@ pytest                             # whole repo (root pytest.ini)
 pytest components/c1_disruption    # C1 only
 ```
 
+ML Model 1 in the API: train and download `c1_drift_model.joblib` (+ `.joblib.json`) with
+`notebooks/01_model1_drift.ipynb`, put both in one folder and set
+`C1_DRIFT_MODEL_PATH=<path to the .joblib>` in `.env`. Without it (or if the file is missing) the API
+plans with drift 1.0. Model files are never committed (`components/c1_disruption/.gitignore`).
+
 Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
 in-memory store behind a repository interface, so no database is needed to run it.

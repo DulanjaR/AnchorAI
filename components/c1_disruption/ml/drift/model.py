@@ -85,6 +85,7 @@ class DriftModel:
         self.k: float | None = None
         self.forest: RandomForestQuantileRegressor | None = None
         self.offsets: dict[str, tuple[int, float]] = {}  # student → (n, mean residual)
+        self.n_records = 0
 
     @property
     def trained(self) -> bool:
@@ -117,6 +118,7 @@ class DriftModel:
             sums[s].append(float(r))
         self.offsets = {s: (len(v), float(np.mean(v))) for s, v in sums.items()}
         self.forest = self._forest().fit(X, y)
+        self.n_records = len(records)
         return self
 
     def weight(self, student_id: str) -> tuple[int, float]:

@@ -25,6 +25,16 @@ from components.c1_disruption.app.settings import c1_settings
 from shared.auth import require_api_key
 
 
+def default_corrector(path: str) -> DriftCorrector:
+    """ML Model 1 from C1_DRIFT_MODEL_PATH; empty → NoDrift (drift 1.0). The ML
+    packages are only imported when a model file is configured."""
+    if not path:
+        return NoDrift()
+    from components.c1_disruption.ml.drift.corrector import load_corrector
+
+    return load_corrector(path)
+
+
 def create_app(
     store: Repository | None = None,
     clock: Clock | None = None,
@@ -38,7 +48,7 @@ def create_app(
     app.state.deps = Deps(
         store=MemoryStore() if store is None else store,
         clock=SystemClock() if clock is None else clock,
-        corrector=NoDrift() if corrector is None else corrector,
+        corrector=default_corrector(c1_settings.drift_model_path) if corrector is None else corrector,
         chooser=FixedOrder() if chooser is None else chooser,
     )
     install_error_handlers(app)

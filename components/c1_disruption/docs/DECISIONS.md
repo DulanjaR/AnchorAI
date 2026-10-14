@@ -2,6 +2,13 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Colab-trained Model 1 file used by the API
+- Source: planning chat, 2026-10-14.
+- `ml/drift/persist.py`: `save_model` writes `c1_drift_model.joblib` (the fitted model) and `c1_drift_model.joblib.json` (format version, training date, record and student count, dataset + `synthetic` flag, k, quantiles, library versions); `load_model` checks the format and that it is a trained C1 drift model, and reports whether library versions match.
+- `notebooks/01_model1_drift.ipynb` ends by training on all records, saving both files and downloading them.
+- The API reads **`C1_DRIFT_MODEL_PATH`** (`app/settings.py`). Empty setting, missing file, missing metadata, unknown format or a file that is not a drift model → **NoDrift (drift 1.0)**, logged; the API always starts. ML packages are imported only when a path is set.
+- Model files are **never committed**: `components/c1_disruption/.gitignore` (`*.joblib`, `*.joblib.json`). The .joblib is a pickle: load only files made by the notebook.
+
 ## 2026-10-14 — Sync rule with the planning chat
 - Source: planning chat, 2026-10-14.
 - Commit and push to `origin dev/ravindu` before every report; unfinished work as a `wip:` commit; never report with unpushed changes.
