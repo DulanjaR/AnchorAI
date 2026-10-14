@@ -4,6 +4,16 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Planning decisions step 3/4: full SYNTHETIC run — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: sim/results/c1_simulation_SYNTHETIC.md, sim/results/c1_simulation_SYNTHETIC.json
+Files changed: sim/experiment.py (CLI `main()`, learning-curve table, Model 2 first/second-half acceptance, `summary()`), docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → all passed (count in STATUS.md)
+Results (SYNTHETIC): Model 1 warm MAE planted 7.25 min vs B0 12.19 / B3 8.04; null 4.36 vs B0 4.18 (no harm beyond ~0.2 min); misspecified 16.73 vs B1 16.03; coverage 0.72–0.75 → no calibration. Model 2 mean acceptance: most accepted 0.749, bandit 0.707, random 0.623, fixed 0.609 (accept probabilities are assumptions).
+Decisions applied: DECISIONS.md 2026-10-14 (run, calibration rule)
+Open questions for owner: none new
+Next step: step 5 (OVERRUN_RISK)
+
 ## 2026-10-14 — Planning decisions step 1+2: disruption profile, replanning scope — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: sim/profile.py; sim/data/SYNTHETIC_disruption_profile.csv; tests/sim/test_profile.py

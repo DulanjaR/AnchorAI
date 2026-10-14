@@ -162,8 +162,66 @@ def to_markdown(report: dict[str, Any]) -> str:
                          f"{_mean_sd([sum(p['topUp'] for p in r['events']['profile'].values()) for r in runs])} | |")
             lines.append(f"| personas short of 10 effective disruptions | "
                          f"{_mean_sd([sum(p['shortfall'] > 0 for p in r['events']['profile'].values()) for r in runs])} | |")
-        lines += ["", "| Model 2 policy | mean simulated acceptance |", "|---|---|"]
+        lines += ["", "| Model 1 learning curve (warm, model) | n records seen | MAE min |", "|---|---|---|"]
+        for i, row in enumerate(runs[0]["model1"]["learningCurve"]):
+            label = f"{row['nFrom']}–{row['nTo'] - 1}" if row["nTo"] else f"{row['nFrom']}+"
+            values = [r["model1"]["learningCurve"][i]["maeMinutes"] for r in runs]
+            lines.append(f"| | {label} | {_mean_sd(values)} |")
+        lines += ["", "| Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |",
+                  "|---|---|---|---|"]
         for name in runs[0]["model2"]:
-            lines.append(f"| {name} | {_mean_sd([mean(r['model2'][name]) if r['model2'][name] else None for r in runs])} |")
+            def half(values, second):
+                if not values:
+                    return None
+                k = len(values) // 2
+                part = values[k:] if second else values[:k]
+                return mean(part) if part else None
+            lines.append("| " + " | ".join([
+                name,
+                _mean_sd([mean(r["model2"][name]) if r["model2"][name] else None for r in runs]),
+                _mean_sd([half(r["model2"][name], False) for r in runs]),
+                _mean_sd([half(r["model2"][name], True) for r in runs]),
+            ]) + " |")
         lines.append("")
     return "\n".join(lines)
+
+
+def summary(report: dict[str, Any]) -> dict[str, Any]:
+    """The report without per-event rows (small enough to commit)."""
+    runs = []
+    for r in report["runs"]:
+        events = {k: v for k, v in r["events"].items() if k != "rows"}
+        runs.append({**r, "events": events})
+    return {**report, "runs": runs}
+
+
+def main(argv: list[str] | None = None) -> None:
+    """python -m components.c1_disruption.sim.experiment [--out DIR] [--seeds 11 22 …]
+    Runs the full SYNTHETIC simulation on sim/data/ (the notebook 03 logic) and writes
+    c1_simulation_SYNTHETIC.md and .json to DIR (default sim/results/)."""
+    import argparse
+    import json
+    from pathlib import Path
+
+    here = Path(__file__).parent
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", default=str(here / "results"))
+    parser.add_argument("--seeds", type=int, nargs="*", default=list(settings.SEEDS))
+    parser.add_argument("--variants", nargs="*", default=list(VARIANTS))
+    parser.add_argument("--trees", type=int, default=settings.SIM_N_ESTIMATORS)
+    args = parser.parse_args(argv)
+    data = here / "data"
+    report = run(str(data / "SYNTHETIC_personas.csv"), str(data / "SYNTHETIC_tasks_planned.csv"),
+                 seeds=args.seeds, variants=args.variants, n_estimators=args.trees,
+                 schedule_csv=str(data / "SYNTHETIC_schedule.csv"), habits_csv=str(data / "SYNTHETIC_habits.csv"),
+                 profile_csv=str(data / "SYNTHETIC_disruption_profile.csv"))
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "c1_simulation_SYNTHETIC.md").write_text(to_markdown(report) + "\n", encoding="utf-8", newline="\n")
+    (out / "c1_simulation_SYNTHETIC.json").write_text(json.dumps(summary(report), indent=1) + "\n", encoding="utf-8",
+                                                      newline="\n")
+    print(to_markdown(report))
+
+
+if __name__ == "__main__":
+    main()
