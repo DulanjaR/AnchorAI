@@ -115,6 +115,14 @@ def explain_task(task: Task, context: ExplainContext) -> str:
     return text
 
 
+def explain_overrun(task: Task, high_minutes: int, limit: str, what: str) -> str:
+    """OVERRUN_RISK warning text (PROPOSED wording, planning chat 14 Oct 2026)."""
+    return (
+        f"Overrun risk: it is planned {task['start']}–{task['end']}, but if it takes as long as the high "
+        f"estimate ({high_minutes} min) it would run into {what} at {limit}."
+    )
+
+
 def explain_protected(block: Mapping[str, str]) -> str:
     name = block.get("label") or block["id"]
     return f"Protected time ({name}, {block['start']}–{block['end']}): the planner never moves or shortens it."

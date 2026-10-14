@@ -20,7 +20,13 @@ from components.c1_disruption.engine.classify import (
     tag_for,
 )
 from components.c1_disruption.engine.errors import EngineError
-from components.c1_disruption.engine.explain import ExplainContext, explain_protected, explain_task
+from components.c1_disruption.engine.explain import (
+    ExplainContext,
+    disruption_text,
+    explain_overrun,
+    explain_protected,
+    explain_task,
+)
 from components.c1_disruption.engine.fi import (
     compute_fi,
     deadline_proximity,
@@ -228,6 +234,7 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
     # Unavailable kind: the window is taken time, exactly like a protected block.
     if unavailable:
         gaps = subtract_interval(gaps, window)
+    free_time = list(gaps)  # before placement: where fixed time (blocks, end of day) begins
     window_first = window_active and not unavailable
     slots: dict[str, Interval] = {}
     for item in order:
@@ -310,9 +317,50 @@ def generate_mvd(input: MvdInput, config: ModuleType = default_config) -> Mvd:
         "tasks": results,
         "protect": protect,
         "freeMinutesLeft": free_minutes_left,
-        "warnings": [
-            {"taskId": r["id"], "code": "DEADLINE_RISK", "message": r["explanation"]}
-            for r in results
-            if r["deadlineRisk"]
-        ],
+        "warnings": _warnings(results, order, free_time, horizon, protected_blocks, window if unavailable else None,
+                              explain_ctx),
     }
+
+
+def _overrun_limit(slot_start: int, free_time: list[Interval]) -> int | None:
+    """End of the free stretch the task starts in: where the next fixed block (or the
+    end of the day's free time) begins. Other tasks do not count."""
+    for g in free_time:
+        if g.start <= slot_start < g.end:
+            return g.end
+    return None
+
+
+def _what_ends(limit: int, horizon: Interval, protected_blocks: list[ProtectedBlock],
+               taken_window: Interval | None, ctx: ExplainContext) -> str:
+    if limit == horizon.end:
+        return "the end of today's free time"
+    if taken_window is not None and limit == taken_window.start:
+        return disruption_text(ctx)
+    for block in protected_blocks:
+        if any(piece.start == limit for piece in block_to_intervals(block)):
+            return block.get("label") or block["id"]
+    return "the next fixed block"
+
+
+def _warnings(results: list[MvdTask], order: list[ScoredTask], free_time: list[Interval], horizon: Interval,
+              protected_blocks: list[ProtectedBlock], taken_window: Interval | None, ctx: ExplainContext) -> list[dict]:
+    """DEADLINE_RISK (moved and urgent) and OVERRUN_RISK (planning chat, 14 Oct 2026): a
+    Keep task whose HIGH estimate (ML Model 1 range) would run into the next fixed block
+    or past the end of the day's free time. Planning itself uses the point estimate."""
+    tasks = {item.task["id"]: item.task for item in order}
+    out = []
+    for r in results:
+        if r["deadlineRisk"]:
+            out.append({"taskId": r["id"], "code": "DEADLINE_RISK", "message": r["explanation"]})
+        high = tasks[r["id"]].get("estimatedHoursHigh")
+        if r["tag"] != "Keep" or high is None:
+            continue
+        start = to_minutes(r["start"])
+        high_minutes = js_round(high * MINUTES_PER_HOUR)
+        limit = _overrun_limit(start, free_time)
+        if limit is not None and start + high_minutes > limit:
+            what = _what_ends(limit, horizon, protected_blocks, taken_window, ctx)
+            out.append({"taskId": r["id"], "code": "OVERRUN_RISK",
+                        "message": explain_overrun(r, high_minutes, to_hhmm(limit), what)})
+    return out

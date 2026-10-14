@@ -2,6 +2,12 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — OVERRUN_RISK implemented (step 5)
+- Implements the planning-chat decision "High duration: only for the OVERRUN_RISK warning" (below).
+- `engine/mvd.py` `_warnings`: for every **Keep** task with `estimatedHoursHigh`, if `start + high` runs past the end of the free stretch the task starts in, the MVD's `warnings` get `{taskId, code: "OVERRUN_RISK", message}`. The end of the free stretch = where the next fixed block begins (a protected block, or the window of an unavailable disruption) or the end of the day's free time; other placed tasks do not count. Reduce / Move / Delegate tasks never get it. Planning (Fi, fit, slot, compression %) is unchanged.
+- **PROPOSED wording** (`engine/explain.py` `explain_overrun`): "Overrun risk: it is planned 09:00–11:00, but if it takes as long as the high estimate (240 min) it would run into Lunch at 12:30."
+- Golden unchanged (no high estimate in the golden inputs); a wide range on every golden scenario changes only the warnings (tested).
+
 ## 2026-10-14 — Full SYNTHETIC run done; Model 1 range not calibrated (step 3/4)
 - Implements the planning-chat decisions "Run the notebook 03 logic: 5 seeds × planted/null/misspecified" and "Calibrate Model 1's range only if q10–q90 coverage is outside 70–90%".
 - Run: `python -m components.c1_disruption.sim.experiment` (seeds 11, 22, 33, 44, 55; 100 trees). Results: `sim/results/c1_simulation_SYNTHETIC.md` (+ `.json` without per-event rows). SYNTHETIC, pipeline validation only.

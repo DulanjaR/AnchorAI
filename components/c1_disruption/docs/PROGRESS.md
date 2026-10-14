@@ -4,6 +4,15 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Planning decisions step 5: OVERRUN_RISK warning — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: tests/engine/test_overrun.py
+Files changed: engine/mvd.py (`_warnings`: OVERRUN_RISK for Keep tasks with a high estimate), engine/explain.py (`explain_overrun`), docs/DECISIONS.md, docs/STATUS.md
+Tests: `pytest` (repo root) → 587 passed; golden S1–S16 and the 57 API cases unchanged; a wide range on every golden scenario changes only `warnings`
+Decisions applied: DECISIONS.md 2026-10-14 (high duration only for OVERRUN_RISK)
+Open questions for owner: message wording; "end of window" interpretation (STATUS.md PROPOSED)
+Next step: step 6
+
 ## 2026-10-14 — Planning decisions step 3/4: full SYNTHETIC run — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: sim/results/c1_simulation_SYNTHETIC.md, sim/results/c1_simulation_SYNTHETIC.json
