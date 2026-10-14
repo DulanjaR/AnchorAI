@@ -1,0 +1,7 @@
+,model,accuracy,precision,recall,f1,roc_auc,accuracy_mean,precision_mean,recall_mean,f1_mean,roc_auc_mean
+fixed_split,Majority-class baseline,0.477,0.477,1.0,0.646,0.5,,,,,
+fixed_split,Logistic Regression,0.364,0.389,0.583,0.467,0.417,,,,,
+fixed_split,Random Forest,0.503,0.484,0.639,0.551,0.487,,,,,
+grouped_cv,Majority-class baseline,,,,,,0.36,0.128,0.4,0.194,0.5
+grouped_cv,Logistic Regression,,,,,,0.513,0.523,0.673,0.559,0.564
+grouped_cv,Random Forest,,,,,,0.591,0.571,0.734,0.625,0.628
