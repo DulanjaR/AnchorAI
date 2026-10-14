@@ -2,6 +2,12 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-14 — Model 1 library: quantile-forest; ML pins
+- **Quantile regression forest from `quantile-forest` 1.4.2** (`RandomForestQuantileRegressor`, scikit-learn API). *Why:* a real quantile regression forest (Meinshausen 2006) with the same trees as a Random Forest, so one model gives the point (mean) and the q10–q90 range; scikit-learn compatible; binary wheels install cleanly for Linux x86_64 (Colab) on Python 3.11–3.13 and Windows (checked 14 Oct 2026). Alternatives not taken: scikit-learn `GradientBoostingRegressor(loss="quantile")` (one model per quantile, not a forest); hand-made quantiles from tree leaves (more code to defend).
+- Pins (`requirements.txt`): numpy 2.4.6 (2.5 dropped Python 3.11), scipy 1.17.1, scikit-learn 1.9.1, quantile-forest 1.4.2, joblib 1.6.0, pandas 3.0.6. Model 2 needs only numpy.
+- Implementation choices (`ml/drift/`): student residuals from **out-of-fold** forest predictions (5 folds); k from `K_GRID` (0…100) by leave-one-record-out on the training data only, ties → larger k; forest 200 trees, min 5 samples per leaf. Exclusion-rule limits (drop if overlap > 50% of the span or < 10 min left) are **PROPOSED**.
+- First run on the SYNTHETIC test fixture: the q10–q90 range covered ~95% of actuals (nominal 80%), i.e. conservative. **PROPOSED for later:** calibrate the range (e.g. conformal adjustment on the training fold) if the persona simulation shows the same.
+
 ## 2026-10-14 — D-MOVE carry-over: PROPOSED (not final, not implemented)
 - Moved tasks are carried over to the next day's plan. The detailed rules are **waiting for the owner's approval**; nothing is implemented until the Python port matches all golden scenarios (done) **and** the owner approves the rules.
 - The metrics that depend on it (carry-over placement rate, post-move deadline misses) are reserved in `metrics/` but not computed.

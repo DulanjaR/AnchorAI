@@ -3,8 +3,15 @@
 # and Windows; developed on 3.13.3). Install from the repo root:
 #   pip install -r components/c1_disruption/requirements.txt
 # Satisfies the team's root requirements.txt ranges for these packages.
-# ML packages (scikit-learn, pandas, numpy, joblib; Vowpal Wabbit) are added with
-# Task 4 / Task 5, not before (docs/TASK4_PLAN.md, DRAFT).
+# ML (Model 1 / Model 2, 14 Oct 2026). numpy 2.4.x is the newest line that still
+# supports Python 3.11 (numpy 2.5 needs 3.12+). Wheels checked for Linux x86_64
+# (Colab) on 3.11-3.13 and Windows on 3.11/3.13. Model 2 (LinUCB) is plain numpy.
+numpy==2.4.6
+scipy==1.17.1
+scikit-learn==1.9.1
+quantile-forest==1.4.2
+joblib==1.6.0
+pandas==3.0.6
 
 # API (Phase 4) + shared/config.py, shared/auth.py
 fastapi==0.142.2
