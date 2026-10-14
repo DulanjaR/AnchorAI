@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`10b7571` · 2026-10-14 · "C1 engine: OVERRUN_RISK warning from the high duration estimate (planning uses the point)" (this update is in the commit after it).
+`ff64e95` · 2026-10-14 · "C1 strategy: deferOrder and recoveryTiming; 5-action catalogue with distinctness check" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -13,9 +13,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Step 3/4:** full SYNTHETIC run (5 seeds × planted / null / misspecified) → `sim/results/c1_simulation_SYNTHETIC.md`; Model 1 warm coverage 0.72–0.75 (inside 70–90%) → no calibration.
 - **Step 5:** `OVERRUN_RISK` warning for Keep tasks whose high estimate would cross the next fixed block or the end of the free time (planning still uses the point).
 - **Step 6:** strategy `deferOrder` (`fi` | `deadline`) and `recoveryTiming` (`earliest` | `latest`); 5-action catalogue (default, compress_25, no_compress, deadline_first, evening_first); distinctness check passed (no pair never differs).
+- **Rerun with the 5-action catalogue:** Model 1 unchanged; Model 2 mean acceptance (SYNTHETIC, assumed 0.85/0.3): most accepted 0.742, bandit 0.680, fixed 0.609, random 0.537.
 
 ## In progress
-- Rerun of the SYNTHETIC simulation with the 5-action catalogue.
+- Nothing running.
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -29,7 +30,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
 ## Next step
-Rerun the SYNTHETIC simulation with the 5-action catalogue; then PP1 demo (Task 6); D-MOVE after PP1 (golden S17+ first).
+PP1 demo (Task 6); D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
 Root `pytest`: **608 passed** (C1 607 + C4 1), 14 Oct 2026.

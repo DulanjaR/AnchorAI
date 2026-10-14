@@ -19,7 +19,7 @@ Dated record of design decisions for Component 1. Newest first.
 - Implements the planning-chat decisions "Run the notebook 03 logic: 5 seeds × planted/null/misspecified" and "Calibrate Model 1's range only if q10–q90 coverage is outside 70–90%".
 - Run: `python -m components.c1_disruption.sim.experiment` (seeds 11, 22, 33, 44, 55; 100 trees). Results: `sim/results/c1_simulation_SYNTHETIC.md` (+ `.json` without per-event rows). SYNTHETIC, pipeline validation only.
 - Warm q10–q90 coverage: planted 0.747, null 0.734, misspecified 0.720, all **inside 70–90%** → **no calibration** (rule applied, nothing changed).
-- Note: this run used the 3-action Model 2 catalogue (step 6 not yet committed); the results are rerun after step 6.
+- The results files were rerun after step 6 with the 5-action catalogue (Model 1 unchanged).
 
 ## 2026-10-14 — Team questions stay open
 - Source: planning chat, 2026-10-14.

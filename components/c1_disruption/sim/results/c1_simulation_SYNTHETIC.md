@@ -38,9 +38,9 @@
 | Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
 |---|---|---|---|
 | fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
-| most accepted | 0.749 ± 0.074 | 0.689 ± 0.073 | 0.808 ± 0.079 |
-| random | 0.623 ± 0.064 | 0.626 ± 0.087 | 0.621 ± 0.063 |
-| bandit | 0.707 ± 0.051 | 0.648 ± 0.078 | 0.765 ± 0.035 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
 
 ## Variant: null (SYNTHETIC)
 
@@ -78,9 +78,9 @@
 | Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
 |---|---|---|---|
 | fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
-| most accepted | 0.749 ± 0.074 | 0.689 ± 0.073 | 0.808 ± 0.079 |
-| random | 0.623 ± 0.064 | 0.626 ± 0.087 | 0.621 ± 0.063 |
-| bandit | 0.707 ± 0.051 | 0.648 ± 0.078 | 0.765 ± 0.035 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
 
 ## Variant: misspecified (SYNTHETIC)
 
@@ -118,7 +118,7 @@
 | Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
 |---|---|---|---|
 | fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
-| most accepted | 0.749 ± 0.074 | 0.689 ± 0.073 | 0.808 ± 0.079 |
-| random | 0.623 ± 0.064 | 0.626 ± 0.087 | 0.621 ± 0.063 |
-| bandit | 0.707 ± 0.051 | 0.648 ± 0.078 | 0.765 ± 0.035 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
 

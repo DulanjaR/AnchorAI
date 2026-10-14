@@ -4,6 +4,12 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-14 — Rerun of the SYNTHETIC simulation with 5 actions — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files changed: sim/results/c1_simulation_SYNTHETIC.md/.json, docs/STATUS.md
+Results (SYNTHETIC): Model 1 identical to the 3-action run; Model 2 acceptance most accepted 0.742, bandit 0.680, fixed 0.609, random 0.537 (accept probabilities are assumptions)
+Next step: PP1 demo; D-MOVE after PP1
+
 ## 2026-10-14 — Planning decisions step 6: deferOrder, recoveryTiming, 5-action catalogue — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files created: sim/results/distinctness_SYNTHETIC.txt
