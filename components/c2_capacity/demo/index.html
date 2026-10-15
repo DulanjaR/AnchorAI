@@ -166,6 +166,14 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
 .spark{width:100%;height:46px;display:block}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--deep);color:var(--deep-ink);padding:10px 16px;border-radius:10px;font-size:14px;z-index:9;max-width:calc(100% - 32px)}
 
+body.pilot #sampleTask{display:none}
+input[type="text"],input[type="number"]{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-height:38px;width:100%;max-width:220px}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:12px}
+.field label,.chk{font-size:13px;color:var(--ink-soft)}
+.chk{display:flex;gap:8px;align-items:flex-start;color:var(--ink);margin-top:12px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:8px;cursor:pointer;font-size:14px}
+.opt input{margin-top:3px;accent-color:var(--tide)}
+.opt:has(input:checked){border-color:var(--tide);background:var(--surface-2)}
 @media (max-width:900px){.work{grid-template-columns:minmax(0,1fr)}.gauge{position:static;order:-1}}
 @media (max-width:520px){.drv{grid-template-columns:minmax(0,1fr)}.gauge .num{font-size:52px}}
 </style>
@@ -189,6 +197,7 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
     <button class="tab" role="tab" data-view="today" aria-selected="true">Today</button>
     <button class="tab" role="tab" data-view="baseline" aria-selected="false">My baseline</button>
     <button class="tab" role="tab" data-view="history" aria-selected="false">Decisions</button>
+    <button class="tab" role="tab" data-view="pilot" aria-selected="false">Pilot data</button>
     <button class="tab" role="tab" data-view="eval" aria-selected="false">Evaluation</button>
     <button class="tab" role="tab" data-view="about" aria-selected="false">Evidence and limits</button>
   </nav>
@@ -207,7 +216,8 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
           </div>
         </section>
 
-        <section>
+        <div id="taskHome"></div>
+        <section id="taskSec">
           <div class="sec-h"><span class="n">2</span><h2>Focus check</h2><p>About 50 seconds. Press Space or tap for any digit except 3. Hold back on 3.</p></div>
           <div class="panel">
             <div class="pad" id="pad" role="button" tabindex="0" aria-label="Focus check response area">
@@ -297,6 +307,42 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
     <div class="sec-h"><h2>Decisions</h2><p>The person decides. These entries record what was suggested and what was done.</p></div>
     <div class="two" id="histSummary" style="margin-bottom:16px"></div>
     <div class="panel scroll"><table id="histTable"></table></div>
+  </section>
+
+  <!-- PILOT -->
+  <section class="view" id="v-pilot">
+    <div class="sec-h"><h2>Pilot data</h2><p>Short student research pilot used to train a first model. About 2 minutes per session. Please do 3 sessions at different times of day.</p></div>
+    <div class="two">
+      <div class="panel">
+        <h3 style="font-size:16px">1. Consent and code</h3>
+        <p class="note" style="margin-top:6px">Anonymous. Only a code you choose (for example P01), your answers and your focus-check numbers are saved, on this device. No name, email or phone data. You decide whether to send the file and you can stop at any time. This is a student research pilot, not a medical test.</p>
+        <label class="chk"><input type="checkbox" id="plConsent"> I agree to take part in this pilot.</label>
+        <div class="field"><label for="plCode">Participant code (2 to 8 letters or digits)</label><input type="text" id="plCode" maxlength="8" autocomplete="off" placeholder="P01"></div>
+      </div>
+      <div class="panel">
+        <h3 style="font-size:16px">2. About now</h3>
+        <div class="field"><label for="plSleep">Hours slept last night</label><input type="number" id="plSleep" min="0" max="16" step="0.5" placeholder="7"></div>
+        <div class="field"><label for="plBreak">Minutes since your last proper break</label><input type="number" id="plBreak" min="0" max="600" step="5" placeholder="45"></div>
+      </div>
+    </div>
+    <div style="margin-top:16px" id="pilotTaskSlot"></div>
+    <div class="panel" style="margin-top:16px">
+      <h3 style="font-size:16px">4. Your own rating</h3>
+      <p class="note" style="margin:6px 0 4px">Answer after the focus check. How ready do you feel to start demanding study or work right now?</p>
+      <label class="opt"><input type="radio" name="plLabel" value="High"><span><b>High.</b> Ready, I could start demanding work now.</span></label>
+      <label class="opt"><input type="radio" name="plLabel" value="Moderate"><span><b>Moderate.</b> Manageable, maybe start with something lighter.</span></label>
+      <label class="opt"><input type="radio" name="plLabel" value="Low"><span><b>Low.</b> I would struggle, a break would help first.</span></label>
+      <label class="opt"><input type="radio" name="plLabel" value="At Risk"><span><b>At Risk.</b> I should not start demanding work now.</span></label>
+      <div class="row" style="margin-top:14px"><button class="btn" id="plSave" type="button">Save this session</button><span class="note" id="plHint"></span></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3 style="font-size:16px">5. Send your data</h3>
+      <p class="note" style="margin:6px 0 10px">When your 3 sessions are saved, copy the table and send it to Hirunya (a chat message is fine). Your data stays on this device until you send it.</p>
+      <div class="row"><button class="btn" id="plCopy" type="button">Copy data</button><button class="btn ghost" id="plDownload" type="button">Download CSV</button><button class="btn ghost" id="plClear" type="button">Delete saved rows</button><span class="note" id="plCount"></span></div>
+      <textarea id="plOut" readonly hidden style="margin-top:10px;min-height:120px;font-family:var(--font-mono);font-size:12px"></textarea>
+    </div>
+    <div class="panel scroll" style="margin-top:16px"><table id="plTable"></table></div>
+    <p class="note" style="margin-top:12px">Limits: the rating is your own perception, sleep is typed in, and the group is small. Results will be reported as a pilot, not as a validated model.</p>
   </section>
 
   <!-- EVALUATION -->
@@ -618,6 +664,58 @@ function renderHist(){
   $('histTable').innerHTML=h;
 }
 
+/* ---------- pilot data capture ---------- */
+var PCOLS=['participant','session','time','hour','weekday','sleep_h','min_since_break','rt_ms','rt_sd_ms','miss_pct','premature_pct','accuracy_pct','drift_ms','label'];
+var pil=[];
+function loadPilot(){try{pil=JSON.parse(localStorage.getItem('anchorC2Pilot')||'[]')}catch(e){pil=[]}}
+function pilotCSV(){
+  var lines=[PCOLS.join(',')];
+  pil.slice().reverse().forEach(function(r){lines.push(PCOLS.map(function(c){return r[c]}).join(','))});
+  return lines.join('\n');
+}
+function renderPilot(){
+  var ppl={};pil.forEach(function(r){ppl[r.participant]=1});
+  $('plCount').textContent=pil.length+' session'+(pil.length===1?'':'s')+' saved from '+Object.keys(ppl).length+' code'+(Object.keys(ppl).length===1?'':'s')+' on this device.';
+  var h='<tr><th>Code</th><th>#</th><th>Time</th><th>Sleep</th><th>Break</th><th>RT</th><th>Miss %</th><th>Acc %</th><th>Rating</th></tr>';
+  if(!pil.length)h+='<tr><td colspan="9" class="note">Nothing saved yet.</td></tr>';
+  pil.slice(0,10).forEach(function(r){h+='<tr><td class="mono">'+r.participant+'</td><td class="mono">'+r.session+'</td><td class="mono">'+r.time.replace('T',' ')+'</td><td class="mono">'+r.sleep_h+'</td><td class="mono">'+r.min_since_break+'</td><td class="mono">'+r.rt_ms+'</td><td class="mono">'+r.miss_pct+'</td><td class="mono">'+r.accuracy_pct+'</td><td>'+r.label+'</td></tr>'});
+  $('plTable').innerHTML=h;
+}
+function savePilot(){
+  var hint=$('plHint'),code=$('plCode').value.trim().toUpperCase();
+  if(!$('plConsent').checked){hint.textContent='Please tick the consent box first.';return}
+  if(!/^[A-Z0-9]{2,8}$/.test(code)){hint.textContent='Enter a code of 2 to 8 letters or digits (no name).';return}
+  var sl=parseFloat($('plSleep').value),br=parseFloat($('plBreak').value);
+  if(!(sl>=0&&sl<=16)){hint.textContent='Enter hours slept (0 to 16).';return}
+  if(!(br>=0&&br<=600)){hint.textContent='Enter minutes since your last break (0 to 600).';return}
+  if(!(S.task&&S.taskReal)){hint.textContent='Run the focus check yourself first (step 3).';return}
+  var lb=document.querySelector('input[name="plLabel"]:checked');
+  if(!lb){hint.textContent='Choose your own rating in step 4.';return}
+  var n=pil.filter(function(r){return r.participant===code}).length+1,d=new Date(),t=S.task;
+  pil.unshift({participant:code,session:n,time:new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16),hour:d.getHours(),weekday:d.getDay(),sleep_h:sl,min_since_break:br,
+    rt_ms:Math.round(t.rt),rt_sd_ms:Math.round(t.rtsd),miss_pct:+t.miss.toFixed(1),premature_pct:+t.prem.toFixed(1),accuracy_pct:+t.acc.toFixed(1),drift_ms:Math.round(t.drift),label:lb.value});
+  try{localStorage.setItem('anchorC2Pilot',JSON.stringify(pil))}catch(e){hint.textContent='Could not save on this browser. Use Copy data right now.'}
+  lb.checked=false;S.task=null;S.taskReal=false;
+  $('glyph').textContent='+';$('prog').style.width='0';$('startTask').textContent='Start focus check';$('padHint').textContent='Start the check.';
+  hint.textContent='';render();renderPilot();toast('Session '+n+' saved for '+code+'.');
+}
+function copyPilot(){
+  var csv=pilotCSV();
+  function fallback(){var o=$('plOut');o.hidden=false;o.value=csv;o.focus();o.select();toast('Select all and copy the text below.')}
+  try{navigator.clipboard.writeText(csv).then(function(){toast('Copied. Paste it into a message.')},fallback)}catch(e){fallback()}
+}
+function downloadPilot(){
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([pilotCSV()],{type:'text/csv'}));a.download='c2_pilot_data.csv';
+  document.body.appendChild(a);a.click();a.remove();
+}
+var clearArmed=false;
+function clearPilot(){
+  var b=$('plClear');
+  if(!clearArmed){clearArmed=true;b.textContent='Click again to delete all';setTimeout(function(){clearArmed=false;b.textContent='Delete saved rows'},4000);return}
+  pil=[];try{localStorage.removeItem('anchorC2Pilot')}catch(e){}
+  clearArmed=false;b.textContent='Delete saved rows';renderPilot();
+}
+
 /* ---------- evaluation (SUS, NASA-TLX) ---------- */
 var SUSQ=['I think that I would like to use this system frequently.','I found the system unnecessarily complex.','I thought the system was easy to use.','I think that I would need the support of a technical person to use this system.','I found the various functions in this system were well integrated.','I thought there was too much inconsistency in this system.','I would imagine that most people would learn to use this system very quickly.','I found the system very cumbersome to use.','I felt very confident using the system.','I needed to learn a lot of things before I could get going with this system.'];
 var TLXQ=['Mental demand: how mentally demanding was the task?','Physical demand: how physically demanding was the task?','Temporal demand: how hurried or rushed was the pace?','Performance: how successful were you in doing what you were asked?','Effort: how hard did you have to work?','Frustration: how insecure, discouraged, irritated or stressed were you?'];
@@ -678,6 +776,9 @@ function renderBase(){
 /* ---------- wiring ---------- */
 function setView(v){
   S.view=v;
+  document.body.classList.toggle('pilot',v==='pilot');
+  if(v==='pilot'){$('pilotTaskSlot').appendChild($('taskSec'));$('taskSec').querySelector('.n').textContent='3'}
+  else{$('taskHome').after($('taskSec'));$('taskSec').querySelector('.n').textContent='2'}
   document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('on',x.id==='v-'+v)});
   document.querySelectorAll('.tab').forEach(function(t){t.setAttribute('aria-selected',String(t.dataset.view===v))});
 }
@@ -717,6 +818,8 @@ function init(){
   $('susBox').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;document.querySelectorAll('[data-sus="'+b.dataset.sus+'"]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))})});
   $('tlxBox').addEventListener('input',function(e){var i=e.target.dataset.tlx;if(i!==undefined)$('tlxv'+i).textContent=e.target.value});
   $('evSave').addEventListener('click',saveEval);
+  $('plSave').addEventListener('click',savePilot);$('plCopy').addEventListener('click',copyPilot);$('plDownload').addEventListener('click',downloadPilot);$('plClear').addEventListener('click',clearPilot);
+  loadPilot();renderPilot();
   renderEvalForm();loadEvals();renderEvals();
   loadHist();renderHist();renderBase();useSample();
 }

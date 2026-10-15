@@ -6,3 +6,7 @@ data/swell_kw/*
 models/*
 !models/README.md
 .ipynb_checkpoints/
+
+# pilot data from classmates (anonymous codes only)
+data/pilot/*
+!data/pilot/README.md
