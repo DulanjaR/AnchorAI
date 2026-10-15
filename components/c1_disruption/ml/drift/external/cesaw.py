@@ -13,8 +13,10 @@ Mapping, one CESAW task -> one Model 1 record:
   priority         = "Medium" (CESAW has none)
 Tasks with plan <= 0, actual <= 0 or no readable start time are dropped and counted.
 
-Evaluation = the synthetic one (ml/drift/evaluation.py): leave-one-developer-out (cold
-start) and rolling-origin (warm) for the model and baselines B0-B3, folds run in parallel.
+Evaluation = the synthetic one (ml/drift/evaluation.py), for the model and baselines B0-B3:
+cold start with developers held out in groups (COLD_FOLDS seeded groups; a developer's own
+tasks are never in training when they are predicted) and rolling-origin (warm) on a seeded
+sample of developers. Folds run in parallel and print progress.
 Every result is labelled REAL (CESAW, professional developers), never SYNTHETIC.
 """
 import csv
@@ -113,13 +115,23 @@ def _merge(parts: list[dict[str, Predictions]], names: Sequence[str]) -> dict[st
     return merged
 
 
-def cold_start(records: Records, factories: Mapping[str, Factory], n_jobs: int = -1,
-               developers: Sequence[str] | None = None) -> dict[str, Predictions]:
-    """Leave-one-developer-out: train on everyone else, predict the held-out developer (n = 0)."""
-    own = _by_developer(records)
-    chosen = sorted(own) if developers is None else sorted(developers)
-    jobs = [delayed(_fit_predict)(factories, [r for r in records if r["studentId"] != d], own[d], 0) for d in chosen]
-    return _merge(Parallel(n_jobs=n_jobs)(jobs), list(factories))
+def cold_groups(developers: Sequence[str], folds: int = settings.COLD_FOLDS) -> list[list[str]]:
+    """Seeded split of the developers into `folds` groups of (almost) equal size."""
+    order = sorted(developers)
+    random.Random(settings.COLD_SEED).shuffle(order)
+    return [sorted(order[i::folds]) for i in range(min(folds, len(order)))]
+
+
+def cold_start(records: Records, factories: Mapping[str, Factory], n_jobs: int = settings.N_JOBS,
+               folds: int = settings.COLD_FOLDS) -> dict[str, Predictions]:
+    """Cold start: each group of developers is held out in turn; train on all other developers,
+    predict the group's tasks with n = 0 (none of their own records seen)."""
+    jobs = []
+    for group in cold_groups(sorted({r["studentId"] for r in records}), folds):
+        held = set(group)
+        jobs.append(delayed(_fit_predict)(factories, [r for r in records if r["studentId"] not in held],
+                                          [r for r in records if r["studentId"] in held], 0))
+    return _merge(Parallel(n_jobs=n_jobs, verbose=10)(jobs), list(factories))
 
 
 def warm_developers(records: Records) -> list[str]:
@@ -130,7 +142,7 @@ def warm_developers(records: Records) -> list[str]:
 
 
 def warm_start(records: Records, factories: Mapping[str, Factory], developers: Sequence[str],
-               step_days: int = settings.WARM_STEP_DAYS, n_jobs: int = -1) -> dict[str, Predictions]:
+               step_days: int = settings.WARM_STEP_DAYS, n_jobs: int = settings.N_JOBS) -> dict[str, Predictions]:
     """Rolling-origin as in ml/drift/evaluation.py (min history 1 day), only for `developers`,
     with one origin per `step_days` of the developer's own days."""
     own = _by_developer(records)
@@ -143,18 +155,17 @@ def warm_start(records: Records, factories: Mapping[str, Factory], developers: S
             past = [r for r in own[d] if r["date"] < days[i]]
             test = [r for r in own[d] if r["date"] in window]
             jobs.append(delayed(_fit_predict)(factories, others + past, test, len(past)))
-    return _merge(Parallel(n_jobs=n_jobs)(jobs), list(factories))
+    return _merge(Parallel(n_jobs=n_jobs, verbose=10)(jobs), list(factories))
 
 
-def evaluate(records: Records, n_estimators: int = settings.N_ESTIMATORS, n_jobs: int = -1,
-             cold_developers: Sequence[str] | None = None,
-             warm_sample: Sequence[str] | None = None) -> dict[str, Any]:
+def evaluate(records: Records, n_estimators: int = settings.N_ESTIMATORS, n_jobs: int = settings.N_JOBS,
+             folds: int = settings.COLD_FOLDS, warm_sample: Sequence[str] | None = None) -> dict[str, Any]:
     factories = methods(n_estimators)
     sample = list(warm_sample) if warm_sample is not None else warm_developers(records)
-    cold = cold_start(records, factories, n_jobs, cold_developers)
+    cold = cold_start(records, factories, n_jobs, folds)
     warm = warm_start(records, factories, sample, n_jobs=n_jobs)
     return {
-        "label": settings.LABEL, "trees": n_estimators, "warmDevelopers": sample,
+        "label": settings.LABEL, "trees": n_estimators, "coldFolds": folds, "warmDevelopers": sample,
         "cold": {name: score(p) for name, p in cold.items()},
         "warm": {name: score(p) for name, p in warm.items()},
         "learningCurve": learning_curve(warm["model"]),
@@ -185,10 +196,11 @@ def to_markdown(report: dict[str, Any], dropped: Mapping[str, int], shape: Mappi
         f"sd {f(shape['sdLogRatio'])}.",
         f"- Model: quantile forest, {report['trees']} trees (production default 200). Warm evaluation: seeded sample of "
         f"{len(report['warmDevelopers'])} developers with ≥ {settings.WARM_MIN_DAYS} working days, one origin per "
-        f"{settings.WARM_STEP_DAYS} of their days. Cold start covers every developer.",
+        f"{settings.WARM_STEP_DAYS} of their days. Cold start covers every developer: {report['coldFolds']} seeded "
+        "groups of developers, each held out in turn (none of a developer's own tasks in training).",
         "",
     ]
-    for part, title in (("cold", "Cold start — leave-one-developer-out (n = 0)"),
+    for part, title in (("cold", "Cold start — developers held out in groups (n = 0)"),
                         ("warm", "Warm — rolling-origin (sampled developers)")):
         lines += [f"## {title}", "", "| Method | MAE minutes | MAE log ratio | q10–q90 coverage | n |", "|---|---|---|---|---|"]
         for name, s in report[part].items():
@@ -213,7 +225,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--path", default=c1_settings.cesaw_path)
     parser.add_argument("--out", default=str(here / "docs" / "results" / "c1_model1_cesaw.md"))
     parser.add_argument("--trees", type=int, default=settings.N_ESTIMATORS)
-    parser.add_argument("--jobs", type=int, default=-1)
+    parser.add_argument("--jobs", type=int, default=settings.N_JOBS)
     args = parser.parse_args(argv)
     if not args.path:
         parser.error("set C1_CESAW_PATH or pass --path (folder with CESAW_task_fact.csv)")

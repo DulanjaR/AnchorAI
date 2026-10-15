@@ -6,6 +6,16 @@ from typing import Final
 # every fold fits six forests. Same value for every fold and every method.
 N_ESTIMATORS: Final = 50
 
+# Cold start: developers are split into this many groups (seeded); each group is held out
+# in turn, so every developer is predicted without any of their own tasks in training.
+# (One fold per developer = 247 fits did not finish; owner approved 15 Oct 2026.)
+COLD_FOLDS: Final = 10
+COLD_SEED: Final = 2026
+
+# Parallel workers. Each one holds a full forest (the quantile forest keeps its training
+# samples), so more workers run out of memory; with 7 a worker crashed.
+N_JOBS: Final = 3
+
 # Warm (rolling-origin) evaluation: a seeded sample of developers, because one fit on
 # 60,000 tasks takes about a minute. Developers need enough history to be evaluated warm.
 WARM_DEVELOPERS: Final = 40

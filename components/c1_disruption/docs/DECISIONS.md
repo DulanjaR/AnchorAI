@@ -2,6 +2,18 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-15 — CESAW evaluation design: cold start in 10 developer groups
+- Source: owner ("start" on the proposal of 15 Oct 2026).
+- The first CESAW run (one fold per developer = 247 forest fits on ~60,000 tasks, 7 workers) did not finish in 11 h and a worker crashed (memory); it was stopped.
+- **Cold start:** developers split into 10 seeded groups (`COLD_FOLDS`, `COLD_SEED` in `ml/drift/external/settings.py`); each group held out in turn, so no developer's own tasks are in training when they are predicted. **Warm:** unchanged (seeded 40 developers with ≥ 20 working days, one origin per 30 of their days). 3 workers, progress printed.
+- Mapping accepted with it: priority `Medium` for every task; tasks without a readable start time are dropped and counted.
+
+## 2026-10-15 — CESAW evaluation design: cold start in 10 developer groups
+- Source: owner ("start" on the proposal of 15 Oct 2026).
+- The first CESAW run (one fold per developer = 247 forest fits on ~60,000 tasks, 7 workers) did not finish in 11 h and a worker crashed (memory); it was stopped.
+- **Cold start:** developers split into 10 seeded groups (`COLD_FOLDS`, `COLD_SEED` in `ml/drift/external/settings.py`); each group held out in turn, so no developer's own tasks are in training when they are predicted. **Warm:** unchanged (seeded 40 developers with ≥ 20 working days, one origin per 30 of their days). 3 workers, progress printed.
+- Mapping accepted with it: priority `Medium` for every task; tasks without a readable start time are dropped and counted.
+
 ## 2026-10-14 — deferOrder / recoveryTiming implemented; 5-action catalogue (step 6)
 - Implements the planning-chat decision "Strategy settings deferOrder and recoveryTiming; 5-action catalogue" (below). Defaults reproduce the golden spec (tested).
 - **PROPOSED interpretations:** `deferOrder: "deadline"` keeps the candidate groups A–D (locked) and orders **within** each group by earliest absolute deadline, then Fi, then shortest duration. `recoveryTiming: "latest"` keeps window-first (Q6, locked); outside it, a task goes to the **latest** free gap that holds it, at the gap's end; for compression, equal largest gaps go to the latest.

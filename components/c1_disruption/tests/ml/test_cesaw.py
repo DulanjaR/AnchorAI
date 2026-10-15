@@ -77,13 +77,24 @@ def test_warm_sample_is_seeded_and_needs_enough_days(tmp_path):
     assert cesaw.warm_developers(records[:30]) == []
 
 
+def test_cold_groups_cover_every_developer_once_and_are_seeded():
+    developers = [f"D{i}" for i in range(23)]
+    groups = cesaw.cold_groups(developers)
+    assert len(groups) == settings.COLD_FOLDS
+    assert sorted(d for g in groups for d in g) == sorted(developers)
+    assert {len(g) for g in groups} == {2, 3}
+    assert cesaw.cold_groups(developers) == groups
+    assert len(cesaw.cold_groups(developers[:3])) == 3  # never an empty group
+
+
 def test_evaluation_runs_on_a_small_file_and_is_labelled_real(tmp_path):
     records, dropped = small_world(tmp_path)
-    report = cesaw.evaluate(records, n_estimators=10, n_jobs=1)
+    report = cesaw.evaluate(records, n_estimators=10, n_jobs=1, folds=2)
     assert report["label"] == "REAL (CESAW, professional developers)"
     assert set(report["cold"]) == set(report["warm"]) == {"model", "B0 drift = 1.0", "B1 global mean",
                                                           "B2 per-student mean", "B3 shrinkage only"}
     assert report["cold"]["model"]["n"] == len(records)  # every developer is held out once
+    assert report["coldFolds"] == 2
     assert report["cold"]["model"]["coverage"] is not None
     assert report["warm"]["B0 drift = 1.0"]["coverage"] is None
     text = cesaw.to_markdown(report, dropped, cesaw.describe(records))
