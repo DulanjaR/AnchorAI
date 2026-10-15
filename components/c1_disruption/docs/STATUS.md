@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`a9989cd` · 2026-10-15 · "wip: C1 Model 1 on REAL CESAW data - loader, evaluation, notebook 04 (run not finished)" (this update is in the commit after it).
+`a75f808` · 2026-10-15 · "C1 Task 6: PP1 demo - one power-cut day end to end through the API" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -15,6 +15,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Step 6:** strategy `deferOrder` (`fi` | `deadline`) and `recoveryTiming` (`earliest` | `latest`); 5-action catalogue (default, compress_25, no_compress, deadline_first, evening_first); distinctness check passed (no pair never differs).
 - **Rerun with the 5-action catalogue:** Model 1 unchanged; Model 2 mean acceptance (SYNTHETIC, assumed 0.85/0.3): most accepted 0.742, bandit 0.680, fixed 0.609, random 0.537.
 - **Task 6 (part 1): PP1 demo script** `demo/pp1_demo.py`: one power-cut day end to end through the API (in-process, or `--url` for a running server): plan → confirmed disruption → MVD with all four tags and their explanations → accept → tags for C3/C4 → feedback logged. Tested (`tests/test_demo.py`).
+- **Task 6 (part 2): PP1 web demo** `demo/web_demo.py` + `demo/web/index.html`: a small page in front of the real API (add tasks, protected time, report a disruption, MVD timeline with original vs new slots, every tag explained, accept/reject, hand-off to C3/C4). `python -m components.c1_disruption.demo.web_demo`. Tested (`tests/test_web_demo.py`); checked in a headless browser.
 
 ## In progress
 - **Model 1 on REAL data (CESAW):** code, tests, notebook 04, METHODOLOGY §9 and `C1_CESAW_PATH` done (wip commit). The full run (leave-one-developer-out over 247 developers + warm sample, 50 trees) did not finish in 11 h (a worker crashed) and was stopped; no result table yet. Waiting on owner: a faster evaluation design (see PROPOSED).

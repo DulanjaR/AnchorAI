@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor AI · Disruption Recovery</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --ink: #1d2433; --muted: #667085; --line: #e3e6ec;
+    --accent: #2f5bea; --accent-ink: #ffffff; --danger: #c8372d;
+    --keep: #1f9d55; --reduce: #d98a00; --move: #5b6b82; --delegate: #7a4bd1; --protect: #c9ced8;
+    --planned: #9db4f5; --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151c; --card: #1b2029; --ink: #e8ebf1; --muted: #9aa3b2; --line: #2c3340;
+      --accent: #6d8dff; --accent-ink: #0d1020; --danger: #ff7b70;
+      --keep: #3ccf7f; --reduce: #f2b33d; --move: #8b9ab0; --delegate: #a98bf0; --protect: #3a4250;
+      --planned: #46598f; --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--card);
+           display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 19px; margin: 0; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  main { max-width: 1320px; margin: 0 auto; padding: 20px 16px 60px;
+         display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+          box-shadow: var(--shadow); margin-bottom: 18px; }
+  .card h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .step { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+          background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 700; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
+  input, select { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px;
+                  background: var(--bg); color: var(--ink); font: inherit; }
+  input[type=checkbox] { width: auto; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .check { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 14px; color: var(--ink); }
+  button { font: inherit; border-radius: 8px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line);
+           background: var(--card); color: var(--ink); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  button.danger { color: var(--danger); }
+  button.small { padding: 3px 9px; font-size: 12px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; }
+  .Keep { background: var(--keep); } .Reduce { background: var(--reduce); }
+  .Move { background: var(--move); } .Delegate { background: var(--delegate); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+  .chip { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+  /* timeline */
+  .tl { position: relative; margin-top: 6px; }
+  .tl-axis, .tl-row { display: grid; grid-template-columns: 190px 1fr; align-items: center; }
+  .tl-axis .track { height: 18px; }
+  .tl-row { min-height: 34px; border-top: 1px solid var(--line); }
+  .tl-name { font-size: 13px; padding-right: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .track { position: relative; height: 34px; }
+  .tick { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--line); font-size: 10px; color: var(--muted); }
+  .tick span { position: absolute; top: 2px; left: 3px; }
+  .bar { position: absolute; top: 7px; height: 20px; border-radius: 5px; font-size: 11px; color: #fff;
+         padding: 1px 6px; white-space: nowrap; overflow: hidden; }
+  .bar.ghost { background: transparent; border: 2px dashed var(--planned); top: 5px; height: 24px; }
+  .bar.planned { background: var(--planned); color: var(--ink); }
+  .overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; }
+  .overlay.protect { background: var(--protect); opacity: .45; }
+  .overlay.window { background: repeating-linear-gradient(45deg, rgba(200,55,45,.18) 0 6px, rgba(200,55,45,.05) 6px 12px);
+                    border-left: 2px solid var(--danger); border-right: 2px solid var(--danger); }
+  .overlay-label { position: absolute; top: -18px; font-size: 11px; color: var(--danger); white-space: nowrap; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+  /* lists */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .done td { color: var(--muted); text-decoration: line-through; }
+  .tablewrap { overflow-x: auto; }
+  .explain { display: grid; gap: 10px; margin-top: 14px; }
+  .ex { border: 1px solid var(--line); border-left: 4px solid var(--move); border-radius: 8px; padding: 9px 12px; }
+  .ex.Keep { border-left-color: var(--keep); background: transparent; } .ex.Reduce { border-left-color: var(--reduce); background: transparent; }
+  .ex.Move { border-left-color: var(--move); background: transparent; } .ex.Delegate { border-left-color: var(--delegate); background: transparent; }
+  .ex-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
+  .ex-meta { font-size: 12px; color: var(--muted); }
+  .code { font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: var(--muted); }
+  .risk { color: var(--danger); font-weight: 600; font-size: 12px; }
+  .warn { border: 1px solid var(--reduce); border-radius: 8px; padding: 8px 12px; margin-top: 10px; font-size: 13px; }
+  .handoff { border: 1px solid var(--keep); border-radius: 8px; padding: 10px 12px; margin-top: 14px; font-size: 14px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 18px 0; text-align: center; }
+  #toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 90vw;
+           background: var(--danger); color: #fff; padding: 10px 16px; border-radius: 10px; display: none; z-index: 9; }
+  #toast.ok { background: var(--keep); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Anchor AI · Disruption Recovery Planner</h1>
+    <div class="sub">Component 1 demo: plan your day, report a disruption, get your Minimum Viable Day.</div>
+  </div>
+  <div class="actions" style="margin:0">
+    <span class="muted" id="who"></span>
+    <button id="btnSample">Load sample day</button>
+    <button id="btnNew">New student</button>
+  </div>
+</header>
+
+<main>
+  <div>
+    <section class="card">
+      <h2><span class="step">1</span> My day</h2>
+      <label for="day">Date</label>
+      <input type="date" id="day">
+      <div class="row">
+        <div><label for="workStart">Free from</label><input type="time" id="workStart" value="08:00"></div>
+        <div><label for="workEnd">Until</label><input type="time" id="workEnd" value="18:00"></div>
+      </div>
+      <label>Protected time (the planner never moves it)</label>
+      <div id="blocks" class="chips"></div>
+      <div class="row3">
+        <input id="blkLabel" placeholder="e.g. Lunch" aria-label="Protected block name">
+        <input type="time" id="blkStart" value="12:30" aria-label="Protected from">
+        <input type="time" id="blkEnd" value="13:30" aria-label="Protected until">
+      </div>
+      <div class="actions">
+        <button id="btnHours">Save hours</button>
+        <button id="btnBlock">Add protected time</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span> Add a task</h2>
+      <label for="tTitle">Task</label>
+      <input id="tTitle" placeholder="e.g. Finish lab report">
+      <div class="row">
+        <div><label for="tType">Type</label><select id="tType"></select></div>
+        <div><label for="tPriority">Priority</label><select id="tPriority"></select></div>
+      </div>
+      <div class="row">
+        <div><label for="tHours">Takes (hours)</label><input type="number" id="tHours" min="0.25" step="0.25" value="1"></div>
+        <div><label for="tDeadline">Due</label><input type="datetime-local" id="tDeadline"></div>
+      </div>
+      <div class="row">
+        <div><label for="tStart">Planned start (optional)</label><input type="time" id="tStart"></div>
+        <div><label for="tEnd">Planned end</label><input type="time" id="tEnd"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="tDelegable"> Someone else (or AI help) could do this</label>
+      <div class="actions"><button class="primary" id="btnTask">Add task</button></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">3</span> Something happened</h2>
+      <label for="dType">Disruption</label>
+      <select id="dType"></select>
+      <div class="row">
+        <div><label for="dStart">Started at</label><input type="time" id="dStart" value="09:00"></div>
+        <div><label for="dLost">Time lost (minutes)</label><input type="number" id="dLost" min="1" max="1439" value="150"></div>
+      </div>
+      <div class="row">
+        <div><label for="dSeverity">How bad</label>
+          <select id="dSeverity"><option value="1">1 · minor</option><option value="2">2 · moderate</option><option value="3" selected>3 · severe</option></select></div>
+        <div><label for="dFrom">Replan from</label><input type="time" id="dFrom" value="09:00"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="dConfirm"> Yes, this really happened</label>
+      <div class="actions"><button class="primary" id="btnMvd">Build my Minimum Viable Day</button></div>
+      <p class="muted" style="margin-bottom:0">Nothing changes until you accept: the planner suggests, you decide.</p>
+    </section>
+  </div>
+
+  <div>
+    <section class="card">
+      <h2>Today's plan</h2>
+      <div id="planTimeline"></div>
+      <div class="tablewrap" style="margin-top:14px"><table>
+        <thead><tr><th>Task</th><th>Type</th><th>Priority</th><th>Hours</th><th>Due</th><th>Planned</th><th>MVD</th><th></th></tr></thead>
+        <tbody id="taskRows"></tbody>
+      </table></div>
+      <div id="noTasks" class="empty">No tasks yet. Add one on the left, or press <b>Load sample day</b>.</div>
+    </section>
+
+    <section class="card" id="mvdCard" hidden>
+      <h2>Your Minimum Viable Day <span id="mvdStatus" class="chip"></span></h2>
+      <div id="mvdSummary" class="chips"></div>
+      <div id="mvdTimeline"></div>
+      <div class="legend">
+        <span><i style="border:2px dashed var(--planned)"></i>original plan</span>
+        <span><i class="Keep"></i>Keep</span><span><i class="Reduce"></i>Reduce (shortened)</span>
+        <span><i class="Move"></i>Move to tomorrow</span><span><i class="Delegate"></i>Delegate</span>
+        <span><i style="background:var(--protect)"></i>protected</span>
+        <span><i style="background:rgba(200,55,45,.35)"></i>disruption</span>
+      </div>
+      <div id="mvdWarnings"></div>
+      <div class="explain" id="mvdExplain"></div>
+      <div class="actions" id="mvdActions">
+        <button class="primary" id="btnAccept">Accept this plan</button>
+        <button class="danger" id="btnReject">Reject</button>
+      </div>
+      <div id="handoff"></div>
+    </section>
+  </div>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+const CFG = /*__CONFIG__*/{};
+const $ = (id) => document.getElementById(id);
+const TAG_ORDER = ["Keep", "Reduce", "Delegate", "Move"];
+const TAG_TEXT = { Keep: "Keep", Reduce: "Reduce", Move: "Move to tomorrow", Delegate: "Delegate" };
+const NAMES = { power_outage: "Power cut", transport_delay: "Transport delay", connectivity_failure: "No internet",
+                urgent_work: "Urgent work", family_obligation: "Family obligation", health_issue: "Health issue" };
+const state = { user: "", tasks: [], blocks: [], settings: null, mvd: null };
+
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function toast(msg, ok = false) {
+  const t = $("toast"); t.textContent = msg; t.className = ok ? "ok" : ""; t.style.display = "block";
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => (t.style.display = "none"), ok ? 2200 : 6000);
+}
+async function api(method, path, body) {
+  const res = await fetch(CFG.prefix + path, {
+    method, headers: { "X-API-Key": CFG.apiKey, "X-User-Id": state.user, "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error((data && data.error && data.error.message) || `${res.status} ${res.statusText}`);
+  return data;
+}
+async function run(fn) { try { await fn(); } catch (e) { toast(e.message); } }
+
+const day = () => $("day").value;
+const toMin = (hhmm) => { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; };
+const pad = (n) => String(n).padStart(2, "0");
+const fmtDue = (iso) => { const d = new Date(iso); const today = new Date(day() + "T00:00");
+  const days = Math.round((new Date(iso.slice(0, 10) + "T00:00") - today) / 864e5);
+  const when = days === 0 ? "today" : days === 1 ? "tomorrow" : days < 0 ? iso.slice(0, 10) : `in ${days} days`;
+  return `${when} ${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const addDays = (n, hhmm) => { const d = new Date(day() + "T00:00"); d.setDate(d.getDate() + n);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${hhmm}`; };
+
+/* ---------- timeline ---------- */
+function timeline(rows, opts) {
+  // rows: [{name, bars:[{start,end,cls,text}]}]; opts: {from,to,protect:[{label,start,end}],window:{start,end,label}}
+  const from = Math.floor(opts.from / 60) * 60, to = Math.ceil(opts.to / 60) * 60, span = Math.max(to - from, 60);
+  const pct = (m) => `${((Math.min(Math.max(m, from), to) - from) / span) * 100}%`;
+  const width = (a, b) => `${((Math.min(b, to) - Math.max(a, from)) / span) * 100}%`;
+  const overlays = () => (opts.protect || []).map(p =>
+      `<div class="overlay protect" style="left:${pct(toMin(p.start))};width:${width(toMin(p.start), toMin(p.end))}" title="${esc(p.label)}"></div>`).join("")
+    + (opts.window ? `<div class="overlay window" style="left:${pct(toMin(opts.window.start))};width:${width(toMin(opts.window.start), toMin(opts.window.end))}"></div>` : "");
+  let ticks = "";
+  for (let m = from; m <= to; m += 60) ticks += `<div class="tick" style="left:${pct(m)}"><span>${pad(m / 60 % 24)}:00</span></div>`;
+  const label = opts.window ? `<div class="overlay-label" style="left:${pct(toMin(opts.window.start))}">${esc(opts.window.label)}</div>` : "";
+  let html = `<div class="tl"><div class="tl-axis"><div></div><div class="track" style="height:22px">${ticks}${label}</div></div>`;
+  for (const r of rows) {
+    const bars = r.bars.filter(b => b.start && b.end).map(b =>
+      `<div class="bar ${b.cls}" style="left:${pct(toMin(b.start))};width:${width(toMin(b.start), toMin(b.end))}" title="${esc(r.name)} ${b.start}–${b.end}">${esc(b.text || "")}</div>`).join("");
+    html += `<div class="tl-row"><div class="tl-name" title="${esc(r.name)}">${r.label || esc(r.name)}</div><div class="track">${overlays()}${bars}</div></div>`;
+  }
+  return html + "</div>";
+}
+function range(extra) {
+  const s = state.settings || { workStart: $("workStart").value, workEnd: $("workEnd").value };
+  const times = [s.workStart, s.workEnd, ...extra.filter(Boolean)].map(toMin);
+  return { from: Math.min(...times), to: Math.max(...times) };
+}
+
+/* ---------- render ---------- */
+function renderBlocks() {
+  $("blocks").innerHTML = state.blocks.length ? state.blocks.map(b =>
+    `<span class="chip">${esc(b.label)} ${b.start}–${b.end} <button class="small" data-del-block="${b.id}" aria-label="Remove">×</button></span>`).join("")
+    : `<span class="muted">none</span>`;
+}
+function renderTasks() {
+  const rows = state.tasks;
+  $("noTasks").hidden = rows.length > 0;
+  $("taskRows").innerHTML = rows.map(t => `<tr class="${t.status === "done" ? "done" : ""}">
+    <td>${esc(t.title)}${t.delegable ? ' <span class="muted">(delegable)</span>' : ""}</td><td>${esc(t.type)}</td><td>${esc(t.priority)}</td>
+    <td>${t.estimatedHours}</td><td>${fmtDue(t.deadline)}</td>
+    <td>${t.plannedStart ? `${t.plannedStart}–${t.plannedEnd}` : '<span class="muted">if time</span>'}</td>
+    <td>${t.mvdTag ? `<span class="pill ${t.mvdTag}">${t.mvdTag}</span> ${t.mvdStart ? `${t.mvdStart}–${t.mvdEnd}` : ""}` : ""}</td>
+    <td style="white-space:nowrap">${t.status === "done" ? "done" : `<button class="small" data-done="${t.id}">Done</button>`}
+      <button class="small" data-del-task="${t.id}" aria-label="Delete">×</button></td></tr>`).join("");
+  const planned = rows.filter(t => t.status !== "done");
+  const r = range(planned.flatMap(t => [t.plannedStart, t.plannedEnd, t.mvdStart, t.mvdEnd]));
+  $("planTimeline").innerHTML = planned.length ? timeline(planned.map(t => ({
+    name: t.title,
+    bars: t.mvdTag && t.mvdStart ? [{ start: t.mvdStart, end: t.mvdEnd, cls: t.mvdTag, text: t.mvdTag }]
+                                : [{ start: t.plannedStart, end: t.plannedEnd, cls: "planned", text: "" }],
+  })), { ...r, protect: state.blocks }) : "";
+}
+function renderMvd() {
+  const m = state.mvd; $("mvdCard").hidden = !m; if (!m) return;
+  const plan = m.plan, d = plan.disruption;
+  const original = Object.fromEntries((m.comparison.original || []).map(o => [o.taskId, o]));
+  const tasks = [...plan.tasks].sort((a, b) => TAG_ORDER.indexOf(a.tag) - TAG_ORDER.indexOf(b.tag) || (a.start || "99").localeCompare(b.start || "99"));
+  const status = { proposed: "proposed: waiting for you", accepted: "accepted", rejected: "rejected", edited: "edited", superseded: "replaced by a newer one" }[m.status] || m.status;
+  $("mvdStatus").textContent = status;
+  const counts = TAG_ORDER.map(t => [t, tasks.filter(x => x.tag === t).length]).filter(([, n]) => n);
+  $("mvdSummary").innerHTML = `<span class="chip">${esc(NAMES[d.type] || d.type)} ${d.start}–${d.end} (${d.kind === "unavailable" ? "your time is taken" : "some tasks can't be done during it"})</span>`
+    + counts.map(([t, n]) => `<span class="pill ${t}">${n} × ${TAG_TEXT[t]}</span>`).join(" ")
+    + `<span class="chip">replanned from ${plan.horizon.start} · free time left ${plan.freeMinutesLeft} min</span>`;
+  const r = range([d.start, d.end, ...tasks.flatMap(t => [t.start, t.end, original[t.id]?.start, original[t.id]?.end])]);
+  $("mvdTimeline").innerHTML = timeline(tasks.map(t => ({
+    name: t.title,
+    label: `<span class="pill ${t.tag}" style="margin-right:6px">${t.tag[0]}</span>${esc(t.title)}`,
+    bars: [
+      { start: original[t.id]?.start, end: original[t.id]?.end, cls: "ghost", text: "" },
+      { start: t.start, end: t.end, cls: t.tag, text: t.tag === "Reduce" ? `−${t.compressionPct}%` : t.tag },
+    ],
+  })), { ...r, protect: plan.protect, window: { start: d.start, end: d.end, label: NAMES[d.type] || d.type } });
+  $("mvdWarnings").innerHTML = (plan.warnings || []).map(w => `<div class="warn">⚠ ${esc(w.message)} <span class="code">${esc(w.code)}</span></div>`).join("");
+  $("mvdExplain").innerHTML = tasks.map(t => `<div class="ex ${t.tag}">
+      <div class="ex-head"><span class="pill ${t.tag}">${TAG_TEXT[t.tag]}</span>${esc(t.title)}
+        <span class="ex-meta">${t.start ? `${t.start}–${t.end}` : "not today"}${t.tag === "Reduce" ? ` · shortened by ${t.compressionPct}%` : ""}</span>
+        ${t.deadlineRisk ? '<span class="risk">⚠ deadline at risk</span>' : ""}</div>
+      <div>${esc(t.explanation)}</div>
+      <div class="code">reason ${esc(t.reason)} · Fi ${t.fi == null ? "–" : +t.fi.toFixed(3)} · due ${fmtDue(t.deadline)}</div></div>`).join("");
+  const open = m.status === "proposed";
+  $("btnAccept").disabled = $("btnReject").disabled = !open;
+  $("mvdActions").hidden = !open;
+  if (m.status === "accepted" || m.status === "edited") {
+    const keep = tasks.filter(t => t.tag === "Keep").map(t => esc(t.title));
+    const dele = tasks.filter(t => t.tag === "Delegate").map(t => esc(t.title));
+    $("handoff").innerHTML = `<div class="handoff">✔ Plan accepted and saved to your tasks.<br>
+      <b>Focus (Component 3)</b> receives the Keep tasks: ${keep.join(", ") || "none"}.<br>
+      <b>Delegation (Component 4)</b> receives: ${dele.join(", ") || "none"}.<br>
+      <span class="muted">Your decision is logged for the strategy model (Model 2).</span></div>`;
+  } else if (m.status === "rejected") {
+    $("handoff").innerHTML = `<div class="handoff" style="border-color:var(--move)">Rejected: your original plan stays. The decision is logged for Model 2.</div>`;
+  } else $("handoff").innerHTML = "";
+}
+async function refresh() {
+  state.tasks = await api("GET", `/tasks?date=${day()}`);
+  state.blocks = await api("GET", "/protected-blocks");
+  renderBlocks(); renderTasks();
+}
+
+/* ---------- actions ---------- */
+async function saveHours() {
+  state.settings = await api("PUT", "/me/settings", { workStart: $("workStart").value, workEnd: $("workEnd").value });
+}
+async function addTask() {
+  const title = $("tTitle").value.trim(); if (!title) throw new Error("Give the task a name");
+  const body = { title, type: $("tType").value, priority: $("tPriority").value, estimatedHours: Number($("tHours").value),
+                 deadline: $("tDeadline").value, delegable: $("tDelegable").checked, plannedDate: day() };
+  if (!body.deadline) throw new Error("Set when the task is due");
+  if ($("tStart").value || $("tEnd").value) {
+    if (!($("tStart").value && $("tEnd").value)) throw new Error("Give both planned start and end, or neither");
+    body.plannedStart = $("tStart").value; body.plannedEnd = $("tEnd").value;
+  }
+  await api("POST", "/tasks", body);
+  $("tTitle").value = ""; $("tStart").value = ""; $("tEnd").value = ""; $("tDelegable").checked = false;
+  await refresh(); toast("Task added", true);
+}
+async function buildMvd() {
+  if (!$("dConfirm").checked) throw new Error("Tick “Yes, this really happened” first: the planner only acts on confirmed disruptions");
+  await saveHours();
+  const report = await api("POST", "/disruptions", { date: day(), type: $("dType").value, start: $("dStart").value,
+    timeLostMinutes: Number($("dLost").value), severity: Number($("dSeverity").value), confirmed: true });
+  state.mvd = await api("POST", `/disruptions/${report.id}/mvd`, { planFrom: $("dFrom").value });
+  renderMvd(); $("mvdCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+async function decide(action) {
+  state.mvd = await api("POST", `/mvds/${state.mvd.id}/${action}`, action === "reject" ? {} : undefined);
+  renderMvd(); await refresh();
+}
+async function loadSample() {
+  $("workStart").value = "09:00"; $("workEnd").value = "17:00"; await saveHours();
+  if (!state.blocks.some(b => b.label === "Lunch")) await api("POST", "/protected-blocks", { label: "Lunch", start: "12:30", end: "13:30" });
+  const sample = [
+    ["Lab report (submit tonight)", "Digital", "High", 2, addDays(0, "23:59"), "09:00", "11:00"],
+    ["Revise for tomorrow's quiz", "Analog", "High", 1.5, addDays(1, "09:00"), "11:00", "12:30"],
+    ["Maths problem sheet", "Analog", "High", 2, addDays(1, "17:00"), "13:30", "15:30"],
+    ["Group slides", "Digital", "Medium", 1.5, addDays(2, "17:00"), "15:30", "17:00", true],
+    ["Read chapter 5", "Analog", "Medium", 1, addDays(3, "17:00")],
+    ["Online course video", "Digital", "Medium", 2, addDays(2, "23:59")],
+  ];
+  for (const [title, type, priority, estimatedHours, deadline, plannedStart, plannedEnd, delegable] of sample) {
+    const body = { title, type, priority, estimatedHours, deadline, plannedDate: day(), delegable: !!delegable };
+    if (plannedStart) Object.assign(body, { plannedStart, plannedEnd });
+    await api("POST", "/tasks", body);
+  }
+  Object.assign($("dType"), { value: "power_outage" }); $("dStart").value = "09:00"; $("dLost").value = 150;
+  $("dSeverity").value = "3"; $("dFrom").value = "09:00";
+  await refresh(); toast("Sample day loaded: now report the disruption (step 3)", true);
+}
+function newStudent() {
+  state.user = "student-" + Math.random().toString(36).slice(2, 7);
+  state.settings = null; state.mvd = null; $("who").textContent = state.user;
+  renderMvd(); return run(async () => { await saveHours(); await refresh(); });
+}
+
+/* ---------- wiring ---------- */
+function fill(id, values, text = (v) => v) { $(id).innerHTML = values.map(v => `<option value="${v}">${esc(text(v))}</option>`).join(""); }
+fill("tType", CFG.taskTypes); fill("tPriority", CFG.priorities);
+fill("dType", CFG.disruptionTypes, v => `${NAMES[v] || v}${CFG.disruptionKinds[v] === "unavailable" ? " (my time is taken)" : ""}`);
+$("tPriority").value = "Medium";
+const now = new Date(); $("day").value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+$("tDeadline").value = `${$("day").value}T23:59`;
+$("dStart").addEventListener("change", () => ($("dFrom").value = $("dStart").value));
+$("day").addEventListener("change", () => run(refresh));
+$("btnHours").onclick = () => run(async () => { await saveHours(); renderTasks(); toast("Hours saved", true); });
+$("btnBlock").onclick = () => run(async () => {
+  await api("POST", "/protected-blocks", { label: $("blkLabel").value.trim() || "Protected", start: $("blkStart").value, end: $("blkEnd").value });
+  $("blkLabel").value = ""; await refresh();
+});
+$("btnTask").onclick = () => run(addTask);
+$("btnMvd").onclick = () => run(buildMvd);
+$("btnAccept").onclick = () => run(() => decide("accept"));
+$("btnReject").onclick = () => run(() => decide("reject"));
+$("btnSample").onclick = () => run(loadSample);
+$("btnNew").onclick = newStudent;
+document.addEventListener("click", (e) => {
+  const t = e.target.dataset;
+  if (t.done) run(async () => { await api("POST", `/tasks/${t.done}/done`, {}); await refresh(); });
+  if (t.delTask) run(async () => { await api("DELETE", `/tasks/${t.delTask}`); await refresh(); });
+  if (t.delBlock) run(async () => { await api("DELETE", `/protected-blocks/${t.delBlock}`); await refresh(); });
+});
+newStudent().then(() => {
+  // ?auto: load the sample day and build the MVD in one go (quick start / screenshots).
+  if (new URLSearchParams(location.search).has("auto")) run(async () => {
+    await loadSample(); $("dConfirm").checked = true; await buildMvd();
+  });
+});
+</script>
+</body>
+</html>

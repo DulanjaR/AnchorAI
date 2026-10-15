@@ -55,5 +55,16 @@ ML Model 1 in the API: train and download `c1_drift_model.joblib` (+ `.joblib.js
 `C1_DRIFT_MODEL_PATH=<path to the .joblib>` in `.env`. Without it (or if the file is missing) the API
 plans with drift 1.0. Model files are never committed (`components/c1_disruption/.gitignore`).
 
+## PP1 demo (web page)
+
+```bash
+python -m components.c1_disruption.demo.web_demo     # opens http://127.0.0.1:8000
+```
+
+A small page in front of the real C1 API: set your day, add tasks, report a disruption, see the
+Minimum Viable Day (timeline + every tag explained) and accept or reject it. **Load sample day** fills
+a ready-made day; `http://127.0.0.1:8000/?auto` loads it and builds the MVD in one go. Data is in
+memory and is gone when the server stops. A terminal version: `python -m components.c1_disruption.demo.pp1_demo`.
+
 Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
 in-memory store behind a repository interface, so no database is needed to run it.
