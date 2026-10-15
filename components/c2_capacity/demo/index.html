@@ -189,6 +189,7 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
     <button class="tab" role="tab" data-view="today" aria-selected="true">Today</button>
     <button class="tab" role="tab" data-view="baseline" aria-selected="false">My baseline</button>
     <button class="tab" role="tab" data-view="history" aria-selected="false">Decisions</button>
+    <button class="tab" role="tab" data-view="eval" aria-selected="false">Evaluation</button>
     <button class="tab" role="tab" data-view="about" aria-selected="false">Evidence and limits</button>
   </nav>
 
@@ -199,6 +200,11 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
         <section>
           <div class="sec-h"><span class="n">1</span><h2>Context from the phone</h2><p id="personaBlurb"></p></div>
           <div class="grid5" id="ctxGrid"></div>
+          <div class="panel" style="margin-top:12px">
+            <div class="row" style="justify-content:space-between"><strong>Optional quick check-in</strong><button class="btn ghost" id="selfClear" type="button" style="min-height:34px;padding:4px 12px">Clear</button></div>
+            <p class="note" style="margin:4px 0 12px">Three taps. Compared with your own usual rating. Skipping is fine, it only adds evidence and never replaces the sensed signals.</p>
+            <div class="row" style="gap:18px" id="selfBox"></div>
+          </div>
         </section>
 
         <section>
@@ -293,6 +299,20 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
     <div class="panel scroll"><table id="histTable"></table></div>
   </section>
 
+  <!-- EVALUATION -->
+  <section class="view" id="v-eval">
+    <div class="sec-h"><h2>Evaluation</h2><p>Questionnaires for the user study. Answers are stored only in this browser during the demo.</p></div>
+    <div class="panel" style="margin-bottom:16px"><p class="note">Planned study: working university students use Anchor Capacity and a standard productivity routine in a counterbalanced order, then complete SUS (usability) and NASA-TLX (perceived workload) for each condition. Recommendation responses (accept, edit, reject) are taken from the Decisions record.</p>
+      <div class="row" style="margin-top:10px"><span class="note">Condition being rated</span>
+        <select id="evCond"><option>Anchor Capacity</option><option>Standard productivity approach</option></select></div></div>
+    <div class="two">
+      <div class="panel"><h3 style="font-size:16px;margin-bottom:4px">System Usability Scale</h3><p class="note" style="margin-bottom:10px">1 = strongly disagree, 5 = strongly agree.</p><div id="susBox"></div></div>
+      <div class="panel"><h3 style="font-size:16px;margin-bottom:4px">NASA-TLX (raw)</h3><p class="note" style="margin-bottom:10px">0 = very low, 100 = very high. For performance, 0 = perfect and 100 = failure.</p><div id="tlxBox"></div></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="evSave" type="button">Save this response</button><span class="note" id="evHint"></span></div>
+    <div class="panel scroll" style="margin-top:16px"><table id="evTable"></table></div>
+  </section>
+
   <!-- ABOUT -->
   <section class="view" id="v-about">
     <div class="sec-h"><h2>Evidence and limits</h2><p>What this prototype does, what it does not, and what the data so far shows.</p></div>
@@ -314,6 +334,8 @@ th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;tex
         <tr><td>Resting heart rate (optional)</td><td>Health Connect heart rate, sensitive permission</td><td><span class="pillx">Simulated</span></td></tr>
         <tr><td>Phone use at night</td><td>UsageStatsManager (special usage access)</td><td><span class="pillx">Simulated</span></td></tr>
         <tr><td>Reaction time, variability, misses, premature responses, accuracy, drift</td><td>Short focus check in the app</td><td><span class="pillx real">Real, runs here</span></td></tr>
+        <tr><td>App switches per hour (interruption proxy)</td><td>UsageStatsManager event counts (no content read)</td><td><span class="pillx">Simulated</span></td></tr>
+        <tr><td>Energy, motivation, stress (optional 3-tap check-in)</td><td>User, compared with own usual rating</td><td><span class="pillx real">Real, optional</span></td></tr>
         <tr><td>Task difficulty</td><td>Chosen by the user</td><td><span class="pillx real">Real</span></td></tr>
       </table>
     </div>
@@ -336,6 +358,10 @@ var SIG=[
  {id:'sed',name:'Since last movement break',w:8,dir:1,kind:'ctx',src:'Steps and phone use',fmt:function(v){return Math.round(v)+' min'}},
  {id:'night',name:'Phone use after 23:00',w:8,dir:1,kind:'ctx',src:'Usage access',fmt:hm},
  {id:'rhr',name:'Resting heart rate',w:7,dir:1,kind:'ctx',src:'Health Connect, optional',fmt:function(v){return Math.round(v)+' bpm'}},
+ {id:'intr',name:'App switches, last hour',w:6,dir:1,kind:'ctx',src:'Usage access (event counts)',fmt:function(v){return Math.round(v)+''}},
+ {id:'energy',name:'Energy (your rating)',w:5,dir:-1,kind:'self',fmt:function(v){return v+' / 5'}},
+ {id:'motiv',name:'Motivation (your rating)',w:5,dir:-1,kind:'self',fmt:function(v){return v+' / 5'}},
+ {id:'stress',name:'Stress (your rating)',w:5,dir:1,kind:'self',fmt:function(v){return v+' / 5'}},
  {id:'rt',name:'Reaction time',w:15,dir:1,kind:'task',fmt:function(v){return Math.round(v)+' ms'}},
  {id:'rtsd',name:'Reaction-time variability',w:12,dir:1,kind:'task',fmt:function(v){return Math.round(v)+' ms'}},
  {id:'miss',name:'Missed responses',w:8,dir:1,kind:'task',fmt:function(v){return v.toFixed(1)+'%'}},
@@ -343,12 +369,12 @@ var SIG=[
  {id:'acc',name:'Accuracy',w:10,dir:-1,kind:'task',fmt:function(v){return v.toFixed(0)+'%'}},
  {id:'drift',name:'Attention drift',w:8,dir:1,kind:'task',fmt:function(v){return (v>=0?'+':'')+Math.round(v)+' ms'}}
 ];
-var BASE={sleep:[6.75,0.7],steps:[6.8,2.0],sed:[55,25],night:[0.6,0.5],rhr:[64,3],rt:[440,45],rtsd:[65,15],miss:[3,2],prem:[2,1.5],acc:[91,4],drift:[15,20]};
+var BASE={sleep:[6.75,0.7],steps:[6.8,2.0],sed:[55,25],night:[0.6,0.5],rhr:[64,3],intr:[18,6],energy:[3.4,0.7],motiv:[3.4,0.7],stress:[2.4,0.8],rt:[440,45],rtsd:[65,15],miss:[3,2],prem:[2,1.5],acc:[91,4],drift:[15,20]};
 var STATES=[
- {id:'steady',name:'Steady morning',blurb:'Slept well, moved yesterday, little late-night phone use.',ctx:{sleep:7.2,steps:7.4,sed:30,night:0.4,rhr:63},task:{rt:432,rtsd:60,miss:2,prem:1.5,acc:93,drift:8}},
- {id:'busy',name:'Busy afternoon',blurb:'A shorter sleep and a long stretch without a break.',ctx:{sleep:6.0,steps:5.2,sed:120,night:1.0,rhr:66},task:{rt:480,rtsd:80,miss:4.5,prem:3,acc:88,drift:30}},
- {id:'shift',name:'After a long shift',blurb:'Very active day at work, late phone use, slower responses.',ctx:{sleep:6.0,steps:11.5,sed:45,night:1.2,rhr:69},task:{rt:545,rtsd:110,miss:7,prem:4,acc:80,drift:62}},
- {id:'short',name:'Short night',blurb:'Under five hours of sleep and a late night on the phone.',ctx:{sleep:4.83,steps:3.1,sed:100,night:2.1,rhr:69},task:{rt:570,rtsd:130,miss:9,prem:5,acc:78,drift:70}}
+ {id:'steady',name:'Steady morning',blurb:'Slept well, moved yesterday, little late-night phone use.',ctx:{sleep:7.2,steps:7.4,sed:30,night:0.4,rhr:63,intr:14},task:{rt:432,rtsd:60,miss:2,prem:1.5,acc:93,drift:8}},
+ {id:'busy',name:'Busy afternoon',blurb:'A shorter sleep and a long stretch without a break.',ctx:{sleep:6.0,steps:5.2,sed:120,night:1.0,rhr:66,intr:34},task:{rt:480,rtsd:80,miss:4.5,prem:3,acc:88,drift:30}},
+ {id:'shift',name:'After a long shift',blurb:'Very active day at work, late phone use, slower responses.',ctx:{sleep:6.0,steps:11.5,sed:45,night:1.2,rhr:69,intr:22},task:{rt:545,rtsd:110,miss:7,prem:4,acc:80,drift:62}},
+ {id:'short',name:'Short night',blurb:'Under five hours of sleep and a late night on the phone.',ctx:{sleep:4.83,steps:3.1,sed:100,night:2.1,rhr:69,intr:30},task:{rt:570,rtsd:130,miss:9,prem:5,acc:78,drift:70}}
 ];
 var REQ={light:35,standard:55,demanding:70};
 var BANDS=[{k:'high',n:'High',min:72},{k:'moderate',n:'Moderate',min:52},{k:'low',n:'Low',min:32},{k:'risk',n:'At Risk',min:-1}];
@@ -361,7 +387,7 @@ var COPY={
 };
 
 /* ---------- state ---------- */
-var S={persona:1,diff:'standard',task:null,taskReal:false,running:false,decided:false,view:'today'};
+var S={persona:1,diff:'standard',self:{},task:null,taskReal:false,running:false,decided:false,view:'today'};
 var hist=[];
 
 /* ---------- engine ---------- */
@@ -369,16 +395,17 @@ function values(){
   var st=STATES[S.persona],v={};
   for(var k in st.ctx)v[k]=st.ctx[k];
   if(S.task){for(var t in S.task)v[t]=S.task[t]}
+  for(var q in S.self)v[q]=S.self[q];
   return v;
 }
 function estimate(){
-  var v=values(),rows=[],wAll=0,wPres=0,strain=0;
+  var v=values(),rows=[],wAll=0,wPres=0,wCore=0,strain=0;
   SIG.forEach(function(s){
-    wAll+=s.w;
+    if(s.kind!=='self')wAll+=s.w;
     if(typeof v[s.id]!=='number')return;
     var z=(v[s.id]-BASE[s.id][0])/BASE[s.id][1];
     var harm=s.dir*z, sc=clamp(harm,0,3)/3;
-    wPres+=s.w; strain+=s.w*sc;
+    wPres+=s.w; if(s.kind!=='self')wCore+=s.w; strain+=s.w*sc;
     rows.push({s:s,v:v[s.id],z:z,harm:harm,sc:sc,part:s.w*sc});
   });
   var idx=wPres?strain/wPres:0;
@@ -387,7 +414,7 @@ function estimate(){
   for(var i=0;i<BANDS.length;i++){if(cap>=BANDS[i].min){band=BANDS[i].k;break}}
   var req=REQ[S.diff],gap=cap-req,mismatch=gap<=-22;
   var final=mismatch?'risk':band;
-  var cov=wPres/wAll,conf=cov<0.45?'Low':(cov<0.95?'Medium':'High');
+  var cov=wCore/wAll,conf=cov<0.45?'Low':(cov<0.95?'Medium':'High');
   return {rows:rows,cap:cap,band:band,final:final,req:req,gap:gap,mismatch:mismatch,conf:conf,cov:cov,wAll:wAll,strain:strain,wPres:wPres};
 }
 function sev(row){return row.harm>=2?'severe':row.harm>=1?'high':row.harm>=0.5?'mild':'ok'}
@@ -415,6 +442,16 @@ function renderCtx(){
        '<span class="chip '+sev(row)+'">'+sevText(row)+'</span><span class="s">'+s.src+' · simulated</span></div>';
   });
   $('ctxGrid').innerHTML=h;
+}
+var SELFQ=[{id:'energy',t:'Energy',lo:'low',hi:'high'},{id:'motiv',t:'Motivation to start',lo:'low',hi:'high'},{id:'stress',t:'Stress right now',lo:'calm',hi:'high'}];
+function renderSelf(){
+  var h='';
+  SELFQ.forEach(function(q){
+    h+='<div><div class="note" style="margin-bottom:5px">'+q.t+' <span class="mono">('+q.lo+' 1 to 5 '+q.hi+')</span></div><div class="seg" role="group" aria-label="'+q.t+'">';
+    for(var i=1;i<=5;i++)h+='<button type="button" data-k="'+q.id+'" data-v="'+i+'" aria-pressed="'+(S.self[q.id]===i)+'">'+i+'</button>';
+    h+='</div></div>';
+  });
+  $('selfBox').innerHTML=h;
 }
 function renderMetrics(){
   var h='';
@@ -448,7 +485,7 @@ function gaugeSVG(cap,req,band){
 }
 function render(){
   var E=estimate(),c=COPY[E.final];
-  renderCtx();renderMetrics();
+  renderCtx();renderMetrics();renderSelf();
   /* gauge */
   $('gNum').textContent=E.cap;
   pill($('gPill'),E.final);
@@ -456,7 +493,7 @@ function render(){
   $('swWater').style.setProperty('--c',bandVar(E.final));
   $('reqLbl').textContent='Dashed line is what '+S.diff+' work needs ('+E.req+')';
   var gap=E.gap>=0?'Capacity covers this work by '+E.gap+' points.':'Capacity is '+Math.abs(E.gap)+' points short of this work.';
-  $('gMeta').innerHTML=gap+'<br>Evidence: '+E.rows.length+' of '+SIG.length+' signals · confidence '+E.conf+(S.task?'':' (add the focus check)');
+  $('gMeta').innerHTML=gap+'<br>Evidence: '+E.rows.length+' of '+(SIG.filter(function(s){return s.kind!=='self'||typeof S.self[s.id]==='number'}).length)+' signals · confidence '+E.conf+(S.task?'':' (add the focus check)');
   /* result */
   pill($('bandPill'),E.final);
   $('headline').textContent=c.h;
@@ -581,6 +618,41 @@ function renderHist(){
   $('histTable').innerHTML=h;
 }
 
+/* ---------- evaluation (SUS, NASA-TLX) ---------- */
+var SUSQ=['I think that I would like to use this system frequently.','I found the system unnecessarily complex.','I thought the system was easy to use.','I think that I would need the support of a technical person to use this system.','I found the various functions in this system were well integrated.','I thought there was too much inconsistency in this system.','I would imagine that most people would learn to use this system very quickly.','I found the system very cumbersome to use.','I felt very confident using the system.','I needed to learn a lot of things before I could get going with this system.'];
+var TLXQ=['Mental demand: how mentally demanding was the task?','Physical demand: how physically demanding was the task?','Temporal demand: how hurried or rushed was the pace?','Performance: how successful were you in doing what you were asked?','Effort: how hard did you have to work?','Frustration: how insecure, discouraged, irritated or stressed were you?'];
+var evs=[];
+function susScore(a){var s=0;for(var i=0;i<10;i++){s+=(i%2===0)?(a[i]-1):(5-a[i])}return s*2.5}
+function renderEvalForm(){
+  var h='';
+  SUSQ.forEach(function(q,i){
+    h+='<div style="margin-bottom:12px"><div style="font-size:13.5px;margin-bottom:5px">'+(i+1)+'. '+q+'</div><div class="seg" role="radiogroup" aria-label="SUS item '+(i+1)+'">';
+    for(var k=1;k<=5;k++)h+='<button type="button" data-sus="'+i+'" data-v="'+k+'" aria-pressed="false">'+k+'</button>';
+    h+='</div></div>';
+  });
+  $('susBox').innerHTML=h;
+  var t='';
+  TLXQ.forEach(function(q,i){
+    t+='<div style="margin-bottom:14px"><label for="tlx'+i+'" style="font-size:13.5px;display:block;margin-bottom:5px">'+q+'</label><div class="row"><input type="range" id="tlx'+i+'" data-tlx="'+i+'" min="0" max="100" step="5" value="50" style="flex:1;min-width:140px;accent-color:var(--tide)"><span class="mono" id="tlxv'+i+'" style="width:34px">50</span></div></div>';
+  });
+  $('tlxBox').innerHTML=t;
+}
+function loadEvals(){try{evs=JSON.parse(localStorage.getItem('anchorC2Eval')||'[]')}catch(e){evs=[]}}
+function renderEvals(){
+  var h='<tr><th>When</th><th>Condition</th><th>SUS (0 to 100)</th><th>NASA-TLX raw (0 to 100)</th></tr>';
+  if(!evs.length)h+='<tr><td colspan="4" class="note">No responses saved yet.</td></tr>';
+  evs.forEach(function(x){h+='<tr><td class="mono">'+x.t.replace('T',' ')+'</td><td>'+x.cond+'</td><td class="mono">'+x.sus.toFixed(1)+'</td><td class="mono">'+x.tlx.toFixed(1)+'</td></tr>'});
+  $('evTable').innerHTML=h;
+}
+function saveEval(){
+  var a=[];
+  for(var i=0;i<10;i++){var b=document.querySelector('[data-sus="'+i+'"][aria-pressed="true"]');if(!b){$('evHint').textContent='Answer all 10 SUS statements first (item '+(i+1)+' is empty).';return}a.push(+b.dataset.v)}
+  var tl=0;for(var j=0;j<6;j++)tl+=+$('tlx'+j).value;
+  evs.unshift({t:new Date().toISOString().slice(0,16),cond:$('evCond').value,sus:susScore(a),tlx:tl/6});
+  try{localStorage.setItem('anchorC2Eval',JSON.stringify(evs))}catch(e){}
+  $('evHint').textContent='';renderEvals();toast('Response saved.');
+}
+
 /* ---------- baseline view ---------- */
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function spark(id,title,fmt){
@@ -615,7 +687,7 @@ function init(){
   $('editAct').innerHTML=ACTS.map(function(a){return '<option>'+a+'</option>'}).join('');
   $('persona').addEventListener('change',function(){
     if(S.running)return;
-    S.persona=+this.value;S.task=null;S.taskReal=false;$('glyph').textContent='+';$('prog').style.width='0';
+    S.persona=+this.value;S.task=null;S.taskReal=false;S.self={};$('glyph').textContent='+';$('prog').style.width='0';
     $('padHint').textContent='Start the check, or use the sample result for this day.';
     $('editPane').hidden=true;$('rejectPane').hidden=true;
     useSample();
@@ -640,6 +712,12 @@ function init(){
     try{localStorage.setItem('anchorC2Theme',nx)}catch(e){}
   });
   try{var th=localStorage.getItem('anchorC2Theme');if(th)document.documentElement.setAttribute('data-theme',th)}catch(e){}
+  $('selfBox').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=+b.dataset.v;if(S.self[b.dataset.k]===v)delete S.self[b.dataset.k];else S.self[b.dataset.k]=v;render()});
+  $('selfClear').addEventListener('click',function(){S.self={};render()});
+  $('susBox').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;document.querySelectorAll('[data-sus="'+b.dataset.sus+'"]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))})});
+  $('tlxBox').addEventListener('input',function(e){var i=e.target.dataset.tlx;if(i!==undefined)$('tlxv'+i).textContent=e.target.value});
+  $('evSave').addEventListener('click',saveEval);
+  renderEvalForm();loadEvals();renderEvals();
   loadHist();renderHist();renderBase();useSample();
 }
 init();
