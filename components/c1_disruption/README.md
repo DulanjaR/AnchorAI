@@ -61,9 +61,11 @@ plans with drift 1.0. Model files are never committed (`components/c1_disruption
 python -m components.c1_disruption.demo.web_demo     # opens http://127.0.0.1:8000
 ```
 
-A small page in front of the real C1 API: set your day, add tasks, report a disruption, see the
-Minimum Viable Day (timeline + every tag explained) and accept or reject it. **Load sample day** fills
-a ready-made day; `http://127.0.0.1:8000/?auto` loads it and builds the MVD in one go. Data is in
+A small page in front of the real C1 API. First setup: free hours, **Sync calendar** (a calendar
+file (.ics) exported from Google/Outlook/Apple, or a sample calendar → protected time) and tasks (name, start, end,
+deadline, priority). The day calendar updates live; **⚡ Record a disruption** opens the report, then the
+Minimum Viable Day (timeline + every tag explained) to accept or reject; accepting updates the calendar. **Load sample day** fills
+a ready-made day; `http://127.0.0.1:8000/?auto` loads it and builds the MVD in one go (`?auto=accept` also accepts it). Data is in
 memory and is gone when the server stops. A terminal version: `python -m components.c1_disruption.demo.pp1_demo`.
 
 Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
