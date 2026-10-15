@@ -1,0 +1,6 @@
+# C3 extras on top of the team's requirements.txt (fastapi, sqlalchemy, pydantic, httpx, pytest ...)
+python-multipart>=0.0.9   # file upload for /api/files/analyze
+python-docx>=1.1          # read .docx files (read-only)
+
+# Only for Model 2 (fine-tuned summary model); not needed for the template summaries
+# torch, transformers, peft, bitsandbytes, accelerate

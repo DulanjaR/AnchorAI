@@ -42,12 +42,14 @@ C3 only summarises the student's own progress and plan. Content assistance = C4 
 - Do not merge Hirsch rows with SWELL-KW or any other dataset.
 
 ## Model 2 – restart summary (bonus for PP1)
-- Base: unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit, QLoRA, Google Colab T4 GPU.
-- Data: synthetic IT-student checkpoint -> restart summary pairs (300–500, JSONL) in
-  data/generated/, seeded from CommitPackFT (code) and IteraTeR (documents).
-  Outputs must never contain new code or answers. Mark this data clearly as synthetic.
-- Evaluate base vs fine-tuned: ROUGE-L, BERTScore, ~20 human ratings.
-- Save LoRA adapter to Google Drive, not to git.
+- Base: Qwen/Qwen2.5-1.5B-Instruct, QLoRA with Hugging Face PEFT (4-bit NF4, r=16), Google Colab T4 GPU.
+- Data: synthetic IT-student checkpoint -> restart summary pairs in data/generated/ (train/val/test use different
+  task families), made by model2/generate_data.py. Outputs only restate the student's text and never contain new
+  code, answers or advice. Mark this data clearly as synthetic.
+- Evaluate base vs fine-tuned vs template with model2/metrics.py: own words, no advice, depth, second person,
+  question kept, length; ROUGE-L is only a sanity check; plus ~18 blinded human ratings.
+- Save the LoRA adapter to Google Drive, not to git.
+- The backend wraps the model in a safety net (app/generators.py) and falls back to the template summary.
 
 ## Environment
 - Notebooks (notebooks/) are written here and run in Google Colab.

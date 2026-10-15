@@ -17,6 +17,10 @@ models/*/
 *.sav
 *.zip
 
+# Local demo databases
+*.db
+*.sqlite3
+
 # Keep placeholder files committable
 !.gitkeep
 !**/.gitkeep

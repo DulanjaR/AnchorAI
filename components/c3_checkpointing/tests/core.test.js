@@ -107,7 +107,8 @@ test('time formatting', () => {
   assert.strictEqual(C.formatMinutes(0.4), 'less than a minute');
   assert.strictEqual(C.formatMinutes(45), '45 min');
   assert.strictEqual(C.formatMinutes(90), '1.5 h');
-  assert.strictEqual(C.formatMinutes(1440), '1 days');
+  assert.strictEqual(C.formatMinutes(1440), '1 day');
+  assert.strictEqual(C.formatMinutes(2880), '2 days');
   assert.strictEqual(C.formatMinutes(NaN), 'an unknown time');
 });
 
@@ -162,4 +163,27 @@ test('file suggestions are copied from the file, not invented', () => {
   assert.strictEqual(s.resources, 'contact.html');
   assert.ok(s.workingPoint.includes('validate email'));
   assert.ok(s.completed.includes('validateName'));
+});
+
+const vectors = require('./vectors.json');
+
+test('difficulty matches the shared vectors (same as the Python tests)', () => {
+  for (const v of vectors.predict) {
+    const r = C.predictDifficulty(v.in);
+    assert.strictEqual(r.score, v.score, JSON.stringify(v.in));
+    assert.strictEqual(r.level, v.level, JSON.stringify(v.in));
+  }
+});
+
+test('minute formatting matches the shared vectors', () => {
+  for (const [minutes, expected] of vectors.format_minutes) assert.strictEqual(C.formatMinutes(minutes), expected);
+});
+
+test('summary labels match the shared vectors', () => {
+  const v = vectors.summary;
+  for (const level of ['Low', 'Medium', 'High']) {
+    const s = C.buildSummary({ title: v.task }, v.checkpoint, level, 300);
+    assert.deepStrictEqual(s.lines.map((l) => l.label), v.labels[level]);
+    assert.strictEqual(s.intro, v.intro_300);
+  }
 });

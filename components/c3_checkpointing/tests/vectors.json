@@ -1,0 +1,40 @@
+{
+  "predict": [
+    {"in": {"minutes": 5, "complexity": "simple", "openItems": 0, "type": "quick_message"}, "score": 0, "level": "Low"},
+    {"in": {"minutes": 14, "complexity": "simple", "openItems": 1, "type": "break"}, "score": 0, "level": "Low"},
+    {"in": {"minutes": 15, "complexity": "simple", "openItems": 0, "type": "meeting"}, "score": 1, "level": "Low"},
+    {"in": {"minutes": 30, "complexity": "moderate", "openItems": 3, "type": "meeting"}, "score": 3, "level": "Medium"},
+    {"in": {"minutes": 60, "complexity": "moderate", "openItems": 2, "type": "meeting"}, "score": 4, "level": "Medium"},
+    {"in": {"minutes": 240, "complexity": "moderate", "openItems": 0, "type": "meeting"}, "score": 4, "level": "Medium"},
+    {"in": {"minutes": 120, "complexity": "complex", "openItems": 4, "type": "other_task"}, "score": 6, "level": "High"},
+    {"in": {"minutes": 300, "complexity": "complex", "openItems": 6, "type": "other_task"}, "score": 8, "level": "High"},
+    {"in": {"minutes": null, "complexity": "weird", "openItems": 0, "type": "meeting"}, "score": 1, "level": "Low"}
+  ],
+  "format_minutes": [
+    [0.4, "less than a minute"],
+    [45, "45 min"],
+    [90, "1.5 h"],
+    [120, "2 h"],
+    [1440, "1 day"],
+    [2880, "2 days"],
+    [null, "an unknown time"]
+  ],
+  "summary": {
+    "task": "Hotel site",
+    "checkpoint": {
+      "goal": "Finish the booking site",
+      "completed": "login.html, register.html",
+      "workingPoint": "contact.html form has no submit handler",
+      "problem": "How to validate the email?",
+      "nextStep": "Add submit button",
+      "resources": "Figma link",
+      "openItems": ["validate email", "add submit"]
+    },
+    "labels": {
+      "Low": ["You stopped at", "Next step"],
+      "Medium": ["You stopped at", "Next step", "Goal", "Open problem or decision"],
+      "High": ["You stopped at", "Next step", "Goal", "Open problem or decision", "Already done", "Files / resources", "Open items found in your own files"]
+    },
+    "intro_300": "Welcome back to \"Hotel site\". You were away about 5 h."
+  }
+}
