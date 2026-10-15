@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`ff64e95` · 2026-10-14 · "C1 strategy: deferOrder and recoveryTiming; 5-action catalogue with distinctness check" (this update is in the commit after it).
+`5e5fba8` · 2026-10-14 · "C1 sim: rerun SYNTHETIC results with the 5-action catalogue" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -16,7 +16,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Rerun with the 5-action catalogue:** Model 1 unchanged; Model 2 mean acceptance (SYNTHETIC, assumed 0.85/0.3): most accepted 0.742, bandit 0.680, fixed 0.609, random 0.537.
 
 ## In progress
-- Nothing running.
+- **Model 1 on REAL data (CESAW):** code, tests, notebook 04, METHODOLOGY §9 and `C1_CESAW_PATH` done (wip commit). The full run (leave-one-developer-out over 247 developers + warm sample, 50 trees) did not finish in 11 h (a worker crashed) and was stopped; no result table yet. Waiting on owner: a faster evaluation design (see PROPOSED).
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -24,13 +24,15 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- CESAW evaluation design: cold start as grouped 10-fold by developer (every developer still unseen when predicted) instead of 247 single-developer folds; warm on the seeded 40-developer sample; progress logging.
+- CESAW mapping: priority `Medium` for every task (CESAW has none); tasks without a readable start time (843) dropped and counted.
 - deferOrder "deadline" keeps the groups and orders within them; recoveryTiming "latest" keeps window-first.
 - Model 2 simulation: count a shown plan as "preferred" when it equals the preferred strategy's plan (today the label decides; on persona days the compression actions rarely change the plan).
 - OVERRUN_RISK message wording; "end of window" read as the end of the free stretch the task starts in.
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
 ## Next step
-PP1 demo (Task 6); D-MOVE after PP1 (golden S17+ first).
+Decide the CESAW design and run it; PP1 demo (Task 6, PP1 = 19 Oct 2026); D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **608 passed** (C1 607 + C4 1), 14 Oct 2026.
+Root `pytest`: **614 passed** (C1 613 + C4 1), 15 Oct 2026.

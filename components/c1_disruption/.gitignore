@@ -2,3 +2,6 @@
 # Trained ML Model 1 files (ml/drift/persist.py) are made in Colab and never committed.
 *.joblib
 *.joblib.json
+# CESAW data: licence not stated, never committed (keep it outside the repo)
+CESAW_*.csv
+CESAW_*.txt

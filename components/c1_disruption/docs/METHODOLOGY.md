@@ -130,3 +130,12 @@ notebooks stay thin: they call repo code and explain each step in plain English.
 - **Week 1 of the pilot = fixed-order baseline** for Model 2; `randomised` mode after that.
 - Decision-change rate shows how often the model changes what the student is told.
 - Results are split by the tight-slack flag (threshold fixed before analysis).
+
+## 9. External validation of Model 1: CESAW (REAL data)
+
+- **What:** CESAW (SEI/CMU; ~60,000 tasks of professional developers with planned and actual minutes) is used as an **external validation of Model 1 on real estimation errors**. Source: <https://kilthub.cmu.edu/articles/CESAW_Project_Data_Fact_sheets/9922697>.
+- **Data handling:** the licence is not stated, so the data is **never committed**. It is kept outside the repository and found through the setting `C1_CESAW_PATH`. `.gitignore` also blocks `CESAW_*.csv`.
+- **Mapping** (`ml/drift/external/cesaw.py`): developer → student; plan minutes → estimate; actual minutes → actual (interrupt time already excluded); task type `Digital` (original phase kept as an extra column); start hour and weekday from the start timestamp; priority `Medium` (none in CESAW). Tasks with plan ≤ 0, actual ≤ 0 or no readable start time are dropped and counted in the result file.
+- **Evaluation:** the same as §3 (leave-one-developer-out for cold start, rolling-origin for warm; model vs B0–B3; MAE in minutes, MAE of the log ratio, q10–q90 coverage). Because one fit on 60,000 tasks is slow, the model uses 50 trees, the warm evaluation covers a seeded sample of developers (≥ 20 working days) with one origin per 30 of their days, and folds run in parallel (`ml/drift/external/settings.py`).
+- **Labelling:** results are labelled **REAL (CESAW, professional developers)**, never SYNTHETIC. Table: `docs/results/c1_model1_cesaw.md`; notebook: `notebooks/04_model1_cesaw.ipynb`.
+- **Limitation:** professional developers, not students; no priority or task type; professionals' estimation errors may differ in size and pattern from students' own. The result supports "Model 1 works on real estimation errors", not "Model 1 is right for students".

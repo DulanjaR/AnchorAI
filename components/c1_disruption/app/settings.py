@@ -17,5 +17,9 @@ class C1Settings(BaseSettings):
     # notebooks/01. Empty or missing file → drift 1.0 (NoDrift), the approved fallback.
     drift_model_path: str = ""
 
+    # Folder with the CESAW files (or CESAW_task_fact.csv itself), kept OUTSIDE the repository:
+    # the licence is not stated, so the data is never committed (ml/drift/external/cesaw.py).
+    cesaw_path: str = ""
+
 
 c1_settings = C1Settings()

@@ -9,6 +9,7 @@ labelled **SYNTHETIC** (CLAUDE.md rule 6). Commit them without outputs (a test c
 | `01_model1_drift.ipynb` | Model 1 vs baselines B0–B3: cold start, warm, coverage, learning curve |
 | `02_model2_strategy.ipynb` | strategy distinctness, simulated acceptance for each Model 2 policy |
 | `03_simulation_report.ipynb` | all variants (planted / null / misspecified) × seeds → markdown report |
+| `04_model1_cesaw.ipynb` | Model 1 on REAL data (CESAW, professional developers): cold, warm, coverage; data downloaded separately, never committed |
 
 The first cell of every notebook clones the `dev/ravindu` branch, installs C1's pinned
 requirements and prints the Python version (supported: 3.11–3.13). Open in Colab with
