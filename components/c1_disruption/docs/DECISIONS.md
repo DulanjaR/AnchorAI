@@ -2,6 +2,11 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-15 — Commit authorship: owner only, no attribution trailers
+- Source: owner, 15 Oct 2026.
+- All commits are authored and committed by the owner's git identity (Ravindu, `ravindu912`) with no `Co-Authored-By` lines (CLAUDE.md §0.3 rule 4).
+- The 28 commits already on `dev/ravindu` had such a line; at the owner's request their messages were rewritten to remove it (code, authors and dates unchanged) and the branch was force-pushed once (an owner-approved exception to rule 6 "no force-push"). None of these commits were in `main` or another branch. Commit hashes cited in the docs were updated to the new ones.
+
 ## 2026-10-15 — CESAW evaluation design: cold start in 10 developer groups
 - Source: owner ("start" on the proposal of 15 Oct 2026).
 - The first CESAW run (one fold per developer = 247 forest fits on ~60,000 tasks, 7 workers) did not finish in 11 h and a worker crashed (memory); it was stopped.

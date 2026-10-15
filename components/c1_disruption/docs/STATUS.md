@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`2af1fe2` · 2026-10-15 · "C1 Task 6: web demo with first setup, calendar sync (.ics), live day calendar and a Record-a-disruption button" (this update is in the commit after it).
+`1611e06` · 2026-10-15 · "C1 Task 6: web demo with first setup, calendar sync (.ics), live day calendar and a Record-a-disruption button" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.

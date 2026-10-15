@@ -44,6 +44,7 @@ The owner plans in a separate chat that reads the repo, so GitHub must always sh
 1. **Commit and push to `origin dev/ravindu` before reporting anything to the owner.** Unfinished work may be pushed as a commit whose message starts with `wip:`. **Never end a report with unpushed changes.**
 2. **Keep `docs/STATUS.md` (one page) updated in the same commit as every change**, with these sections: Last commit (hash + date) · Done · In progress · Waiting on owner (decisions/questions) · PROPOSED items not yet approved · Next step · Test count from root pytest. (A commit cannot contain its own hash, so "Last commit" names the commit before it; the report gives the new hash.)
 3. **Every report to the owner ends with:** the commit hash, the output of `git ls-remote origin dev/ravindu`, and the test count from root `pytest`.
+4. **Commits are the owner's (15 Oct 2026):** author and committer = the owner's git identity (Ravindu, `ravindu912`). **No `Co-Authored-By` lines or any other attribution trailer** in commit messages, and no "Generated with" lines in pull-request texts.
 4. **Decisions the owner pastes from the planning chat** are recorded in `docs/DECISIONS.md` with "Source: planning chat, <date>".
 
 ---
@@ -326,8 +327,8 @@ Golden scenarios use only `power_outage` and `transport_delay` with Digital and 
 ### Progress checklist
 
 - [x] Tasks 1, 2, 3, 2a — Node project (`anchor-ai-component1`, last commit 2bfedfa): Jest 248/248
-- [x] Port P1 — commit 321f39c (13 Oct 2026): golden spec S1–S16 + 57 API cases frozen as JSON, checked against Node
-- [x] Port P2 — commit 94a8584 (13 Oct 2026): structure, CLAUDE.md, README, docs, pinned requirements
+- [x] Port P1 — commit e96a567 (13 Oct 2026): golden spec S1–S16 + 57 API cases frozen as JSON, checked against Node
+- [x] Port P2 — commit 15f4aff (13 Oct 2026): structure, CLAUDE.md, README, docs, pinned requirements
 - [x] Port P3 — 13 Oct 2026: pure Python engine; all 16 golden scenarios match exactly; invariants + the same 500 seeded days as Node (hash-checked); pytest 225/225 from the repo root
 - [x] Port P4 — 13 Oct 2026: FastAPI app (same endpoints as docs/API.md, shared X-API-Key, Pydantic models, repository + in-memory store); all 57 API cases and S1–S16 over HTTP pass
 - [x] Methodology update (14 Oct 2026): engine extensions with defaults (strategy, duration range, plan diff, overload check), logging, metrics, Model 1, Model 2, simulation framework, Colab notebooks (replaces port P5); docs (P6). pytest 500/500 from the repo root

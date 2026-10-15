@@ -84,7 +84,7 @@ Open questions for owner: see STATUS.md
 Next step: persona task lists → notebooks 01 and 03
 
 ## 2026-10-14 — Methodology update: engine extensions, logging, metrics, Model 1, Model 2, simulation, Colab — done (waiting for persona task lists)
-Commits (dev/ravindu): 43f8ff5 engine strategy/range/diff · 453794e docs (METHODOLOGY.md, CLAUDE.md §3.6–3.8, DECISIONS) · 15de920 overload check · 1a0495c logging + ML hooks · 9cad504 metrics · 9f6f6a1 Model 1 · 577b841 Model 2 · next commit: simulation, notebooks, docs
+Commits (dev/ravindu): af51165 engine strategy/range/diff · 9a82761 docs (METHODOLOGY.md, CLAUDE.md §3.6–3.8, DECISIONS) · 5ec7954 overload check · 9b4ff72 logging + ML hooks · 2b136db metrics · fe266dd Model 1 · 60bc5a9 Model 2 · next commit: simulation, notebooks, docs
 Files created: engine/{strategy,diff,overload}.py; app/services/planning.py; metrics/{config,plan_metrics,records}.py; ml/drift/{settings,data,model,baselines,evaluation,corrector}.py; ml/bandit/{settings,actions,context,linucb,policies}.py; sim/{README.md,settings,personas,generate,events,experiment}.py, sim/examples/{personas,tasks}.csv; notebooks/01–03 *.ipynb; docs/METHODOLOGY.md; tests for each
 Files changed: engine/{mvd,explain,schema}.py (strategy + range, defaults = approved); app/services/mvd_service.py, app/main.py (logging, ML hooks); requirements.txt (ML pins); CLAUDE.md §3.6–3.8, §5, §6, §7; docs/API.md (log fields); docs/DECISIONS.md; docs/TASK4_PLAN.md (superseded)
 Tests: `pytest` (repo root) → 500 passed (C1 499 + C4 1); golden S1–S16 and all 57 API cases unchanged at every step; planted bugs caught (strategy ignored, no per-student bandit part, training leak in the simulation)
@@ -93,7 +93,7 @@ Open questions for owner: use of the high duration in the Keep check; defer orde
 Next step: owner sends the persona task lists (P01–P10, sim/README.md format) → run notebooks/03 for the SYNTHETIC results
 
 ## 2026-10-13 — Port to the team repo (Python/FastAPI), phases 1–4 — done
-Commits (dev/ravindu): 321f39c P1 golden spec frozen as JSON · 94a8584 P2 structure, CLAUDE.md v3.0, README, docs, pins · 21f23f1 P3 engine · 7897adf golden S11 text change · 5f99856 P4 FastAPI app
+Commits (dev/ravindu): e96a567 P1 golden spec frozen as JSON · 15f4aff P2 structure, CLAUDE.md v3.0, README, docs, pins · 1bbcbc1 P3 engine · 0c92a7b golden S11 text change · 0876039 P4 FastAPI app
 Files created: tests/golden/ (scenarios S01–S16.json, api_cases.json, README, tools/golden_from_node.js); engine/*; app/* (api, services, data); tests/{engine,golden,api,data}/*; CLAUDE.md, README.md, requirements.txt; docs copied from the Node project
 Tests: `pytest` (repo root) → 337 passed after P4; `golden_from_node.js --check` → 16 scenarios + 57 API cases match the Node project; Node Jest 248/248 (unchanged); every Node test has a Python counterpart (mapping in the P4 report)
 Decisions applied: DECISIONS.md 2026-10-13 (port, S11 golden text, impossible dates refused)
