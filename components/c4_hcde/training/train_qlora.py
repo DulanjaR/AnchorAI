@@ -8,7 +8,8 @@ Kaggle / Colab (one T4 or better), from the repo root:
     python -m components.c4_hcde.training.train_qlora \
         --base-model Qwen/Qwen2.5-7B-Instruct --out runs/hcde-qwen7b
 
-Smaller GPU or out of memory: --base-model Qwen/Qwen2.5-3B-Instruct, or --max-len 768.
+Defaults fit a 15 GB T4 (batch 1 x 16 accumulation). Still out of memory: --max-len 768,
+or --base-model Qwen/Qwen2.5-3B-Instruct.
 CPU smoke test (no GPU, tiny model, 4-bit off):
 
     python -m components.c4_hcde.training.train_qlora --base-model sshleifer/tiny-gpt2 \
@@ -19,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import time
 from pathlib import Path
 
@@ -78,8 +80,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--epochs", type=float, default=3)
     ap.add_argument("--max-steps", type=int, default=-1, help="override epochs (smoke tests)")
     ap.add_argument("--lr", type=float, default=2e-4)
-    ap.add_argument("--batch-size", type=int, default=2)
-    ap.add_argument("--grad-accum", type=int, default=8)
+    ap.add_argument("--batch-size", type=int, default=1)
+    ap.add_argument("--grad-accum", type=int, default=16)
     ap.add_argument("--lora-r", type=int, default=16)
     ap.add_argument("--lora-alpha", type=int, default=32)
     ap.add_argument("--lora-dropout", type=float, default=0.05)
@@ -87,8 +89,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-4bit", action="store_true", help="full-precision LoRA (CPU smoke tests)")
     args = ap.parse_args(argv)
 
+    os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
     import torch
-    from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+    from peft import LoraConfig, get_peft_model
     from transformers import (AutoModelForCausalLM, AutoTokenizer, DataCollatorForSeq2Seq, Trainer,
                               TrainingArguments, set_seed)
 
@@ -122,7 +125,11 @@ def main(argv: list[str] | None = None) -> int:
         load_kwargs["dtype" if _new_transformers() else "torch_dtype"] = compute_dtype
     model = AutoModelForCausalLM.from_pretrained(args.base_model, **load_kwargs)
     if use_4bit:
-        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+        # Not peft's prepare_model_for_kbit_training: it casts the embedding and output layers
+        # (~1B weights for Qwen's 152k vocabulary) to float32, ~4 GB extra, which does not fit a T4.
+        model.config.use_cache = False
+        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        model.enable_input_require_grads()
 
     # All linear projections of the transformer blocks; falls back to whatever exists.
     wanted = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
