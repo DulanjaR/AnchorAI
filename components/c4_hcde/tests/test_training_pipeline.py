@@ -17,8 +17,9 @@ def test_control_prompt_is_short_and_rubric_is_long():
 
 def test_human_first_rejects_code_and_requires_question():
     assert not check("HUMAN_FIRST", "Try it yourself first. " + CODE).passed
-    assert not check("HUMAN_FIRST", "Try it yourself first.").passed
+    assert not check("HUMAN_FIRST", "This is a classic exercise in loops.").passed
     assert check("HUMAN_FIRST", "You've done this before. What is your first attempt?").passed
+    assert check("HUMAN_FIRST", "You know loops well. Give it a try and share your code with me.").passed
 
 
 def test_hint_allows_one_step_only():
@@ -26,9 +27,15 @@ def test_hint_allows_one_step_only():
     assert not check("HINT", "1. Do this\n2. Then this\n3. Then that").passed
 
 
+def test_guided_flags_filled_in_code():
+    filled = "```python\ndef f(a, b, c):\n    if a > b:\n        m = a\n    else:\n        m = b\n    if m > c:\n        return m\n    return c\n```"
+    assert not check("GUIDED", "1. Compare\n" + filled).passed
+
+
 def test_guided_needs_blanks_for_long_code():
     assert not check("GUIDED", "Here you go:\n" + CODE).passed
-    assert check("GUIDED", "Fill in the TODO:\n" + CODE).passed
+    assert not check("GUIDED", "Fill in the TODO:\n" + CODE).passed  # blank must be in the code
+    assert check("GUIDED", "Fill in the blank:\n" + CODE.replace("x5 = 5", "x5 = ___  # TODO")).passed
 
 
 def test_shared_must_hand_back():
@@ -41,6 +48,10 @@ def test_probe_format():
     assert split_probe(good)[1] == "Keep a running minimum."
     assert check("PROBE", good).passed
     assert not check("PROBE", "Write a function that returns the smallest number.").passed
+    task = "Write a Python function that returns the largest of three numbers without using max()."
+    copy = "Problem:\nWrite a Python function that returns the largest of three numbers without using max().\n\nAnswer key:\nCompare."
+    assert not check("PROBE", copy, task).passed
+    assert check("PROBE", good, task).passed
 
 
 def test_disclosure_score_and_bands():

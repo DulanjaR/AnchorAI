@@ -1,0 +1,19 @@
+{
+ "it-001": [
+  "The function takes three parameters: a, b, and c.",
+  "It uses if and elif statements to compare the values.",
+  "If a is greater than or equal to both b and c, it returns a.",
+  "If b is greater than or equal to both a and c, it returns b.",
+  "Otherwise, it returns c.",
+  "The function returns the largest number among the three."
+ ],
+ "it-002": [
+  "The program uses a for loop to iterate over a sequence of numbers.",
+  "The range function generates a sequence of even numbers between 1 and 50.",
+  "The range function starts at 2, ends before 51, and has a step of 2.",
+  "The loop prints each number in the sequence.",
+  "The sequence starts from 2 to ensure the first number is even.",
+  "The end value in the range function is 51 because the range function is exclusive of the end value.",
+  "The step value of 2 in the range function ensures that only even numbers are generated."
+ ]
+}

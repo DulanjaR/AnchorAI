@@ -73,7 +73,8 @@ TIERS: dict[str, TierSpec] = {
         ),
         must_not=(
             "the complete working solution or final answer",
-            "filled-in code for the core logic the task is testing",
+            "filled-in code for the core logic the task is testing: leave that logic as ___ or TODO for the student",
+            "a finished program that would already solve the task if run",
         ),
         max_words=300,
     ),
@@ -128,12 +129,71 @@ MODES = TIER_NAMES + [PROBE]
 
 PROBE_RULES = (
     "Write ONE new practice problem that tests exactly the same skill as the student's task, "
-    "with a different surface (new names, numbers or scenario), solvable without help in about 5 minutes.\n"
+    "solvable without help in about 5 minutes.\n"
+    "It must NOT be the student's task again: change the scenario AND the data AND what exactly is asked "
+    "(for example a different number of inputs, the opposite goal, or a real-world context), so a "
+    "memorised answer to the original task does not solve it.\n"
     "Format exactly:\n"
     "Problem:\n<the problem, addressed to the student>\n\n"
     "Answer key:\n<the correct answer and the 2-4 points a correct attempt must contain>\n"
     "Do not include hints in the problem. Keep the whole output under 220 words."
 )
+
+
+# One worked example per tier for the TEACHER only, on a task that is not in the dataset. Large
+# models copy an example's shape far more reliably than they follow written rules (in the trial,
+# GUIDED replies kept filling in the full code until shown what blanks look like).
+EXAMPLE_TASK = "Write a function that counts how many times a given character appears in a string."
+TEACHER_EXAMPLES: dict[str, str] = {
+    "HUMAN_FIRST": (
+        "You have already written loops over strings, so you have everything you need for this one. "
+        "Have a go on your own first, then share your attempt and I'll look through it with you."
+    ),
+    "HINT": (
+        "Think about what you need to remember while you walk through the string, and at what moment "
+        "that value should change. Try it, and come back if you get stuck."
+    ),
+    "GUIDED": (
+        "Let's build it step by step.\n\n"
+        "1. You need a counter. What value should it start at?\n"
+        "2. Go through the string one character at a time. How do you know a character matches?\n"
+        "3. What should happen to the counter when it matches?\n\n"
+        "```python\n"
+        "def count_char(text, ch):\n"
+        "    count = ___          # step 1\n"
+        "    for c in text:\n"
+        "        if ___:          # step 2\n"
+        "            ___          # step 3\n"
+        "    return count\n"
+        "```\n\n"
+        "Fill in the three blanks, then test it with `count_char(\"banana\", \"a\")`. What should it return?"
+    ),
+    "SHARED": (
+        "Here is a plan: (1) set up a counter, (2) walk through the string, (3) update the counter on a "
+        "match, (4) test edge cases. I'll do steps 1 and 2:\n\n"
+        "```python\n"
+        "def count_char(text, ch):\n"
+        "    count = 0\n"
+        "    for c in text:\n"
+        "        # your part: update count when c matches ch\n"
+        "    return count\n"
+        "```\n\n"
+        "Your turn: complete the loop body. Then decide: should `count_char(\"Apple\", \"a\")` return 0 or 1? "
+        "That choice is yours, so tell me which you want and why."
+    ),
+    "EMERGENCY": (
+        "```python\n"
+        "def count_char(text, ch):\n"
+        "    count = 0\n"
+        "    for c in text:\n"
+        "        if c == ch:\n"
+        "            count += 1\n"
+        "    return count\n"
+        "```\n\n"
+        "It starts a counter at 0, checks every character, and adds 1 on each match. "
+        "(`text.count(ch)` does the same in one call.) Later, revisit loops with counters so you can write this unaided."
+    ),
+}
 
 
 def control_system_prompt(tier: str) -> str:
@@ -177,7 +237,10 @@ def teacher_system_prompt(tier: str) -> str:
         + _rubric_block(spec)
         + "\n\nAuthoring rules:\n"
         "- Reply directly to the student, in a warm, plain, professional tone.\n"
+        "- Start with substance. Do not open with filler such as 'Sure!', 'Of course!' or 'Great question!'.\n"
         "- Be technically correct. Use Markdown code blocks for any code.\n"
         "- Do not mention the tier name, the rubric, or that you are restricted.\n"
-        "- Follow the MAY / MUST NOT lists strictly; when unsure, give less help, not more."
+        "- Follow the MAY / MUST NOT lists strictly; when unsure, give less help, not more.\n\n"
+        f"Example of a good {spec.label} reply, for a DIFFERENT task (match its amount of help and shape, "
+        f"not its content):\nTask: {EXAMPLE_TASK}\nReply:\n{TEACHER_EXAMPLES[tier]}"
     )

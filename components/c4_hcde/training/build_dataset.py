@@ -83,6 +83,11 @@ def mock_reply(tier: str, task: str) -> str:
     }[tier]
 
 
+def repair_message(tier: str, reasons: list[str]) -> str:
+    return (f"That reply breaks the {tier} rules: {'; '.join(reasons)}. Rewrite it so it follows the "
+            f"{tier} rules exactly, using the example's amount of help. Reply with the rewritten answer only.")
+
+
 def build_example(task: dict, tier: str, reply: str, teacher: str, compliance: dict, attempts: int) -> dict:
     return {
         "task_id": task["id"],
@@ -135,14 +140,18 @@ def main(argv: list[str] | None = None) -> int:
         messages = [{"role": "system", "content": teacher_system_prompt(tier)},
                     {"role": "user", "content": task["task"]}]
         reply, result, attempts = "", None, 0
-        # One regeneration if the first reply breaks the tier; the second is kept either way
-        # and flagged, so the review step can decide.
+        # If the first reply breaks the tier, send it back with the exact reasons and ask for a
+        # rewrite. The second reply is kept either way and flagged, so the review step can decide.
         for attempts in (1, 2):
             reply = mock_reply(tier, task["task"]) if args.mock else chat(
                 base_url, api_key, model, messages, args.temperature, args.max_tokens)
-            result = check(tier, reply)
+            result = check(tier, reply, task["task"])
             if result.passed:
                 break
+            messages = messages + [
+                {"role": "assistant", "content": reply},
+                {"role": "user", "content": repair_message(tier, result.reasons)},
+            ]
         return build_example(task, tier, reply, model, result.to_dict(), attempts)
 
     failed = 0

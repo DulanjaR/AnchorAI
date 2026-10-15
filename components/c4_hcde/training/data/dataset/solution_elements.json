@@ -1,0 +1,14 @@
+{
+ "it-001": [
+  "Compare the first number with the other two to determine if it's the largest",
+  "Compare the second number with the other two if the first is not the largest",
+  "Return the number that is greater than or equal to the other two",
+  "Use conditional statements to handle the different possible largest number scenarios"
+ ],
+ "it-002": [
+  "Determine the range of numbers to iterate over",
+  "Select only the even numbers within the range",
+  "Use a loop to iterate over the selected numbers",
+  "Print each number in the loop"
+ ]
+}

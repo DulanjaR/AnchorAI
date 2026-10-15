@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
                 dropped["fix with empty fixed_reply"] += 1
                 continue
             r["messages"][2]["content"] = fixed
-            r["compliance"] = check(r["tier"], fixed).to_dict()
+            r["compliance"] = check(r["tier"], fixed, r["messages"][1]["content"]).to_dict()
             r.pop("disclosure", None)
             r["reviewed"] = "fixed"
         elif verdict == "keep":

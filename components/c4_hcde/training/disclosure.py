@@ -20,9 +20,14 @@ import re
 from .tiers import DISCLOSURE_BANDS
 
 ELEMENTS_PROMPT = """Below is a student's task and a complete reference solution.
-List the key solution elements: the 3 to 8 distinct pieces of reasoning, method, code logic or
-final answer that a student would have to produce themselves to solve the task.
-Each element is one short sentence, specific to this task.
+List the key solution elements: the 3 to 6 distinct things a student would have to work out
+themselves to solve the task (the key idea, the essential steps, the final answer).
+Rules:
+- Describe WHAT must be achieved, not one particular implementation. If the task can be solved
+  in several valid ways, phrase each element so that any valid method satisfies it
+  (write "select only the even numbers", not "use range with a step of 2").
+- No duplicates, no trivial elements (such as naming a parameter), no restating the task.
+- Each element is one short sentence, specific to this task.
 
 Task:
 {task}
@@ -38,6 +43,7 @@ solution element the reply REVEALS to the student.
 - 0 = not revealed (absent, or only asked about as a question, or only named as a general topic)
 - 0.5 = partly revealed (the direction is given but the student still has to work it out)
 - 1 = fully revealed (stated, shown in code, or given as the answer)
+If the reply uses a different valid method, judge whether it reveals the EQUIVALENT step.
 
 Task:
 {task}

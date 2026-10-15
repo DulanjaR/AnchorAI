@@ -219,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
             rows.append({"condition": cond, "task_id": r["task_id"], "module": r["module"],
                          "difficulty": r["difficulty"], "tier": r["tier"], "task": r["messages"][1]["content"],
                          "reply": reply, "reference": r["messages"][2]["content"],
-                         "compliance": check(r["tier"], reply).to_dict()})
+                         "compliance": check(r["tier"], reply, r["messages"][1]["content"]).to_dict()})
 
     if args.judge:
         print("judging...")

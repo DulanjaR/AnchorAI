@@ -1,0 +1,13 @@
+{
+ "it-001": [
+  "Compare the input numbers to determine the largest",
+  "Use conditional statements to handle different comparison outcomes",
+  "Return the largest number based on the comparison results"
+ ],
+ "it-002": [
+  "Determine the range of numbers to iterate over",
+  "Select only the even numbers within the range",
+  "Use a loop to iterate over the selected numbers",
+  "Print each number in the loop"
+ ]
+}
