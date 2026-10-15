@@ -10,6 +10,8 @@ or vLLM server, ...). Configure with environment variables:
     TEACHER_BASE_URL   e.g. https://openrouter.ai/api/v1  or  http://localhost:11434/v1
     TEACHER_API_KEY    API key (any string for local servers)
     TEACHER_MODEL      e.g. qwen/qwen-2.5-72b-instruct
+    TEACHER_EXTRA      optional JSON merged into every request, e.g. for Groq gpt-oss:
+                       {"reasoning_effort": "low", "include_reasoning": false}
 
 Run from the repo root:
 
@@ -24,6 +26,7 @@ import argparse
 import json
 import os
 import random
+import re
 import sys
 import threading
 import time
@@ -47,27 +50,145 @@ def load_jsonl(path: Path) -> list[dict]:
         return [json.loads(line) for line in f if line.strip()]
 
 
+THINK_BLOCK = re.compile(r"<think>.*?</think>\s*", re.DOTALL | re.IGNORECASE)
+
+
+def strip_reasoning(text: str) -> str:
+    """Remove <think>...</think> blocks that reasoning models (e.g. Qwen3) put before the answer,
+    so they never end up in the training data."""
+    return THINK_BLOCK.sub("", text).strip()
+
+
+def env_json(name: str) -> dict:
+    """Optional JSON object from an environment variable (provider-specific request settings)."""
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return {}
+    value = json.loads(raw)
+    if not isinstance(value, dict):
+        raise ValueError(f"{name} must be a JSON object")
+    return value
+
+
+class KeyPool:
+    """Several API keys for one model, given as a comma-separated list. When a key reaches its
+    DAILY limit (Groq reports "per day" / TPD / RPD on a 429), it is set aside and the next key is
+    used. Per-minute limits are waited out instead."""
+
+    _pools: dict[tuple[str, str], "KeyPool"] = {}
+    _lock = threading.Lock()
+
+    def __init__(self, keys: list[str]):
+        self.keys = keys
+        self.spent: set[str] = set()
+        self.i = 0
+
+    @classmethod
+    def for_model(cls, model: str, api_key: str) -> "KeyPool":
+        keys = [k.strip() for k in api_key.split(",") if k.strip()] or [""]
+        with cls._lock:
+            return cls._pools.setdefault((model, ",".join(keys)), cls(keys))
+
+    def current(self) -> str:
+        with self._lock:
+            live = [k for k in self.keys if k not in self.spent]
+            if not live:
+                raise RuntimeError(f"all {len(self.keys)} API key(s) reached their daily limit for this model")
+            return live[self.i % len(live)]
+
+    def rotate(self) -> None:
+        """Move on to the next key (spreads per-minute limits across keys)."""
+        with self._lock:
+            self.i += 1
+
+    def live_count(self) -> int:
+        with self._lock:
+            return len([k for k in self.keys if k not in self.spent])
+
+    def mark_spent(self, key: str, model: str) -> None:
+        with self._lock:
+            if key not in self.spent:
+                self.spent.add(key)
+                left = len(self.keys) - len(self.spent)
+                print(f"note: key #{self.keys.index(key) + 1} hit its daily limit for {model}; "
+                      f"{left} key(s) left", file=sys.stderr)
+
+
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) anchor-ai-hcde/1.0"
+DAILY_LIMIT = re.compile(r"per day|\bTPD\b|\bRPD\b", re.IGNORECASE)
+RETRY_IN = re.compile(r"try again in (?:(\d+)m)?([\d.]+)s", re.IGNORECASE)
+
+
+def retry_seconds(message: str, header: str | None) -> float | None:
+    """Seconds to wait, from a Retry-After header or Groq's 'try again in 1m2.5s' text."""
+    m = RETRY_IN.search(message)
+    if m:
+        return int(m.group(1) or 0) * 60 + float(m.group(2))
+    try:
+        return float(header) if header else None
+    except ValueError:
+        return None
+
+
 def chat(base_url: str, api_key: str, model: str, messages: list[dict], temperature: float,
-         max_tokens: int, retries: int = 5) -> str:
+         max_tokens: int, retries: int = 5, extra: dict | None = None) -> str:
+    """One chat completion from an OpenAI-compatible endpoint. ``api_key`` may hold several
+    comma-separated keys (see KeyPool)."""
     url = base_url.rstrip("/") + "/chat/completions"
-    body = json.dumps({"model": model, "messages": messages, "temperature": temperature,
-                       "max_tokens": max_tokens}).encode()
-    for attempt in range(retries):
+    payload = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens,
+               **(extra or {})}
+    body = json.dumps(payload).encode()
+    pool = KeyPool.for_model(model, api_key)
+    attempt, waits = 0, 0
+    while True:
+        key = pool.current()
         req = urllib.request.Request(url, data=body, method="POST", headers={
-            "Content-Type": "application/json", "Authorization": f"Bearer {api_key}"})
+            "Content-Type": "application/json", "Accept": "application/json", "Authorization": f"Bearer {key}",
+            # Cloudflare (in front of Groq and others) blocks Python's default "Python-urllib" agent
+            # with error 1010, so identify as a normal client.
+            "User-Agent": USER_AGENT})
         try:
             with urllib.request.urlopen(req, timeout=180) as resp:
                 data = json.load(resp)
-            return data["choices"][0]["message"]["content"].strip()
+            return strip_reasoning(data["choices"][0]["message"]["content"] or "")
         except urllib.error.HTTPError as e:
+            detail = e.read()[:400]
+            # A provider that rejects one of the optional settings: retry once without them.
+            if e.code == 400 and extra:
+                print(f"note: {model} rejected the extra settings {sorted(extra)}; retrying without them",
+                      file=sys.stderr)
+                return chat(base_url, api_key, model, messages, temperature, max_tokens, retries)
+            message = detail.decode("utf-8", "replace")
+            # A key that is out of daily quota: switch to the next key (does not use up a retry).
+            if e.code == 429 and DAILY_LIMIT.search(message):
+                pool.mark_spent(key, model)
+                continue
+            # Per-minute limit: try the next key straight away; once every key has been tried,
+            # wait as long as the provider asks. These short waits do not use up retries.
+            if e.code == 429 and waits < 60:
+                waits += 1
+                pool.rotate()
+                if waits % max(1, pool.live_count()) == 0:
+                    time.sleep(min(90.0, retry_seconds(message, e.headers.get("retry-after") if e.headers else None)
+                                   or 5.0) + random.random())
+                continue
             # 429 / 5xx are retried with backoff; other errors are real problems.
-            if e.code not in (408, 429, 500, 502, 503, 504) or attempt == retries - 1:
-                raise RuntimeError(f"teacher HTTP {e.code}: {e.read()[:300]!r}") from e
+            attempt += 1
+            if e.code not in (408, 429, 500, 502, 503, 504) or attempt >= retries:
+                raise RuntimeError(f"teacher HTTP {e.code}: {detail!r}") from e
+            # Providers such as Groq say how long to wait on 429; honour it (capped at 2 minutes).
+            wait = e.headers.get("retry-after") if e.headers else None
+            if wait:
+                try:
+                    time.sleep(min(120.0, float(wait)) + random.random())
+                    continue
+                except ValueError:
+                    pass
         except (urllib.error.URLError, TimeoutError) as e:
-            if attempt == retries - 1:
+            attempt += 1
+            if attempt >= retries:
                 raise RuntimeError(f"teacher unreachable: {e}") from e
         time.sleep(min(60, 2 ** attempt + random.random()))
-    raise RuntimeError("unreachable")
 
 
 def mock_reply(tier: str, task: str) -> str:
@@ -115,10 +236,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, default=0, help="only the first N tasks (0 = all)")
     ap.add_argument("--workers", type=int, default=4, help="parallel requests; lower it if you hit rate limits")
     ap.add_argument("--temperature", type=float, default=0.7)
-    ap.add_argument("--max-tokens", type=int, default=1200)
+    ap.add_argument("--max-tokens", type=int, default=2000,
+                    help="reply length cap; reasoning models count their thinking towards it")
     ap.add_argument("--mock", action="store_true", help="no API calls; write canned replies")
+    ap.add_argument("--redo", nargs="+", default=[], metavar="TASK_ID",
+                    help="discard the saved replies for these tasks (only the --tiers given) and generate them again")
     args = ap.parse_args(argv)
 
+    extra = env_json("TEACHER_EXTRA")
     base_url = os.environ.get("TEACHER_BASE_URL", "")
     api_key = os.environ.get("TEACHER_API_KEY", "")
     model = "mock" if args.mock else os.environ.get("TEACHER_MODEL", "")
@@ -130,6 +255,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.limit:
         tasks = tasks[: args.limit]
     args.out.parent.mkdir(parents=True, exist_ok=True)
+    if args.redo:
+        redo = set(args.redo)
+        existing = load_jsonl(args.out)
+        keep = [r for r in existing if not (r["task_id"] in redo and r["tier"] in args.tiers)]
+        backup = args.out.with_suffix(".before_redo.jsonl")
+        backup.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in existing))
+        args.out.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in keep))
+        print(f"--redo: removed {len(existing) - len(keep)} saved replies (backup: {backup.name})")
     done = {(r["task_id"], r["tier"]) for r in load_jsonl(args.out)}
     jobs = [(t, tier) for t in tasks for tier in args.tiers if (t["id"], tier) not in done]
     print(f"{len(tasks)} tasks x {len(args.tiers)} tiers: {len(done)} done, {len(jobs)} to generate")
@@ -144,7 +277,7 @@ def main(argv: list[str] | None = None) -> int:
         # rewrite. The second reply is kept either way and flagged, so the review step can decide.
         for attempts in (1, 2):
             reply = mock_reply(tier, task["task"]) if args.mock else chat(
-                base_url, api_key, model, messages, args.temperature, args.max_tokens)
+                base_url, api_key, model, messages, args.temperature, args.max_tokens, extra=extra)
             result = check(tier, reply, task["task"])
             if result.passed:
                 break

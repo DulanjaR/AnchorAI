@@ -24,3 +24,8 @@ node_modules/
 # training outputs
 runs/
 components/c4_hcde/training/data/dataset/*.tmp
+
+# local working files
+components/c4_hcde/training/data/dataset/old/
+components/c4_hcde/training/data/dataset/raw.before_redo.jsonl
+~$*

@@ -1,0 +1,103 @@
+{"task_id": "it-006", "tier": "PROBE", "verdict": "reject", "reason": "regenerated probe is identical to the original task", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-031", "tier": "PROBE", "verdict": "reject", "reason": "answer key describes a different bug than the problem states", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-037", "tier": "PROBE", "verdict": "reject", "reason": "problem statement contradicts itself (returns 0 instead of 0)", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-041", "tier": "PROBE", "verdict": "reject", "reason": "answer key explanation is technically wrong", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-042", "tier": "PROBE", "verdict": "reject", "reason": "the given query is already correct; answer key is speculative", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-045", "tier": "PROBE", "verdict": "reject", "reason": "answer key contradicts itself", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-054", "tier": "PROBE", "verdict": "reject", "reason": "unsolvable: the bug is in HTML that is not shown", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-077", "tier": "PROBE", "verdict": "keep", "reason": "only flagged for length; content is a good transfer probe", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-082", "tier": "PROBE", "verdict": "keep", "reason": "only flagged for length; content is a good transfer probe", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-088", "tier": "PROBE", "verdict": "keep", "reason": "only flagged for length; content is a good transfer probe", "by": "researcher-reviewed (Claude-assisted)"}
+{"task_id": "it-002", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-005", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-006", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-006", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-008", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-009", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-010", "tier": "PROBE", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-011", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-012", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-015", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-015", "tier": "PROBE", "verdict": "reject", "reason": "tests a different concept and language (C# method hiding vs overriding)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-015", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-018", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-018", "tier": "HUMAN_FIRST", "verdict": "reject", "reason": "gives the key idea (declared type decides callable methods); Human First must not hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-019", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-020", "tier": "PROBE", "verdict": "reject", "reason": "same task with renamed class (Point to Book)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-022", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-022", "tier": "HINT", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-022", "tier": "SHARED", "verdict": "reject", "reason": "plan names volatile and double-checked locking: gives away the core decisions", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-023", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-023", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-023", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-024", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-025", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-025", "tier": "GUIDED", "verdict": "reject", "reason": "the core of the task (Car holding an Engine instance) is already written", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-025", "tier": "HINT", "verdict": "reject", "reason": "code skeleton with blanks and two questions; Guided behaviour, not one hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-028", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-030", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-031", "tier": "HINT", "verdict": "reject", "reason": "two questions plus a code skeleton; more than one hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-032", "tier": "SHARED", "verdict": "reject", "reason": "the student's part (compare and swap) is written out in a comment", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-033", "tier": "PROBE", "verdict": "reject", "reason": "answer key intermediate merge steps are wrong", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-035", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-036", "tier": "HINT", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-039", "tier": "HINT", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-040", "tier": "HINT", "verdict": "reject", "reason": "names both WHERE and ORDER BY: the whole solution for a level-1 task", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-041", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-041", "tier": "HUMAN_FIRST", "verdict": "reject", "reason": "names GROUP BY, the method", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-042", "tier": "HINT", "verdict": "reject", "reason": "names COUNT, GROUP BY and the filtering step: gives the method", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-042", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-043", "tier": "SHARED", "verdict": "reject", "reason": "both definitions fully given; little left for the student", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-044", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-045", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-045", "tier": "HINT", "verdict": "reject", "reason": "describes the full method (subquery excluding the max)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-045", "tier": "SHARED", "verdict": "reject", "reason": "the student's remaining step is spelled out (salary < MAX subquery)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-047", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-048", "tier": "HINT", "verdict": "reject", "reason": "a list of guiding questions per ACID letter; more than one hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-048", "tier": "HUMAN_FIRST", "verdict": "reject", "reason": "three guiding questions walk through the answer; that is Hint/Guided behaviour", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-049", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-050", "tier": "SHARED", "verdict": "reject", "reason": "610 words and the table is the answer", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-051", "tier": "HINT", "verdict": "reject", "reason": "full SQL skeleton; Guided behaviour", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-051", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-053", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-054", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-055", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-056", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-056", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-057", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-058", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-059", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-060", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-062", "tier": "HUMAN_FIRST", "verdict": "reject", "reason": "names the solution (parameterized queries)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-063", "tier": "GUIDED", "verdict": "reject", "reason": "far too long (550+ words) for Guided", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-065", "tier": "SHARED", "verdict": "reject", "reason": "writes user story 2 itself although it says the student will", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-068", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-068", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-068", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-069", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-069", "tier": "HUMAN_FIRST", "verdict": "reject", "reason": "lists edge cases to test; that is a hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-070", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-070", "tier": "HINT", "verdict": "reject", "reason": "three questions that map one-to-one to the answer", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-070", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-071", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-072", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-073", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-073", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-074", "tier": "EMERGENCY", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-074", "tier": "GUIDED", "verdict": "reject", "reason": "states the whole workflow step by step; questions are decoration, no real blanks", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-074", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-076", "tier": "PROBE", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-076", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-077", "tier": "HINT", "verdict": "reject", "reason": "four fill-in statements; more than one hint", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-083", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-084", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-085", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-086", "tier": "SHARED", "verdict": "reject", "reason": "the troubleshooting plan (the answer) is fully laid out, 585 words", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-087", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-088", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-089", "tier": "SHARED", "verdict": "reject", "reason": "the core definitions (the answer) are given", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-090", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-091", "tier": "HUMAN_FIRST", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-092", "tier": "HINT", "verdict": "keep", "reason": "fits its tier", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "random"}
+{"task_id": "it-097", "tier": "GUIDED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}
+{"task_id": "it-100", "tier": "SHARED", "verdict": "keep", "reason": "fits its tier (flag was length or judge noise)", "by": "Claude review (AI-assisted); researcher to confirm", "sample": "flagged"}

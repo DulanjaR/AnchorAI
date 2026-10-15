@@ -23,7 +23,7 @@ from pathlib import Path
 
 import os
 
-from .build_dataset import DEFAULT_OUT, chat, load_jsonl
+from .build_dataset import DEFAULT_OUT, chat, env_json, load_jsonl
 from .compliance import check
 from .disclosure import extract_elements, score_reply, summarise_disclosure
 from .tiers import PROBE, TIERS, teacher_system_prompt
@@ -81,6 +81,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--elements", type=Path, default=DEFAULT_ELEMENTS)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--mock", action="store_true")
+    ap.add_argument("--tiers", nargs="+", default=None,
+                    help="only score these tiers (e.g. HINT GUIDED when the judge's daily budget is tight)")
     ap.add_argument("--repair-rounds", type=int, default=2,
                     help="rewrites per out-of-band reply (0 = only score, never rewrite)")
     args = ap.parse_args(argv)
@@ -106,7 +108,8 @@ def main(argv: list[str] | None = None) -> int:
 
     # Step 2: score every tier reply against its task's elements.
     jobs = [i for i, r in enumerate(rows)
-            if r["tier"] != PROBE and "disclosure" not in r and r["task_id"] in elements]
+            if r["tier"] != PROBE and "disclosure" not in r and r["task_id"] in elements
+            and (not args.tiers or r["tier"] in args.tiers or r["tier"] == "EMERGENCY")]
     missing = sum(1 for r in rows if r["tier"] != PROBE and r["task_id"] not in elements)
     print(f"scoring {len(jobs)} replies ({missing} skipped: task has no reference yet)")
 
@@ -132,7 +135,7 @@ def main(argv: list[str] | None = None) -> int:
             if current["disclosure"]["in_band"]:  # only compliance failed; build_dataset already tried
                 break
             history.append({"role": "user", "content": repair_feedback(tier, els, current["disclosure"])})
-            new_reply = chat(*teacher, history, 0.7, 1200)
+            new_reply = chat(*teacher, history, 0.7, 2000, extra=env_json("TEACHER_EXTRA"))
             history.append({"role": "assistant", "content": new_reply})
             current = {"reply": new_reply, "compliance": check(tier, new_reply, task).to_dict(),
                        "disclosure": summarise_disclosure(tier, score_reply(task, els, new_reply, ask)), "repairs": n}

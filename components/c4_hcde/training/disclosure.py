@@ -64,30 +64,44 @@ def _judge_config() -> tuple[str, str, str]:
     return base_url, key, model
 
 
+def judge_ask(max_tokens: int):
+    """A function prompt -> judge reply, using JUDGE_* settings (JUDGE_EXTRA: optional JSON settings,
+    e.g. {"reasoning_effort": "none"} for Groq Qwen; JUDGE_MAX_TOKENS raises the length cap)."""
+    from .build_dataset import chat, env_json
+
+    extra = env_json("JUDGE_EXTRA")
+    cap = max(max_tokens, int(os.environ.get("JUDGE_MAX_TOKENS", "0") or 0))
+    return lambda prompt: chat(*_judge_config(), [{"role": "user", "content": prompt}], 0.0, cap, extra=extra)
+
+
 def _json(text: str):
     m = re.search(r"(\{.*\}|\[.*\])", text, re.DOTALL)
     if not m:
         raise ValueError(f"no JSON in judge output: {text[:200]!r}")
-    return json.loads(m.group(1))
+    return json.loads(m.group(1), strict=False)  # tolerate raw line breaks inside strings
 
 
 def extract_elements(task: str, reference: str, ask=None) -> list[str]:
-    from .build_dataset import chat
-
-    ask = ask or (lambda prompt: chat(*_judge_config(), [{"role": "user", "content": prompt}], 0.0, 600))
+    ask = ask or judge_ask(600)
     data = _json(ask(ELEMENTS_PROMPT.format(task=task, reference=reference)))
-    if isinstance(data, dict):  # some models wrap the array
-        data = next(iter(data.values()))
-    elements = [str(e).strip() for e in data if str(e).strip()]
+    if isinstance(data, dict):  # some models wrap the array: {"elements": [...]}
+        lists = [v for v in data.values() if isinstance(v, list)]
+        data = lists[0] if lists else list(data.values())
+    if isinstance(data, str):  # a single string: one element per line
+        data = data.splitlines()
+    # never iterate over a string's characters (that produced "45 elements" before)
+    flat = []
+    for e in data:
+        flat.extend(e.splitlines() if isinstance(e, str) else [str(e)])
+    elements = [re.sub(r"^\s*(?:[-*]|\d+[.)])\s*", "", e).strip() for e in flat]
+    elements = [e for e in elements if e]
     if not 1 <= len(elements) <= 12:
         raise ValueError(f"judge returned {len(elements)} elements")
     return elements
 
 
 def score_reply(task: str, elements: list[str], reply: str, ask=None) -> list[float]:
-    from .build_dataset import chat
-
-    ask = ask or (lambda prompt: chat(*_judge_config(), [{"role": "user", "content": prompt}], 0.0, 300))
+    ask = ask or judge_ask(300)
     numbered = "\n".join(f"{i}. {e}" for i, e in enumerate(elements, 1))
     data = _json(ask(SCORE_PROMPT.format(task=task, elements=numbered, reply=reply)))
     scores = data["scores"] if isinstance(data, dict) else data

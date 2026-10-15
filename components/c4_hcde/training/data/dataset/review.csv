@@ -1,0 +1,2822 @@
+task_id,tier,module,difficulty,task,reply,auto_passed,auto_reasons,disclosure,disclosure_band,verdict,fixed_reply,notes
+it-002,HUMAN_FIRST,Programming Fundamentals,1,Write a program that prints all even numbers between 1 and 50 using a loop.,"You've worked with loops and conditions before, so you have the tools to tackle this. Give it a try on your own first, and then share your attempt. I'll be here to review it with you.",True,,0.0,0.0-0.05,,,
+it-004,PROBE,Programming Fundamentals,2,Write a function that checks whether a given year is a leap year.,"Problem:
+Write a function named `is_leap_year` that takes an integer representing a year and returns `True` if the year is a leap year, and `False` otherwise. A leap year is defined as follows:
+- The year is evenly divisible by 4.
+- If the year is divisible by 100, it must also be divisible by 400 to be a leap year.
+
+Test your function with the following years: 1900, 2000, 2020, and 2021.
+
+Answer key:
+```python
+def is_leap_year(year):
+    if year % 4 == 0:
+        if year % 100 == 0:
+            if year % 400 == 0:
+                return True
+            else:
+                return False
+        else:
+            return True
+    else:
+        return False
+
+# Test cases
+print(is_leap_year(1900))  # False
+print(is_leap_year(2000))  # True
+print(is_leap_year(2020))  # True
+print(is_leap_year(2021))  # False
+```
+A correct attempt must contain:
+1. A function named `is_leap_year` that takes an integer `year` as an argument.
+2. Correct implementation of the leap year rules.
+3. Test cases for the years 1900, 2000, 2020, and 2021 with the correct outputs.",True,,,,,,
+it-005,GUIDED,Programming Fundamentals,2,"Write a function that reverses a list without using reverse(), reversed() or slicing.","Think it through step by step.
+
+1. How do you start a variable that will eventually hold the reversed list?
+2. Which `range` parameters let you walk through `lst` from the last index to the first?
+3. While iterating, what list operation can you use to put the current element into the result list?
+
+```python
+def reverse_list(lst):
+    ___                     # 1
+    for i in range(___, ___, ___):   # 2
+        ___                          # 3
+    return ___
+```
+
+Fill in each blank, then test `reverse_list([10, 20, 30])`. What should the output look like?",True,,0.5,0.1-0.55,,,
+it-006,HUMAN_FIRST,Programming Fundamentals,1,"My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?","You're close, and you've got the right idea with the loop and the accumulation. Let's see if you can spot the small detail that's causing the difference. Try to walk through your code step-by-step and see if you can identify where the total is not what you expected. Once you have a theory, share it with me, and I'll help you verify it.",True,,0.0,0.0-0.05,,,
+it-006,SHARED,Programming Fundamentals,1,"My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?","Here’s a short plan:
+
+1. **Recall how `range` works** – it generates numbers up to, but not including, the stop value.  
+2. **Pick the correct stop value** so the sequence contains the number 10.  
+3. **Insert that range into the loop** and run the program.  
+4. **Check the result** – does it match the expected sum 55?
+
+I’ll handle steps 1‑3 and leave the verification for you.
+
+```python
+total = 0
+# Step 2 & 3: choose the right range so that 10 is included
+for i in range(1, ___):   # fill in the stop value
+    total += i
+print(total)
+```
+
+Your turn:
+
+- Replace the blank with the appropriate stop value.  
+- Run the script and tell me what it prints.  
+- If the output is 55, you’ve fixed the problem; if not, what do you think still needs adjusting?",True,,0.625,0.4-0.85,,,
+it-008,SHARED,Programming Fundamentals,2,"Write a program that keeps reading integers until the user enters 0, then prints their average.","Here's a plan: (1) initialize variables to keep track of the sum and count of numbers, (2) use a loop to read integers until the user enters 0, (3) update the sum and count inside the loop, (4) calculate and print the average after the loop.
+
+I'll handle steps 1 and 2:
+
+```python
+def main():
+    total = 0
+    count = 0
+    
+    while True:
+        num = int(input(""Enter an integer (0 to stop): ""))
+        if num == 0:
+            break
+        # your part: update total and count
+```
+
+Your turn: complete the loop body to update `total` and `count` with the user's input. Then, decide: how should the program handle the case where the user enters 0 immediately without entering any other numbers? Should it print a message or just exit?",True,,0.8,0.4-0.85,,,
+it-009,HUMAN_FIRST,Programming Fundamentals,2,"Write a function that checks whether a string is a palindrome, ignoring case and spaces.","You've worked with strings and loops before, so you're well-equipped to tackle this. Give it a try on your own first, and share your attempt with me. I'll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
+it-010,PROBE,Programming Fundamentals,3,"Write a recursive function to compute the factorial of n, and explain what should happen when n is negative.","Problem:
+Write a recursive function in Python to compute the product of the first `n` even numbers. Explain what should happen when `n` is negative.
+
+Answer key:
+```python
+def product_of_evens(n):
+    if n <= 0:
+        return 1
+    else:
+        return (2 * n) * product_of_evens(n - 1)
+```
+
+A correct attempt must contain:
+1. A recursive function definition.
+2. A base case that returns 1 when `n` is 0 or negative.
+3. A recursive case that multiplies `2 * n` by the result of `product_of_evens(n - 1)`.
+4. An explanation that when `n` is negative, the function should return 1.",False,probe is too close to the original task (overlap 0.69),,,,,
+it-011,GUIDED,Programming Fundamentals,3,Write a function that removes duplicates from a list while keeping the original order.,"Think about how to build the function yourself.
+
+1. Which container lets you test “have I seen this value before?” in constant time?  
+2. As you walk through the original list, what condition tells you that an element should be kept?  
+3. When that condition is true, what two actions must you perform?  
+
+```python
+def remove_duplicates(seq):
+    seen = ___           # 1️⃣
+    result = []
+    for x in seq:
+        if ___:          # 2️⃣
+            ___          # 3️⃣ (add x to result)
+            ___          # 3️⃣ (record x as seen)
+    return result
+```
+
+Fill in the blanks, then try `remove_duplicates([1, 2, 2, 3, 4, 4, 5])`. What list do you get?",True,disclosure outside band,0.6,0.1-0.55,,,
+it-012,HINT,Programming Fundamentals,3,"Write a program that validates a password: at least 8 characters, at least one digit and at least one uppercase letter.","What part of the password should you examine to decide if it meets the length requirement?  
+Which two character‑type checks do you need to perform while iterating through the string?  
+After you’ve gathered those results, how will you combine them to determine the final answer?  
+
+Try coding the skeleton and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+it-015,HINT,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","What changes in a method’s **parameter list** let you keep the same name but create a new version in the same class?  
+
+When a subclass defines a method with the **exact same signature** as one in its superclass, what behavior does that affect at runtime?  
+
+Try sketching a tiny Java class that shows each case, leaving the differing parts as blanks (e.g., `void foo(___)`). Come back if you get stuck.",True,,0.0,0.0-0.25,,,
+it-015,PROBE,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","**Problem:**  
+In C#, two related concepts are *method hiding* (using `new`) and *method overriding* (using `override`).  
+
+1. Briefly state how method hiding differs from method overriding.  
+2. Write a short C# program that demonstrates each:  
+
+   * Base class `Animal` with a virtual method `Speak()` printing `""Generic animal sound""`.  
+   * Derived class `Dog` that **overrides** `Speak()` to print `""Woof!""`.  
+   * Derived class `Cat` that **hides** `Speak()` (using `new`) to print `""Meow!""`.  
+   * In `Main`, create `Animal a1 = new Dog();` and `Animal a2 = new Cat();` and call `Speak()` on both.  
+   * Also call `Speak()` on a `Cat` reference (`Cat c = new Cat(); c.Speak();`).  
+
+Show the program’s output and explain why the results differ for `Dog` and `Cat`.
+
+---
+
+**Answer key:**  
+
+- **Explanation (2‑3 sentences):**  
+  *Method overriding* replaces a virtual base implementation; the method invoked is chosen at runtime based on the actual object type. *Method hiding* (`new`) defines a new method that hides the base one; the invoked method is chosen at compile time from the reference’s static type.
+
+- **Sample code (any equivalent C# is accepted):**
+
+```csharp
+using System;
+
+class Animal { public virtual void Speak() => Console.WriteLine(""Generic animal sound""); }
+class Dog : Animal { public override void Speak() => Console.WriteLine(""Woof!""); }
+class Cat : Animal { public new void Speak() => Console.WriteLine(""Meow!""); }
+
+class Program {
+    static void Main() {
+        Animal a1 = new Dog();
+        Animal a2 = new Cat();
+        a1.Speak();          // Woof!
+        a2.Speak();          // Generic animal sound
+        Cat c = new Cat();
+        c.Speak();           // Meow!
+    }
+}
+```
+
+- **Output:**  
+```
+Woof!
+Generic animal sound
+Meow!
+```
+
+- **Reasoning:** `Dog` overrides, so the runtime type (`Dog`) determines the call. `Cat` hides, so when the reference type is `Animal` the base method runs; with a `Cat` reference the hidden method runs.",False,too long: 295 words (limit 220),,,,,
+it-015,SHARED,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","Here’s a way to explore the two concepts yourself.
+
+### 1. Sketch a plan
+1. Write a single class that contains **several methods with the same name** but different parameter lists.  
+2. Write a second pair of classes where a subclass **redefines** a method that already exists in its superclass.
+
+### 2. Your starting code
+
+#### Overloading (fill‑in the blanks)
+```java
+public class Calculator {
+    // ① first overload – two ints
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // ② second overload – three ints
+    public int add(____) {          // <-- what parameters go here?
+        // your part: implement the body
+    }
+
+    // ③ third overload – two doubles
+    public double add(____) {       // <-- choose the parameter types
+        // your part: implement the body
+    }
+}
+```
+
+*Question:*  
+- How does the compiler decide which `add` method to call when you write `calc.add(2, 3)` versus `calc.add(2.0, 3.0)`?  
+- What term describes this compile‑time decision?
+
+#### Overriding (fill‑in the blanks)
+```java
+class Animal {
+    public void speak() {
+        System.out.println(""The animal makes a sound"");
+    }
+}
+
+// Your task: create a subclass that overrides speak()
+class Dog extends Animal {
+    @Override
+    public void speak() {
+        // ___: print a dog‑specific sound here
+    }
+}
+```
+
+*Questions:*  
+- When you execute the following, what will each call print and why?
+
+```java
+Animal a1 = new Animal();
+Animal a2 = new Dog();
+
+a1.speak(); // ?
+a2.speak(); // ?
+```
+
+- Which binding (static or dynamic) determines the method that runs for `a2.speak()`?
+
+### 3. What to do next
+- Complete the missing parameter lists and method bodies in the `Calculator` class.  
+- Fill in the `Dog.speak()` implementation.  
+- Answer the questions about which method is chosen in each scenario and name the type of binding involved.
+
+Once you’ve tried those steps, share your code and answers and we can discuss any points that need clarification.",True,,0.4,0.4-0.85,,,
+it-018,EMERGENCY,Object-Oriented Programming,2,"Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?","The code does not compile because the `fetch()` method is not declared in the `Animal` class. In Java, when you declare a variable of type `Animal` and assign it an instance of `Dog`, the compiler only knows about the methods that are declared in the `Animal` class. If `fetch()` is not part of the `Animal` class, the compiler will not recognize it, even though the actual object is a `Dog`.
+
+To fix this, you have a couple of options:
+
+1. **Add the `fetch()` method to the `Animal` class** (or make it an abstract method if `Animal` is an abstract class):
+    ```java
+    public class Animal {
+        public void fetch() {
+            // Default implementation or leave it abstract
+        }
+    }
+
+    public class Dog extends Animal {
+        @Override
+        public void fetch() {
+            // Dog's implementation
+        }
+    }
+    ```
+
+2. **Cast the `Animal` reference to `Dog`** before calling `fetch()`:
+    ```java
+    Animal a = new Dog();
+    ((Dog) a).fetch();
+    ```
+
+The first option is generally better because it maintains type safety and clarity. The second option can be useful in specific cases where you are sure that the `Animal` reference is actually a `Dog`.
+
+Later, revisit polymorphism and method overriding to understand how to design classes and methods for better flexibility and maintainability.",True,,1.0,0.85-1.0,,,
+it-018,HUMAN_FIRST,Object-Oriented Programming,2,"Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?","Consider what the declared type of `a` means for the methods you can call on it. What does the compiler look at when it checks `a.fetch()`? Try writing out the types involved and see what you notice, then share what you come up with.",True,disclosure outside band,0.125,0.0-0.05,,,
+it-019,HUMAN_FIRST,Object-Oriented Programming,3,When should I use an interface instead of an abstract class? Explain using a payment-processing example.,"The goal is to decide when to use an interface over an abstract class in a payment-processing system. You have a good grasp of both concepts, so you’re well-equipped to think through this. Take a shot at outlining your thoughts on the key differences and when each would be more appropriate. Once you’ve shared your ideas, I’ll be here to review and discuss them with you.",True,,0.0,0.0-0.05,,,
+it-020,PROBE,Object-Oriented Programming,3,Implement equals() and hashCode() for a Java Point class with x and y coordinates.,"Problem:
+You are developing a Java application that manages a library of books. Each book is uniquely identified by its title and ISBN. Implement the `equals()` and `hashCode()` methods for a `Book` class to ensure that books can be compared correctly and used in hash-based collections.
+
+```java
+public class Book {
+    private String title;
+    private String isbn;
+
+    public Book(String title, String isbn) {
+        this.title = title;
+        this.isbn = isbn;
+    }
+
+    // Implement equals() and hashCode() methods here
+}
+```
+
+Answer key:
+The correct implementation of the `equals()` and `hashCode()` methods for the `Book` class must contain the following points:
+
+1. **equals() method**: 
+   - Check if the object being compared is `null` or not an instance of `Book`.
+   - Compare the `isbn` and `title` fields of the two `Book` objects using `Objects.equals()` to handle `null` values correctly.
+
+2. **hashCode() method**:
+   - Use `Objects.hash()` to generate a hash code based on the `isbn` and `title` fields.
+
+Correct implementation:
+```java
+import java.util.Objects;
+
+public class Book {
+    private String title;
+    private String isbn;
+
+    public Book(String title, String isbn) {
+        this.title = title;
+        this.isbn = isbn;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Book book = (Book) obj;
+        return Objects.equals(isbn, book.isbn) && Objects.equals(title, book.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn, title);
+    }
+}
+```",True,,,,,,
+it-022,EMERGENCY,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnectionManager {
+    private static volatile DatabaseConnectionManager instance;
+    private static volatile Connection connection;
+    private static final Object lock = new Object();
+
+    private DatabaseConnectionManager() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static DatabaseConnectionManager getInstance() {
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new DatabaseConnectionManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
+        if (connection == null) {
+            synchronized (lock) {
+                if (connection == null) {
+                    try {
+                        connection = DriverManager.getConnection(""jdbc:mysql://localhost:3306/yourdb"", ""username"", ""password"");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return connection;
+    }
+}
+```
+
+This implementation of the Singleton pattern ensures that only one instance of the `DatabaseConnectionManager` is created and that the connection to the database is also managed as a singleton. The `volatile` keyword is used to ensure visibility of the instance and connection across threads. The `synchronized` blocks ensure that the instance and connection are created only once, even in a multithreaded environment.
+
+Later, revisit thread safety and the Singleton pattern to understand the importance of lazy initialization and the use of `volatile` and `synchronized` keywords in Java.",True,,1.0,0.85-1.0,,,
+it-022,HINT,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"Consider how you can ensure that the instance of your `DatabaseConnectionManager` is only created once, even in a multi-threaded environment. Look into the `synchronized` keyword or the `volatile` modifier. Try implementing it and think about the implications for thread safety. Come back if you need more guidance.",True,disclosure outside band,0.3,0.0-0.25,,,
+it-022,SHARED,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"Here is a high‑level plan and a skeleton you can fill in. I’ll take care of the overall structure and the first half of the lazy‑initialisation logic; you’ll decide the exact synchronization, exception handling, and visibility details.
+
+### Plan
+1. Declare a **static volatile** field for the singleton instance.  
+2. Provide a **private constructor** that attempts to open a JDBC `Connection`.  
+3. Write a **public static `getInstance()`** that performs lazy initialisation.  
+4. Inside `getInstance()` add the synchronization / double‑checked‑locking pattern you think is appropriate.  
+5. In the constructor catch any `SQLException` and decide how you want to surface the failure (e.g., wrap in an unchecked exception, store it for later, etc.).  
+6. Expose a `public Connection getConnection()` that returns the created connection (or handles the case where creation failed).  
+7. (Optional) Add a `close()` method to shut the connection down.
+
+### Skeleton code
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public final class DatabaseConnectionManager {
+
+    // 1. ___ static volatile instance ___
+    private static volatile DatabaseConnectionManager instance;
+
+    // lock object for synchronization (you may use the class object itself)
+    private static final Object LOCK = new Object();
+
+    // 1. ___ the JDBC Connection field ___
+    private Connection connection;
+
+    // 2. private constructor
+    private DatabaseConnectionManager() {
+        try {
+            // TODO: replace with your DB URL / credentials
+            String url = ""jdbc:yourdb://host:port/dbname"";
+            String user = ""username"";
+            String pass = ""password"";
+
+            // 2. ___ create the connection ___
+            this.connection = DriverManager.getConnection(url, user, pass);
+        } catch (SQLException e) {
+            // 5. ___ decide how to handle the exception ___
+            // e.g. throw new IllegalStateException(""…"", e);
+        }
+    }
+
+    // 3. public accessor with lazy initialisation
+    public static DatabaseConnectionManager getInstance() {
+        if (instance == null) {               // first check
+            synchronized (LOCK) {
+                if (instance == null) {       // second check
+                    // 4. ___ create the singleton ___
+                    instance = new DatabaseConnectionManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    // 6. expose the connection
+    public Connection getConnection() {
+        // ___ decide what to do if `connection` is null because construction failed ___
+        return connection;
+    }
+
+    // 7. optional cleanup
+    // public void close() { /* close the connection and reset instance if needed */ }
+}
+```
+
+### Your tasks
+1. Fill in the blanks marked with `___` to choose the exact synchronization/visibility mechanism and exception strategy.  
+2. Decide whether `getConnection()` should return `null`, re‑throw an exception, or lazily retry the connection.  
+3. (Optional) Implement the `close()` method and write a small multithreaded test that calls `DatabaseConnectionManager.getInstance()` from several threads.
+
+**Question:** Which synchronization pattern (e.g., simple `synchronized`, double‑checked locking, or an `enum`‑based singleton) do you think best balances simplicity and thread‑safety for this manager, and why?",True,disclosure outside band,0.9,0.4-0.85,,,
+it-023,GUIDED,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","Let’s construct the design together.
+
+1. **What are the core objects you need to model in a library system?**  
+   (Think about the real‑world entities that will become classes.)
+
+2. **For each object, which pieces of information must be stored?**  
+   Write down the attributes you expect for a *book*, a *member*, a *loan*, and a *fine*. Use `___` for any attribute you haven’t decided yet.
+
+3. **How do these objects relate to one another?**  
+   - Which object should hold a reference to another (e.g., a loan needs to know which book and which member)?  
+   - Where would you store a possible fine for an overdue loan?
+
+4. **Translate your ideas into class skeletons, leaving the uncertain parts as blanks.**
+
+```python
+class Book:
+    def __init__(self, ___):
+        # store book details here
+        pass
+
+class Member:
+    def __init__(self, ___):
+        # store member details here
+        pass
+
+class Loan:
+    def __init__(self, ___):
+        # link a book to a member and record dates
+        pass
+
+class Fine:
+    def __init__(self, ___):
+        # associate a fine with a loan and amount
+        pass
+```
+
+5. **What methods might each class need?**  
+   - How will you create a new loan?  
+   - How will you check if a loan is overdue?  
+   - How will a fine be calculated and recorded?
+
+Fill in the blanks and answer the questions, then you’ll have a complete class diagram for the library system. What attribute or relationship do you want to tackle first?",True,,0.3,0.1-0.55,,,
+it-023,HUMAN_FIRST,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","You've tackled similar problems before, so you have the skills to design these classes. Think about the attributes and methods each class should have, and how they interact. Give it a try, and then share your design with me. I’ll be here to review it.",True,,0.0,0.0-0.05,,,
+it-023,SHARED,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","Sure! Let's design a basic structure for a library system with the following classes: `Book`, `Member`, `Loan`, and `Fines`. We'll define the classes and their relationships, and I'll implement one of the classes to get us started.
+
+### Plan:
+1. **Book**: Represents a book in the library.
+2. **Member**: Represents a library member.
+3. **Loan**: Represents a loan of a book to a member.
+4. **Fines**: Represents fines for overdue books.
+
+### Relationships:
+- A `Book` can be loaned to a `Member`.
+- A `Member` can have multiple `Loan` records.
+- A `Loan` is associated with a `Book` and a `Member`.
+- A `Loan` can incur a `Fines` if it is overdue.
+
+### Step 1: Define the `Book` class
+
+I'll start by defining the `Book` class, which will include basic attributes like `title`, `author`, and `isbn`.
+
+```python
+class Book:
+    def __init__(self, title, author, isbn):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.is_loaned = False  # Flag to check if the book is currently loaned
+
+    def __str__(self):
+        return f""{self.title} by {self.author} (ISBN: {self.isbn})""
+
+# Example usage:
+book1 = Book(""1984"", ""George Orwell"", ""9780451524935"")
+print(book1)
+```
+
+### Your Turn:
+Now, it's your turn to define the `Member` class. This class should include attributes like `name`, `member_id`, and a list to keep track of the `Loan` records.
+
+Once you've defined the `Member` class, let's discuss how you would like to handle the relationships between `Book`, `Member`, `Loan`, and `Fines`.
+
+What attributes and methods do you think the `Member` class should have?",True,,,,,,
+it-024,HINT,Object-Oriented Programming,4,Implement the Observer pattern so that several displays update when a weather station's temperature changes.,"Consider what the `Subject` should do when its state changes, and who needs to be notified. Look at how you can register observers and notify them in your weather station class. Try it, and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+it-025,EMERGENCY,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","### Composition vs. Inheritance
+
+**Inheritance** is a mechanism where a new class (subclass) is derived from an existing class (superclass). The subclass inherits properties and methods from the superclass, allowing for code reuse and a hierarchical structure. However, inheritance can lead to tight coupling and complex class hierarchies, making the code harder to maintain and extend.
+
+**Composition** is a design principle where a class is composed of other classes, rather than inheriting from them. This means that a class has instances of other classes as members. Composition provides more flexibility and modularity, as you can change the behavior of a class by altering its components without modifying its structure.
+
+### Rewriting `Car extends Engine` Using Composition
+
+#### Original Design with Inheritance
+
+```java
+class Engine {
+    void start() {
+        System.out.println(""Engine started."");
+    }
+}
+
+class Car extends Engine {
+    void drive() {
+        System.out.println(""Car is driving."");
+    }
+}
+```
+
+#### Refactored Design with Composition
+
+```java
+class Engine {
+    void start() {
+        System.out.println(""Engine started."");
+    }
+}
+
+class Car {
+    private Engine engine;
+
+    public Car() {
+        this.engine = new Engine();
+    }
+
+    void startEngine() {
+        engine.start();
+    }
+
+    void drive() {
+        System.out.println(""Car is driving."");
+    }
+}
+```
+
+### Explanation
+
+- **Inheritance**: The `Car` class extends `Engine`, meaning `Car` is a type of `Engine`. This can be misleading because a car is not an engine; it has an engine.
+- **Composition**: The `Car` class has an `Engine` object as a member. This better represents the real-world relationship where a car has an engine. The `Car` class delegates the task of starting the engine to the `Engine` object.
+
+### Suggestion for Later
+
+Revisit the principles of object-oriented design, particularly the ""has-a"" relationship (composition) versus the ""is-a"" relationship (inheritance). Understanding these concepts will help you design more modular and maintainable code.",True,,1.0,0.85-1.0,,,
+it-025,GUIDED,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","Let's break down the concepts and rewrite the `Car` class using composition.
+
+### Step-by-Step
+
+1. **Define the `Engine` class:**
+   - What properties and methods should it have?
+
+2. **Define the `Car` class:**
+   - Include an instance of the `Engine` class.
+   - Use the `Engine` instance in the `Car` methods.
+
+### Skeleton Code
+
+```python
+class Engine:
+    def __init__(self, horsepower):
+        self.horsepower = horsepower
+
+    def start(self):
+        # What should happen when the engine starts?
+        pass
+
+    def stop(self):
+        # What should happen when the engine stops?
+        pass
+
+
+class Car:
+    def __init__(self, make, model, horsepower):
+        self.make = make
+        self.model = model
+        self.engine = Engine(horsepower)  # Composition
+
+    def start(self):
+        # How does the car start the engine?
+        pass
+
+    def stop(self):
+        # How does the car stop the engine?
+        pass
+```
+
+Fill in the blanks in the `start` and `stop` methods of both classes. What should each method do?",False,20 lines of code with no blanks left for the student,0.2,0.1-0.55,,,
+it-025,HINT,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","What single line would you add inside `Car` to hold an engine instance?  
+How would you call the engine’s `start()` method from a `Car.start()` without writing the full delegation code?  
+
+Fill in the blanks:
+
+```java
+public class Car {
+    private ___ engine;   // what type goes here?
+
+    public void start() {
+        // delegate to the engine
+        ___;               // what call goes here?
+    }
+}
+```",False,contains 7 lines of code; disclosure outside band,0.3,0.0-0.25,,,
+it-028,EMERGENCY,Data Structures and Algorithms,2,Implement binary search on a sorted array and explain why the array must be sorted.,"```python
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+```
+
+Binary search works by repeatedly dividing the search interval in half. The array must be sorted to ensure that the middle element can be used to eliminate half of the remaining elements in each step. If the array is not sorted, the middle element would not provide any useful information about the location of the target, and the algorithm would not work correctly. Later, revisit how sorting and dividing the search space improve the efficiency of search algorithms.",True,,1.0,0.85-1.0,,,
+it-030,SHARED,Data Structures and Algorithms,3,"Use a stack to check whether the brackets in a string such as ""{[()]}"" are balanced.","To check if the brackets in a string are balanced, we can use a stack to keep track of the opening brackets. Here’s a plan:
+
+1. Initialize an empty stack.
+2. Iterate through each character in the string.
+3. If the character is an opening bracket (i.e., '(', '[', or '{'), push it onto the stack.
+4. If the character is a closing bracket (i.e., ')', ']', or '}'), check if the stack is empty or the top of the stack does not match the corresponding opening bracket. If either condition is true, the string is not balanced.
+5. If the stack is empty after processing all characters, the string is balanced; otherwise, it is not.
+
+I'll implement steps 1, 2, and 3:
+
+```python
+def is_balanced(s):
+    stack = []
+    for char in s:
+        if char in '([{':
+            stack.append(char)
+        # Your part: handle closing brackets
+    # Your part: check if the stack is empty
+    return len(stack) == 0
+```
+
+Your turn: complete the function by handling the closing brackets and checking if the stack is empty at the end. 
+
+Think about: How will you handle the closing brackets to ensure they match the correct opening brackets? What should you do if a closing bracket does not match the top of the stack?",True,,0.75,0.4-0.85,,,
+it-031,HINT,Data Structures and Algorithms,3,Implement a queue using two stacks.,"What operation on a stack could let you access the element that was inserted **first**?  
+If you could move items temporarily, in which direction would you move them to reach that first‑inserted element?  
+
+```python
+def enqueue(item):
+    # ___ ?
+
+def dequeue():
+    # ___ ?
+```",False,contains 4 lines of code,0.1,0.0-0.25,,,
+it-032,SHARED,Data Structures and Algorithms,2,Implement bubble sort and explain its best-case and worst-case time complexity.,"Here’s a concrete plan and most of the implementation. We’ll:
+
+1. Set up the outer loop that runs at most `n‑1` passes.  
+2. Use a **swap flag** (`swapped`) to detect whether any exchange happened during a pass.  
+3. If a pass finishes with `swapped == False`, the list is already sorted and we can break early.  
+4. Inside the pass, iterate over the unsorted prefix and swap adjacent out‑of‑order elements.
+
+I’ll write the outer structure, the flag handling, and the early‑exit test. You will fill in the actual comparison‑and‑swap line.
+
+```python
+def bubble_sort(arr):
+    n = len(arr)
+    # Each pass pushes the largest remaining element to its final position
+    for i in range(n - 1):
+        swapped = False                     # 1️⃣ flag for this pass
+        # Only need to scan up to n‑i‑1 because the last i elements are already sorted
+        for j in range(n - i - 1):
+            # 👉 Your part: compare arr[j] and arr[j+1] and swap if needed,
+            # and set swapped = True when a swap occurs.
+            # Example:
+            # if arr[j] > arr[j+1]:
+            #     arr[j], arr[j+1] = arr[j+1], arr[j]
+            #     swapped = True
+        # If no swaps happened, the list is sorted → exit early
+        if not swapped:
+            break
+    return arr
+```
+
+### What’s left for you
+1. **Insert the comparison‑and‑swap code** inside the inner loop (as shown in the comment).  
+2. **Test the function** on a few arrays:
+   * an already‑sorted list, e.g. `[1, 2, 3, 4, 5]`
+   * a reverse‑sorted list, e.g. `[5, 4, 3, 2, 1]`
+   * a random list of your choice.
+
+### Time‑complexity discussion (you can finish the wording)
+
+- **Best case** – when the input is already sorted. Because the `swapped` flag stays `False` after the first inner loop, the algorithm breaks after a single pass. The inner loop still scans `n‑1` comparisons, so the best‑case running time is **Θ(n)**.
+
+- **Worst case** – when the input is reverse sorted. Every comparison triggers a swap, so `swapped` is always `True` and the algorithm performs all `n‑1` passes. The total number of comparisons is  
+  \[
+  (n-1) + (n-2) + \dots + 1 = \frac{n(n-1)}{2}
+  \]
+  giving a **Θ(n²)** worst‑case time.
+
+**Your turn:**  
+* Fill in the missing swap line.  
+* Run the tests and confirm that the early‑exit works for the sorted case.  
+* Finally, write a short paragraph summarizing the best‑case and worst‑case complexities in your own words. What do you observe about the number of passes in each case?",True,disclosure outside band,0.9,0.4-0.85,,,
+it-033,PROBE,Data Structures and Algorithms,3,"Implement merge sort and trace it on the array [5, 2, 8, 1, 9, 3].","Problem:
+You are given a list of temperatures recorded over a week: `[23, 17, 31, 29, 20, 25, 18]`. Implement the merge sort algorithm and trace its execution on this list. Provide the intermediate steps of the merge sort process, showing the state of the list after each merge operation.
+
+Answer key:
+The correct answer should include the following:
+
+1. The initial list: `[23, 17, 31, 29, 20, 25, 18]`.
+2. The list after the first merge operation: `[17, 23, 29, 31, 18, 20, 25]`.
+3. The list after the second merge operation: `[17, 23, 29, 31, 18, 20, 25]`.
+4. The final sorted list: `[17, 18, 20, 23, 25, 29, 31]`.
+
+The student should also provide the correct implementation of the merge sort algorithm, which should include the following key components:
+
+- A `merge_sort` function that recursively divides the list into halves.
+- A `merge` function that merges two sorted halves into a single sorted list.",True,,,,,,
+it-034,PROBE,Data Structures and Algorithms,3,Reverse a singly linked list in place.,"Problem:
+You are given a singly linked list where each node contains an integer value and a pointer to the next node. Write a function to reverse the linked list in place. The function should return the new head of the reversed list.
+
+**Example:**
+- Input: `1 -> 2 -> 3 -> 4 -> 5`
+- Output: `5 -> 4 -> 3 -> 2 -> 1`
+
+**Function signature:**
+```python
+def reverse_linked_list(head: ListNode) -> ListNode:
+    pass
+```
+
+**Node class:**
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+```
+
+Answer key:
+- The function should correctly reverse the linked list in place.
+- The new head of the reversed list should be returned.
+- The original nodes should be reused, and no new nodes should be created.
+- The function should handle edge cases, such as an empty list or a list with a single node.
+
+Example test case:
+```python
+# Test case
+node1 = ListNode(1)
+node2 = ListNode(2)
+node3 = ListNode(3)
+node4 = ListNode(4)
+node5 = ListNode(5)
+
+node1.next = node2
+node2.next = node3
+node3.next = node4
+node4.next = node5
+
+reversed_head = reverse_linked_list(node1)
+
+# Expected output: 5 -> 4 -> 3 -> 2 -> 1
+current = reversed_head
+while current:
+    print(current.val, end="" -> "" if current.next else ""\n"")
+    current = current.next
+```",True,,,,,,
+it-035,HUMAN_FIRST,Data Structures and Algorithms,4,Detect whether a singly linked list contains a cycle using O(1) extra space.,"You’ve worked with linked lists before, and you know how to traverse them, so you’re well-prepared to tackle this problem. Give it a try on your own, and then share your attempt with me. I’ll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
+it-036,HINT,Data Structures and Algorithms,3,Implement insertion and in-order traversal for a binary search tree.,"For insertion, consider what you need to do at each node based on the value you're inserting. Should you go left or right? For in-order traversal, think about the order in which you visit nodes. Try implementing these and see how it goes!",True,disclosure outside band,0.3,0.0-0.25,,,
+it-039,HINT,Data Structures and Algorithms,4,"Given an array of integers and a target, return the indices of the two numbers that add up to the target in O(n) time.",What information could you keep while scanning the array once that would let you determine whether the current element’s partner for the target has already appeared? Think about how you might retrieve a previously seen value in constant time. Try coding that idea and let me know if you get stuck.,True,disclosure outside band,0.5,0.0-0.25,,,
+it-040,HINT,Database Systems,1,"Write an SQL query that lists all students with a GPA above 3.0, ordered by GPA from highest to lowest.",Consider the `WHERE` clause to filter the GPA and the `ORDER BY` clause to sort the results. Take a look at your table structure to identify the correct column names. Try it out and come back if you need more help.,True,disclosure outside band,0.333,0.0-0.25,,,
+it-041,GUIDED,Database Systems,2,Write an SQL query that counts how many students are enrolled in each course.,"Let's construct the SQL query step by step.
+
+1. Identify the tables involved. Which table contains the enrollment data?
+2. Determine the columns you need. Which column represents the course, and which column represents the student?
+3. Use a GROUP BY clause to group the results by the course.
+4. Use the COUNT function to count the number of students in each group.
+
+```sql
+SELECT 
+    ____,          -- step 2: column representing the course
+    COUNT(____)    -- step 4: count the number of students
+FROM 
+    ____          -- step 1: table containing enrollment data
+GROUP BY 
+    ____;         -- step 3: group by the course
+```
+
+Fill in the blanks and run the query. What results do you expect to see?",True,,0.4,0.1-0.55,,,
+it-041,HUMAN_FIRST,Database Systems,2,Write an SQL query that counts how many students are enrolled in each course.,"You've worked with SQL queries and GROUP BY before, so you're well-prepared for this. Give it a try, and share your attempt. I'll review it with you afterward.",True,,0.0,0.0-0.05,,,
+it-042,HINT,Database Systems,2,Write an SQL query that lists only the courses with more than 30 enrolled students.,"Consider using the `COUNT` function and a `GROUP BY` clause to aggregate the number of students per course. How can you filter the results to show only those with more than 30 students? Try it, and come back if you get stuck.",True,disclosure outside band,0.375,0.0-0.25,,,
+it-042,SHARED,Database Systems,2,Write an SQL query that lists only the courses with more than 30 enrolled students.,"To achieve this, we'll need to write an SQL query that aggregates the number of students enrolled in each course and then filters out the courses with more than 30 enrolled students. Here’s a step-by-step plan:
+
+1. **Select the course information and count the number of students for each course.**
+2. **Group the results by course.**
+3. **Filter the results to include only those courses with more than 30 students.**
+
+Let's do the first two steps together:
+
+```sql
+SELECT course_id, course_name, COUNT(student_id) AS num_students
+FROM enrollments
+JOIN courses ON enrollments.course_id = courses.course_id
+GROUP BY course_id, course_name;
+```
+
+This query will give us the number of students enrolled in each course. Now, it's your turn to complete the query by adding the filter to only include courses with more than 30 students.
+
+Your turn: Add the `HAVING` clause to filter the results. Then, decide if you want to include any additional columns in the `SELECT` statement, such as the course department or instructor name. Let me know your choices and why you made them.",True,disclosure outside band,0.875,0.4-0.85,,,
+it-043,SHARED,Database Systems,2,Explain the difference between INNER JOIN and LEFT JOIN using a students and enrollments example.,"Below is a step‑by‑step outline that gives you the core ideas and a concrete example, while leaving the parts you’ll fill in yourself.
+
+---
+
+### 1. What an **INNER JOIN** does
+*It returns only the rows where a matching key exists in **both** tables.*
+
+- In our case the key is `students.student_id = enrollments.student_id`.
+- Any student **without** an enrollment will be omitted from the result.
+
+### 2. What a **LEFT JOIN** does
+*It returns **all** rows from the left table (`students`) and adds matching rows from the right table (`enrollments`).*  
+
+- If a student has no matching enrollment, the columns from `enrollments` become `NULL`.
+
+---
+
+### 3. Sample data (feel free to add more rows)
+
+| students |                |
+|----------|----------------|
+| student_id | name          |
+| 1        | Alice          |
+| 2        | Bob            |
+| 3        | Charlie        |
+| 4        | David          |  ← no enrollment yet
+
+| enrollments |                |
+|------------|----------------|
+| enrollment_id | student_id | course_name |
+| 101          | 1          | Math        |
+| 102          | 1          | Science     |
+| 103          | 2          | History     |
+
+---
+
+### 4. Write the two queries (the SELECT list and ON clause are fixed; you’ll decide what you expect to see)
+
+```sql
+-- INNER JOIN
+SELECT s.name, e.course_name
+FROM students AS s
+INNER JOIN enrollments AS e
+  ON s.student_id = e.student_id;
+-- Expected result (list the rows you think will appear):
+-- _________________________________________________
+
+-- LEFT JOIN
+SELECT s.name, e.course_name
+FROM students AS s
+LEFT JOIN enrollments AS e
+  ON s.student_id = e.student_id;
+-- Expected result (list the rows you think will appear):
+-- _________________________________________________
+```
+
+---
+
+### 5. Your tasks
+
+1. **Fill in the “Expected result” sections** for both queries.  
+   - Which students appear in the INNER JOIN result?  
+   - Which students appear in the LEFT JOIN result?  
+   - Where do you see `NULL` values, and why?
+
+2. **Summarize in one or two sentences** the key difference you observe between the two result sets.
+
+Once you’ve written your answers, share them here and we can check whether the reasoning matches the behavior of the joins.",True,disclosure outside band,0.9,0.4-0.85,,,
+it-044,GUIDED,Database Systems,3,Write an SQL query that finds the students who are not enrolled in any course.,"Let's approach this step by step.
+
+1. Identify the tables involved. Which table contains the student information, and which table contains the enrollment information?
+2. How can you select students who do not have an entry in the enrollment table? Think about using a `LEFT JOIN` or a `NOT EXISTS` clause.
+3. What columns should you select to display the student information?
+
+Here's a skeleton of the SQL query with the key parts marked as TODO:
+
+```sql
+SELECT s.student_id, s.student_name
+FROM students s
+WHERE ___  -- step 2: condition to filter students not in the enrollment table
+```
+
+Fill in the blank and run the query. What should the result show?",True,,0.375,0.1-0.55,,,
+it-045,EMERGENCY,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"```sql
+SELECT MAX(salary) AS SecondHighestSalary
+FROM Employee
+WHERE salary < (SELECT MAX(salary) FROM Employee)
+```
+
+This query finds the second-highest salary by first determining the highest salary in the `Employee` table. It then selects the maximum salary that is less than this highest salary, effectively giving you the second-highest salary. Later, revisit subqueries and aggregate functions to deepen your understanding of how they work together.",True,,1.0,0.85-1.0,,,
+it-045,HINT,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Consider using a subquery to first find the highest salary, and then filter out that value in your main query. Take a look at the `WHERE` clause and how you can exclude the highest salary. Give it a try and see how it goes!",True,disclosure outside band,0.5,0.0-0.25,,,
+it-045,PROBE,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Problem:
+You are working with a database that contains a table named `Sales` which records the sales amounts for different products. The table has the following columns: `product_id`, `sale_date`, and `amount`. Write an SQL query to find the second-highest sales amount recorded in the `Sales` table.
+
+Answer key:
+```sql
+SELECT MAX(amount) AS second_highest_sales
+FROM Sales
+WHERE amount < (SELECT MAX(amount) FROM Sales)
+```
+A correct attempt must contain:
+1. A subquery to find the maximum sales amount.
+2. A main query that selects the maximum sales amount less than the maximum sales amount found in the subquery.
+3. Correct use of the `SELECT` and `FROM` clauses.
+4. Proper handling of the `amount` column.",True,,,,,,
+it-045,SHARED,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Sure! Let's break this down into steps:
+
+1. **Understand the Table Structure**: The `Employee` table likely has a column for salary, which we'll assume is named `salary`.
+
+2. **Identify the Highest Salary**: We need to find the highest salary in the table.
+
+3. **Exclude the Highest Salary**: Once we have the highest salary, we need to exclude it from our results.
+
+4. **Find the Second-Highest Salary**: From the remaining salaries, we find the highest one, which will be the second-highest overall.
+
+I'll handle steps 1 and 2 by writing a subquery to find the highest salary. Then, I'll leave the rest to you.
+
+Here's the SQL query for steps 1 and 2:
+
+```sql
+SELECT MAX(salary) AS highest_salary
+FROM Employee;
+```
+
+Your turn: Use this subquery to exclude the highest salary and find the second-highest salary. You can do this by selecting the maximum salary from the `Employee` table where the salary is less than the highest salary.
+
+Here's a hint to get you started:
+
+```sql
+SELECT MAX(salary) AS second_highest_salary
+FROM Employee
+WHERE salary < (
+    -- Your subquery here
+);
+```
+
+Can you complete the subquery and the outer query? Also, think about what you would do if there are multiple employees with the same highest salary. How would you handle that scenario?",True,,0.667,0.4-0.85,,,
+it-047,HINT,Database Systems,3,"Describe an ER model for a hospital with patients, doctors, appointments and wards, including cardinalities.","Consider the relationships between entities: Which entity would you connect with a ""treats"" relationship, and what are the minimum and maximum number of patients a doctor can treat? Sketch this out, then come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+it-048,HINT,Database Systems,2,"Explain what a database transaction is and the ACID properties, using a bank transfer example.","What single concept describes a group of database operations that must either all succeed or all fail?  
+
+When you think about a bank transfer, which step would break the whole process if it didn’t happen?  
+
+For each ACID letter, ask yourself:
+- **A** – What must happen to the debit and credit if one part fails?
+- **C** – How does the system keep account balances valid?
+- **I** – What could go wrong if two transfers run at the same time?
+- **D** – Where is the result stored so it survives a crash?  
+
+Try filling in the blanks for each property, then combine them into a short explanation.",False,too long: 110 words (limit 90),0.25,0.0-0.25,,,
+it-048,HUMAN_FIRST,Database Systems,2,"Explain what a database transaction is and the ACID properties, using a bank transfer example.","What do you think a database transaction represents in the context of moving money from one account to another?  
+Which properties must such a transfer satisfy to ensure it is reliable and safe?  
+Can you list those properties and describe, using the bank‑transfer scenario, what each one would guarantee?  
+
+Try drafting your answers, then share them with me for feedback.",True,,0.0,0.0-0.05,,,
+it-049,HUMAN_FIRST,Database Systems,4,Write a stored procedure that transfers money between two accounts and rolls back if anything fails.,"You have the skills to handle transactions and error handling in SQL, so you can tackle this task. Give it a try, and then share your attempt with me. I’ll review it and provide feedback.",True,,0.0,0.0-0.05,,,
+it-050,SHARED,Database Systems,3,"Explain how an index speeds up queries, and when adding an index can make performance worse.","Here’s a collaborative outline you can use. I’ll flesh out the core concepts and give you a concrete piece of code to complete; the rest you’ll finish and then decide on the final recommendation.
+
+---
+
+### 1. Trade‑off between reads and writes  
+
+| Operation | What the index helps with | What extra work the index adds |
+|-----------|--------------------------|--------------------------------|
+| **SELECT** (search on indexed column) | Quickly locate matching rows via the index structure (usually O(log N) for a B‑tree) | None – the index is read‑only for this query |
+| **INSERT** | – (no direct benefit) | The DB must insert the new key into the index and possibly rebalance/re‑split pages |
+| **UPDATE** (indexed column) | May allow the DB to find the row faster before updating | Must delete the old key from the index and insert the new key, plus any page reorganisations |
+| **DELETE** | – (no direct benefit) | Must remove the key from the index and keep the structure balanced |
+
+*Your turn:* Write a short paragraph (2‑3 sentences) that summarises this table in your own words.
+
+---
+
+### 2. When an index can hurt performance  
+
+Typical situations where the cost outweighs the benefit:
+
+1. **Very small tables** – a full table scan is cheaper than navigating an index.  
+2. **High‑write workloads on the indexed column** – every write incurs index maintenance.  
+3. **Low‑selectivity columns** (e.g., a boolean flag) – the index returns a large fraction of rows, so the DB still has to read most of the table.  
+
+*Your turn:* Add one more scenario to the list and explain why it degrades performance.
+
+---
+
+### 3. Storage impact  
+
+- An index is a separate data structure stored on disk (or in memory).  
+- Its size is roughly proportional to the number of indexed rows * the size of the indexed key plus a pointer.  
+- Larger indexes increase I/O (more pages to read/write) and consume buffer‑pool space that could be used for the table itself.  
+
+*Your turn:* Estimate the storage overhead for a B‑tree index on a `BIGINT` primary key for a table with 10 M rows (assume 16 bytes per index entry). Show the calculation.
+
+---
+
+### 4. Query‑complexity interaction  
+
+Consider a query with multiple predicates:
+
+```sql
+SELECT *
+FROM orders
+WHERE customer_id = 12345      -- indexed column
+  AND order_date BETWEEN '2024-01-01' AND '2024-01-31';
+```
+
+- The optimizer can use the `customer_id` index to narrow the row set, then filter by `order_date`.  
+- If there were also an index on `order_date`, the optimizer might choose a **range scan** on that index and then apply the `customer_id` filter, depending on cardinalities.  
+
+*Your turn:* Write a short explanation (2‑3 sentences) of how the optimizer decides which index (if any) to use when multiple eligible indexes exist.
+
+---
+
+### 5. Decision point for a concrete workload  
+
+You have a table `events` (10 M rows) that receives **500 inserts/second** and is queried **5 k times/second** on the column `event_type`.  
+
+I’ll give you a starter analysis:
+
+- **Read benefit:** `event_type` has moderate selectivity (≈ 5 % of rows per value). Using an index could cut the rows examined by a factor of 20.  
+- **Write cost:** Each insert must add a new entry to the `event_type` index, adding extra I/O and CPU.  
+
+*Your turn:* Complete the analysis by answering these questions:
+
+1. **Net effect:** Based on the numbers above, do you expect the read‑speed gain to outweigh the write overhead?  
+2. **Alternative:** Would a **partial** or **filtered** index (e.g., only on recent rows) be a better compromise? Explain your reasoning.  
+
+Once you’ve written your answers, tell me which option you would choose and why.",False,too long: 610 words (limit 420); disclosure outside band,0.9,0.4-0.85,,,
+it-051,HINT,Database Systems,4,Write an SQL query that ranks students by GPA within each department using a window function.,"What pieces still need to be decided in order to rank students inside each department?
+
+```sql
+SELECT
+    ___,
+    ___,
+    ___,
+    ___() OVER (PARTITION BY ___ ORDER BY ___ DESC) AS ___
+FROM ___;
+```",False,contains 6 lines of code,0.25,0.0-0.25,,,
+it-051,HUMAN_FIRST,Database Systems,4,Write an SQL query that ranks students by GPA within each department using a window function.,"You've worked with SQL before and you know how to use window functions, so you're well-prepared for this task. Give it a try, and share your attempt with me. I'll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
+it-053,GUIDED,Web Development,1,"Create an HTML form with name and email fields and a submit button, where both fields are required.","Let's build the HTML form step by step.
+
+1. Start with the basic HTML structure. What tags do you need for the document structure?
+2. Add a `<form>` element. What attributes should it have?
+3. Inside the form, add an input field for the name. What type of input is it, and what attribute makes it required?
+4. Add another input field for the email. What type of input is it, and what attribute makes it required?
+5. Add a submit button to the form. What type of button is it?
+
+### Skeleton:
+```html
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Registration Form</title>
+</head>
+<body>
+    <form action=""___"" method=""___"">
+        <label for=""name"">Name:</label>
+        <input type=""___"" id=""name"" name=""name"" ___>
+        <br>
+        <label for=""email"">Email:</label>
+        <input type=""___"" id=""email"" name=""email"" ___>
+        <br>
+        <button type=""___"">Submit</button>
+    </form>
+</body>
+</html>
+```
+
+Fill in the blanks, then test the form by trying to submit it with and without filling in the fields. What should happen if you leave either field empty?",True,,0.4,0.1-0.55,,,
+it-054,GUIDED,Web Development,1,Write CSS that centres a div horizontally and vertically using flexbox.,"Think about the Flexbox properties you’ll need on the container to make its child sit in the middle.
+
+1. What CSS rule turns a block element into a Flex container?
+2. Which Flexbox property controls the distribution of items along the main axis (horizontal in a row layout)?
+3. Which Flexbox property controls the alignment of items along the cross axis (vertical in a row layout)?
+4. How can you make sure the container has enough height for vertical centering?
+
+Now place those ideas into the stylesheet, leaving blanks for the exact values:
+
+```css
+.parent {
+    display: ___;          /* step 1 */
+    justify-content: ___;  /* step 2 */
+    align-items: ___;      /* step 3 */
+    height: ___;           /* step 4 – give the container a height */
+}
+
+.child {
+    /* optional styling for the child element */
+}
+```
+
+Fill in each `___` with the appropriate value, then create a simple HTML page with a `<div class=""parent"">` containing a `<div class=""child"">`. What do you observe when you open the page in a browser?",True,,0.5,0.1-0.55,,,
+it-055,SHARED,Web Development,1,Write JavaScript that changes a paragraph's text when a button is clicked.,"Sure, let's break this down into steps:
+
+1. Create the HTML structure with a paragraph and a button.
+2. Write the JavaScript to add an event listener to the button.
+3. Define the function that changes the paragraph's text.
+4. Test the functionality.
+
+I'll handle steps 1 and 2. Here is the HTML and the initial JavaScript setup:
+
+### HTML
+```html
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Change Paragraph Text</title>
+</head>
+<body>
+    <p id=""myParagraph"">Hello, this is the original text.</p>
+    <button id=""changeTextButton"">Change Text</button>
+
+    <script src=""script.js""></script>
+</body>
+</html>
+```
+
+### JavaScript (script.js)
+```javascript
+document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('changeTextButton');
+    button.addEventListener('click', function() {
+        // Your part: write the function to change the paragraph's text
+    });
+});
+```
+
+Your turn: complete the function inside the event listener to change the text of the paragraph with the ID `myParagraph`. What text would you like to set it to?",True,,0.6,0.4-0.85,,,
+it-056,GUIDED,Web Development,2,Create a three-column layout that becomes a single column on screens narrower than 600px.,"Let’s sketch the layout together.
+
+1. **HTML** – You need a wrapper that holds three items. What tag(s) will you use for the wrapper and the three parts?
+2. **Flex container** – To lay the three parts side‑by‑side, the wrapper should use a flex display. What value goes after `display:`?  
+   Also, to allow the items to wrap when needed, what property and value do you need?
+3. **Column sizing** – Each column must share the available space equally. Which flex property can express that?  
+   What minimum width should you give a column so that the three can stay on one line when the viewport is wide enough?
+4. **Media query** – When the viewport is narrower than 600 px you want the columns to stack.  
+   Write a media query that targets `max-width: 600px`. Inside it, which property of the columns must change, and to what value, so each column takes the full width?
+
+```html
+<!-- Step 1: fill in the element names -->
+<div class=""___"">
+    <div class=""___"">Column 1</div>
+    <div class=""___"">Column 2</div>
+    <div class=""___"">Column 3</div>
+</div>
+```
+
+```css
+/* Step 2: flex container */
+.___ {
+    display: ___;          /* flex? */
+    flex-wrap: ___;        /* allow wrapping? */
+}
+
+/* Step 3: column sizing */
+.___ {
+    flex: ___;             /* share space equally */
+    min-width: ___;        /* width that keeps three in a row */
+    box-sizing: border-box;
+}
+
+/* Step 4: media query for <600px */
+@media (max-width: 600px) {
+    .___ {
+        ___: ___;          /* make each column full‑width */
+    }
+}
+```
+
+Replace each `___` with the appropriate value or selector. After completing the blanks, open the page in a browser and resize the window—what happens when the width drops below 600 px?",True,disclosure outside band,0.6,0.1-0.55,,,
+it-056,SHARED,Web Development,2,Create a three-column layout that becomes a single column on screens narrower than 600px.,"Sure! Let's create a responsive three-column layout that stacks into a single column on screens narrower than 600px. We'll use CSS for this. Here’s a plan:
+
+1. Define the HTML structure with three columns.
+2. Write CSS to style the columns.
+3. Add a media query to stack the columns on smaller screens.
+4. Test the layout.
+
+I'll do steps 1 and 2:
+
+### HTML Structure
+```html
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Responsive Layout</title>
+    <link rel=""stylesheet"" href=""styles.css"">
+</head>
+<body>
+    <div class=""container"">
+        <div class=""column"">Column 1</div>
+        <div class=""column"">Column 2</div>
+        <div class=""column"">Column 3</div>
+    </div>
+</body>
+</html>
+```
+
+### CSS Styling
+```css
+/* Basic styling for the container and columns */
+.container {
+    display: flex;
+    gap: 10px;
+}
+
+.column {
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+```
+
+Your turn: complete the media query to stack the columns on screens narrower than 600px. Then decide: should the columns have a fixed width or flexibly adjust based on content? Tell me which you prefer and why.",True,,0.5,0.4-0.85,,,
+it-057,GUIDED,Web Development,2,Use fetch() to load a list of users from a JSON API and show their names in a list on the page.,"Let’s outline the pieces you’ll need and let you fill in the details.
+
+1. **Make the request** – What `fetch` call will you write? Which URL should you pass?
+2. **Turn the response into data** – After you get the `Response` object, how do you obtain the JSON payload?
+3. **Pick out the names** – Once you have the parsed JSON (likely an array), how can you create a new array that contains only each user’s name?
+4. **Show the names** – Assuming you have an empty `<ul id=""user-list""></ul>` in your HTML, how will you create an `<li>` for each name and add it to that list?
+
+Below is a scaffold with the key steps left as blanks for you to complete:
+
+```javascript
+// 1. Fetch the data
+fetch('___')                     // ← API endpoint URL
+  .then(response => {
+    // 2. Convert to JSON
+    return ___;                 // ← response.json() or similar
+  })
+  .then(data => {
+    // 3. Extract just the names
+    const names = data.___;      // ← use map or another method
+    // 4. Add each name to the page
+    const list = document.getElementById('user-list');
+    names.forEach(name => {
+      const li = document.createElement('li');
+      li.textContent = ___;      // ← set the text to the current name
+      ___;                       // ← append the <li> to the list
+    });
+  })
+  .catch(err => console.error(err));
+```
+
+Work through each blank, then run the script and verify that the list on the page populates with the user names.",True,disclosure outside band,0.6,0.1-0.55,,,
+it-058,GUIDED,Web Development,2,"Explain the difference between let, const and var, with an example of a bug each one can cause or prevent.","Let’s explore the three declaration keywords step by step.
+
+1. **Scope** – For each keyword, ask yourself: *Is the variable visible only inside the block where it’s defined, or also outside that block but inside the containing function?*  
+   - Write a short snippet that declares a variable with `var`, `let`, or `const` inside an `if` block and then try to log it **outside** the block. What happens for each keyword?
+
+2. **Hoisting** – Consider what value the variable has **before** the line where it is declared runs.  
+   - Insert a `console.log` **above** a `var` declaration and see the output.  
+   - Do the same for `let` and `const`. What error (if any) appears?
+
+3. **Reassignment vs. redeclaration** –  
+   - With `var`, can you declare the same name twice in the same function? Try it and note the result.  
+   - With `let`, try to declare the same name twice in the same block. What happens?  
+   - With `const`, try to assign a new value after the initial declaration. What error is thrown?
+
+4. **Bug‑finding exercise** – Fill in the blanks so each snippet demonstrates a typical mistake that the keyword either allows or prevents.
+
+```javascript
+// 1️⃣  var – function‑scoped
+function demoVar() {
+    var a = 1;
+    if (true) {
+        var a = ___;   // (a) What value does this assign to the outer `a`?
+    }
+    console.log(a);   // (b) What is logged?
+}
+
+// 2️⃣  let – block‑scoped
+function demoLet() {
+    let b = 1;
+    if (true) {
+        let b = ___;   // (c) Does this create a new `b` or affect the outer one?
+    }
+    console.log(b);   // (d) What is logged?
+}
+
+// 3️⃣  const – immutable binding
+function demoConst() {
+    const c = ___;      // (e) Choose an initial value
+    c = 5;              // (f) What error occurs here?
+    console.log(c);
+}
+```
+
+**Your tasks**
+
+- Replace each `___` with the appropriate value or expression.
+- Run the code and answer the questions in the comments (`(a)`, `(b)`, …).
+- Reflect on how each behavior could lead to a bug in a larger program.
+
+By completing these steps you’ll see how `var`, `let`, and `const` differ in scope, hoisting, and mutability, and why choosing the right one matters.",False,too long: 367 words (limit 300),0.5,0.1-0.55,,,
+it-059,HINT,Web Development,3,Why does `console.log(data)` print undefined right after I call an async function that loads the data?,Consider the timing of when the async function completes versus when `console.log(data)` runs. Look at the sequence of your code and think about when the data is actually available. Try it again and see if you can spot the timing issue.,True,,0.25,0.0-0.25,,,
+it-060,HUMAN_FIRST,Web Development,3,"Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist.","You've worked with Express.js before, so you have the skills to create this endpoint. Give it a try, and then share your code with me. I'll review it and provide feedback.",True,,0.0,0.0-0.05,,,
+it-060,PROBE,Web Development,3,"Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist.","Problem:
+You are developing an API for a movie streaming service. Create an Express.js endpoint that retrieves a movie by its ID. If the movie does not exist, the endpoint should return a 404 status code.
+
+Answer key:
+The correct answer should include the following points:
+1. **Route Definition**: Define a route that handles GET requests for a movie by ID.
+2. **Movie Retrieval**: Use a mock data structure or a database query to retrieve the movie by its ID.
+3. **404 Handling**: If the movie is not found, send a 404 status code.
+4. **Response**: If the movie is found, send the movie details in the response.
+
+Example solution:
+```javascript
+const express = require('express');
+const app = express();
+
+// Mock data for movies
+const movies = [
+  { id: 1, title: 'Inception', director: 'Christopher Nolan' },
+  { id: 2, title: 'The Matrix', director: 'Lana Wachowski' }
+];
+
+app.get('/movies/:id', (req, res) => {
+  const movieId = parseInt(req.params.id);
+  const movie = movies.find(m => m.id === movieId);
+
+  if (!movie) {
+    res.status(404).send('Movie not found');
+  } else {
+    res.json(movie);
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+```",False,probe is too close to the original task (overlap 0.45),,,,,
+it-062,HUMAN_FIRST,Web Development,4,My Node.js login route builds its SQL query with string concatenation. Show how to prevent SQL injection.,"Using parameterized queries is key to preventing SQL injection. You've worked with Node.js and SQL before, so you're well-prepared for this. Give it a try on your own first, and then share your attempt. I’ll be here to review it with you.",True,disclosure outside band,0.125,0.0-0.05,,,
+it-063,GUIDED,Web Development,3,"Design REST endpoints for a to-do app with users, lists and tasks, including HTTP methods and status codes.","Let's design the REST endpoints for a to-do app that includes users, lists, and tasks. We'll go through it step by step.
+
+1. **Define the resources**: What are the main entities in your to-do app?
+2. **List the actions**: What operations do you need for each entity?
+3. **Choose HTTP methods**: Which HTTP methods (GET, POST, PUT, DELETE) will you use for each action?
+4. **Determine status codes**: What HTTP status codes will you return for each operation?
+
+### Step-by-Step Guide
+
+1. **Define the resources**:
+   - Users
+   - Lists
+   - Tasks
+
+2. **List the actions**:
+   - Users: Create, Read, Update, Delete
+   - Lists: Create, Read, Update, Delete
+   - Tasks: Create, Read, Update, Delete
+
+3. **Choose HTTP methods**:
+   - Create: POST
+   - Read: GET
+   - Update: PUT
+   - Delete: DELETE
+
+4. **Determine status codes**:
+   - Successful creation: 201 Created
+   - Successful read: 200 OK
+   - Successful update: 200 OK or 204 No Content
+   - Successful delete: 204 No Content
+   - Error: 400 Bad Request, 401 Unauthorized, 404 Not Found, 500 Internal Server Error
+
+### REST Endpoints
+
+#### Users
+- **Create a user**:
+  ```http
+  POST /users
+  ```
+  - **Request Body**: User data (e.g., name, email, password)
+  - **Response**: 201 Created, with the user object in the response body
+
+- **Read a user**:
+  ```http
+  GET /users/{userId}
+  ```
+  - **Response**: 200 OK, with the user object in the response body
+
+- **Update a user**:
+  ```http
+  PUT /users/{userId}
+  ```
+  - **Request Body**: Updated user data
+  - **Response**: 200 OK or 204 No Content
+
+- **Delete a user**:
+  ```http
+  DELETE /users/{userId}
+  ```
+  - **Response**: 204 No Content
+
+#### Lists
+- **Create a list**:
+  ```http
+  POST /users/{userId}/lists
+  ```
+  - **Request Body**: List data (e.g., title, description)
+  - **Response**: 201 Created, with the list object in the response body
+
+- **Read a list**:
+  ```http
+  GET /users/{userId}/lists/{listId}
+  ```
+  - **Response**: 200 OK, with the list object in the response body
+
+- **Update a list**:
+  ```http
+  PUT /users/{userId}/lists/{listId}
+  ```
+  - **Request Body**: Updated list data
+  - **Response**: 200 OK or 204 No Content
+
+- **Delete a list**:
+  ```http
+  DELETE /users/{userId}/lists/{listId}
+  ```
+  - **Response**: 204 No Content
+
+#### Tasks
+- **Create a task**:
+  ```http
+  POST /users/{userId}/lists/{listId}/tasks
+  ```
+  - **Request Body**: Task data (e.g., title, description, due date)
+  - **Response**: 201 Created, with the task object in the response body
+
+- **Read a task**:
+  ```http
+  GET /users/{userId}/lists/{listId}/tasks/{taskId}
+  ```
+  - **Response**: 200 OK, with the task object in the response body
+
+- **Update a task**:
+  ```http
+  PUT /users/{userId}/lists/{listId}/tasks/{taskId}
+  ```
+  - **Request Body**: Updated task data
+  - **Response**: 200 OK or 204 No Content
+
+- **Delete a task**:
+  ```http
+  DELETE /users/{userId}/lists/{listId}/tasks/{taskId}
+  ```
+  - **Response**: 204 No Content
+
+### Example Skeleton
+
+```python
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# In-memory storage for simplicity
+users = {}
+lists = {}
+tasks = {}
+
+# User endpoints
+@app.route('/users', methods=['POST'])
+def create_user():
+    user_data = request.json
+    user_id = len(users) + 1
+    users[user_id] = user_data
+    return jsonify(users[user_id]), ___
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def read_user(user_id):
+    if user_id in users:
+        return jsonify(users[user_id]), ___
+    else:
+        return jsonify({""error"": ""User not found""}), ___
+
+@app.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    if user_id in users:
+        user_data = request.json
+        users[user_id].update(user_data)
+        return jsonify(users[user_id]), ___
+    else:
+        return jsonify({""error"": ""User not found""}), ___
+
+@app.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    if user_id in users:
+        del users[user_id]
+        return '', ___
+    else:
+        return jsonify({""error"": ""User not found""}), ___
+
+# List endpoints
+@app.route('/users/<int:user_id>/lists', methods=['POST'])
+def create_list(user_id):
+    list_data = request.json
+    list_id",False,too long: 552 words (limit 300); 12 lines of code with no blanks left for the student,,,,,
+it-065,SHARED,Software Engineering,2,Write three user stories with acceptance criteria for a student timetable app.,"Sure! Here’s a plan for creating three user stories with acceptance criteria for a student timetable app. We’ll work on the first one together, and then you can complete the remaining two.
+
+### User Story 1: View Timetable
+**As a student, I want to view my timetable for the week, so that I can see my class schedule at a glance.**
+
+#### Acceptance Criteria:
+1. **Display Weekly Schedule:**
+   - The app should display a weekly view of the timetable.
+   - Each class should show the subject name, time, and location.
+
+2. **Filter by Day:**
+   - The user should be able to filter the timetable to show only a specific day of the week.
+   - When a day is selected, the app should display only the classes scheduled for that day.
+
+3. **Highlight Current Class:**
+   - The app should highlight the class that is currently happening.
+   - If no class is currently happening, the app should display the next upcoming class.
+
+### Your Turn:
+Now, let’s create the second and third user stories along with their acceptance criteria.
+
+### User Story 2: Add/Edit Classes
+**As a student, I want to add or edit classes in my timetable, so that I can keep my schedule up to date.**
+
+#### Acceptance Criteria:
+1. **Add a Class:**
+   - The app should allow the user to add a new class.
+   - The user should be able to enter the subject name, time, location, and day of the week.
+
+2. **Edit a Class:**
+   - The app should allow the user to edit an existing class.
+   - The user should be able to update the subject name, time, location, and day of the week.
+
+3. **Delete a Class:**
+   - The app should allow the user to delete a class from the timetable.
+   - The user should be prompted to confirm the deletion before it is finalized.
+
+### User Story 3: Set Reminders
+**As a student, I want to set reminders for my classes, so that I don’t miss any important sessions.**
+
+#### Acceptance Criteria:
+1. **Set a Reminder:**
+   - The app should allow the user to set a reminder for a specific class.
+   - The user should be able to choose the time before the class when they want to be reminded (e.g., 15 minutes, 30 minutes, 1 hour).
+
+2. **Manage Reminders:**
+   - The app should allow the user to view and manage their reminders.
+   - The user should be able to edit or delete existing reminders.
+
+3. **Reminder Notification:**
+   - The app should send a notification to the user at the specified time before the class.
+   - The notification should include the subject name, time, and location of the class.
+
+Your turn: Complete the acceptance criteria for User Story 2 and User Story 3. Feel free to add or modify criteria as you see fit. Once you’re done, let me know if you have any questions or need further assistance!",False,too long: 484 words (limit 420),0.75,0.4-0.85,,,
+it-066,PROBE,Software Engineering,1,"Explain the difference between functional and non-functional requirements, with examples from a food delivery app.","Problem:
+You are designing a mobile app for a fitness tracking service. Explain the difference between functional and non-functional requirements, and provide examples specific to this fitness app.
+
+Answer key:
+- **Correct explanation of functional requirements**: Functional requirements specify the actions or functions the app must perform, such as user interactions and system responses.
+- **Example of a functional requirement for the fitness app**: ""The app must allow users to log their daily exercise activities and track calories burned.""
+- **Correct explanation of non-functional requirements**: Non-functional requirements describe the qualities or constraints of the system, such as performance, security, and usability.
+- **Example of a non-functional requirement for the fitness app**: ""The app must synchronize user data with the server within 5 seconds to ensure real-time updates.""",False,probe is too close to the original task (overlap 0.44),,,,,
+it-068,EMERGENCY,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Sure! Here's a use case diagram for an ATM, including actors and main use cases:
+
+### Actors:
+1. **Customer**: A person who uses the ATM to perform transactions.
+2. **Bank**: The financial institution that manages the ATM and customer accounts.
+3. **Maintenance Staff**: Personnel responsible for maintaining and servicing the ATM.
+
+### Main Use Cases:
+1. **Insert Card**: The customer inserts their bank card into the ATM.
+2. **Enter PIN**: The customer enters their personal identification number (PIN) to authenticate their identity.
+3. **Check Balance**: The customer can view the current balance of their account.
+4. **Withdraw Cash**: The customer can withdraw a specified amount of cash from their account.
+5. **Deposit Cash**: The customer can deposit cash into their account.
+6. **Transfer Funds**: The customer can transfer funds to another account.
+7. **Print Statement**: The customer can request a printed statement of recent transactions.
+8. **Request Mini Statement**: The customer can request a mini statement showing the last few transactions.
+9. **Change PIN**: The customer can change their PIN.
+10. **Eject Card**: The ATM returns the customer's card after the transaction is complete.
+11. **Report Problem**: The customer can report any issues or problems with the ATM.
+12. **Service ATM**: Maintenance staff can perform routine maintenance and service tasks on the ATM.
+13. **Update ATM Status**: The bank can update the status of the ATM, such as marking it as out of service or in need of maintenance.
+
+### Use Case Diagram:
+```plaintext
++-----------------+
+|     Customer    |
++-----------------+
+        |
+        | insert card
+        v
++-----------------+
+|      ATM        |
++-----------------+
+| - insert card   |
+| - enter PIN     |
+| - check balance |
+| - withdraw cash |
+| - deposit cash  |
+| - transfer funds|
+| - print statement|
+| - request mini statement|
+| - change PIN    |
+| - eject card    |
+| - report problem|
++-----------------+
+        |
+        | service ATM
+        v
++-----------------+
+| Maintenance Staff|
++-----------------+
+        |
+        | update ATM status
+        v
++-----------------+
+|      Bank       |
++-----------------+
+```
+
+### Explanation:
+- **Customer**: The primary user of the ATM who performs transactions.
+- **Bank**: Manages the ATM and customer accounts, and updates the ATM status.
+- **Maintenance Staff**: Ensures the ATM is functioning properly and performs necessary maintenance.
+
+Each use case represents a specific interaction or action that can be performed by the actors. For example, the ""insert card"" use case is initiated by the customer and is a prerequisite for most other use cases.
+
+### Next Steps:
+Later, revisit the relationships between actors and use cases, and practice creating more detailed use case diagrams for different systems to solidify your understanding.",True,,1.0,0.85-1.0,,,
+it-068,GUIDED,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Let’s construct the ATM use‑case diagram together.
+
+1. **Actors** – Who interacts with the ATM? List each distinct actor and write them as separate boxes.  
+2. **Customer actions** – What tasks does a customer want to accomplish at the ATM? Write each task as a use case (ellipse).  
+3. **Maintenance actions** – Which activities are performed by staff who keep the machine running? Add those as use cases.  
+4. **Bank actions** – What does the bank’s system need to provide for the ATM? Add those use cases.  
+5. **Relationships** – For each actor, draw a line to every use case that the actor can initiate.  
+
+Below is a skeletal outline you can fill in. Replace each `___` with the appropriate element.
+
+```plaintext
++-----------------+          +-----------------+
+|    ___ (Actor)  |          |    ___ (Actor)  |
++-----------------+          +-----------------+
+        |                         |
+        | uses                    | uses
+        v                         v
++-------------------------------------------+
+|                ATM System                 |
++-------------------------------------------+
+|  ___ (Use case)   ___ (Use case)   ___    |
+|  ___ (Use case)   ___ (Use case)   ___    |
+|  ___ (Use case)   ___ (Use case)   ___    |
++-------------------------------------------+
+```
+
+**Your tasks**
+
+- Fill in the three actor boxes.  
+- List at least five use cases for the customer, two for maintenance staff, and one for the bank.  
+- Connect each actor to the appropriate use cases with lines.  
+
+When you’ve placed all the pieces, sketch the diagram (hand‑drawn or with a tool) and check that every actor is linked to the right set of use cases. What does your final diagram look like?",True,,0.3,0.1-0.55,,,
+it-068,HINT,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Consider the main actors involved in using an ATM, such as the customer and the bank. What are the primary actions each actor performs? For the customer, think about what they do when they interact with the ATM. Try sketching out the diagram and listing the use cases, then come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+it-069,GUIDED,Software Engineering,3,"Write unit tests for a function that calculates a discounted price, covering the edge cases.","Consider the situations you need to verify for a discount‑calculation function.
+
+1. What input values represent a **0 %** discount?
+2. Which values illustrate a **typical** discount (e.g., 20 %)?
+3. How do you express a **full** discount (100 %) in the inputs?
+4. What inputs would test a **negative** discount?
+5. Which inputs show an **original price of 0**?
+6. Can you think of any other boundary condition (e.g., discount > 100 %)?
+
+Use those ideas to complete the test scaffold below:
+
+```python
+import unittest
+
+# calculate_discounted_price(price, discount) is defined elsewhere
+class TestDiscount(unittest.TestCase):
+    def test_zero_percent(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),   # price, discount
+            ___                                     # expected result
+        )
+
+    def test_typical_discount(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),
+            ___
+        )
+
+    def test_full_discount(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),
+            ___
+        )
+
+    def test_negative_discount(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),
+            ___
+        )
+
+    def test_zero_price(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),
+            ___
+        )
+
+    def test_other_boundary(self):
+        self.assertEqual(
+            calculate_discounted_price(___, ___),
+            ___
+        )
+
+if __name__ == ""__main__"":
+    unittest.main()
+```
+
+Replace each `___` with the appropriate values and expected outcomes based on the questions you answered. What choices do you make for each case?",True,disclosure outside band,0.6,0.1-0.55,,,
+it-069,HUMAN_FIRST,Software Engineering,3,"Write unit tests for a function that calculates a discounted price, covering the edge cases.","You've worked with unit tests before, and you're well-equipped to handle this task. Think about the different scenarios where the discount might apply or not, and consider edge cases like zero discount or maximum discount. Try writing your tests, and then share your attempt. I'm here to review them with you.",True,disclosure outside band,0.1,0.0-0.05,,,
+it-070,GUIDED,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","Let’s explore the three testing levels step by step.
+
+### 1. Unit testing  
+*What is the smallest piece of code you can test on its own?*  
+*How would you verify that this piece behaves correctly for a given input?*  
+
+```python
+def add(a, b):
+    return a + b
+
+# Unit test – fill in the expected result
+def test_add():
+    assert add(2, 3) == ___   # what should the sum be?
+```
+
+### 2. Integration testing  
+*Which two (or more) units need to work together for a feature to succeed?*  
+*What would you check to confirm that their interaction is correct?*  
+
+```python
+def save_to_db(item):
+    # stores item, returns True on success
+    ...
+
+def log_action(item):
+    # writes a log entry, returns True on success
+    ...
+
+# Integration test – combine the two functions
+def test_save_and_log():
+    item = {""id"": 1, ""name"": ""test""}
+    saved = save_to_db(item)
+    logged = log_action(item)
+    assert saved and logged, ""Both saving and logging should ___""
+```
+
+### 3. System testing  
+*What is a realistic end‑to‑end scenario that exercises the whole application?*  
+*Which observable outcomes would tell you the system meets its requirements?*  
+
+```python
+def register_user(username, password):
+    ...
+
+def login_user(username, password):
+    ...
+
+def post_message(user_id, text):
+    ...
+
+# System test – outline the user flow
+def test_user_flow():
+    username = ""alice""
+    password = ""secret""
+    register_user(username, password)
+    assert login_user(username, password), ""Login should ___""
+    user_id = get_user_id(username)   # assume this helper exists
+    post_message(user_id, ""Hello world"")
+    assert check_message(user_id, ""Hello world""), ""The posted message should ___""
+```
+
+Answer the questions and fill in the blanks to complete each test. This will help you see how the scope expands from a single function to multiple components and finally to the whole system.",True,,0.5,0.1-0.55,,,
+it-070,HINT,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","What does it mean to test a single, isolated piece of code—like a single function—without any of its collaborators?  
+
+When two or more components need to work together (for example, a service calling a database), what kind of test checks that their interaction behaves correctly?  
+
+If you want to verify the behavior of the whole application from the user’s perspective, covering every layer end‑to‑end, which testing level are you exercising?  
+
+Try drafting a brief example for each scenario, then compare them.",True,disclosure outside band,0.5,0.0-0.25,,,
+it-070,HUMAN_FIRST,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","You’ve got a good grasp of testing concepts, so you can definitely explain the differences between unit, integration, and system testing with an example for each. Take a moment to write down your understanding and examples, then share them with me. I’m here to review and provide feedback!",False,does not invite the student's attempt,0.0,0.0-0.05,,,
+it-071,GUIDED,Software Engineering,3,Describe a sequence diagram for a customer placing an order in an online shop.,"Let’s construct the diagram together.
+
+1. **Who are the participants in the scenario?**  
+   List the roles (e.g., a person, a browser, a server component, a payment service, etc.) and write each as a `participant` line.
+
+2. **What are the high‑level actions the customer performs?**  
+   Think of the steps from opening the site to receiving confirmation. Write each action as a message from *Customer* (or the browser) to the next participant, leaving the message text as `___`.
+
+3. **What does the browser send to the shop system for each action?**  
+   For every customer action, add a corresponding line like `WebBrowser ->> OnlineShopSystem: ___`.
+
+4. **How does the shop system respond?**  
+   After each request, add a return line such as `OnlineShopSystem ->> WebBrowser: ___`.
+
+5. **Where does the payment step fit, and what messages are exchanged with the payment service?**  
+   Insert the interaction with the payment gateway, using blanks for the request and response.
+
+6. **How is the order confirmation generated and delivered back to the customer?**  
+   Add the messages between the shop system, the confirmation component, and finally the browser/customer.
+
+Putting it together, the skeleton looks like this (fill in the blanks as you answer the questions above):
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant WebBrowser
+    participant OnlineShopSystem
+    participant PaymentGateway
+    participant OrderConfirmation
+
+    Customer ->> WebBrowser: ___   % open site
+    WebBrowser ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> WebBrowser: ___
+    WebBrowser ->> Customer: ___
+
+    Customer ->> WebBrowser: ___   % add to cart
+    WebBrowser ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> WebBrowser: ___
+    WebBrowser ->> Customer: ___
+
+    Customer ->> WebBrowser: ___   % checkout
+    WebBrowser ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> WebBrowser: ___
+    WebBrowser ->> Customer: ___
+
+    Customer ->> WebBrowser: ___   % submit payment
+    WebBrowser ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> PaymentGateway: ___
+    PaymentGateway ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> OrderConfirmation: ___
+    OrderConfirmation ->> OnlineShopSystem: ___
+    OnlineShopSystem ->> WebBrowser: ___
+    WebBrowser ->> Customer: ___
+```
+
+Answer each question, then replace the `___` placeholders with the appropriate messages. This will give you a complete sequence diagram for the order‑placement flow.",True,disclosure outside band,0.583,0.1-0.55,,,
+it-072,EMERGENCY,Software Engineering,4,"A 200-line function validates input, queries the database and sends an email. Identify the code smells and propose a refactoring.","The primary code smells in a 200-line function that validates input, queries the database, and sends an email are:
+
+1. **Long Method**: A 200-line function is too long and hard to understand, maintain, and test.
+2. **Single Responsibility Principle (SRP) Violation**: The function is doing multiple things (validation, database querying, and email sending), which violates the SRP.
+3. **Tight Coupling**: The function is tightly coupled with the database and email services, making it hard to change or test independently.
+
+### Refactored Solution
+
+To address these code smells, you can break down the function into smaller, single-responsibility functions and potentially into separate classes or modules. Here’s an example of how you might refactor it:
+
+```python
+def validate_input(input_data):
+    # Perform input validation
+    if not input_data:
+        raise ValueError(""Input data is required"")
+    if not input_data.get('email'):
+        raise ValueError(""Email is required"")
+    # Add more validation rules as needed
+    return True
+
+def query_database(input_data):
+    # Query the database
+    # Example using a hypothetical database connection
+    connection = get_database_connection()
+    cursor = connection.cursor()
+    query = ""SELECT * FROM users WHERE email = %s""
+    cursor.execute(query, (input_data['email'],))
+    result = cursor.fetchone()
+    connection.close()
+    return result
+
+def send_email(email, message):
+    # Send an email
+    # Example using a hypothetical email service
+    email_service = get_email_service()
+    email_service.send(email, message)
+
+def process_request(input_data):
+    try:
+        validate_input(input_data)
+        user_data = query_database(input_data)
+        if user_data:
+            send_email(user_data['email'], ""Your request has been processed."")
+        else:
+            send_email(input_data['email'], ""No user found with the provided email."")
+    except Exception as e:
+        send_email(input_data['email'], f""An error occurred: {str(e)}"")
+```
+
+### Explanation
+
+1. **validate_input**: This function handles input validation. It checks if the required fields are present and valid.
+2. **query_database**: This function handles the database query. It connects to the database, executes the query, and returns the result.
+3. **send_email**: This function handles sending the email. It uses a hypothetical email service to send the email.
+4. **process_request**: This is the main function that orchestrates the process. It calls the other functions in sequence and handles exceptions.
+
+### Suggested Follow-Up
+
+Later, revisit the concepts of the Single Responsibility Principle, code refactoring, and exception handling to solidify your understanding and improve your ability to write maintainable code.",True,,1.0,0.85-1.0,,,
+it-073,HUMAN_FIRST,Software Engineering,3,Estimate the effort for a login feature using story points and explain your reasoning.,"Estimating effort for a login feature is a great way to practice breaking down tasks. You've likely worked on similar projects, so you have a good sense of what’s involved. Give it a try, and share your estimate along with your reasoning. I’ll be here to review it with you.",True,,0.0,0.0-0.05,,,
+it-073,SHARED,Software Engineering,3,Estimate the effort for a login feature using story points and explain your reasoning.,"Below is a scaffold you can fill in to produce a complete story‑point estimate for the login feature. I’ll handle the overall structure and give you the pieces you need to decide; the rest is left for you to complete.
+
+---
+
+### 1. Break the feature into sub‑tasks  
+
+| # | Sub‑task (you may add/remove) |
+|---|------------------------------|
+| 1 | UI design & UX (wireframes, accessibility) |
+| 2 | Front‑end implementation (HTML/CSS/JS, client‑side validation) |
+| 3 | Backend authentication API |
+| 4 | Security hardening (hashing, CSRF, rate‑limiting, MFA hook) |
+| 5 | Database integration (schema, migrations) |
+| 6 | Automated testing (unit, integration, security) |
+| 7 | Documentation & hand‑off |
+
+Feel free to adjust the list if your project needs extra pieces (e.g., password‑reset flow, social login).
+
+---
+
+### 2. Assign **base** story points  
+
+For each sub‑task, decide a *baseline* effort (ignoring uncertainty).  
+Write the numbers in the table below:
+
+| Sub‑task | Base points (your estimate) |
+|----------|-----------------------------|
+| UI design & UX | ___ |
+| Front‑end impl. | ___ |
+| Backend API | ___ |
+| Security hardening | ___ |
+| DB integration | ___ |
+| Automated tests | ___ |
+| Documentation | ___ |
+
+*Tip:* Think about how many person‑days each piece would take for a team familiar with the stack, then map that to a typical Fibonacci scale (1, 2, 3, 5, 8, 13…).
+
+---
+
+### 3. Rate **uncertainty** for each sub‑task  
+
+Choose a multiplier based on how unknown the work is:
+
+| Uncertainty level | Multiplier |
+|-------------------|------------|
+| Low (well‑known tech) | 1.0 |
+| Medium (some unknowns) | 1.2 |
+| High (new security standards, accessibility audits, unfamiliar libraries) | 1.5 |
+
+Now fill in the multiplier for each row:
+
+| Sub‑task | Uncertainty | Multiplier |
+|----------|-------------|------------|
+| UI design & UX | ___ | ___ |
+| Front‑end impl. | ___ | ___ |
+| Backend API | ___ | ___ |
+| Security hardening | ___ | ___ |
+| DB integration | ___ | ___ |
+| Automated tests | ___ | ___ |
+| Documentation | ___ | ___ |
+
+---
+
+### 4. Compute **adjusted** points  
+
+For each sub‑task:  
+
+`Adjusted points = round(Base points × Multiplier)`
+
+Create a new column in your table and calculate the numbers.
+
+| Sub‑task | Base | Multiplier | Adjusted |
+|----------|------|------------|----------|
+| UI design & UX | ___ | ___ | ___ |
+| Front‑end impl. | ___ | ___ | ___ |
+| Backend API | ___ | ___ | ___ |
+| Security hardening | ___ | ___ | ___ |
+| DB integration | ___ | ___ | ___ |
+| Automated tests | ___ | ___ | ___ |
+| Documentation | ___ | ___ | ___ |
+
+---
+
+### 5. Sum the adjusted points  
+
+Add up all the “Adjusted” values to obtain the **total story points** for the login feature.
+
+`Total = ___`
+
+---
+
+### Your next steps  
+
+1. **Fill in the blanks** for base points, uncertainty levels, and adjusted points.  
+2. **Explain** any choices you made (e.g., why security hardening is “high” uncertainty for your team).  
+3. **Report** the final total and briefly note how UX/accessibility considerations influenced your numbers.
+
+Once you’ve completed the table, share the totals and reasoning, and we can discuss whether the estimate feels realistic for your upcoming sprint.",False,too long: 570 words (limit 420); does not hand a part back to the student,0.5,0.4-0.85,,,
+it-074,EMERGENCY,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","A Git branching workflow for a four-person team can help manage changes and ensure everyone's work is integrated smoothly. Here’s a common workflow called the **Feature Branch Workflow**:
+
+### 1. **Main Branches:**
+- **`main`**: This branch contains the production-ready code. It should always be stable and deployable.
+- **`develop`**: This branch is used for development. All new features and changes are merged into `develop` before being merged into `main`.
+
+### 2. **Feature Branches:**
+- Each team member creates a **feature branch** from `develop` for their specific task.
+- For example, if you are working on a new feature called ""user authentication,"" you would create a branch named `feature/user-auth`.
+
+### 3. **Workflow Steps:**
+1. **Create a Feature Branch:**
+   ```bash
+   git checkout -b feature/user-auth develop
+   ```
+
+2. **Make Changes:**
+   - Work on your feature in the `feature/user-auth` branch.
+   - Commit your changes frequently.
+   ```bash
+   git add .
+   git commit -m ""Add user authentication forms""
+   ```
+
+3. **Pull Latest Changes:**
+   - Before merging your feature branch back into `develop`, pull the latest changes from `develop` to avoid conflicts.
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout feature/user-auth
+   git merge develop
+   ```
+
+4. **Resolve Merge Conflicts:**
+   - If there are conflicts, Git will prompt you to resolve them. Open the conflicting files and look for sections marked with `<<<<<<<`, `=======`, and `>>>>>>>`.
+   - Edit the file to resolve the conflicts. For example:
+     ```plaintext
+     <<<<<<< HEAD
+     // Your changes
+     =======
+     // Their changes
+     >>>>>>> develop
+     ```
+   - After resolving, add the resolved files and continue the merge:
+   ```bash
+   git add <file>
+   git commit -m ""Merge develop into feature/user-auth""
+   ```
+
+5. **Merge Feature Branch into Develop:**
+   - Once your feature is complete and tested, merge it back into `develop`.
+   ```bash
+   git checkout develop
+   git merge feature/user-auth
+   git push origin develop
+   ```
+
+6. **Delete Feature Branch:**
+   - Optionally, delete the feature branch to keep your repository clean.
+   ```bash
+   git branch -d feature/user-auth
+   ```
+
+### 4. **Handling Merge Conflicts:**
+- **Identify Conflicts:**
+  - When you run `git merge`, Git will list the files with conflicts.
+- **Open the File:**
+  - Open the file with conflicts and look for the conflict markers.
+- **Resolve Conflicts:**
+  - Decide which changes to keep and remove the conflict markers.
+- **Commit the Changes:**
+  - Add the resolved files and commit the changes.
+  ```bash
+  git add <file>
+  git commit -m ""Resolve merge conflicts in <file>""
+  ```
+
+### 5. **Best Practices:**
+- **Frequent Pulls:**
+  - Regularly pull the latest changes from `develop` to your feature branch to keep it up-to-date.
+- **Small, Frequent Commits:**
+  - Commit your changes frequently to make it easier to track and manage your work.
+- **Code Reviews:**
+  - Have team members review each other's code before merging into `develop` to ensure quality and consistency.
+
+Later, revisit the concept of branching and merging to understand the underlying mechanics better, so you can handle more complex scenarios confidently.",True,,1.0,0.85-1.0,,,
+it-074,GUIDED,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","Let's walk through a Git branching workflow for a four-person team and how to resolve a merge conflict.
+
+### Git Branching Workflow
+
+1. **Create a Main Branch:**
+   - What is the main branch in your project? Typically, it's called `main` or `master`. Ensure everyone knows this is the production-ready code.
+
+2. **Feature Branches:**
+   - When a team member starts working on a new feature, they should create a new branch from the main branch. How would you create a new branch named `feature-1`?
+
+3. **Commit Changes:**
+   - Team members should commit their changes frequently to their feature branches. What is a good practice for commit messages?
+
+4. **Pull Latest Changes:**
+   - Before merging a feature branch back to the main branch, team members should pull the latest changes from the main branch to their feature branch. Why is this important?
+
+5. **Merge Feature Branch:**
+   - Once the feature is complete and tested, merge the feature branch back into the main branch. How would you merge `feature-1` into `main`?
+
+6. **Delete Feature Branch:**
+   - After merging, delete the feature branch to keep the repository clean. How would you delete the `feature-1` branch?
+
+### Resolving a Merge Conflict
+
+1. **Identify the Conflict:**
+   - When merging, Git may report a conflict. How do you know a conflict has occurred?
+
+2. **Open the Conflicting File:**
+   - Open the file with the conflict. What markers does Git use to indicate the conflict?
+
+3. **Resolve the Conflict:**
+   - Decide which changes to keep or merge. What do the markers `<<<<<<<`, `=======`, and `>>>>>>>` represent?
+
+4. **Mark the Conflict as Resolved:**
+   - After resolving the conflict, you need to mark it as resolved. How would you add the resolved file to the staging area?
+
+5. **Complete the Merge:**
+   - Finally, complete the merge by committing the changes. What commit message would you use to indicate the conflict resolution?
+
+### Skeleton Workflow
+
+```bash
+# Step 2: Create a feature branch
+git checkout -b ___
+
+# Step 3: Commit changes
+git add .
+git commit -m ""___""
+
+# Step 4: Pull latest changes
+git checkout main
+git pull
+git checkout ___
+git merge ___
+
+# Step 5: Merge feature branch
+git checkout ___
+git merge ___
+
+# Step 6: Delete feature branch
+git branch -d ___
+```
+
+### Conflict Resolution
+
+```bash
+# Step 1: Identify the conflict
+# Git will report conflicts during the merge process
+
+# Step 2: Open the conflicting file
+# Open the file and look for markers like <<<<<<<, =======, and >>>>>>>
+
+# Step 3: Resolve the conflict
+# Edit the file to resolve the conflict, removing the markers
+
+# Step 4: Mark the conflict as resolved
+git add ___
+
+# Step 5: Complete the merge
+git commit -m ""___""
+```
+
+Fill in the blanks and follow the steps to set up your branching workflow and resolve any conflicts that may arise.",False,too long: 477 words (limit 300),0.5,0.1-0.55,,,
+it-074,HINT,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","Consider how each team member can work on separate features without interfering with others. What mechanism in Git allows for isolated development? Also, when you encounter a merge conflict, what is the first step you should take to understand the differences? Try outlining these steps and come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+it-076,PROBE,Software Engineering,4,"Explain the SOLID principles, and give an example that violates the Single Responsibility Principle and how to fix it.","Problem:
+You are working on a software project and come across a class that handles both user authentication and sending emails. This class violates one of the SOLID principles. Identify which principle is violated and explain why. Then, refactor the class to adhere to the principle.
+
+Answer key:
+- The class violates the **Single Responsibility Principle (SRP)**.
+- The SRP states that a class should have only one reason to change.
+- In the given scenario, the class has two responsibilities: user authentication and sending emails. This means it has two reasons to change, which violates SRP.
+- To fix the violation, you should split the class into two separate classes: one for user authentication and one for sending emails.
+
+```java
+// Original class violating SRP
+class UserManagement {
+    public void authenticateUser(String username, String password) {
+        // Authentication logic
+    }
+
+    public void sendEmail(String recipient, String subject, String body) {
+        // Email sending logic
+    }
+}
+
+// Refactored classes adhering to SRP
+class UserAuthentication {
+    public void authenticateUser(String username, String password) {
+        // Authentication logic
+    }
+}
+
+class EmailService {
+    public void sendEmail(String recipient, String subject, String body) {
+        // Email sending logic
+    }
+}
+```",True,,,,,,
+it-076,SHARED,Software Engineering,4,"Explain the SOLID principles, and give an example that violates the Single Responsibility Principle and how to fix it.","Here’s a scaffold you can use to explore the SOLID principles and the Single‑Responsibility Principle (SRP) yourself.
+
+### 1. Recall the SOLID acronym  
+Write a short, one‑sentence description for each principle (SRP, OCP, LSP, ISP, DIP).  
+*Your turn:* fill in the blanks.
+
+```
+S – ______________________________
+O – ______________________________
+L – ______________________________
+I – ______________________________
+D – ______________________________
+```
+
+### 2. Spot a class that breaks SRP  
+Consider a class that both **creates a user** and **sends a welcome email**. Sketch its shape (you can use the same names as in the example below, or invent your own).
+
+```python
+class ___:
+    def create_user(self, username, email):
+        # (a) create the user in the database
+        # (b) send a welcome email
+        ...
+
+    def send_welcome_email(self, username, email):
+        # email‑sending logic
+        ...
+```
+
+*Your turn:*  
+- What are the two responsibilities this class is handling?  
+- List at least two reasons why a change in one responsibility might force a change in the other.
+
+### 3. Refactor toward SRP  
+Break the responsibilities into separate classes. Write the class names and the single method each should expose. Use `pass` for the method bodies you’ll implement later.
+
+```python
+class ___:          # responsible for …?
+    def create_user(self, username, email):
+        pass
+
+class ___:          # responsible for …?
+    def send_welcome_email(self, user):
+        pass
+```
+
+*Your turn:*  
+- What should each class be named?  
+- What argument(s) does each method need?  
+
+### 4. Wire the pieces together  
+Think about how a client (your main code) would use the new classes. Sketch the usage pattern, leaving the actual calls as blanks.
+
+```python
+# instantiate the collaborators
+creator = ___()
+mailer   = ___()
+
+# create a user
+user = creator.create_user(""john_doe"", ""john@example.com"")
+
+# send the welcome email
+mailer.send_welcome_email(___)
+```
+
+*Your turn:*  
+- Fill in the class names for `creator` and `mailer`.  
+- What do you pass to `send_welcome_email`?
+
+### 5. Extending the design (optional)  
+Suppose you now need to log every user creation.  
+- Would you add logging code inside `UserCreator`, or would you introduce another class?  
+- Sketch a possible `UserLogger` class signature.
+
+```python
+class ___:
+    def log_creation(self, user):
+        pass
+```
+
+**Your next step:** Complete the blanks, answer the questions, and then decide whether your refactored design satisfies SRP. Let me know what you come up with and any doubts you encounter!",True,,0.4,0.4-0.85,,,
+it-077,HINT,Computer Networks,1,Explain the difference between TCP and UDP and give one application suited to each.,"1. A protocol that provides ___ and ___ delivery is typically used when ___ is critical.  
+
+2. A protocol that sends packets ___ and ___ does not guarantee they arrive.  
+
+3. Name an application that cannot tolerate ___ or ___ packets.  
+
+4. Name an application where ___ latency is more important than ___ loss.  
+
+Fill in the blanks and pair each protocol with an appropriate application.",False,contains 4 numbered steps (one hint only); disclosure outside band,0.4,0.0-0.25,,,
+it-077,PROBE,Computer Networks,1,Explain the difference between TCP and UDP and give one application suited to each.,"Problem:
+Explain the difference between FTP and SFTP and give one application suited to each.
+
+Answer key:
+- **Correct answer**: FTP (File Transfer Protocol) is a standard network protocol used for transferring files between a client and a server over a network, typically without encryption. SFTP (Secure File Transfer Protocol) is a secure version of FTP that uses SSH (Secure Shell) to encrypt the data and commands, ensuring secure file transfers.
+- **Application for FTP**: Sharing files within a private, secure local network.
+- **Application for SFTP**: Transferring files over the internet, especially when sensitive data is involved.
+- **Explanation of the security difference**: SFTP provides encryption for both data and commands, making it suitable for secure file transfers over unsecured networks.",False,probe is too close to the original task (overlap 0.60),,,,,
+it-078,PROBE,Computer Networks,3,Describe step by step what happens when you type a URL into a browser and press Enter.,"Problem:
+When you type a domain name into a domain registrar's search bar and press Enter, describe step by step what happens from the moment you press Enter until the search results are displayed.
+
+Answer key:
+- The domain registrar's website receives the domain name query.
+- The registrar performs a DNS lookup to check the availability of the domain name.
+- The registrar queries its database or the domain registry to see if the domain is already registered.
+- If the domain is available, the registrar displays the domain as available for purchase.
+- If the domain is not available, the registrar displays the domain as taken and may suggest alternative domain names.
+- The registrar may also provide additional information such as domain registration costs and available extensions.",False,probe is too close to the original task (overlap 0.43),,,,,
+it-083,SHARED,Computer Networks,3,Explain the TCP three-way handshake and why it needs three steps rather than two.,"Here’s a sketch of the handshake and a small code skeleton you can finish. I’ll give you the overall structure and fill in one clearly bounded piece; the rest is left for you to complete and reflect on.
+
+---
+
+### Hand‑shake outline (fill‑in the blanks)
+
+1. **Client → Server** – **SYN**  
+   *What information does the client need to include in this packet?*  
+   ```text
+   SYN(seq = ___)          # client’s initial sequence number
+   ```
+
+2. **Server → Client** – **SYN‑ACK**  
+   *How does the server acknowledge the client’s SYN and convey its own sequence number?*  
+   ```text
+   SYN‑ACK(seq = ___, ack = ___)   # server’s ISN and acknowledgment of client’s ISN+1
+   ```
+
+3. **Client → Server** – **ACK**  
+   *What must the client send back to confirm the server’s SYN‑ACK?*  
+   ```text
+   ACK(seq = ___, ack = ___)       # client’s next expected number and acknowledgment of server’s ISN+1
+   ```
+
+**Questions for you to answer**
+
+- Why can’t the handshake be reduced to only two messages? Think about what each side needs to know before it can start sending data.
+- How do the sequence numbers exchanged in steps 1 and 2 guarantee that both ends agree on the byte ordering?
+- What would happen if the third ACK were omitted? Which “half‑open” problem might arise?
+- In the context of reliable transmission, what role does the final ACK play beyond merely confirming receipt of the SYN‑ACK?
+
+---
+
+### Minimal code you can run (UDP is used only to illustrate the exchange; it does **not** implement real TCP)
+
+```python
+import socket
+
+# ---------- client side ----------
+def send_syn(sock, server_addr):
+    # ___: build a SYN packet with a chosen initial sequence number
+    syn_packet = b'SYN:' + b'12345'   # <-- replace 12345 with your chosen ISN
+    sock.sendto(syn_packet, server_addr)
+    print('Client: sent SYN')
+
+def send_ack(sock, server_addr, server_isn):
+    # ___: construct the final ACK using server_isn+1
+    ack_packet = b'ACK:' + str(server_isn + 1).encode()
+    sock.sendto(ack_packet, server_addr)
+    print('Client: sent final ACK')
+
+# ---------- server side ----------
+def handle_syn(sock):
+    data, client_addr = sock.recvfrom(1024)
+    # ___: parse the client's ISN from the received SYN packet
+    client_isn = int(data.split(b':')[1])
+    # ___: choose your own ISN and send SYN‑ACK
+    server_isn = 54321                # <-- pick any number you like
+    syn_ack = f'SYN-ACK:{server_isn}:{client_isn+1}'.encode()
+    sock.sendto(syn_ack, client_addr)
+    print('Server: sent SYN‑ACK')
+    return client_addr, server_isn
+
+# ----- set up sockets (run client and server in separate terminals) -----
+if __name__ == '__main__':
+    # server
+    srv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    srv_sock.bind(('localhost', 12345))
+    client_addr, srv_isn = handle_syn(srv_sock)
+
+    # client (in another process)
+    # cl_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # send_syn(cl_sock, ('localhost', 12345))
+    # receive SYN‑ACK, extract server_isn, then call send_ack(...)
+```
+
+**Your tasks**
+
+1. Replace the placeholder values (`12345`, `54321`, etc.) with variables that you generate at runtime.  
+2. Parse the server’s SYN‑ACK on the client side, extract the server’s ISN, and then call `send_ack`.  
+3. Decide what the server should do after receiving the final ACK (e.g., print a confirmation, move to a data‑transfer phase, etc.).  
+
+Once you’ve filled in the blanks and answered the questions above, let me know what you chose for the sequence numbers and how you justified the three‑step design.",False,too long: 508 words (limit 420),0.5,0.4-0.85,,,
+it-084,HINT,Computer Networks,2,Explain how DHCP gives a new laptop an IP address when it joins a network.,"Consider the initial message the laptop sends to the network to request an IP address. What type of message is this, and to which address is it sent? Try to think through the steps from there.",True,,0.0,0.0-0.25,,,
+it-085,HUMAN_FIRST,Computer Networks,2,Explain NAT and why most home devices have private IP addresses.,"The goal is to explain Network Address Translation (NAT) and why most home devices use private IP addresses. You've covered networking basics, so you have the foundation to tackle this. Give it a try, and then share your explanation. I’ll review it with you.",True,,0.0,0.0-0.05,,,
+it-086,SHARED,Computer Networks,3,A PC can ping 8.8.8.8 but cannot open google.com in a browser. What are the likely causes and how would you troubleshoot?,"**Overall troubleshooting plan**
+
+| Step | What we’ll check | What you’ll do after the AI part |
+|------|------------------|----------------------------------|
+| 1️⃣ | **Basic connectivity** – confirm that ICMP works (ping) and that TCP to port 80/443 works. | Run the commands I provide and note the results. |
+| 2️⃣ | **DNS resolution** – see whether the name `google.com` can be resolved to an IP address. | Execute the `nslookup`/`dig` commands I give and report the output. |
+| 3️⃣ | **Force IPv4 / test alternate client** – rule out IPv6‑only or browser‑specific problems. | Try accessing the site with `curl`/`wget` and with a different browser, forcing IPv4. |
+| 4️⃣ | **Firewall / security software** – make sure outbound HTTP/HTTPS isn’t blocked while ICMP is allowed. | Look at Windows Firewall (or your OS firewall) rules and any third‑party security suite, then tell me what you find. |
+| 5️⃣ | **Path‑MTU / fragmentation** – large packets can be dropped by a mis‑configured router, breaking TCP but not ping. | Run a ping with a large payload and interpret the result (I’ll give the command). |
+| 6️⃣ | **Finalize** – based on the evidence, decide which layer is at fault and apply the appropriate fix. | Summarise your findings and choose the next corrective action. |
+
+---
+
+### Steps I’ll do for you
+
+#### 1️⃣ Verify basic IP connectivity (ICMP) and TCP reachability
+```bat
+:: ICMP test (already works, but repeat for completeness)
+ping -c 4 8.8.8.8
+
+:: TCP test to Google’s HTTP and HTTPS ports
+telnet 172.217.14.206 80
+telnet 172.217.14.206 443
+```
+*If `telnet` isn’t installed, you can use `Test-NetConnection` on PowerShell:*
+
+```powershell
+Test-NetConnection -ComputerName 172.217.14.206 -Port 80
+Test-NetConnection -ComputerName 172.217.14.206 -Port 443
+```
+
+#### 2️⃣ Check DNS resolution
+```bat
+nslookup google.com
+:: or, on Linux/macOS
+dig +short google.com
+```
+The output should be one or more IPv4/IPv6 addresses. If you get “***** server can't find google.com: NXDOMAIN**” or a timeout, DNS is the culprit.
+
+#### 3️⃣ Force IPv4 and use a command‑line HTTP client
+```bash
+# Force IPv4 with curl
+curl -4 -I http://google.com
+
+# Force IPv4 with wget
+wget -4 -O - http://google.com
+```
+If these succeed while the browser still fails, the problem is likely browser‑specific (proxy settings, extensions, etc.).
+
+#### 4️⃣ Large‑payload ping (Path‑MTU test)
+```bat
+ping -l 1472 8.8.8.8   :: Windows (adds 28‑byte ICMP header → 1500 bytes total)
+```
+*If the ping succeeds with the default 32‑byte payload but fails with 1472 bytes, a MTU/fragmentation issue may be present.*
+
+---
+
+### Your turn
+
+1. **Run the commands above** (steps 1‑4) and copy the exact output for each.  
+2. **Inspect your firewall / security software**:  
+   * Windows: `wf.msc` → Inbound/Outbound Rules → look for any rule that blocks ports 80 or 443.  
+   * macOS/Linux: `sudo iptables -L -v -n` (or `ufw status`).  
+   Note any rules that seem to deny HTTP/HTTPS traffic.  
+
+3. **Based on what you see**, answer these questions:
+
+* a. Does DNS resolution succeed? If not, what error do you get?  
+* b. Do the `telnet`/`Test‑NetConnection` checks to ports 80/443 succeed?  
+* c. Does the forced‑IPv4 `curl`/`wget` request retrieve headers?  
+* d. Does the large‑payload ping succeed or time out?  
+* e. Are there any firewall rules that could be blocking outbound web traffic?
+
+With your answers, we can pinpoint whether the issue lies in DNS, firewall, IPv6 mis‑configuration, or MTU problems, and then decide the exact fix (e.g., change DNS server, adjust firewall rule, disable IPv6, or lower MTU). Let me know your findings!",False,too long: 585 words (limit 420),0.75,0.4-0.85,,,
+it-087,GUIDED,Computer Networks,4,Two routers connect the networks 192.168.1.0/24 and 192.168.2.0/24. Describe the static routes needed so the networks can reach each other.,"Let’s piece the configuration together by answering a few questions.
+
+1. **What IP address does each router use on the link that connects the two routers?**  
+   - Think about the subnet you would place on that point‑to‑point link and assign an address to Router A’s interface and to Router B’s interface.
+
+2. **What is the next‑hop address that each router must use to reach the remote network?**  
+   - For Router A, which address (the one you just assigned to Router B) should be the next hop to get to 192.168.2.0/24?  
+   - For Router B, which address (the one you assigned to Router A) should be the next hop to get to 192.168.1.0/24?
+
+3. **Write the static‑route command for each router, leaving the next‑hop blank for now.**  
+
+```text
+! Router A (connected to 192.168.1.0/24)
+interface Gig0/0
+ ip address 192.168.1.1 255.255.255.0
+!
+interface Gig0/1   ! link to Router B
+ ip address ___ ___          ! assign the point‑to‑point address here
+!
+ip route 192.168.2.0 255.255.255.0 ___   ! next‑hop = Router B’s address on the link
+
+! Router B (connected to 192.168.2.0/24)
+interface Gig0/0
+ ip address 192.168.2.1 255.255.255.0
+!
+interface Gig0/1   ! link to Router A
+ ip address ___ ___          ! assign the point‑to‑point address here
+!
+ip route 192.168.1.0 255.255.255.0 ___   ! next‑hop = Router A’s address on the link
+```
+
+Fill in the blanks by answering the questions above, then test connectivity (e.g., ping from a host in 192.168.1.0/24 to one in 192.168.2.0/24).",True,disclosure outside band,0.625,0.1-0.55,,,
+it-088,SHARED,Computer Networks,4,"Compare symmetric and asymmetric encryption, and explain how HTTPS uses both.","Below is a scaffold that gives you the main pieces of the answer while leaving the core reasoning and some wording for you to fill in.
+
+---
+
+### 1. Symmetric vs. asymmetric encryption (fill‑in)
+
+| Aspect | Symmetric encryption | Asymmetric encryption |
+|--------|----------------------|-----------------------|
+| Key usage | ___ (same key for …) | ___ (public ↔ private …) |
+| Typical algorithms | ___ (e.g., …) | ___ (e.g., …) |
+| Main advantage | ___ (e.g., …) | ___ (e.g., …) |
+| Main drawback | ___ (e.g., …) | ___ (e.g., …) |
+
+*Your turn:* Complete the table with at least three rows (speed, key distribution, typical use case, etc.).
+
+---
+
+### 2. Role of each type in secure data transmission
+
+- **Asymmetric part:** used during the initial handshake to ___ (authenticate the server and …).  
+- **Symmetric part:** used after the handshake to ___ (encrypt/decrypt the bulk of the traffic because …).
+
+*Your turn:* Write one or two sentences for each bullet that explain why the two types are combined.
+
+---
+
+### 3. HTTPS (TLS) handshake – high‑level outline
+
+1. **ClientHello** – client sends ___ and proposes cipher suites.  
+2. **ServerHello** – server replies with ___, its certificate (containing ___), and a random nonce.  
+3. **Key‑exchange** – depending on the chosen cipher suite, either  
+   - **RSA key transport:** client creates a ___, encrypts it with the server’s ___, and sends it, **or**  
+   - **Ephemeral Diffie‑Hellman (ECDHE):** both sides exchange ___ values and compute a shared secret.  
+4. **Deriving keys** – both parties run a PRF on the ___ and the two nonces to obtain the ___ secret.  
+5. **Session keys** – from the master secret, TLS derives ___ keys for encryption/MAC in each direction.  
+6. **Finished** – each side sends a hash of the handshake encrypted with the newly derived keys.
+
+*Your turn:* Choose **one** key‑exchange method (RSA or ECDHE) and write a short paragraph (2‑3 sentences) explaining why that method is preferred for modern HTTPS (consider forward secrecy, performance, etc.).
+
+---
+
+### 4. Why TLS switches to symmetric encryption after the handshake
+
+- Symmetric ciphers are ___ (fast, low‑cost, …), making them suitable for ___ (large payloads, real‑time traffic).  
+- The shared secret established by the asymmetric step ensures that both parties have ___ without ever transmitting it in clear.
+
+*Your turn:* Fill in the blanks and add a concluding sentence that ties the two phases together.
+
+---
+
+### 5. Optional diagram (text‑only)
+
+```
+Client                         Server
+  |  ClientHello  -------------> |
+  | <----------- ServerHello   |
+  | <--- Certificate (pub key) |
+  |  Key‑exchange (RSA/ECDHE)  |
+  | -------------------------> |
+  |   Derive master secret      |
+  | <------------------------- |
+  |   Derive session keys       |
+  |  Encrypted data <--------> |
+```
+
+Feel free to adjust the wording or add arrows as you see fit.
+
+---
+
+**Next step:** Fill in the blanks, complete the table, and write the short paragraph about the key‑exchange method you chose. When you’re done, paste your version here and I’ll give you feedback.",False,too long: 497 words (limit 420),0.5,0.4-0.85,,,
+it-089,SHARED,Operating Systems,1,Explain the difference between a process and a thread.,"Here’s a short outline that covers the main ideas. I’ll fill in the core points, and you can finish the rest.
+
+**Process**
+- A process is **an executing instance of a program**. It has its own **virtual address space**, its own **set of resources** (open files, sockets, etc.), and is **isolated** from other processes.
+- Because of this isolation, two processes **cannot directly read or write each other’s memory**; they must use IPC mechanisms (pipes, sockets, shared memory, etc.).
+
+**Thread**
+- A thread is **the smallest unit of scheduled work** that runs inside a process.  
+- Threads **share the same virtual address space and most resources** (heap, global variables, open files) of their parent process, while each thread has its own **stack and registers**.
+- Since they share memory, threads can **communicate simply by reading/writing shared variables**, but they must also handle **synchronisation** (locks, semaphores, etc.) to avoid race conditions.
+
+---
+
+### What’s left for you to complete
+1. **Summarise the creation/termination cost** for each:
+   - Process: ___ (why is it considered heavyweight?)
+   - Thread: ___ (why is it lighter?)
+
+2. **Give a concrete example** where using a separate process is preferable, and another where using multiple threads makes more sense:
+   - Process example: ___
+   - Thread example: ___
+
+3. **Reflection question** – based on the characteristics above, decide which you would choose for a program that needs to run a UI while performing background calculations, and justify your choice in a brief paragraph.
+
+Fill in the blanks and answer the reflection question, then let me know what you wrote for the cost comparison. We can discuss whether your examples capture the key trade‑offs.",True,disclosure outside band,0.9,0.4-0.85,,,
+it-090,HINT,Operating Systems,2,Describe the process state diagram and explain each transition.,"Consider what triggers each state change in the process lifecycle, such as system calls or events. Look at the key points where a process can transition from one state to another, like when it starts executing or waits for I/O. Try to map these out and come back if you need more guidance.",True,,0.167,0.0-0.25,,,
+it-091,HUMAN_FIRST,Operating Systems,3,"Calculate the average waiting time for P1=5, P2=3 and P3=8 (burst times, all arriving at time 0) under FCFS and SJF.","The goal is to calculate the average waiting time for the processes under FCFS and SJF scheduling. You’ve worked with scheduling algorithms before, so you have the skills to tackle this. Give it a try, and then share your attempt. I’ll review it with you afterward.",True,,0.0,0.0-0.05,,,
+it-092,HINT,Operating Systems,3,"Simulate Round Robin with a time quantum of 2 for P1=5, P2=3 and P3=1, all arriving at time 0, and give each completion time.","Consider how the time quantum affects the order and duration of each process's execution. Focus on how the processes are scheduled in rounds, and track the time each process spends in the CPU. Try to simulate the process step-by-step and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+it-097,GUIDED,Operating Systems,4,"Count the page faults for the reference string 7,0,1,2,0,3,0,4,2,3 with 3 frames under FIFO and LRU.","Let’s work through the counting together.
+
+#### FIFO (First‑In‑First‑Out)
+
+1. **Start** – You have three empty frames. What should the initial contents look like?
+2. **First reference** – When the first page arrives, is it a hit or a fault? How do you record that?
+3. **Subsequent references** – For each new page:
+   - How do you check whether it is already in one of the frames?
+   - If it isn’t, which frame do you replace (the “oldest” one)?  
+   - How do you update the position of the “oldest” frame for the next fault?
+
+#### LRU (Least‑Recently‑Used)
+
+1. **Start** – Again, three empty frames. What structure could help you remember how recently each page was used?
+2. **When a page is referenced** – How do you decide if it’s a hit or a fault?
+3. **On a fault** – If there is a free frame, where do you put the page?  
+   If all frames are occupied, which page should you evict (the one used longest ago)?  
+   How do you update your “recent‑use” information after each reference?
+
+#### Skeleton code (fill the blanks)
+
+```python
+def fifo_faults(ref, frames):
+    buf = [___] * frames          # initial empty frames
+    faults = 0
+    next_replace = 0
+
+    for p in ref:
+        if ___:                   # page already in buf?
+            continue
+        # page fault handling
+        buf[___] = p               # replace the oldest page
+        faults += 1
+        next_replace = (next_replace + 1) % frames
+    return faults
+
+
+def lru_faults(ref, frames):
+    buf = [___] * frames          # initial empty frames
+    faults = 0
+    # a structure to track recency, e.g., a dict or list
+    recent = {}
+
+    for i, p in enumerate(ref):
+        if ___:                   # page already in buf?
+            # update recency information
+            recent[p] = ___
+            continue
+        # page fault handling
+        if None in buf:
+            idx = buf.index(None) # use a free slot
+        else:
+            # find least‑recently‑used page
+            lru_page = ___        # page with smallest recency value
+            idx = buf.index(lru_page)
+            del recent[lru_page]
+        buf[idx] = p
+        faults += 1
+        recent[p] = ___            # record current time/index
+    return faults
+
+
+reference = [7,0,1,2,0,3,0,4,2,3]
+frame_count = 3
+
+print(""FIFO faults:"", fifo_faults(reference, frame_count))
+print(""LRU faults :"", lru_faults(reference, frame_count))
+```
+
+Fill in each `___` and answer the numbered questions above. After you’ve completed the code, run it with the given `reference` list and note the fault counts for FIFO and LRU. Let me know what numbers you obtain or if any step is unclear.",False,too long: 396 words (limit 300),0.5,0.1-0.55,,,
+it-099,PROBE,Operating Systems,3,Write a C program that uses fork() so that the parent and the child each print their own PID.,"Problem:
+Write a C program that uses `fork()` to create a child process. The parent process should print ""I am the parent with PID [PID]"" and the child process should print ""I am the child with PID [PID]"".
+
+Answer key:
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        fprintf(stderr, ""Fork failed\n"");
+        return 1;
+    } else if (pid == 0) {
+        // Child process
+        printf(""I am the child with PID %d\n"", getpid());
+    } else {
+        // Parent process
+        printf(""I am the parent with PID %d\n"", getpid());
+    }
+
+    return 0;
+}
+```
+A correct attempt must contain:
+1. The `fork()` function call to create a child process.
+2. A check for the return value of `fork()` to distinguish between the parent and child processes.
+3. The parent process printing its PID with the message ""I am the parent with PID [PID]"".
+4. The child process printing its PID with the message ""I am the child with PID [PID]"".",False,probe is too close to the original task (overlap 0.47),,,,,
+it-100,SHARED,Operating Systems,2,Write a bash script that copies all .txt files in a folder into a backup archive named with today's date.,"Here’s a sketch of the script and a set of decisions for you to fill in.
+
+**Overall plan**
+
+1. Compute today’s date in a format you’ll use for the archive name.  
+2. Define the directory that holds the *.txt files.  
+3. Ensure a “backup store” directory exists (create it if it doesn’t).  
+4. Build the full path of the archive file, using the date from step 1.  
+5. Run a compression tool (e.g., `tar`) to pack **only** the *.txt files from the source directory into the archive.  
+6. Decide what to do if an archive with that name already exists (overwrite, abort, or rename).
+
+**Implemented steps 1‑3 (with placeholders you’ll replace)**
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 1. Today's date (choose a format, e.g., YYYY-MM-DD)
+today=___   # <-- fill in the command that produces the date string
+
+# 2. Directory containing the .txt files
+src_dir=___   # <-- replace with the path you want to back up
+
+# 3. Directory where backups will be stored
+backup_dir=___   # <-- replace with the path for storing archives
+
+# Create the backup directory if it does not exist
+if [[ ! -d ""$backup_dir"" ]]; then
+    echo ""Creating backup directory at $backup_dir""
+    mkdir -p ""$backup_dir""
+fi
+
+# 4. Full name of the archive (use $today)
+archive_path=""${backup_dir}/backup_${today}.___""   # <-- choose extension (e.g., tar.gz)
+```
+
+**Your tasks**
+
+* **Step 5:** Write the command that creates a compressed archive containing only the `*.txt` files from `$src_dir`. Think about the options you need for `tar` (or another tool) to:
+  * change to the source directory,
+  * select only `*.txt` files,
+  * write the output to `$archive_path`.
+
+* **Step 6:** Add logic that checks whether `$archive_path` already exists and implements the behavior you prefer (overwrite, abort with a message, or generate a new name).  
+
+Once you’ve completed those two parts, run the script on a test folder and verify that the archive contains exactly the `.txt` files you expect. Let me know which option you chose for handling existing archives and why.",False,does not hand a part back to the student,0.5,0.4-0.85,,,

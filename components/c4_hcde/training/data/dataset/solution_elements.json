@@ -10,5 +10,658 @@
   "Select only the even numbers within the range",
   "Use a loop to iterate over the selected numbers",
   "Print each number in the loop"
+ ],
+ "it-003": [
+  "Define a set of characters that are considered vowels",
+  "Initialize a counter variable to keep track of vowel occurrences",
+  "Iterate over each character in the input string",
+  "Check if each character is a vowel and update the counter accordingly"
+ ],
+ "it-004": [
+  "Determine the conditions under which a year is considered a leap year",
+  "Identify the order of operations for checking these conditions",
+  "Handle the special case where a year is divisible by 100",
+  "Apply the modulo operator to check for divisibility",
+  "Return a boolean value indicating whether the year is a leap year"
+ ],
+ "it-008": [
+  "Determine a method to repeatedly read integers from the user until a specific stop value is entered",
+  "Keep a running total of the entered numbers",
+  "Count the number of valid integers entered",
+  "Calculate the average of the entered numbers",
+  "Handle the case where no numbers are entered before the stop value"
+ ],
+ "it-005": [
+  "Create an empty list to store the reversed elements",
+  "Iterate over each item in the original list",
+  "Insert each item at the beginning of the new list to reverse the order",
+  "Return the new list with the reversed elements"
+ ],
+ "it-010": [
+  "Define the base case for the recursion",
+  "Handle the case where the input number is negative",
+  "Implement the recursive formula for calculating the factorial",
+  "Identify the stopping condition for the recursion"
+ ],
+ "it-007": [
+  "Split the input sentence into individual words",
+  "Create a dictionary to store the frequency of each word",
+  "Iterate through each word and update its frequency in the dictionary",
+  "Handle cases where a word is encountered for the first time and cases where it has been seen before"
+ ],
+ "it-013": [
+  "Determine the remainder of the decimal number when divided by 2 to generate binary digits",
+  "Use a loop to repeatedly divide the decimal number by 2 until it becomes 0",
+  "Prepend each remainder to a string to build the binary representation",
+  "Handle the special case where the decimal number is 0"
+ ],
+ "it-009": [
+  "Remove non-alphanumeric characters and ignore case from the input string",
+  "Reverse the cleaned string",
+  "Compare the cleaned string with its reverse to determine if it's a palindrome"
+ ],
+ "it-014": [
+  "Define private fields for name and gpa",
+  "Create a constructor that initializes these fields",
+  "Implement getters and setters for name and gpa",
+  "Validate the gpa value to be within the range 0 to 4 in the setter",
+  "Handle invalid gpa values by throwing an exception"
+ ],
+ "it-018": [
+  "Determine why the compiler does not recognize the fetch() method",
+  "Identify the relationship between the declared variable type and accessible methods",
+  "Decide on a solution approach to make the fetch() method accessible",
+  "Understand the implications of type safety and clarity in the chosen solution"
+ ],
+ "it-017": [
+  "Initialize the account with a balance",
+  "Implement a method to add funds to the account",
+  "Implement a method to remove funds from the account while checking for sufficient balance",
+  "Handle invalid transactions by raising an exception"
+ ],
+ "it-011": [
+  "Create a data structure to track unique items encountered so far",
+  "Iterate over the input list to process each item",
+  "Check if an item has been encountered before to decide whether to include it in the result",
+  "Add unique items to the result while preserving the original order",
+  "Use a separate data structure to store the result"
+ ],
+ "it-006": [
+  "Identify the source of the discrepancy between the expected and actual results",
+  "Understand how the range function works in Python",
+  "Adjust the range to include the desired end value",
+  "Verify the corrected code produces the expected output"
+ ],
+ "it-023": [
+  "Define classes to represent books, members, loans, and fines",
+  "Establish relationships between classes to reflect the library system",
+  "Implement methods for borrowing and returning books",
+  "Create a mechanism to track and calculate fines for overdue loans",
+  "Use attributes to store relevant data for each class"
+ ],
+ "it-025": [
+  "Define the key differences between composition and inheritance",
+  "Identify the limitations and potential drawbacks of using inheritance",
+  "Determine the correct relationship between the Car and Engine classes",
+  "Apply composition to redesign the Car class with an Engine object as a member",
+  "Implement delegation of tasks from the Car class to the Engine object"
+ ],
+ "it-024": [
+  "Define a subject class that manages a list of observers",
+  "Create a method to notify all observers of changes",
+  "Implement a way to attach and detach observers from the subject",
+  "Design a display class that updates itself when notified by the subject",
+  "Develop a weather station class that extends the subject and updates the temperature"
+ ],
+ "it-022": [
+  "Ensure thread safety for the Singleton pattern implementation",
+  "Implement lazy initialization for the database connection",
+  "Use synchronization to prevent multiple instances of the connection manager",
+  "Handle potential exceptions when establishing a database connection",
+  "Implement a mechanism to ensure visibility of the instance and connection across threads"
+ ],
+ "it-026": [
+  "Define a class with two generic fields",
+  "Create a constructor to initialize the fields",
+  "Implement getter methods for the fields",
+  "Design a method to create a new pair with the elements swapped",
+  "Use the generic type parameters to ensure type safety in the swap method"
+ ],
+ "it-027": [
+  "Implement a loop to iterate through each element in the input array",
+  "Compare each element to the target value and return its index if a match is found",
+  "Handle the case where the target is not found in the array",
+  "Determine the time complexity of the search algorithm based on the number of elements in the array"
+ ],
+ "it-021": [
+  "Define an abstract base class for vehicles that declares a toll calculation method",
+  "Create concrete subclasses for each vehicle type that implement the toll calculation method",
+  "Design a separate class responsible for calculating tolls based on a given vehicle object",
+  "Use polymorphism to allow the toll calculator to work with different vehicle types without explicit type checking"
+ ],
+ "it-028": [
+  "Determine the middle index of the current search interval",
+  "Compare the middle element to the target to decide which half to discard",
+  "Repeat the search process until the target is found or the search interval is empty",
+  "Understand why a sorted array is necessary for the algorithm to work correctly"
+ ],
+ "it-030": [
+  "Create a data structure to store the opening brackets encountered so far",
+  "Map each closing bracket to its corresponding opening bracket",
+  "Develop a method to compare the top of the stack with the expected opening bracket when a closing bracket is encountered",
+  "Determine the condition for the string to be considered balanced based on the final state of the stack"
+ ],
+ "it-032": [
+  "Implement a nested loop structure to compare and swap adjacent elements",
+  "Determine the condition to terminate the algorithm early if the array is already sorted",
+  "Calculate the best-case time complexity when the input array is already sorted",
+  "Calculate the worst-case time complexity when the input array is reverse sorted",
+  "Use a flag to track if any swaps occurred during an iteration"
+ ],
+ "it-031": [
+  "Implement a class with methods to add and remove elements",
+  "Use two stacks to store elements, one for enqueue and one for dequeue operations",
+  "Transfer elements from one stack to the other when necessary to maintain queue order",
+  "Handle the case where the queue is empty and an element is attempted to be removed",
+  "Ensure the oldest element is always removed first when dequeuing"
+ ],
+ "it-034": [
+  "Initialize pointers to keep track of the current and previous nodes",
+  "Iterate through the linked list to reverse the direction of the pointers",
+  "Update the next pointer of each node to point to the previous node",
+  "Move the pointers one step forward after reversing each node's pointer",
+  "Return the new head of the reversed linked list"
+ ],
+ "it-029": [
+  "Implement a method to add an item to the top of the stack",
+  "Implement a method to remove and return the top item from the stack",
+  "Handle the case where the stack is empty for both removal and peek operations",
+  "Implement a method to return the top item without removing it",
+  "Determine a way to store the stack's items"
+ ],
+ "it-037": [
+  "Determine the base case for the recursion",
+  "Calculate the height of the left and right subtrees",
+  "Combine the heights of the subtrees to find the total height of the tree"
+ ],
+ "it-033": [
+  "Divide the input array into two halves until each subarray has one element",
+  "Merge the subarrays back together in sorted order",
+  "Compare elements from the subarrays and place the smaller one first in the merged array",
+  "Handle any remaining elements in the subarrays after the comparison loop",
+  "Print the initial and final states of the array to trace the sorting process"
+ ],
+ "it-036": [
+  "Define a data structure to represent a node in the binary search tree",
+  "Implement a method to insert a new node into the binary search tree while maintaining the search tree property",
+  "Develop a recursive approach to traverse the binary search tree in-order and print the node values",
+  "Ensure the insertion method correctly handles the case where the tree is empty",
+  "Implement a recursive function to traverse the left subtree, visit the current node, and then traverse the right subtree"
+ ],
+ "it-038": [
+  "Keep track of visited nodes to avoid revisiting them",
+  "Use a queue data structure to manage nodes to be visited",
+  "Explore neighbors of each node and add unvisited ones to the queue",
+  "Maintain a separate data structure to store the order of visited nodes"
+ ],
+ "it-035": [
+  "Initialize two pointers that move at different speeds through the linked list",
+  "Determine the condition under which the two pointers will meet if a cycle exists",
+  "Identify the condition that indicates the absence of a cycle and terminates the algorithm",
+  "Ensure the algorithm uses a constant amount of extra space"
+ ],
+ "it-041": [
+  "Identify the table that stores enrollment information",
+  "Determine the column that uniquely identifies each course",
+  "Determine the column that uniquely identifies each student",
+  "Use a grouping mechanism to aggregate students by course",
+  "Apply a counting function to calculate the number of students in each course"
+ ],
+ "it-040": [
+  "Filter the students to include only those with a GPA above 3.0",
+  "Select the relevant student information to display",
+  "Order the results by GPA in descending order"
+ ],
+ "it-039": [
+  "Create a data structure to store numbers and their indices",
+  "Calculate the complement of each number with respect to the target",
+  "Check if the complement exists in the data structure and return the corresponding indices if found",
+  "Iterate through the array in a way that allows for efficient lookups of previously seen numbers"
+ ],
+ "it-044": [
+  "Identify the tables that store student and enrollment information",
+  "Determine the join type to use for finding non-enrolled students",
+  "Specify the condition to filter out enrolled students",
+  "Select the relevant columns to display for non-enrolled students"
+ ],
+ "it-045": [
+  "Determine the highest salary in the Employee table",
+  "Filter out the highest salary from consideration",
+  "Find the maximum salary among the remaining salaries"
+ ],
+ "it-042": [
+  "Identify the table that stores enrollment data",
+  "Determine the column that represents the number of enrolled students",
+  "Filter the results to include only groups with more than 30 students",
+  "Group the data by unique course identifiers"
+ ],
+ "it-048": [
+  "Define what a database transaction is and its purpose",
+  "Explain the ACID properties and their roles in ensuring database integrity",
+  "Apply the ACID properties to a real-world example, such as a bank transfer",
+  "Describe how atomicity ensures all-or-nothing execution of transactions",
+  "Discuss how consistency maintains database invariants and rules",
+  "Illustrate how isolation and durability guarantee reliable transaction processing"
+ ],
+ "it-047": [
+  "Identify the entities involved in the hospital system",
+  "Determine the attributes for each entity",
+  "Establish the relationships between entities including cardinalities",
+  "Resolve many-to-many relationships with additional entities",
+  "Represent one-to-many relationships with foreign keys"
+ ],
+ "it-046": [
+  "Identify the functional dependencies between attributes",
+  "Eliminate partial dependencies by creating separate tables",
+  "Eliminate transitive dependencies to achieve 3NF",
+  "Define primary and foreign keys for each table",
+  "Ensure each table has a single responsibility and minimal data redundancy"
+ ],
+ "it-050": [
+  "Describe how an index enables quick location and retrieval of specific data rows",
+  "Explain the trade-offs between index benefits for read operations and potential overhead for write operations",
+  "Identify scenarios where adding an index may not improve or may even worsen query performance",
+  "Determine the impact of index storage requirements on database performance",
+  "Analyze how query complexity affects the effectiveness of an index in speeding up queries"
+ ],
+ "it-043": [
+  "Define the purpose and outcome of an INNER JOIN in the context of the students and enrollments tables",
+  "Explain how an INNER JOIN handles matching and non-matching rows between two tables",
+  "Describe the difference in results between an INNER JOIN and a LEFT JOIN",
+  "Identify how a LEFT JOIN handles rows from the left table that have no match in the right table",
+  "Determine the conditions under which a row will have a NULL value in the result of a LEFT JOIN"
+ ],
+ "it-052": [
+  "Define the structure of the customers table with relevant attributes",
+  "Determine the attributes and relationships for the products table",
+  "Establish the orders table with its attributes and foreign key to customers",
+  "Design the order items table to link orders with products",
+  "Identify the primary keys for each table to ensure unique identification",
+  "Specify the foreign keys to maintain relationships between tables"
+ ],
+ "it-053": [
+  "Create a form element with a submit method",
+  "Add input fields for name and email with corresponding labels",
+  "Make both input fields required for form submission",
+  "Include a submit button to complete the form",
+  "Specify the action URL for form submission"
+ ],
+ "it-054": [
+  "Set the display property of the container to flex",
+  "Center the child horizontally using a flexbox alignment property",
+  "Center the child vertically using a flexbox alignment property",
+  "Ensure the container has a height to allow vertical centering"
+ ],
+ "it-055": [
+  "Identify the HTML element that will trigger the text change",
+  "Select the HTML element whose text will be changed",
+  "Attach an event listener to the trigger element to respond to a click event",
+  "Define the new text to replace the original text",
+  "Update the text of the selected element in response to the event"
+ ],
+ "it-056": [
+  "Create a container element to hold the columns",
+  "Define a layout method to distribute the columns evenly",
+  "Apply a media query to change the layout on smaller screens",
+  "Specify a screen width threshold for the layout change",
+  "Style the columns to take up full width on smaller screens"
+ ],
+ "it-057": [
+  "Fetch data from a JSON API",
+  "Parse the API response as JSON",
+  "Extract user names from the parsed data",
+  "Create DOM elements to display the user names",
+  "Append the user name elements to a container element"
+ ],
+ "it-051": [
+  "Identify the appropriate window function to use for ranking",
+  "Determine the column to partition the data by",
+  "Specify the column to order the data by and the direction of the order",
+  "Select the relevant columns to include in the query result"
+ ],
+ "it-058": [
+  "Describe the scope of each variable declaration type",
+  "Explain how hoisting affects each type",
+  "Provide an example of a bug that each type can cause or prevent",
+  "Compare the reassignment capabilities of let and const",
+  "Discuss the implications of block-scoped versus function-scoped variables"
+ ],
+ "it-060": [
+  "Define a route parameter to capture the product id from the URL",
+  "Implement a method to search for a product by id in the data store",
+  "Handle the case when the product is found and return it as JSON",
+  "Handle the case when the product is not found and return a 404 status"
+ ],
+ "it-059": [
+  "Understand that asynchronous functions return immediately before completing their operation",
+  "Recognize that console.log runs before the data is fully loaded",
+  "Identify the need to wait for the asynchronous operation to complete before logging the data",
+  "Determine the appropriate method to wait for the operation to complete, such as using.then or await"
+ ],
+ "it-049": [
+  "Start a transaction to group the updates as a single, all-or-nothing operation",
+  "Update the balances of both the sender's and receiver's accounts within the transaction",
+  "Implement error handling to roll back the transaction if any update fails",
+  "Commit the transaction if all updates succeed to make the changes permanent"
+ ],
+ "it-062": [
+  "Use a parameterized query or prepared statement to separate code from user input",
+  "Replace user input in the SQL query with placeholders",
+  "Pass user input as a separate array to the query execution function",
+  "Ensure the database library properly escapes the user input"
+ ],
+ "it-061": [
+  "Describe how a session cookie is generated and sent to a client browser",
+  "Explain how a session cookie is used to maintain a user's session state",
+  "Identify a method by which an attacker can steal a session ID",
+  "Describe a common attack vector used to steal session IDs",
+  "Explain how a stolen session ID can be used to impersonate a user"
+ ],
+ "it-064": [
+  "Implement client-side validation using JavaScript to check user input before form submission",
+  "Validate user input data such as username, email, and password using specific criteria",
+  "Use a regular expression to validate the email address format",
+  "Explain why server-side validation is necessary for security and data integrity",
+  "Describe how server-side validation provides a fallback for client-side validation failures or disabilities"
+ ],
+ "it-066": [
+  "Define the characteristics of functional requirements",
+  "Provide examples of functional requirements for a food delivery app",
+  "Define the characteristics of non-functional requirements",
+  "Provide examples of non-functional requirements for a food delivery app",
+  "Explain the importance of understanding both types of requirements in system development"
+ ],
+ "it-065": [
+  "Define the main features of the student timetable app that need to be captured in user stories",
+  "Identify the key actions students want to perform with the app",
+  "Determine the essential information that must be displayed for each feature",
+  "Establish the validation and error handling requirements for user input",
+  "Decide on the notification and reminder functionality",
+  "Specify the settings and configuration options for the app"
+ ],
+ "it-068": [
+  "Identify the primary actors that interact with the ATM",
+  "Determine the main use cases that the ATM supports",
+  "Define the relationships between the actors and the use cases",
+  "Categorize the use cases into customer, maintenance, and bank activities",
+  "Develop a visual representation of the use case diagram"
+ ],
+ "it-063": [
+  "Define the resource endpoints for users, lists, and tasks",
+  "Determine the appropriate HTTP methods for each endpoint",
+  "Specify the request and response bodies for each endpoint",
+  "Assign relevant status codes for each endpoint's response",
+  "Organize endpoints to follow RESTful design principles"
+ ],
+ "it-069": [
+  "Identify the normal operating range of the function to test typical usage",
+  "Determine the edge cases that the function should handle",
+  "Decide on the appropriate assertions to validate the function's output",
+  "Select the input values that will trigger any exceptions the function is expected to raise",
+  "Choose a testing framework and structure the tests accordingly"
+ ],
+ "it-071": [
+  "Identify the main actors involved in the online shopping process",
+  "Determine the sequence of events for a customer to place an order",
+  "Describe the communication between the web browser and the server",
+  "Outline the customer's actions and interactions with the web browser",
+  "Specify the payment processing steps",
+  "Define the order confirmation and notification process"
+ ],
+ "it-072": [
+  "Identify the code smells in the given function",
+  "Break down the long function into smaller single-responsibility functions",
+  "Decouple the functions from specific services like database and email",
+  "Orchestrate the process using a main function that handles exceptions",
+  "Implement input validation and error handling mechanisms"
+ ],
+ "it-067": [
+  "Identify the key characteristics of the Waterfall and Scrum methodologies",
+  "Evaluate the pros and cons of each methodology in the context of a university group project",
+  "Determine which methodology is more suitable for a project with potentially changing requirements and tight deadlines",
+  "Consider the importance of team engagement, flexibility, and risk management in the project's success",
+  "Justify the recommendation of one methodology over the other based on the project's specific needs"
+ ],
+ "it-074": [
+  "Create a branching model that separates stable and development code",
+  "Implement a workflow for creating and managing feature branches",
+  "Resolve merge conflicts by editing files and committing changes",
+  "Merge feature branches into the main development branch",
+  "Establish best practices for frequent updates and code reviews"
+ ],
+ "it-073": [
+  "Determine the complexity of each component of the login feature",
+  "Estimate the effort required for each component",
+  "Assess the uncertainty associated with each component",
+  "Calculate the total story points based on the complexity, effort, and uncertainty",
+  "Consider security measures and their impact on the estimate",
+  "Evaluate the user experience and accessibility aspects of the login feature"
+ ],
+ "it-070": [
+  "Define unit testing as verifying individual code components work correctly in isolation",
+  "Explain integration testing as checking the interactions between code units to ensure they function together as expected",
+  "Describe system testing as a comprehensive evaluation of the entire integrated system to ensure it meets all requirements and works from end to end"
+ ],
+ "it-077": [
+  "Distinguish between connection-oriented and connectionless protocols",
+  "Identify the key characteristics of TCP and UDP",
+  "Determine the trade-offs between reliability and speed in protocol selection",
+  "Select applications suited to TCP and UDP based on their requirements",
+  "Understand the implications of packet loss and retransmission on application performance"
+ ],
+ "it-075": [
+  "Identify potential risks that could impact the mobile app project",
+  "Assess the likelihood and impact of each risk",
+  "Develop mitigation strategies to address each risk",
+  "Prioritize risks based on their likelihood and impact",
+  "Create a comprehensive risk register to track and manage risks"
+ ],
+ "it-078": [
+  "Identify the components of the URL",
+  "Translate the domain name to an IP address",
+  "Establish a connection with the server",
+  "Send a request to the server and receive a response",
+  "Render the page based on the response",
+  "Load additional resources as needed"
+ ],
+ "it-081": [
+  "Identify the seven layers of the OSI model and their functions",
+  "Map HTTP to the correct OSI layer",
+  "Map TCP to the correct OSI layer",
+  "Map IP to the correct OSI layer",
+  "Map Ethernet to the correct OSI layer"
+ ],
+ "it-082": [
+  "Determine the role of caching in DNS resolution",
+  "Identify the sequence of DNS servers involved in resolving a domain name",
+  "Explain how a DNS resolver retrieves an IP address from an authoritative DNS server",
+  "Describe how the Time to Live value affects cache updates",
+  "Outline the steps a client takes to request and receive an IP address from a DNS resolver"
+ ],
+ "it-076": [
+  "Define the SOLID principles and their purpose",
+  "Identify a class that violates the Single Responsibility Principle",
+  "Explain why the class violates the principle",
+  "Split the class into separate classes each with a single responsibility",
+  "Ensure each new class has only one reason to change"
+ ],
+ "it-083": [
+  "Describe the purpose of each step in the TCP three-way handshake",
+  "Explain how sequence numbers are synchronized between the client and server",
+  "Identify the benefits of using three steps instead of two for connection establishment",
+  "Determine the role of acknowledgments in ensuring reliable data transmission"
+ ],
+ "it-084": [
+  "Describe the initial message a laptop sends to the network to obtain an IP address",
+  "Explain how the DHCP server responds to the laptop's request for an IP address",
+  "Identify the message the laptop sends to confirm acceptance of the offered IP address",
+  "Outline the final confirmation message sent by the DHCP server to the laptop"
+ ],
+ "it-080": [
+  "Determine the number of bits to increase the subnet mask by to create four equal subnets",
+  "Calculate the new subnet mask based on the increased bits",
+  "Find the address range for each subnet",
+  "Calculate the number of addresses in each subnet",
+  "Identify the network, first usable, last usable, and broadcast addresses for each subnet"
+ ],
+ "it-079": [
+  "Determine the subnet mask from the given CIDR notation",
+  "Calculate the network address by performing a bitwise AND operation between the IP address and the subnet mask",
+  "Calculate the broadcast address by performing a bitwise OR operation between the IP address and the inverted subnet mask",
+  "Convert the IP address and subnet mask to binary for calculation purposes",
+  "Calculate the number of usable hosts by determining the total number of addresses in the subnet and subtracting 2"
+ ],
+ "it-085": [
+  "Explain how NAT allows multiple devices to share a single public IP address",
+  "Describe the role of a NAT device in modifying packet source IP addresses",
+  "Identify the purpose of a translation table in NAT",
+  "Discuss the benefits of using private IP addresses for home devices",
+  "Explain how NAT contributes to IP address conservation and security"
+ ],
+ "it-089": [
+  "Define the key characteristics of a process",
+  "Describe the key characteristics of a thread",
+  "Explain how processes and threads differ in terms of memory space and resource sharing",
+  "Identify the implications of these differences for communication and data sharing between processes and threads",
+  "Compare the overhead of managing processes versus threads"
+ ],
+ "it-087": [
+  "Determine the IP addresses of the interfaces on both routers that connect to their respective networks",
+  "Identify the subnet masks for both networks",
+  "Configure static routes on both routers to point to each other's networks via the identified IP addresses",
+  "Specify the correct next-hop IP addresses for the static routes on each router"
+ ],
+ "it-090": [
+  "Identify the different states a process can be in",
+  "Describe the conditions for each state transition",
+  "Explain the actions taken during each transition",
+  "Illustrate the process state diagram",
+  "Define the role of the CPU scheduler in state transitions",
+  "Determine the final state of a process after completion or termination"
+ ],
+ "it-088": [
+  "Distinguish between symmetric and asymmetric encryption methods",
+  "Explain the role of each encryption type in secure data transmission",
+  "Describe how HTTPS utilizes both symmetric and asymmetric encryption for secure communication",
+  "Identify the key exchange process in HTTPS using asymmetric encryption",
+  "Understand the use of symmetric encryption for bulk data transfer in HTTPS"
+ ],
+ "it-091": [
+  "Determine the order of process execution for both FCFS and SJF scheduling algorithms",
+  "Calculate the completion time for each process under both algorithms",
+  "Compute the waiting time for each process in both scenarios",
+  "Calculate the average waiting time for all processes under each algorithm",
+  "Compare the average waiting times resulting from FCFS and SJF algorithms"
+ ],
+ "it-094": [
+  "Identify the four necessary conditions for deadlock",
+  "Explain how each condition contributes to a deadlock situation",
+  "Determine a method to prevent each of the four necessary conditions for deadlock",
+  "Describe how preventing each condition avoids deadlock",
+  "Relate the prevention methods to resource allocation and process management in concurrent systems"
+ ],
+ "it-092": [
+  "Determine the order in which processes are executed based on the Round Robin scheduling algorithm",
+  "Calculate the remaining execution time for each process after each time quantum",
+  "Update the completion time for each process when its execution is finished",
+  "Manage the ready queue to ensure processes are executed in a circular manner",
+  "Keep track of the current time and increment it according to the time quantum or remaining process time"
+ ],
+ "it-095": [
+  "Implement mutual exclusion to prevent concurrent access to the shared buffer",
+  "Manage the number of empty and full slots in the buffer using semaphores",
+  "Synchronize producer and consumer processes to ensure correct buffer access and modification",
+  "Handle wrap-around indexing for the buffer to ensure efficient use of slots",
+  "Use semaphore wait and signal operations to coordinate producer and consumer threads"
+ ],
+ "it-097": [
+  "Determine the initial state of the frames",
+  "Implement the FIFO page replacement algorithm to count page faults",
+  "Implement the LRU page replacement algorithm to count page faults",
+  "Compare the total page faults for both algorithms",
+  "Identify the page replacement policy for each algorithm"
+ ],
+ "it-093": [
+  "Identify the shared data that is being accessed by multiple threads",
+  "Describe the sequence of events that leads to a race condition",
+  "Explain how a mutex prevents simultaneous access to shared data",
+  "Determine the expected outcome when multiple threads increment a shared counter without synchronization",
+  "Describe the role of acquire and release operations in mutex synchronization"
+ ],
+ "it-099": [
+  "Create a new process using the fork() function",
+  "Determine whether the current process is the parent or child",
+  "Retrieve and print the process ID of the current process",
+  "Handle the case where fork() fails"
+ ],
+ "it-098": [
+  "Define internal fragmentation as the waste of memory within an allocated block",
+  "Describe external fragmentation as the division of free memory into small, non-contiguous blocks",
+  "Explain how internal fragmentation results from allocating more memory than a process needs",
+  "Discuss how external fragmentation prevents allocation of large contiguous blocks despite sufficient total free memory"
+ ],
+ "it-096": [
+  "Divide the virtual address space into fixed-size blocks called pages and the physical memory into blocks of the same size called frames",
+  "Identify the components of a logical address, including page number and offset",
+  "Describe the role of a page table in mapping logical page numbers to physical frame numbers",
+  "Explain the step-by-step process of translating a logical address to a physical address using the page table",
+  "Combine the frame number with the offset to form the physical address"
+ ],
+ "it-100": [
+  "Determine the current date in a suitable format for naming the backup archive",
+  "Create a directory for storing backup archives if it does not already exist",
+  "Select all.txt files from the specified source directory for inclusion in the backup",
+  "Use a command-line archiving tool to create a compressed backup archive of the selected files"
+ ],
+ "it-012": [
+  "Check that the password length is at least 8 characters.",
+  "Verify that the password contains at least one digit.",
+  "Verify that the password contains at least one uppercase letter.",
+  "Combine the three conditions so that the function returns true only if all are satisfied."
+ ],
+ "it-016": [
+  "Define an abstract base class for shapes that declares an abstract area method to enforce implementation in subclasses.",
+  "Implement a Circle subclass that stores a radius and calculates its area using the formula πr².",
+  "Implement a Rectangle subclass that stores width and height and calculates its area as the product of these dimensions.",
+  "Ensure both concrete subclasses inherit from the abstract base class and provide concrete implementations of the area method."
+ ],
+ "it-015": [
+  "Define method overloading as having multiple methods with the same name but different parameter lists within the same class, resolved at compile time.",
+  "Define method overriding as a subclass providing a new implementation for a method with the same signature as in its superclass, resolved at runtime.",
+  "Provide a valid Java code example demonstrating overloading by defining multiple methods with the same name but different parameters in a single class.",
+  "Provide a valid Java code example demonstrating overriding by defining a subclass that redefines a method inherited from its superclass.",
+  "Explain that overloading relies on static binding (compile-time) based on argument types, while overriding relies on dynamic binding (runtime) based on the actual object type."
+ ],
+ "it-020": [
+  "Implement the equals method to handle reference identity, null checks, and class type verification before comparing fields.",
+  "Compare both x and y coordinates to determine if two Point objects are logically equal.",
+  "Implement the hashCode method to incorporate both x and y coordinates using a standard combination formula.",
+  "Ensure the hashCode implementation satisfies the contract that equal objects must produce identical hash codes."
+ ],
+ "it-019": [
+  "Identify that interfaces are used to define contracts or roles for unrelated classes, particularly when multiple inheritance of types is required.",
+  "Identify that abstract classes are used to share common implementation, state, or utility methods within a single inheritance hierarchy.",
+  "Construct a payment-processing example that defines an interface representing the payment contract (e.g., process or cancel methods).",
+  "Construct a payment-processing example that defines an abstract class providing shared logic or state (e.g., API credentials or HTTP helpers) for specific gateways.",
+  "Explain the specific scenario where an interface is preferred, such as when a class must extend another superclass or when defining a cross-cutting role like 'Refundable'.",
+  "Explain the specific scenario where an abstract class is preferred, such as when multiple payment providers share common configuration or request-handling code."
+ ],
+ "it-086": [
+  "Identify that the successful ping to an IP address confirms network connectivity but does not verify DNS resolution, isolating the issue to name resolution or application-layer traffic.",
+  "Verify DNS functionality by attempting to resolve the hostname to an IP address using command-line tools or by pinging the domain name directly.",
+  "Check for local configuration overrides, such as entries in the hosts file or active proxy/VPN settings, that might redirect or block traffic to the specific domain.",
+  "Test for protocol-specific issues by forcing IPv4 connectivity or checking if the problem persists across different browsers or command-line HTTP clients to rule out browser-specific or IPv6 failures.",
+  "Inspect firewall and security software settings to ensure that outbound HTTP (port 80) and HTTPS (port 443) traffic is not being blocked while ICMP is allowed.",
+  "Diagnose potential path MTU or packet fragmentation issues by testing with large ping packets to see if TCP connections fail due to dropped large packets."
  ]
 }

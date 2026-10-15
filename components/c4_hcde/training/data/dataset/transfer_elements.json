@@ -1,0 +1,139 @@
+{
+ "tr-002": [
+  "Calculate the contribution margin per unit by subtracting the variable cost from the selling price.",
+  "Determine the break-even point in units by dividing the total fixed costs by the contribution margin per unit.",
+  "Calculate the break-even revenue by multiplying the break-even quantity in units by the selling price per unit."
+ ],
+ "tr-003": [
+  "Define the Product by identifying the core banking functionalities, differentiating features, and the brand promise of the mobile app.",
+  "Determine the Price strategy by outlining specific monetization models such as free tiers, subscription fees, or transaction charges.",
+  "Describe the Place (Distribution) by specifying the digital channels and platforms through which the app is accessed and downloaded.",
+  "Detail the Promotion tactics by listing specific marketing activities and campaigns used to communicate benefits and drive user acquisition."
+ ],
+ "tr-001": [
+  "Identify internal strengths by leveraging the café's existing local brand loyalty, unique menu items, and flexible management structure.",
+  "Identify internal weaknesses by recognizing the lack of delivery infrastructure, limited kitchen space, and cash-flow constraints for initial setup costs.",
+  "Identify external opportunities by targeting growing local demand, potential partnerships with delivery platforms, and the introduction of delivery-specific menu items.",
+  "Identify external threats by assessing competition from established chains, logistical challenges like traffic congestion, and regulatory or cost pressures.",
+  "Develop a practical action plan that addresses delivery zone mapping, packaging solutions, and staff training for the new service model."
+ ],
+ "tr-004": [
+  "Identify the correct formula for the current ratio as the division of current assets by current liabilities.",
+  "Perform the division of 4.2 by 2.8 to calculate the numerical value of the ratio.",
+  "State the final calculated current ratio as 1.5.",
+  "Interpret the ratio by explaining that the company has 1.5 units of current assets for every 1 unit of current liabilities.",
+  "Assess the company's liquidity status by noting that a ratio above 1 indicates the ability to meet short-term obligations without selling long-term assets."
+ ],
+ "tr-006": [
+  "Accurately describe the core structure of Maslow's hierarchy of needs, including the five levels and the principle of hierarchical progression.",
+  "Accurately describe Herzberg's two-factor theory, distinguishing between hygiene factors (which prevent dissatisfaction) and motivators (which create satisfaction).",
+  "Identify the specific characteristics of call centre work, such as repetitive tasks, high monitoring, low autonomy, and shift work, that impact employee motivation.",
+  "Apply both theories to the call centre context to explain the specific drivers of staff turnover, such as poor working conditions or lack of career growth.",
+  "Select Herzberg's two-factor theory as the superior explanation and justify this choice by highlighting its specific focus on workplace factors and its ability to differentiate between preventing dissatisfaction and fostering commitment."
+ ],
+ "tr-005": [
+  "Identify the specific factors influencing the threat of new entrants, such as regulatory licensing requirements, technology accessibility, and network effects of incumbents.",
+  "Assess the bargaining power of suppliers (drivers) by analyzing their independence, turnover rates, and the availability of alternative gig-work options.",
+  "Evaluate the bargaining power of buyers (riders) based on price sensitivity, low switching costs, and expectations for service quality and payment methods.",
+  "Determine the threat of substitutes by comparing ride-hailing against public transport, private car ownership, and local alternatives like motorcycle taxis.",
+  "Analyze the intensity of industry rivalry by identifying key competitors (e.g., PickMe, Uber) and their strategies regarding pricing, promotions, and service diversification.",
+  "Synthesize the five forces to provide an overall assessment of market profitability and identify strategic focus areas for sustainable growth."
+ ],
+ "tr-007": [
+  "Identify the initial investment as a negative cash flow at time 0 and the annual returns as positive cash flows for years 1 through 4.",
+  "Calculate the present value of each annual cash flow by discounting it at the 12% rate for the corresponding number of years.",
+  "Sum the present values of the four annual cash flows to determine the total present value of the inflows.",
+  "Subtract the initial investment from the total present value of the inflows to compute the Net Present Value (NPV).",
+  "State the final NPV value (approximately Rs. 125,967).",
+  "Conclude that the project should be accepted because the calculated NPV is positive."
+ ],
+ "tr-009": [
+  "Define transformational leadership by its focus on inspiring employees through a shared vision, intrinsic motivation, and personal development.",
+  "Define transactional leadership by its reliance on structured exchanges of rewards for performance and penalties for non-compliance to achieve short-term goals.",
+  "Provide a specific workplace example illustrating a leader using transformational techniques to boost morale or drive innovation.",
+  "Provide a specific workplace example illustrating a leader using transactional techniques to manage routine tasks or enforce performance metrics.",
+  "Contrast the two styles by highlighting key differences such as the source of motivation (intrinsic vs. extrinsic) or the leader's primary role (visionary vs. monitor)."
+ ],
+ "tr-011": [
+  "Include a clear subject line that indicates the email is a request to reschedule a meeting.",
+  "State the specific meeting details (tomorrow at 9 am) and the reason for the conflict (a university exam).",
+  "Propose a specific alternative time or express flexibility to accommodate the manager's schedule.",
+  "Maintain a professional and polite tone appropriate for communicating with a manager.",
+  "Include a standard professional email closing with the sender's name and contact information."
+ ],
+ "tr-013": [
+  "Identify the need to calculate a conditional sum of sales for each specific month to serve as the denominator.",
+  "Construct a formula (such as SUMIFS) that sums the sales values based on the month in the current row.",
+  "Divide the individual salesperson's sales value by the calculated monthly total to determine the share.",
+  "Apply percentage formatting to the result cells to display the decimal as a percentage.",
+  "Ensure the formula uses appropriate absolute and relative references so it can be copied down to calculate the share for all rows."
+ ],
+ "tr-012": [
+  "Formulate a clear, definitive recommendation on whether to switch to daily stand-ups, supported by a concise executive summary.",
+  "Analyze the current weekly stand-up format to identify specific inefficiencies, such as delayed issue detection or outdated information.",
+  "Articulate the specific benefits of daily stand-ups, including improved transparency, faster blocker resolution, and better team alignment.",
+  "Identify potential drawbacks of the new format and propose concrete mitigation strategies to address concerns like meeting fatigue or scheduling conflicts.",
+  "Design a structured implementation plan, such as a time-boxed pilot period, that includes specific actions for rollout and data collection.",
+  "Define measurable success metrics to objectively evaluate the effectiveness of the change and guide the final adoption decision."
+ ],
+ "tr-014": [
+  "Identify the cell containing the customer ID as the lookup value.",
+  "Specify the data range on the other sheet that includes both the customer IDs and the credit limits.",
+  "Determine the correct column index number within the specified range that corresponds to the credit limit.",
+  "Set the match type to exact match to ensure the correct customer is retrieved.",
+  "Construct the formula using the appropriate lookup function (e.g., VLOOKUP) with the identified arguments."
+ ],
+ "tr-015": [
+  "Structure the presentation to fit within the 5-minute limit by allocating specific time slots to each section.",
+  "Quantify the magnitude of the sign-up drop using specific metrics and comparisons to establish the baseline problem.",
+  "Identify and present distinct root causes for the decline, supporting each with specific data or evidence.",
+  "Propose a concrete action plan that includes specific corrective measures, assigned owners, and timelines.",
+  "Conclude with a summary of key findings and a defined follow-up schedule to monitor the effectiveness of the proposed actions."
+ ],
+ "tr-016": [
+  "Consolidate all seven tasks (five work, two university) into a single list to visualize the total workload.",
+  "Determine the specific deadline and estimated time effort required for each individual task.",
+  "Assign a subjective importance or impact rating to each task to distinguish high-stakes items from routine ones.",
+  "Calculate a composite priority score for each task by combining its urgency (deadline proximity) and importance.",
+  "Rank the tasks in descending order of their calculated scores to establish the execution sequence.",
+  "Allocate specific time blocks for the top-priority tasks and include a buffer for unexpected interruptions."
+ ],
+ "tr-017": [
+  "Identify and separate the four distinct topics from the raw notes: budget approval, vendor list task, launch date change, and legal review requirement.",
+  "Format the identified topics into a structured summary section (e.g., a table or list) that clearly states the decision or status for each item.",
+  "Extract specific action items from the notes, explicitly assigning the owner (Nimal) and deadline (Friday) to the vendor list task.",
+  "Derive additional implied action items from the decisions, such as confirming the specific launch date in March and conducting the legal review.",
+  "Structure the output into two distinct sections: a general meeting summary/decisions section and a dedicated action items section with columns for owner and deadline."
+ ],
+ "tr-018": [
+  "Recognize that comparing raw complaint counts is misleading due to the change in customer base size, and identify the complaint rate (complaints per customer) as the correct metric for comparison.",
+  "Calculate the complaint rate for the initial period by dividing the number of complaints by the number of customers.",
+  "Calculate the complaint rate for the current period by dividing the number of complaints by the number of customers.",
+  "Compare the two calculated rates to determine whether the proportion of complaining customers has increased or decreased.",
+  "Conclude that service quality has not worsened (and has slightly improved) because the complaint rate decreased despite the rise in absolute complaint numbers."
+ ],
+ "tr-019": [
+  "Quantify the actual effort required for the project to provide objective justification for the three-week timeline.",
+  "Determine the optimal timing and communication channel to initiate the conversation, prioritizing early notification and direct interaction.",
+  "Structure the negotiation to acknowledge the client's needs, explain the specific risks of the original one-week deadline, and present a detailed three-week plan with clear milestones.",
+  "Propose value-adding concessions or alternative options, such as early demos, increased reporting, or paid fast-tracking, to balance the request for more time.",
+  "Formalize the agreement by sending a written summary of the new timeline and milestones to ensure mutual understanding and documentation."
+ ],
+ "tr-020": [
+  "Acknowledge and validate the specific high-quality aspects of the teammate's work to establish a positive foundation.",
+  "Objectively describe the impact of the late submissions on the team, such as delays to downstream tasks or scheduling conflicts.",
+  "Identify specific, actionable behaviors to improve timeliness, such as setting intermediate milestones or providing proactive status updates.",
+  "Offer concrete support or resources to help the teammate achieve the desired change, such as reviewing early drafts or sharing templates.",
+  "Conclude with a positive, forward-looking statement that expresses confidence in the teammate's ability to maintain quality while meeting deadlines."
+ ],
+ "tr-010": [
+  "The model output is not a valid JSON array of strings."
+ ],
+ "tr-008": [
+  "Select a multi-tier pricing architecture (e.g., entry, mid, and premium-lite) to address different customer segments within the budget market.",
+  "Set specific price points for each tier that undercut comparable imported competitors to establish a competitive advantage.",
+  "Define distinct feature sets for each tier that justify the price differences and create a clear upgrade path for customers.",
+  "Justify the strategy by explaining how the mix balances volume generation, margin contribution, and brand perception.",
+  "Incorporate tactical elements such as launch promotions, distribution channel alignment, or currency buffers to support the pricing structure."
+ ]
+}

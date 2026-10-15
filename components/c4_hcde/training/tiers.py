@@ -130,13 +130,20 @@ MODES = TIER_NAMES + [PROBE]
 PROBE_RULES = (
     "Write ONE new practice problem that tests exactly the same skill as the student's task, "
     "solvable without help in about 5 minutes.\n"
-    "It must NOT be the student's task again: change the scenario AND the data AND what exactly is asked "
-    "(for example a different number of inputs, the opposite goal, or a real-world context), so a "
-    "memorised answer to the original task does not solve it.\n"
+    "The test: a student who only memorised the answer to the original task must NOT be able to solve the "
+    "probe by copying that answer and renaming things. Changing names, nouns or the scenario alone is NOT enough.\n"
+    "Change what the student has to DO, using one of these moves:\n"
+    "- give a short buggy or incomplete solution and ask them to find and fix the problem\n"
+    "- give code, a query or a situation and ask them to predict the result and say why\n"
+    "- give a concrete new case where they must APPLY the concept to reach a decision or a number\n"
+    "  (for explain-the-concept tasks: never ask them to explain the same concept again)\n"
+    "- ask for the reverse, an extension, or the same idea under a new constraint\n"
+    "Stay on the SAME skill and topic: do not switch to a different protocol, algorithm or concept.\n"
+    "Do not include hints or the rules needed to solve it.\n"
     "Format exactly:\n"
     "Problem:\n<the problem, addressed to the student>\n\n"
     "Answer key:\n<the correct answer and the 2-4 points a correct attempt must contain>\n"
-    "Do not include hints in the problem. Keep the whole output under 220 words."
+    "Keep the whole output under 220 words."
 )
 
 
@@ -180,6 +187,23 @@ TEACHER_EXAMPLES: dict[str, str] = {
         "```\n\n"
         "Your turn: complete the loop body. Then decide: should `count_char(\"Apple\", \"a\")` return 0 or 1? "
         "That choice is yours, so tell me which you want and why."
+    ),
+    "PROBE": (
+        "Problem:\n"
+        "This function should count how often `ch` appears in `text`, but `count_char(\"banana\", \"a\")` "
+        "returns 1 instead of 3. Find the bug, explain it in one sentence, and fix it.\n"
+        "```python\n"
+        "def count_char(text, ch):\n"
+        "    for c in text:\n"
+        "        count = 0\n"
+        "        if c == ch:\n"
+        "            count += 1\n"
+        "    return count\n"
+        "```\n\n"
+        "Answer key:\n"
+        "The counter is reset to 0 on every loop pass, so only the last character counts. Move `count = 0` above "
+        "the loop. A correct attempt must: (1) locate the reset inside the loop, (2) explain why it loses earlier "
+        "matches, (3) move the initialisation before the loop."
     ),
     "EMERGENCY": (
         "```python\n"
@@ -229,7 +253,9 @@ def teacher_system_prompt(tier: str) -> str:
     if tier == PROBE:
         return ("You write short verification problems for a study assistant that checks whether a "
                 "student can now solve a kind of problem without AI help.\n\n" + PROBE_RULES +
-                "\nBe technically correct. Use Markdown code blocks for any code.")
+                "\nBe technically correct. Use Markdown code blocks for any code.\n\n"
+                "Example of a good probe for a DIFFERENT original task (match its approach, not its content):\n"
+                f"Original task: {EXAMPLE_TASK}\nProbe:\n{TEACHER_EXAMPLES[PROBE]}")
     spec = TIERS[tier]
     return (
         "You write example replies for a study assistant that regulates how much help it gives, "

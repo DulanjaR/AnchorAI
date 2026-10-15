@@ -33,6 +33,33 @@ def load_verdicts(path: Path) -> dict[tuple[str, str], dict]:
         return {(r["task_id"], r["tier"]): r for r in csv.DictReader(f) if r.get("verdict", "").strip()}
 
 
+def load_decisions(path: Path) -> dict[tuple[str, str], dict]:
+    """Extra keep/reject decisions made outside the review sheet (one JSON object per line:
+    task_id, tier, verdict, reason, by). The review sheet wins when both cover the same reply."""
+    if not path.exists():
+        return {}
+    with path.open() as f:
+        rows = [json.loads(line) for line in f if line.strip()]
+    out = {(r["task_id"], r["tier"]): r for r in rows}
+    # The researcher's own verdicts in review_verdicts.xlsx (column "YOUR verdict") override Claude's.
+    xlsx = path.parent / "review_verdicts.xlsx"
+    if xlsx.exists():
+        try:
+            from openpyxl import load_workbook
+            ws = load_workbook(xlsx, read_only=True)["Verdicts"]
+            head = [str(c.value or "") for c in next(ws.iter_rows(max_row=1))]
+            i_v = next(i for i, h in enumerate(head) if h.startswith("YOUR verdict"))
+            i_n = i_v + 1
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                v = str(row[i_v] or "").strip().lower()
+                if v in ("keep", "reject"):
+                    out[(row[0], row[1])] = {"task_id": row[0], "tier": row[1], "verdict": v,
+                                             "reason": row[i_n] or "", "by": "researcher"}
+        except ImportError:
+            print("openpyxl not installed: ignoring review_verdicts.xlsx")
+    return out
+
+
 def split_tasks(task_modules: dict[str, str], ratios: tuple[float, float, float], seed: int) -> dict[str, str]:
     by_module: dict[str, list[str]] = defaultdict(list)
     for tid, mod in sorted(task_modules.items()):
@@ -54,6 +81,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--raw", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--review", type=Path, default=DEFAULT_REVIEW)
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT.parent)
+    ap.add_argument("--decisions", type=Path, default=DEFAULT_OUT.parent / "decisions.jsonl",
+                    help="extra keep/reject decisions with reasons (applied when the review sheet has none)")
     ap.add_argument("--ratios", type=float, nargs=3, default=(0.75, 0.10, 0.15))
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--keep-unreviewed-flagged", action="store_true")
@@ -61,9 +90,18 @@ def main(argv: list[str] | None = None) -> int:
 
     rows = load_jsonl(args.raw)
     verdicts = load_verdicts(args.review)
+    decisions = load_decisions(args.decisions)
     kept, dropped = [], Counter()
+    norm = lambda t: " ".join((t or "").split())
+    stale = 0
     for r in rows:
         v = verdicts.get((r["task_id"], r["tier"]))
+        # A verdict only counts for the exact reply that was reviewed; if the reply was regenerated
+        # since, the old verdict is ignored.
+        if v and v.get("reply") and norm(v["reply"]) != norm(r["messages"][2]["content"]):
+            v, stale = None, stale + 1
+        if not v and (r["task_id"], r["tier"]) in decisions:
+            v = decisions[(r["task_id"], r["tier"])]
         verdict = (v or {}).get("verdict", "").strip().lower()
         if verdict == "reject":
             dropped["rejected in review"] += 1
@@ -97,7 +135,8 @@ def main(argv: list[str] | None = None) -> int:
         tiers = Counter(r["tier"] for r in buckets[name])
         n_tasks = len({r["task_id"] for r in buckets[name]})
         print(f"{name:5s}: {len(buckets[name]):4d} examples from {n_tasks:3d} tasks  {dict(sorted(tiers.items()))}")
-    print(f"kept {len(kept)} of {len(rows)}; dropped {dict(dropped) or 0}")
+    print(f"kept {len(kept)} of {len(rows)}; dropped {dict(dropped) or 0}; "
+          f"{stale} review verdicts ignored because the reply was regenerated")
     return 0
 
 

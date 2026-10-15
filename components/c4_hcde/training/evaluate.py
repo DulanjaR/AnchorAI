@@ -92,7 +92,8 @@ def judge(rows: list[dict], elements: dict[str, list[str]]) -> None:
             continue
         prompt = JUDGE_PROMPT.format(rubric=rubric_system_prompt(r["tier"]), task=r["task"], reply=r["reply"])
         try:
-            text = chat(base_url, key, judge_model, [{"role": "user", "content": prompt}], 0.0, 200)
+            from .disclosure import judge_ask
+            text = judge_ask(200)(prompt)
             m = re.search(r"\{.*\}", text, re.DOTALL)
             r["judge"] = json.loads(m.group(0)) if m else {"error": text[:200]}
         except Exception as e:  # a failed grade should not lose the generations
