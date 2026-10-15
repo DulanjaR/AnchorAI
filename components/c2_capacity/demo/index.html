@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anchor Capacity</title>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: slim header + tab rule, then a two-column "Today" workspace (steps left, tide gauge right).
+   Palette: harbour. Petrol-teal accent on misty ground; band colours are semantic, not decorative. */
+:root{
+  --ground:#E9EFEE; --surface:#F6F9F8; --surface-2:#DCE6E4; --ink:#0E2A31; --ink-soft:#4A646C; --line:#C4D3D1;
+  --tide:#14677A; --tide-strong:#0C4A59; --on-tide:#F2FAFB;
+  --deep:#0C2128; --deep-2:#14343D; --deep-ink:#E6F0EF; --deep-soft:#9FB9BC;
+  --high:#2F8F6B; --high-wash:#D6EBE2; --high-ink:#17533C;
+  --mod:#C39319;  --mod-wash:#F3E6C0;  --mod-ink:#6B4D07;
+  --low:#D06A2B;  --low-wash:#F6DCCB;  --low-ink:#7A3510;
+  --risk:#B63552; --risk-wash:#F2D3DA; --risk-ink:#6E1428;
+  --font-display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --font-body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'DM Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0A1A1F; --surface:#10262C; --surface-2:#173139; --ink:#E4EEEC; --ink-soft:#9DB6B8; --line:#234149;
+  --tide:#4FB3C4; --tide-strong:#8DD3DF; --on-tide:#08242B;
+  --deep:#06141A; --deep-2:#0F2830;
+  --high:#4FBF93; --high-wash:#123A2E; --high-ink:#A5E6CB;
+  --mod:#E0B23D;  --mod-wash:#3B3011;  --mod-ink:#F0D58A;
+  --low:#E88C52;  --low-wash:#40240F;  --low-ink:#F5C3A0;
+  --risk:#E5718A; --risk-wash:#451A26; --risk-ink:#F5B8C6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0A1A1F; --surface:#10262C; --surface-2:#173139; --ink:#E4EEEC; --ink-soft:#9DB6B8; --line:#234149;
+  --tide:#4FB3C4; --tide-strong:#8DD3DF; --on-tide:#08242B;
+  --deep:#06141A; --deep-2:#0F2830;
+  --high:#4FBF93; --high-wash:#123A2E; --high-ink:#A5E6CB;
+  --mod:#E0B23D;  --mod-wash:#3B3011;  --mod-ink:#F0D58A;
+  --low:#E88C52;  --low-wash:#40240F;  --low-ink:#F5C3A0;
+  --risk:#E5718A; --risk-wash:#451A26; --risk-ink:#F5B8C6; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+h1,h2,h3{font-family:var(--font-display);font-weight:650;letter-spacing:-.01em;margin:0;text-wrap:balance}
+p{margin:0}
+button,select,textarea,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--tide);outline-offset:2px;border-radius:6px}
+.shell{max-width:1180px;margin-inline:auto}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+
+/* demo strip */
+.strip{margin-inline:-16px;padding:7px 16px;background:var(--deep);color:var(--deep-ink);font-size:12.5px;letter-spacing:.01em}
+.strip .shell{display:flex;gap:6px 18px;flex-wrap:wrap}
+.strip b{font-weight:600;color:#fff}
+
+/* header */
+.top{display:flex;align-items:center;gap:14px 20px;flex-wrap:wrap;padding-block:18px 10px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand svg{width:30px;height:30px;stroke:var(--tide);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.brand strong{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.02em}
+.brand span{display:block;font-size:12px;color:var(--ink-soft);margin-top:-2px}
+.who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.who label{font-size:12px;color:var(--ink-soft)}
+select{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-height:38px;max-width:100%}
+.iconbtn{background:var(--surface);border:1px solid var(--line);border-radius:9px;min-height:38px;padding:0 12px;cursor:pointer}
+.iconbtn:hover{border-color:var(--tide)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:22px}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;cursor:pointer;color:var(--ink-soft);font-weight:550;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--tide)}
+.tab:hover{color:var(--ink)}
+
+/* workspace */
+.work{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.col{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sec-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.sec-h h2{font-size:19px}
+.sec-h .n{font-family:var(--font-mono);font-size:12px;color:var(--tide);border:1px solid var(--tide);border-radius:99px;padding:1px 8px}
+.sec-h p{font-size:13px;color:var(--ink-soft)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid5{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:10px}
+.sig{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:3px;min-width:0}
+.sig .l{font-size:12.5px;color:var(--ink-soft)}
+.sig .v{font-family:var(--font-mono);font-size:22px;font-weight:500}
+.sig .u{font-size:12px;color:var(--ink-soft)}
+.sig .s{font-size:11px;color:var(--ink-soft);margin-top:4px;padding-top:6px;border-top:1px dashed var(--line)}
+.chip{display:inline-block;align-self:flex-start;font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 9px;margin-top:3px}
+.chip.ok{background:var(--high-wash);color:var(--high-ink)}
+.chip.mild{background:var(--mod-wash);color:var(--mod-ink)}
+.chip.high{background:var(--low-wash);color:var(--low-ink)}
+.chip.severe{background:var(--risk-wash);color:var(--risk-ink)}
+.chip.na{background:var(--surface-2);color:var(--ink-soft)}
+
+.btn{border:1px solid var(--tide);background:var(--tide);color:var(--on-tide);border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;min-height:42px}
+.btn:hover{background:var(--tide-strong);border-color:var(--tide-strong)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--tide);background:var(--surface-2)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* focus task */
+.pad{display:grid;place-items:center;min-height:210px;border-radius:14px;background:var(--deep);color:var(--deep-ink);user-select:none;touch-action:manipulation;cursor:pointer;position:relative;overflow:hidden}
+.pad .glyph{font-family:var(--font-mono);font-size:84px;line-height:1}
+.pad .hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--deep-soft)}
+.pad.run{outline:2px solid var(--tide)}
+.bar{height:5px;background:var(--surface-2);border-radius:9px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--tide);transition:width .2s}
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+
+/* decision */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:11px;overflow:hidden;flex-wrap:wrap}
+.seg button{background:var(--surface);border:0;border-right:1px solid var(--line);padding:9px 14px;cursor:pointer;min-height:40px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--tide);color:var(--on-tide);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:99px;padding:5px 14px;font-family:var(--font-display);font-weight:650;font-size:17px}
+.pill i{width:10px;height:10px;border-radius:50%;background:currentColor}
+.b-high{background:var(--high-wash);color:var(--high-ink)}
+.b-moderate{background:var(--mod-wash);color:var(--mod-ink)}
+.b-low{background:var(--low-wash);color:var(--low-ink)}
+.b-risk{background:var(--risk-wash);color:var(--risk-ink)}
+.headline{font-family:var(--font-display);font-size:23px;line-height:1.2;margin-block:10px 4px}
+.drivers{display:flex;flex-direction:column;gap:9px;margin:14px 0 4px;padding:0;list-style:none}
+.drv{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:4px 14px;align-items:center}
+.drv .t{font-size:14px;min-width:0}
+.drv .t small{display:block;color:var(--ink-soft);font-size:12px}
+.meter{height:8px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:9px;background:var(--low)}
+.rec{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--ground)}
+.rec h3{font-size:16px;margin-bottom:4px}
+.rec .acts{margin:8px 0 0;padding-left:18px;color:var(--ink-soft);font-size:13.5px}
+.edit{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:10px}
+.edit label{font-size:12.5px;color:var(--ink-soft);display:block;margin-bottom:3px}
+textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-height:60px;resize:vertical}
+details{margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+summary{cursor:pointer;color:var(--ink);font-weight:550}
+details p{margin-top:6px}
+
+/* tide gauge panel */
+.gauge{background:var(--deep);color:var(--deep-ink);border-radius:18px;padding:18px;position:sticky;top:12px;border:1px solid var(--deep-2)}
+.gauge h2{font-size:15px;font-weight:600;color:var(--deep-soft);letter-spacing:.02em}
+.gauge .num{font-family:var(--font-display);font-size:64px;font-weight:700;line-height:1;margin-top:6px;letter-spacing:-.03em}
+.gauge .num small{font-size:20px;color:var(--deep-soft);font-weight:500;margin-left:4px}
+.gauge .pill{margin-top:10px}
+.gsvg{display:block;margin:12px auto 4px;width:100%;max-width:230px;height:auto}
+.gl{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--deep-soft);margin-top:8px}
+.gl div{display:flex;align-items:center;gap:8px}
+.gl .sw{width:16px;height:0;border-top:2px solid var(--deep-soft)}
+.gl .sw.dash{border-top-style:dashed}
+.gl .sw.fill{height:10px;border-radius:3px;border:0;background:var(--c,var(--tide))}
+.gauge .meta{margin-top:12px;border-top:1px solid var(--deep-2);padding-top:10px;font-size:12.5px;color:var(--deep-soft)}
+.wave{animation:drift 6s linear infinite}
+@keyframes drift{to{transform:translateX(-60px)}}
+@media (prefers-reduced-motion:reduce){.wave{animation:none}.bar i{transition:none}}
+
+/* other views */
+.view{display:none}.view.on{display:block}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;text-transform:uppercase}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.note{font-size:13px;color:var(--ink-soft)}
+.pillx{font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 9px;background:var(--surface-2);color:var(--ink-soft)}
+.pillx.real{background:var(--high-wash);color:var(--high-ink)}
+.spark{width:100%;height:46px;display:block}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--deep);color:var(--deep-ink);padding:10px 16px;border-radius:10px;font-size:14px;z-index:9;max-width:calc(100% - 32px)}
+
+@media (max-width:900px){.work{grid-template-columns:minmax(0,1fr)}.gauge{position:static;order:-1}}
+@media (max-width:520px){.drv{grid-template-columns:minmax(0,1fr)}.gauge .num{font-size:52px}}
+</style>
+
+<div class="strip"><div class="shell"><span><b>Prototype.</b> Context signals are simulated; the focus check runs for real in your browser.</span><span>Preliminary. Thresholds are provisional until calibrated on working-student data.</span></div></div>
+
+<div class="shell">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><path d="M12 7.2V21M7.5 11h9M4 14c0 4 3.6 7 8 7s8-3 8-7"/></svg>
+      <div><strong>Anchor Capacity</strong><span>Readiness for demanding work, C2</span></div>
+    </div>
+    <div class="who">
+      <label for="persona">Simulated day for Dilani</label>
+      <select id="persona"></select>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Switch colour theme">Theme</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" data-view="today" aria-selected="true">Today</button>
+    <button class="tab" role="tab" data-view="baseline" aria-selected="false">My baseline</button>
+    <button class="tab" role="tab" data-view="history" aria-selected="false">Decisions</button>
+    <button class="tab" role="tab" data-view="about" aria-selected="false">Evidence and limits</button>
+  </nav>
+
+  <!-- TODAY -->
+  <main class="view on" id="v-today">
+    <div class="work">
+      <div class="col">
+        <section>
+          <div class="sec-h"><span class="n">1</span><h2>Context from the phone</h2><p id="personaBlurb"></p></div>
+          <div class="grid5" id="ctxGrid"></div>
+        </section>
+
+        <section>
+          <div class="sec-h"><span class="n">2</span><h2>Focus check</h2><p>About 50 seconds. Press Space or tap for any digit except 3. Hold back on 3.</p></div>
+          <div class="panel">
+            <div class="pad" id="pad" role="button" tabindex="0" aria-label="Focus check response area">
+              <div class="glyph" id="glyph">+</div>
+              <div class="hint" id="padHint">Start the check, or use the sample result for this day.</div>
+            </div>
+            <div class="bar" aria-hidden="true"><i id="prog"></i></div>
+            <div class="row" style="margin-top:12px">
+              <button class="btn" id="startTask" type="button">Start focus check</button>
+              <button class="btn ghost" id="sampleTask" type="button">Use sample result</button>
+              <span class="note" id="taskState"></span>
+            </div>
+            <div class="metrics" id="metrics"></div>
+          </div>
+        </section>
+
+        <section aria-live="polite">
+          <div class="sec-h"><span class="n">3</span><h2>Readiness</h2><p>Compared with Dilani's own usual range, never with other people.</p></div>
+          <div class="panel">
+            <div class="row" style="justify-content:space-between;align-items:flex-end">
+              <div>
+                <div class="note" style="margin-bottom:6px">Work you are about to start</div>
+                <div class="seg" id="diffSeg" role="group" aria-label="Task difficulty">
+                  <button type="button" data-d="light" aria-pressed="false">Light</button>
+                  <button type="button" data-d="standard" aria-pressed="true">Standard</button>
+                  <button type="button" data-d="demanding" aria-pressed="false">Demanding</button>
+                </div>
+              </div>
+              <span class="pill" id="bandPill"></span>
+            </div>
+            <h3 class="headline" id="headline"></h3>
+            <p class="note" id="subline"></p>
+            <ul class="drivers" id="drivers"></ul>
+            <div class="rec" id="rec"></div>
+            <div class="row" style="margin-top:14px">
+              <button class="btn" id="accept" type="button">Accept</button>
+              <button class="btn ghost" id="editBtn" type="button">Edit</button>
+              <button class="btn ghost" id="rejectBtn" type="button">Reject</button>
+              <span class="note" id="decideHint"></span>
+            </div>
+            <div class="edit" id="editPane" hidden>
+              <div><label for="editAct">I will do this instead</label><select id="editAct"></select></div>
+              <div><label for="editNote">Note (optional)</label><textarea id="editNote" placeholder="For example: exam in two hours, I will start anyway."></textarea></div>
+              <div class="row"><button class="btn" id="saveEdit" type="button">Save my choice</button><button class="btn ghost" id="cancelEdit" type="button">Cancel</button></div>
+            </div>
+            <div class="edit" id="rejectPane" hidden>
+              <div><label for="rejReason">Why does this not fit?</label>
+                <select id="rejReason">
+                  <option>I feel better than this suggests</option><option>I feel worse than this suggests</option>
+                  <option>The task cannot wait</option><option>The signals look wrong today</option><option>Other</option></select></div>
+              <div class="row"><button class="btn" id="saveReject" type="button">Save and continue</button><button class="btn ghost" id="cancelReject" type="button">Cancel</button></div>
+            </div>
+            <details>
+              <summary>How this estimate was made</summary>
+              <p>Each signal is compared with Dilani's own mean and spread over the last 14 days. Only deviations in the unhelpful direction count, capped at 3 spreads. The weighted total gives a strain share, and capacity is 100 minus that share. Bands: High 72 and above, Moderate 52 to 71, Low 32 to 51, At Risk below 32. At Risk is also shown when capacity is at least 22 points below what the chosen work needs (Light 35, Standard 55, Demanding 70). All cut-offs are provisional.</p>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <aside class="gauge" aria-label="Estimated capacity">
+        <h2>ESTIMATED CAPACITY</h2>
+        <div class="num"><span id="gNum">0</span><small>/ 100</small></div>
+        <span class="pill" id="gPill"></span>
+        <svg class="gsvg" id="gsvg" viewBox="0 0 230 330" role="img" aria-label="Tide gauge showing estimated capacity against what the task needs"></svg>
+        <div class="gl">
+          <div><span class="sw fill" id="swWater"></span>Water level is estimated capacity</div>
+          <div><span class="sw dash"></span><span id="reqLbl">Dashed line is what this work needs</span></div>
+        </div>
+        <div class="meta" id="gMeta"></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- BASELINE -->
+  <section class="view" id="v-baseline">
+    <div class="sec-h"><h2>My baseline</h2><p>Built from Dilani's own repeated observations. No population norm is used.</p></div>
+    <div class="panel" style="margin-bottom:16px">
+      <div class="row" style="justify-content:space-between"><div><strong>14 days of data</strong><div class="note">Baseline is ready after 7 days. Spread is one standard deviation.</div></div><span class="pillx real">Baseline ready</span></div>
+    </div>
+    <div class="two" id="sparks"></div>
+    <div class="panel scroll" style="margin-top:16px"><table id="baseTable"></table></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="view" id="v-history">
+    <div class="sec-h"><h2>Decisions</h2><p>The person decides. These entries record what was suggested and what was done.</p></div>
+    <div class="two" id="histSummary" style="margin-bottom:16px"></div>
+    <div class="panel scroll"><table id="histTable"></table></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view" id="v-about">
+    <div class="sec-h"><h2>Evidence and limits</h2><p>What this prototype does, what it does not, and what the data so far shows.</p></div>
+    <div class="two">
+      <div class="panel"><h3 style="font-size:16px;margin-bottom:8px">What C2 does</h3>
+        <p class="note">Estimates current readiness for mentally demanding work from objective signals, compared with the person's own baseline, and suggests a protective action. The person accepts, edits or rejects it.</p>
+        <h3 style="font-size:16px;margin:14px 0 8px">What C2 does not do</h3>
+        <p class="note">It does not diagnose, measure biological capacity, set deadlines or rearrange schedules (that belongs to C1). Energy, focus, stress and fatigue are latent states estimated from signals, never read directly from a phone.</p></div>
+      <div class="panel"><h3 style="font-size:16px;margin-bottom:8px">Evidence so far (public data, preliminary)</h3>
+        <p class="note"><b>StudentLife</b> (47 students): phone-only features gave a weak, unstable stress signal (AUC 0.55 to 0.63 with people held out).</p>
+        <p class="note" style="margin-top:8px"><b>SWELL-KW</b> (25 people): the strong score (AUC 0.86) came from study design, because the neutral condition is always the first block. Block order alone scored 1.00, and the order-balanced comparison was near chance.</p>
+        <p class="note" style="margin-top:8px"><b>Conclusion.</b> Public data cannot validate capacity labels. High, Moderate, Low and At Risk will be calibrated and validated on working-student data (self-report, behaviour, task outcome, repeated weeks).</p></div>
+    </div>
+    <div class="panel scroll" style="margin-top:16px">
+      <table>
+        <tr><th>Signal</th><th>Planned source</th><th>In this demo</th></tr>
+        <tr><td>Sleep duration</td><td>Health Connect sleep sessions (user grants access)</td><td><span class="pillx">Simulated</span></td></tr>
+        <tr><td>Steps, time since movement</td><td>Health Connect steps, derived break proxy</td><td><span class="pillx">Simulated</span></td></tr>
+        <tr><td>Resting heart rate (optional)</td><td>Health Connect heart rate, sensitive permission</td><td><span class="pillx">Simulated</span></td></tr>
+        <tr><td>Phone use at night</td><td>UsageStatsManager (special usage access)</td><td><span class="pillx">Simulated</span></td></tr>
+        <tr><td>Reaction time, variability, misses, premature responses, accuracy, drift</td><td>Short focus check in the app</td><td><span class="pillx real">Real, runs here</span></td></tr>
+        <tr><td>Task difficulty</td><td>Chosen by the user</td><td><span class="pillx real">Real</span></td></tr>
+      </table>
+    </div>
+    <p class="note" style="margin-top:12px">Google Fit APIs are being retired, so Android sensing is planned through Health Connect. Decisions are stored only in this browser during the demo.</p>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function hm(h){var m=Math.round(h*60);return Math.floor(m/60)+'h '+('0'+(m%60)).slice(-2)+'m'}
+
+/* ---------- model definition ---------- */
+var SIG=[
+ {id:'sleep',name:'Sleep last night',w:18,dir:-1,kind:'ctx',src:'Health Connect sleep',fmt:hm},
+ {id:'steps',name:'Steps yesterday',w:5,dir:-1,kind:'ctx',src:'Health Connect steps',fmt:function(v){return v.toFixed(1)+'k'}},
+ {id:'sed',name:'Since last movement break',w:8,dir:1,kind:'ctx',src:'Steps and phone use',fmt:function(v){return Math.round(v)+' min'}},
+ {id:'night',name:'Phone use after 23:00',w:8,dir:1,kind:'ctx',src:'Usage access',fmt:hm},
+ {id:'rhr',name:'Resting heart rate',w:7,dir:1,kind:'ctx',src:'Health Connect, optional',fmt:function(v){return Math.round(v)+' bpm'}},
+ {id:'rt',name:'Reaction time',w:15,dir:1,kind:'task',fmt:function(v){return Math.round(v)+' ms'}},
+ {id:'rtsd',name:'Reaction-time variability',w:12,dir:1,kind:'task',fmt:function(v){return Math.round(v)+' ms'}},
+ {id:'miss',name:'Missed responses',w:8,dir:1,kind:'task',fmt:function(v){return v.toFixed(1)+'%'}},
+ {id:'prem',name:'Premature responses',w:6,dir:1,kind:'task',fmt:function(v){return v.toFixed(1)+'%'}},
+ {id:'acc',name:'Accuracy',w:10,dir:-1,kind:'task',fmt:function(v){return v.toFixed(0)+'%'}},
+ {id:'drift',name:'Attention drift',w:8,dir:1,kind:'task',fmt:function(v){return (v>=0?'+':'')+Math.round(v)+' ms'}}
+];
+var BASE={sleep:[6.75,0.7],steps:[6.8,2.0],sed:[55,25],night:[0.6,0.5],rhr:[64,3],rt:[440,45],rtsd:[65,15],miss:[3,2],prem:[2,1.5],acc:[91,4],drift:[15,20]};
+var STATES=[
+ {id:'steady',name:'Steady morning',blurb:'Slept well, moved yesterday, little late-night phone use.',ctx:{sleep:7.2,steps:7.4,sed:30,night:0.4,rhr:63},task:{rt:432,rtsd:60,miss:2,prem:1.5,acc:93,drift:8}},
+ {id:'busy',name:'Busy afternoon',blurb:'A shorter sleep and a long stretch without a break.',ctx:{sleep:6.0,steps:5.2,sed:120,night:1.0,rhr:66},task:{rt:480,rtsd:80,miss:4.5,prem:3,acc:88,drift:30}},
+ {id:'shift',name:'After a long shift',blurb:'Very active day at work, late phone use, slower responses.',ctx:{sleep:6.0,steps:11.5,sed:45,night:1.2,rhr:69},task:{rt:545,rtsd:110,miss:7,prem:4,acc:80,drift:62}},
+ {id:'short',name:'Short night',blurb:'Under five hours of sleep and a late night on the phone.',ctx:{sleep:4.83,steps:3.1,sed:100,night:2.1,rhr:69},task:{rt:570,rtsd:130,miss:9,prem:5,acc:78,drift:70}}
+];
+var REQ={light:35,standard:55,demanding:70};
+var BANDS=[{k:'high',n:'High',min:72},{k:'moderate',n:'Moderate',min:52},{k:'low',n:'Low',min:32},{k:'risk',n:'At Risk',min:-1}];
+var ACTS=['Continue normally','Take a short recovery break','Reduce immediate work intensity','Avoid starting a highly demanding task now','Recover and reassess later'];
+var COPY={
+ high:{h:'You are within your usual range for demanding work.',s:'Signals are close to your own normal.',act:ACTS[0],more:['Check again after a long stretch of work.']},
+ moderate:{h:'A little below your usual range.',s:'Starting with a lighter part of the work is a safe way in.',act:ACTS[2],more:['A 5 to 10 minute break first can help.','Re-check later in the day.']},
+ low:{h:'Well below your usual range.',s:'A recovery break will likely help before focused work.',act:ACTS[1],more:['10 to 15 minutes away from screens.','Check again afterwards.']},
+ risk:{h:'Strong mismatch between your readiness and this work.',s:'This is not a medical judgement. It compares today with your own normal.',act:ACTS[3],more:['Recover first, then reassess in about an hour.','You decide. Edit or reject if this does not fit.']}
+};
+
+/* ---------- state ---------- */
+var S={persona:1,diff:'standard',task:null,taskReal:false,running:false,decided:false,view:'today'};
+var hist=[];
+
+/* ---------- engine ---------- */
+function values(){
+  var st=STATES[S.persona],v={};
+  for(var k in st.ctx)v[k]=st.ctx[k];
+  if(S.task){for(var t in S.task)v[t]=S.task[t]}
+  return v;
+}
+function estimate(){
+  var v=values(),rows=[],wAll=0,wPres=0,strain=0;
+  SIG.forEach(function(s){
+    wAll+=s.w;
+    if(typeof v[s.id]!=='number')return;
+    var z=(v[s.id]-BASE[s.id][0])/BASE[s.id][1];
+    var harm=s.dir*z, sc=clamp(harm,0,3)/3;
+    wPres+=s.w; strain+=s.w*sc;
+    rows.push({s:s,v:v[s.id],z:z,harm:harm,sc:sc,part:s.w*sc});
+  });
+  var idx=wPres?strain/wPres:0;
+  var cap=Math.round(100*(1-idx));
+  var band='risk';
+  for(var i=0;i<BANDS.length;i++){if(cap>=BANDS[i].min){band=BANDS[i].k;break}}
+  var req=REQ[S.diff],gap=cap-req,mismatch=gap<=-22;
+  var final=mismatch?'risk':band;
+  var cov=wPres/wAll,conf=cov<0.45?'Low':(cov<0.95?'Medium':'High');
+  return {rows:rows,cap:cap,band:band,final:final,req:req,gap:gap,mismatch:mismatch,conf:conf,cov:cov,wAll:wAll,strain:strain,wPres:wPres};
+}
+function sev(row){return row.harm>=2?'severe':row.harm>=1?'high':row.harm>=0.5?'mild':'ok'}
+function sevText(row){
+  var h=row.harm,dirWord=row.s.dir===1?'above':'below';
+  if(h<0.5)return 'Within usual range';
+  var mag=Math.abs(row.z).toFixed(1);
+  return (h>=2?'Far ':h>=1?'Clearly ':'Slightly ')+dirWord.toLowerCase()+' usual ('+mag+' spreads)';
+}
+
+/* ---------- render ---------- */
+var BAND_NAME={high:'High',moderate:'Moderate',low:'Low',risk:'At Risk'};
+function bandVar(k){return k==='high'?'var(--high)':k==='moderate'?'var(--mod)':k==='low'?'var(--low)':'var(--risk)'}
+function pill(el,k){el.className='pill b-'+k;el.innerHTML='<i></i>'+BAND_NAME[k]}
+
+function renderCtx(){
+  var st=STATES[S.persona],v=values();
+  $('personaBlurb').textContent=st.blurb;
+  var h='';
+  SIG.filter(function(s){return s.kind==='ctx'}).forEach(function(s){
+    var val=v[s.id],base=BASE[s.id][0];
+    var z=(val-base)/BASE[s.id][1],harm=s.dir*z;
+    var row={harm:harm,z:z,s:s};
+    h+='<div class="sig"><span class="l">'+s.name+'</span><span class="v">'+s.fmt(val)+'</span><span class="u">usual '+s.fmt(base)+'</span>'+
+       '<span class="chip '+sev(row)+'">'+sevText(row)+'</span><span class="s">'+s.src+' · simulated</span></div>';
+  });
+  $('ctxGrid').innerHTML=h;
+}
+function renderMetrics(){
+  var h='';
+  if(!S.task){$('metrics').innerHTML='';return}
+  SIG.filter(function(s){return s.kind==='task'}).forEach(function(s){
+    var val=S.task[s.id],base=BASE[s.id][0],z=(val-base)/BASE[s.id][1],row={harm:s.dir*z,z:z,s:s};
+    h+='<div class="sig"><span class="l">'+s.name+'</span><span class="v">'+s.fmt(val)+'</span><span class="u">usual '+s.fmt(base)+'</span><span class="chip '+sev(row)+'">'+sevText(row)+'</span></div>';
+  });
+  $('metrics').innerHTML=h;
+}
+function gaugeSVG(cap,req,band){
+  var top=14,H=292,x=70,w=90,r=45,fillY=top+H*(1-cap/100),reqY=top+H*(1-req/100);
+  var col=bandVar(band),t='';
+  t+='<defs><clipPath id="clipG"><rect x="'+x+'" y="'+top+'" width="'+w+'" height="'+H+'" rx="'+r+'"/></clipPath></defs>';
+  [0,25,50,75,100].forEach(function(p){
+    var y=top+H*(1-p/100);
+    t+='<text x="50" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#9FB9BC" font-family="DM Mono,monospace">'+p+'</text>';
+    t+='<line x1="55" y1="'+y+'" x2="64" y2="'+y+'" stroke="#9FB9BC" stroke-width="1"/>';
+  });
+  t+='<rect x="'+x+'" y="'+top+'" width="'+w+'" height="'+H+'" rx="'+r+'" fill="rgba(255,255,255,.04)" stroke="#9FB9BC" stroke-width="1.5"/>';
+  t+='<g clip-path="url(#clipG)"><rect x="'+x+'" y="'+fillY+'" width="'+w+'" height="'+(top+H-fillY+2)+'" fill="'+col+'" opacity=".92"/>';
+  t+='<path class="wave" d="M'+(x-60)+' '+fillY+' q15 -7 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V'+(top+H)+' H'+(x-60)+' Z" fill="'+col+'" opacity=".55"/></g>';
+  [[32,'Low'],[52,'Mod'],[72,'High']].forEach(function(b){
+    var y=top+H*(1-b[0]/100);
+    t+='<line x1="'+(x+w)+'" y1="'+y+'" x2="'+(x+w+8)+'" y2="'+y+'" stroke="#9FB9BC" stroke-width="1"/>';
+    t+='<text x="'+(x+w+12)+'" y="'+(y+4)+'" font-size="10.5" fill="#9FB9BC" font-family="Instrument Sans,sans-serif">'+b[1]+' '+b[0]+'</text>';
+  });
+  t+='<line x1="'+(x-10)+'" y1="'+reqY+'" x2="'+(x+w+10)+'" y2="'+reqY+'" stroke="#F2FAFB" stroke-width="2" stroke-dasharray="5 4"/>';
+  t+='<text x="'+(x+w+12)+'" y="'+(reqY-5)+'" font-size="10.5" fill="#F2FAFB" font-family="DM Mono,monospace">need '+req+'</text>';
+  return t;
+}
+function render(){
+  var E=estimate(),c=COPY[E.final];
+  renderCtx();renderMetrics();
+  /* gauge */
+  $('gNum').textContent=E.cap;
+  pill($('gPill'),E.final);
+  $('gsvg').innerHTML=gaugeSVG(E.cap,E.req,E.final);
+  $('swWater').style.setProperty('--c',bandVar(E.final));
+  $('reqLbl').textContent='Dashed line is what '+S.diff+' work needs ('+E.req+')';
+  var gap=E.gap>=0?'Capacity covers this work by '+E.gap+' points.':'Capacity is '+Math.abs(E.gap)+' points short of this work.';
+  $('gMeta').innerHTML=gap+'<br>Evidence: '+E.rows.length+' of '+SIG.length+' signals · confidence '+E.conf+(S.task?'':' (add the focus check)');
+  /* result */
+  pill($('bandPill'),E.final);
+  $('headline').textContent=c.h;
+  $('subline').textContent=(E.mismatch&&E.band!=='risk'?'Your capacity is '+BAND_NAME[E.band]+', and this work needs '+E.req+', so the gap is large. ':'')+c.s+(S.task?'':' Provisional until the focus check is done.');
+  var top=E.rows.filter(function(r){return r.harm>=0.5}).sort(function(a,b){return b.part-a.part}).slice(0,4);
+  var h='';
+  if(!top.length){h='<li class="note">No signal is clearly outside your usual range.</li>'}
+  top.forEach(function(r){
+    var pct=Math.round(100*r.part/E.strain);
+    h+='<li class="drv"><div class="t">'+r.s.name+'<small>'+r.s.fmt(r.v)+' today, usual '+r.s.fmt(BASE[r.s.id][0])+'</small></div>'+
+       '<div class="meter" title="'+pct+'% of the total strain"><i style="width:'+Math.max(6,pct)+'%;background:'+bandVar(r.harm>=2?'risk':r.harm>=1?'low':'moderate')+'"></i></div></li>';
+  });
+  $('drivers').innerHTML=h;
+  var acts=c.more.map(function(m){return '<li>'+m+'</li>'}).join('');
+  $('rec').innerHTML='<h3>Suggested: '+c.act+'</h3><span class="note">One suggestion. You can accept it, change it, or reject it.</span><ul class="acts">'+acts+'</ul>';
+  var ok=!!S.task;
+  $('accept').disabled=!ok;$('editBtn').disabled=!ok;$('rejectBtn').disabled=!ok;
+  $('decideHint').textContent=ok?'':'Complete the focus check to decide.';
+  $('diffSeg').querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.d===S.diff))});
+  $('taskState').textContent=S.task?(S.taskReal?'Your own result':'Sample result for this day'):'';
+}
+
+/* ---------- focus check (real) ---------- */
+var T={trials:[],i:0,state:'idle',t0:0,timer:null,hits:[],miss:0,prem:0,fa:0,cw:0};
+var NTR=40;
+function buildTrials(){
+  var d=[1,2,4,5,6,7,8,9],arr=[];
+  for(var i=0;i<NTR;i++){arr.push(i%7===3?3:d[Math.floor(Math.random()*d.length)])}
+  for(var j=arr.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1));var tmp=arr[j];arr[j]=arr[k];arr[k]=tmp}
+  return arr;
+}
+function startTask(){
+  if(S.running)return;
+  S.running=true;S.task=null;
+  T.trials=buildTrials();T.i=0;T.hits=[];T.miss=0;T.prem=0;T.fa=0;T.cw=0;
+  $('startTask').disabled=true;$('sampleTask').disabled=true;
+  $('pad').classList.add('run');$('padHint').textContent='Any digit except 3: respond. On 3: do nothing.';
+  render();next();
+}
+function next(){
+  if(T.i>=NTR){return finish()}
+  T.state='isi';$('glyph').textContent='+';$('prog').style.width=Math.round(100*T.i/NTR)+'%';
+  T.resp=false;
+  T.timer=setTimeout(showStim,400+Math.random()*400);
+}
+function showStim(){
+  T.state='stim';var d=T.trials[T.i];$('glyph').textContent=String(d);
+  T.t0=performance.now();
+  T.timer=setTimeout(endStim,700);
+}
+function endStim(){
+  var nogo=T.trials[T.i]===3;
+  if(!T.resp){if(nogo)T.cw++;else T.miss++}
+  T.i++;next();
+}
+function respond(){
+  if(!S.running)return;
+  var now=performance.now();
+  if(T.state==='isi'){if(!T.premTrial||T.premTrial!==T.i){T.prem++;T.premTrial=T.i}return}
+  if(T.state==='stim'&&!T.resp){
+    T.resp=true;
+    if(T.trials[T.i]===3){T.fa++}else{T.hits.push(now-T.t0)}
+  }
+}
+function mean(a){return a.reduce(function(x,y){return x+y},0)/a.length}
+function sd(a){var m=mean(a);return Math.sqrt(mean(a.map(function(x){return (x-m)*(x-m)})))}
+function finish(){
+  S.running=false;clearTimeout(T.timer);
+  $('pad').classList.remove('run');$('prog').style.width='100%';$('glyph').textContent='Done';
+  $('startTask').disabled=false;$('sampleTask').disabled=false;$('startTask').textContent='Run it again';
+  var nGo=T.trials.filter(function(x){return x!==3}).length;
+  if(T.hits.length<6){
+    S.task=null;$('padHint').textContent='Too few responses were recorded. Try again and respond to each digit except 3.';
+    $('taskState').textContent='Not enough responses to estimate.';render();return;
+  }
+  var half=Math.floor(T.hits.length/2);
+  var drift=mean(T.hits.slice(half))-mean(T.hits.slice(0,half));
+  S.task={rt:mean(T.hits),rtsd:sd(T.hits),miss:100*T.miss/nGo,prem:100*T.prem/NTR,acc:100*(T.hits.length+T.cw)/NTR,drift:drift};
+  S.taskReal=true;S.decided=false;
+  $('padHint').textContent='Compared with Dilani\'s baseline for this demo. A real user is compared with their own.';
+  render();
+}
+function useSample(){
+  if(S.running)return;
+  S.task=JSON.parse(JSON.stringify(STATES[S.persona].task));S.taskReal=false;
+  $('glyph').textContent='+';$('prog').style.width='100%';$('padHint').textContent='Sample result loaded for this simulated day.';
+  render();
+}
+
+/* ---------- decisions ---------- */
+function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},2400)}
+function loadHist(){
+  var seed=[
+   {t:'2026-10-09T09:12',persona:'Steady morning',band:'high',cap:88,diff:'standard',action:'Continue normally',decision:'Accepted',note:'',example:true},
+   {t:'2026-10-10T15:40',persona:'Busy afternoon',band:'moderate',cap:66,diff:'standard',action:'Reduce immediate work intensity',decision:'Edited',note:'Took a 10 minute walk first.',example:true},
+   {t:'2026-10-12T21:05',persona:'After a long shift',band:'risk',cap:43,diff:'demanding',action:'Avoid starting a highly demanding task now',decision:'Accepted',note:'',example:true},
+   {t:'2026-10-13T08:30',persona:'Short night',band:'risk',cap:17,diff:'standard',action:'Avoid starting a highly demanding task now',decision:'Rejected',note:'Reason: The task cannot wait',example:true}
+  ];
+  var saved=[];
+  try{saved=JSON.parse(localStorage.getItem('anchorC2Decisions')||'[]')}catch(e){saved=[]}
+  hist=saved.concat(seed);
+}
+function saveHist(){
+  var mine=hist.filter(function(x){return !x.example});
+  try{localStorage.setItem('anchorC2Decisions',JSON.stringify(mine))}catch(e){}
+}
+function record(decision,action,note){
+  var E=estimate();
+  hist.unshift({t:new Date().toISOString().slice(0,16),persona:STATES[S.persona].name,band:E.final,cap:E.cap,diff:S.diff,action:action,decision:decision,note:note||'',example:false});
+  saveHist();renderHist();toast(decision+'. Saved to Decisions.');
+}
+function renderHist(){
+  var n={Accepted:0,Edited:0,Rejected:0};
+  hist.forEach(function(x){n[x.decision]=(n[x.decision]||0)+1});
+  $('histSummary').innerHTML=['Accepted','Edited','Rejected'].map(function(k){
+    return '<div class="panel"><div class="note">'+k+'</div><div class="mono" style="font-size:30px">'+n[k]+'</div></div>'}).join('');
+  var h='<tr><th>When</th><th>Day</th><th>Capacity</th><th>Work</th><th>Suggested or chosen action</th><th>Decision</th></tr>';
+  hist.forEach(function(x){
+    h+='<tr><td class="mono">'+x.t.replace('T',' ')+'</td><td>'+x.persona+(x.example?' <span class="pillx">Example</span>':'')+'</td>'+
+       '<td><span class="pill b-'+x.band+'" style="font-size:13px;padding:2px 10px">'+BAND_NAME[x.band]+' '+x.cap+'</span></td><td>'+x.diff+'</td><td>'+x.action+(x.note?'<div class="note">'+x.note+'</div>':'')+'</td><td>'+x.decision+'</td></tr>';
+  });
+  $('histTable').innerHTML=h;
+}
+
+/* ---------- baseline view ---------- */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function spark(id,title,fmt){
+  var m=BASE[id][0],s=BASE[id][1],r=rng(id.length*977+m*13),vals=[];
+  for(var i=0;i<14;i++){vals.push(m+s*(r()*2-1)*1.1)}
+  var lo=m-2*s,hi=m+2*s,W=300,H=46;
+  function X(i){return 6+i*(W-12)/13}function Y(v){return H-4-(H-8)*(v-lo)/(hi-lo)}
+  var pts=vals.map(function(v,i){return X(i).toFixed(1)+','+Y(v).toFixed(1)}).join(' ');
+  var band='<rect x="0" y="'+Y(m+s).toFixed(1)+'" width="'+W+'" height="'+(Y(m-s)-Y(m+s)).toFixed(1)+'" fill="var(--tide)" opacity=".13"/>';
+  var dots=vals.map(function(v,i){return '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="2.2" fill="var(--tide)"/>'}).join('');
+  return '<div class="panel"><div class="row" style="justify-content:space-between"><strong>'+title+'</strong><span class="mono note">usual '+fmt(m)+'</span></div>'+
+    '<svg class="spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-label="'+title+' over 14 days">'+band+'<polyline points="'+pts+'" fill="none" stroke="var(--tide)" stroke-width="1.6"/>'+dots+'</svg>'+
+    '<div class="note">Last 14 days. Shaded band is one spread either side of the mean.</div></div>';
+}
+function renderBase(){
+  var f={};SIG.forEach(function(s){f[s.id]=s.fmt});
+  $('sparks').innerHTML=spark('sleep','Sleep',f.sleep)+spark('rt','Reaction time',f.rt)+spark('rtsd','Reaction-time variability',f.rtsd)+spark('night','Phone use after 23:00',f.night);
+  var h='<tr><th>Signal</th><th>Usual (mean)</th><th>Spread</th><th>Unhelpful direction</th><th>Weight</th></tr>';
+  SIG.forEach(function(s){h+='<tr><td>'+s.name+'</td><td class="mono">'+s.fmt(BASE[s.id][0])+'</td><td class="mono">'+BASE[s.id][1]+'</td><td>'+(s.dir===1?'Higher':'Lower')+'</td><td class="mono">'+s.w+'</td></tr>'});
+  $('baseTable').innerHTML=h;
+}
+
+/* ---------- wiring ---------- */
+function setView(v){
+  S.view=v;
+  document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('on',x.id==='v-'+v)});
+  document.querySelectorAll('.tab').forEach(function(t){t.setAttribute('aria-selected',String(t.dataset.view===v))});
+}
+function init(){
+  $('persona').innerHTML=STATES.map(function(s,i){return '<option value="'+i+'">'+s.name+'</option>'}).join('');
+  $('persona').value=String(S.persona);
+  $('editAct').innerHTML=ACTS.map(function(a){return '<option>'+a+'</option>'}).join('');
+  $('persona').addEventListener('change',function(){
+    if(S.running)return;
+    S.persona=+this.value;S.task=null;S.taskReal=false;$('glyph').textContent='+';$('prog').style.width='0';
+    $('padHint').textContent='Start the check, or use the sample result for this day.';
+    $('editPane').hidden=true;$('rejectPane').hidden=true;
+    useSample();
+  });
+  document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){setView(t.dataset.view)})});
+  $('diffSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.diff=b.dataset.d;render()});
+  $('startTask').addEventListener('click',startTask);
+  $('sampleTask').addEventListener('click',useSample);
+  $('pad').addEventListener('pointerdown',function(e){e.preventDefault();respond()});
+  document.addEventListener('keydown',function(e){if(e.code==='Space'&&S.running){e.preventDefault();respond()}});
+  $('accept').addEventListener('click',function(){record('Accepted',COPY[estimate().final].act,'')});
+  $('editBtn').addEventListener('click',function(){$('rejectPane').hidden=true;$('editPane').hidden=false;$('editAct').value=COPY[estimate().final].act});
+  $('cancelEdit').addEventListener('click',function(){$('editPane').hidden=true});
+  $('saveEdit').addEventListener('click',function(){record('Edited',$('editAct').value,$('editNote').value);$('editPane').hidden=true;$('editNote').value=''});
+  $('rejectBtn').addEventListener('click',function(){$('editPane').hidden=true;$('rejectPane').hidden=false});
+  $('cancelReject').addEventListener('click',function(){$('rejectPane').hidden=true});
+  $('saveReject').addEventListener('click',function(){record('Rejected','No action taken by the app','Reason: '+$('rejReason').value);$('rejectPane').hidden=true});
+  $('themeBtn').addEventListener('click',function(){
+    var r=document.documentElement,cur=r.getAttribute('data-theme');
+    var dark=cur?cur==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var nx=dark?'light':'dark';r.setAttribute('data-theme',nx);
+    try{localStorage.setItem('anchorC2Theme',nx)}catch(e){}
+  });
+  try{var th=localStorage.getItem('anchorC2Theme');if(th)document.documentElement.setAttribute('data-theme',th)}catch(e){}
+  loadHist();renderHist();renderBase();useSample();
+}
+init();
+})();
+</script>
+
+</body>
+</html>
