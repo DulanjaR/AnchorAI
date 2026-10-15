@@ -1,5 +1,5 @@
 task_id,tier,module,difficulty,task,reply,auto_passed,auto_reasons,disclosure,disclosure_band,verdict,fixed_reply,notes
-it-002,HUMAN_FIRST,Programming Fundamentals,1,Write a program that prints all even numbers between 1 and 50 using a loop.,"You've worked with loops and conditions before, so you have the tools to tackle this. Give it a try on your own first, and then share your attempt. I'll be here to review it with you.",True,,0.0,0.0-0.05,,,
+it-002,HUMAN_FIRST,Programming Fundamentals,1,Write a program that prints all even numbers between 1 and 50 using a loop.,"You've worked with loops and conditions before, so you have the tools to tackle this. Give it a try on your own first, and then share your attempt. I'll be here to review it with you.",TRUE,,0,0.0-0.05,,,
 it-004,PROBE,Programming Fundamentals,2,Write a function that checks whether a given year is a leap year.,"Problem:
 Write a function named `is_leap_year` that takes an integer representing a year and returns `True` if the year is a leap year, and `False` otherwise. A leap year is defined as follows:
 - The year is evenly divisible by 4.
@@ -30,7 +30,7 @@ print(is_leap_year(2021))  # False
 A correct attempt must contain:
 1. A function named `is_leap_year` that takes an integer `year` as an argument.
 2. Correct implementation of the leap year rules.
-3. Test cases for the years 1900, 2000, 2020, and 2021 with the correct outputs.",True,,,,,,
+3. Test cases for the years 1900, 2000, 2020, and 2021 with the correct outputs.",TRUE,,,,,,
 it-005,GUIDED,Programming Fundamentals,2,"Write a function that reverses a list without using reverse(), reversed() or slicing.","Think it through step by step.
 
 1. How do you start a variable that will eventually hold the reversed list?
@@ -45,8 +45,8 @@ def reverse_list(lst):
     return ___
 ```
 
-Fill in each blank, then test `reverse_list([10, 20, 30])`. What should the output look like?",True,,0.5,0.1-0.55,,,
-it-006,HUMAN_FIRST,Programming Fundamentals,1,"My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?","You're close, and you've got the right idea with the loop and the accumulation. Let's see if you can spot the small detail that's causing the difference. Try to walk through your code step-by-step and see if you can identify where the total is not what you expected. Once you have a theory, share it with me, and I'll help you verify it.",True,,0.0,0.0-0.05,,,
+Fill in each blank, then test `reverse_list([10, 20, 30])`. What should the output look like?",TRUE,,0.5,0.1-0.55,,,
+it-006,HUMAN_FIRST,Programming Fundamentals,1,"My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?","You're close, and you've got the right idea with the loop and the accumulation. Let's see if you can spot the small detail that's causing the difference. Try to walk through your code step-by-step and see if you can identify where the total is not what you expected. Once you have a theory, share it with me, and I'll help you verify it.",TRUE,,0,0.0-0.05,,,
 it-006,SHARED,Programming Fundamentals,1,"My code `total = 0; for i in range(1, 10): total += i; print(total)` prints 45 but I expected 55. Why, and how do I fix it?","Here’s a short plan:
 
 1. **Recall how `range` works** – it generates numbers up to, but not including, the stop value.  
@@ -68,7 +68,7 @@ Your turn:
 
 - Replace the blank with the appropriate stop value.  
 - Run the script and tell me what it prints.  
-- If the output is 55, you’ve fixed the problem; if not, what do you think still needs adjusting?",True,,0.625,0.4-0.85,,,
+- If the output is 55, you’ve fixed the problem; if not, what do you think still needs adjusting?",TRUE,,0.625,0.4-0.85,,,
 it-008,SHARED,Programming Fundamentals,2,"Write a program that keeps reading integers until the user enters 0, then prints their average.","Here's a plan: (1) initialize variables to keep track of the sum and count of numbers, (2) use a loop to read integers until the user enters 0, (3) update the sum and count inside the loop, (4) calculate and print the average after the loop.
 
 I'll handle steps 1 and 2:
@@ -85,8 +85,8 @@ def main():
         # your part: update total and count
 ```
 
-Your turn: complete the loop body to update `total` and `count` with the user's input. Then, decide: how should the program handle the case where the user enters 0 immediately without entering any other numbers? Should it print a message or just exit?",True,,0.8,0.4-0.85,,,
-it-009,HUMAN_FIRST,Programming Fundamentals,2,"Write a function that checks whether a string is a palindrome, ignoring case and spaces.","You've worked with strings and loops before, so you're well-equipped to tackle this. Give it a try on your own first, and share your attempt with me. I'll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
+Your turn: complete the loop body to update `total` and `count` with the user's input. Then, decide: how should the program handle the case where the user enters 0 immediately without entering any other numbers? Should it print a message or just exit?",TRUE,,0.8,0.4-0.85,,,
+it-009,HUMAN_FIRST,Programming Fundamentals,2,"Write a function that checks whether a string is a palindrome, ignoring case and spaces.","You've worked with strings and loops before, so you're well-equipped to tackle this. Give it a try on your own first, and share your attempt with me. I'll be here to review it and provide feedback.",TRUE,,0,0.0-0.05,,,
 it-010,PROBE,Programming Fundamentals,3,"Write a recursive function to compute the factorial of n, and explain what should happen when n is negative.","Problem:
 Write a recursive function in Python to compute the product of the first `n` even numbers. Explain what should happen when `n` is negative.
 
@@ -103,7 +103,7 @@ A correct attempt must contain:
 1. A recursive function definition.
 2. A base case that returns 1 when `n` is 0 or negative.
 3. A recursive case that multiplies `2 * n` by the result of `product_of_evens(n - 1)`.
-4. An explanation that when `n` is negative, the function should return 1.",False,probe is too close to the original task (overlap 0.69),,,,,
+4. An explanation that when `n` is negative, the function should return 1.",FALSE,probe is too close to the original task (overlap 0.69),,,,,
 it-011,GUIDED,Programming Fundamentals,3,Write a function that removes duplicates from a list while keeping the original order.,"Think about how to build the function yourself.
 
 1. Which container lets you test “have I seen this value before?” in constant time?  
@@ -121,17 +121,17 @@ def remove_duplicates(seq):
     return result
 ```
 
-Fill in the blanks, then try `remove_duplicates([1, 2, 2, 3, 4, 4, 5])`. What list do you get?",True,disclosure outside band,0.6,0.1-0.55,,,
+Fill in the blanks, then try `remove_duplicates([1, 2, 2, 3, 4, 4, 5])`. What list do you get?",TRUE,disclosure outside band,0.6,0.1-0.55,,,
 it-012,HINT,Programming Fundamentals,3,"Write a program that validates a password: at least 8 characters, at least one digit and at least one uppercase letter.","What part of the password should you examine to decide if it meets the length requirement?  
 Which two character‑type checks do you need to perform while iterating through the string?  
 After you’ve gathered those results, how will you combine them to determine the final answer?  
 
-Try coding the skeleton and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+Try coding the skeleton and come back if you get stuck.",TRUE,,0,0.0-0.25,,,
 it-015,HINT,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","What changes in a method’s **parameter list** let you keep the same name but create a new version in the same class?  
 
 When a subclass defines a method with the **exact same signature** as one in its superclass, what behavior does that affect at runtime?  
 
-Try sketching a tiny Java class that shows each case, leaving the differing parts as blanks (e.g., `void foo(___)`). Come back if you get stuck.",True,,0.0,0.0-0.25,,,
+Try sketching a tiny Java class that shows each case, leaving the differing parts as blanks (e.g., `void foo(___)`). Come back if you get stuck.",TRUE,,0,0.0-0.25,,,
 it-015,PROBE,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","**Problem:**  
 In C#, two related concepts are *method hiding* (using `new`) and *method overriding* (using `override`).  
 
@@ -181,7 +181,7 @@ Generic animal sound
 Meow!
 ```
 
-- **Reasoning:** `Dog` overrides, so the runtime type (`Dog`) determines the call. `Cat` hides, so when the reference type is `Animal` the base method runs; with a `Cat` reference the hidden method runs.",False,too long: 295 words (limit 220),,,,,
+- **Reasoning:** `Dog` overrides, so the runtime type (`Dog`) determines the call. `Cat` hides, so when the reference type is `Animal` the base method runs; with a `Cat` reference the hidden method runs.",FALSE,too long: 295 words (limit 220),,,,,
 it-015,SHARED,Object-Oriented Programming,2,"Explain the difference between method overloading and method overriding, with a small Java example of each.","Here’s a way to explore the two concepts yourself.
 
 ### 1. Sketch a plan
@@ -249,7 +249,7 @@ a2.speak(); // ?
 - Fill in the `Dog.speak()` implementation.  
 - Answer the questions about which method is chosen in each scenario and name the type of binding involved.
 
-Once you’ve tried those steps, share your code and answers and we can discuss any points that need clarification.",True,,0.4,0.4-0.85,,,
+Once you’ve tried those steps, share your code and answers and we can discuss any points that need clarification.",TRUE,,0.4,0.4-0.85,,,
 it-018,EMERGENCY,Object-Oriented Programming,2,"Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?","The code does not compile because the `fetch()` method is not declared in the `Animal` class. In Java, when you declare a variable of type `Animal` and assign it an instance of `Dog`, the compiler only knows about the methods that are declared in the `Animal` class. If `fetch()` is not part of the `Animal` class, the compiler will not recognize it, even though the actual object is a `Dog`.
 
 To fix this, you have a couple of options:
@@ -278,9 +278,9 @@ To fix this, you have a couple of options:
 
 The first option is generally better because it maintains type safety and clarity. The second option can be useful in specific cases where you are sure that the `Animal` reference is actually a `Dog`.
 
-Later, revisit polymorphism and method overriding to understand how to design classes and methods for better flexibility and maintainability.",True,,1.0,0.85-1.0,,,
-it-018,HUMAN_FIRST,Object-Oriented Programming,2,"Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?","Consider what the declared type of `a` means for the methods you can call on it. What does the compiler look at when it checks `a.fetch()`? Try writing out the types involved and see what you notice, then share what you come up with.",True,disclosure outside band,0.125,0.0-0.05,,,
-it-019,HUMAN_FIRST,Object-Oriented Programming,3,When should I use an interface instead of an abstract class? Explain using a payment-processing example.,"The goal is to decide when to use an interface over an abstract class in a payment-processing system. You have a good grasp of both concepts, so you’re well-equipped to think through this. Take a shot at outlining your thoughts on the key differences and when each would be more appropriate. Once you’ve shared your ideas, I’ll be here to review and discuss them with you.",True,,0.0,0.0-0.05,,,
+Later, revisit polymorphism and method overriding to understand how to design classes and methods for better flexibility and maintainability.",TRUE,,1,0.85-1.0,,,
+it-018,HUMAN_FIRST,Object-Oriented Programming,2,"Why does my Java code `Animal a = new Dog(); a.fetch();` not compile, even though Dog has a fetch() method?","Consider what the declared type of `a` means for the methods you can call on it. What does the compiler look at when it checks `a.fetch()`? Try writing out the types involved and see what you notice, then share what you come up with.",TRUE,disclosure outside band,0.125,0.0-0.05,,,
+it-019,HUMAN_FIRST,Object-Oriented Programming,3,When should I use an interface instead of an abstract class? Explain using a payment-processing example.,"The goal is to decide when to use an interface over an abstract class in a payment-processing system. You have a good grasp of both concepts, so you’re well-equipped to think through this. Take a shot at outlining your thoughts on the key differences and when each would be more appropriate. Once you’ve shared your ideas, I’ll be here to review and discuss them with you.",TRUE,,0,0.0-0.05,,,
 it-020,PROBE,Object-Oriented Programming,3,Implement equals() and hashCode() for a Java Point class with x and y coordinates.,"Problem:
 You are developing a Java application that manages a library of books. Each book is uniquely identified by its title and ISBN. Implement the `equals()` and `hashCode()` methods for a `Book` class to ensure that books can be compared correctly and used in hash-based collections.
 
@@ -334,7 +334,7 @@ public class Book {
         return Objects.hash(isbn, title);
     }
 }
-```",True,,,,,,
+```",TRUE,,,,,,
 it-022,EMERGENCY,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"```java
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -379,8 +379,8 @@ public class DatabaseConnectionManager {
 
 This implementation of the Singleton pattern ensures that only one instance of the `DatabaseConnectionManager` is created and that the connection to the database is also managed as a singleton. The `volatile` keyword is used to ensure visibility of the instance and connection across threads. The `synchronized` blocks ensure that the instance and connection are created only once, even in a multithreaded environment.
 
-Later, revisit thread safety and the Singleton pattern to understand the importance of lazy initialization and the use of `volatile` and `synchronized` keywords in Java.",True,,1.0,0.85-1.0,,,
-it-022,HINT,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"Consider how you can ensure that the instance of your `DatabaseConnectionManager` is only created once, even in a multi-threaded environment. Look into the `synchronized` keyword or the `volatile` modifier. Try implementing it and think about the implications for thread safety. Come back if you need more guidance.",True,disclosure outside band,0.3,0.0-0.25,,,
+Later, revisit thread safety and the Singleton pattern to understand the importance of lazy initialization and the use of `volatile` and `synchronized` keywords in Java.",TRUE,,1,0.85-1.0,,,
+it-022,HINT,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"Consider how you can ensure that the instance of your `DatabaseConnectionManager` is only created once, even in a multi-threaded environment. Look into the `synchronized` keyword or the `volatile` modifier. Try implementing it and think about the implications for thread safety. Come back if you need more guidance.",TRUE,disclosure outside band,0.3,0.0-0.25,,,
 it-022,SHARED,Object-Oriented Programming,4,Implement the Singleton pattern for a database connection manager in Java and discuss thread safety.,"Here is a high‑level plan and a skeleton you can fill in. I’ll take care of the overall structure and the first half of the lazy‑initialisation logic; you’ll decide the exact synchronization, exception handling, and visibility details.
 
 ### Plan
@@ -455,7 +455,7 @@ public final class DatabaseConnectionManager {
 2. Decide whether `getConnection()` should return `null`, re‑throw an exception, or lazily retry the connection.  
 3. (Optional) Implement the `close()` method and write a small multithreaded test that calls `DatabaseConnectionManager.getInstance()` from several threads.
 
-**Question:** Which synchronization pattern (e.g., simple `synchronized`, double‑checked locking, or an `enum`‑based singleton) do you think best balances simplicity and thread‑safety for this manager, and why?",True,disclosure outside band,0.9,0.4-0.85,,,
+**Question:** Which synchronization pattern (e.g., simple `synchronized`, double‑checked locking, or an `enum`‑based singleton) do you think best balances simplicity and thread‑safety for this manager, and why?",TRUE,disclosure outside band,0.9,0.4-0.85,,,
 it-023,GUIDED,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","Let’s construct the design together.
 
 1. **What are the core objects you need to model in a library system?**  
@@ -497,8 +497,8 @@ class Fine:
    - How will you check if a loan is overdue?  
    - How will a fine be calculated and recorded?
 
-Fill in the blanks and answer the questions, then you’ll have a complete class diagram for the library system. What attribute or relationship do you want to tackle first?",True,,0.3,0.1-0.55,,,
-it-023,HUMAN_FIRST,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","You've tackled similar problems before, so you have the skills to design these classes. Think about the attributes and methods each class should have, and how they interact. Give it a try, and then share your design with me. I’ll be here to review it.",True,,0.0,0.0-0.05,,,
+Fill in the blanks and answer the questions, then you’ll have a complete class diagram for the library system. What attribute or relationship do you want to tackle first?",TRUE,,0.3,0.1-0.55,,,
+it-023,HUMAN_FIRST,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","You've tackled similar problems before, so you have the skills to design these classes. Think about the attributes and methods each class should have, and how they interact. Give it a try, and then share your design with me. I’ll be here to review it.",TRUE,,0,0.0-0.05,,,
 it-023,SHARED,Object-Oriented Programming,4,"Design the classes for a library system with books, members, loans and fines, and show how they relate.","Sure! Let's design a basic structure for a library system with the following classes: `Book`, `Member`, `Loan`, and `Fines`. We'll define the classes and their relationships, and I'll implement one of the classes to get us started.
 
 ### Plan:
@@ -538,8 +538,8 @@ Now, it's your turn to define the `Member` class. This class should include attr
 
 Once you've defined the `Member` class, let's discuss how you would like to handle the relationships between `Book`, `Member`, `Loan`, and `Fines`.
 
-What attributes and methods do you think the `Member` class should have?",True,,,,,,
-it-024,HINT,Object-Oriented Programming,4,Implement the Observer pattern so that several displays update when a weather station's temperature changes.,"Consider what the `Subject` should do when its state changes, and who needs to be notified. Look at how you can register observers and notify them in your weather station class. Try it, and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+What attributes and methods do you think the `Member` class should have?",TRUE,,,,,,
+it-024,HINT,Object-Oriented Programming,4,Implement the Observer pattern so that several displays update when a weather station's temperature changes.,"Consider what the `Subject` should do when its state changes, and who needs to be notified. Look at how you can register observers and notify them in your weather station class. Try it, and come back if you get stuck.",TRUE,,0,0.0-0.25,,,
 it-025,EMERGENCY,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","### Composition vs. Inheritance
 
 **Inheritance** is a mechanism where a new class (subclass) is derived from an existing class (superclass). The subclass inherits properties and methods from the superclass, allowing for code reuse and a hierarchical structure. However, inheritance can lead to tight coupling and complex class hierarchies, making the code harder to maintain and extend.
@@ -597,7 +597,7 @@ class Car {
 
 ### Suggestion for Later
 
-Revisit the principles of object-oriented design, particularly the ""has-a"" relationship (composition) versus the ""is-a"" relationship (inheritance). Understanding these concepts will help you design more modular and maintainable code.",True,,1.0,0.85-1.0,,,
+Revisit the principles of object-oriented design, particularly the ""has-a"" relationship (composition) versus the ""is-a"" relationship (inheritance). Understanding these concepts will help you design more modular and maintainable code.",TRUE,,1,0.85-1.0,,,
 it-025,GUIDED,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","Let's break down the concepts and rewrite the `Car` class using composition.
 
 ### Step-by-Step
@@ -640,7 +640,7 @@ class Car:
         pass
 ```
 
-Fill in the blanks in the `start` and `stop` methods of both classes. What should each method do?",False,20 lines of code with no blanks left for the student,0.2,0.1-0.55,,,
+Fill in the blanks in the `start` and `stop` methods of both classes. What should each method do?",FALSE,20 lines of code with no blanks left for the student,0.2,0.1-0.55,,,
 it-025,HINT,Object-Oriented Programming,3,"Explain composition versus inheritance, and rewrite a `Car extends Engine` design using composition.","What single line would you add inside `Car` to hold an engine instance?  
 How would you call the engine’s `start()` method from a `Car.start()` without writing the full delegation code?  
 
@@ -655,7 +655,7 @@ public class Car {
         ___;               // what call goes here?
     }
 }
-```",False,contains 7 lines of code; disclosure outside band,0.3,0.0-0.25,,,
+```",FALSE,contains 7 lines of code; disclosure outside band,0.3,0.0-0.25,,,
 it-028,EMERGENCY,Data Structures and Algorithms,2,Implement binary search on a sorted array and explain why the array must be sorted.,"```python
 def binary_search(arr, target):
     left, right = 0, len(arr) - 1
@@ -672,7 +672,7 @@ def binary_search(arr, target):
     return -1
 ```
 
-Binary search works by repeatedly dividing the search interval in half. The array must be sorted to ensure that the middle element can be used to eliminate half of the remaining elements in each step. If the array is not sorted, the middle element would not provide any useful information about the location of the target, and the algorithm would not work correctly. Later, revisit how sorting and dividing the search space improve the efficiency of search algorithms.",True,,1.0,0.85-1.0,,,
+Binary search works by repeatedly dividing the search interval in half. The array must be sorted to ensure that the middle element can be used to eliminate half of the remaining elements in each step. If the array is not sorted, the middle element would not provide any useful information about the location of the target, and the algorithm would not work correctly. Later, revisit how sorting and dividing the search space improve the efficiency of search algorithms.",TRUE,,1,0.85-1.0,,,
 it-030,SHARED,Data Structures and Algorithms,3,"Use a stack to check whether the brackets in a string such as ""{[()]}"" are balanced.","To check if the brackets in a string are balanced, we can use a stack to keep track of the opening brackets. Here’s a plan:
 
 1. Initialize an empty stack.
@@ -696,7 +696,7 @@ def is_balanced(s):
 
 Your turn: complete the function by handling the closing brackets and checking if the stack is empty at the end. 
 
-Think about: How will you handle the closing brackets to ensure they match the correct opening brackets? What should you do if a closing bracket does not match the top of the stack?",True,,0.75,0.4-0.85,,,
+Think about: How will you handle the closing brackets to ensure they match the correct opening brackets? What should you do if a closing bracket does not match the top of the stack?",TRUE,,0.75,0.4-0.85,,,
 it-031,HINT,Data Structures and Algorithms,3,Implement a queue using two stacks.,"What operation on a stack could let you access the element that was inserted **first**?  
 If you could move items temporarily, in which direction would you move them to reach that first‑inserted element?  
 
@@ -706,7 +706,7 @@ def enqueue(item):
 
 def dequeue():
     # ___ ?
-```",False,contains 4 lines of code,0.1,0.0-0.25,,,
+```",FALSE,contains 4 lines of code,0.1,0.0-0.25,,,
 it-032,SHARED,Data Structures and Algorithms,2,Implement bubble sort and explain its best-case and worst-case time complexity.,"Here’s a concrete plan and most of the implementation. We’ll:
 
 1. Set up the outer loop that runs at most `n‑1` passes.  
@@ -756,7 +756,7 @@ def bubble_sort(arr):
 **Your turn:**  
 * Fill in the missing swap line.  
 * Run the tests and confirm that the early‑exit works for the sorted case.  
-* Finally, write a short paragraph summarizing the best‑case and worst‑case complexities in your own words. What do you observe about the number of passes in each case?",True,disclosure outside band,0.9,0.4-0.85,,,
+* Finally, write a short paragraph summarizing the best‑case and worst‑case complexities in your own words. What do you observe about the number of passes in each case?",TRUE,disclosure outside band,0.9,0.4-0.85,,,
 it-033,PROBE,Data Structures and Algorithms,3,"Implement merge sort and trace it on the array [5, 2, 8, 1, 9, 3].","Problem:
 You are given a list of temperatures recorded over a week: `[23, 17, 31, 29, 20, 25, 18]`. Implement the merge sort algorithm and trace its execution on this list. Provide the intermediate steps of the merge sort process, showing the state of the list after each merge operation.
 
@@ -771,7 +771,7 @@ The correct answer should include the following:
 The student should also provide the correct implementation of the merge sort algorithm, which should include the following key components:
 
 - A `merge_sort` function that recursively divides the list into halves.
-- A `merge` function that merges two sorted halves into a single sorted list.",True,,,,,,
+- A `merge` function that merges two sorted halves into a single sorted list.",TRUE,,,,,,
 it-034,PROBE,Data Structures and Algorithms,3,Reverse a singly linked list in place.,"Problem:
 You are given a singly linked list where each node contains an integer value and a pointer to the next node. Write a function to reverse the linked list in place. The function should return the new head of the reversed list.
 
@@ -820,11 +820,11 @@ current = reversed_head
 while current:
     print(current.val, end="" -> "" if current.next else ""\n"")
     current = current.next
-```",True,,,,,,
-it-035,HUMAN_FIRST,Data Structures and Algorithms,4,Detect whether a singly linked list contains a cycle using O(1) extra space.,"You’ve worked with linked lists before, and you know how to traverse them, so you’re well-prepared to tackle this problem. Give it a try on your own, and then share your attempt with me. I’ll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
-it-036,HINT,Data Structures and Algorithms,3,Implement insertion and in-order traversal for a binary search tree.,"For insertion, consider what you need to do at each node based on the value you're inserting. Should you go left or right? For in-order traversal, think about the order in which you visit nodes. Try implementing these and see how it goes!",True,disclosure outside band,0.3,0.0-0.25,,,
-it-039,HINT,Data Structures and Algorithms,4,"Given an array of integers and a target, return the indices of the two numbers that add up to the target in O(n) time.",What information could you keep while scanning the array once that would let you determine whether the current element’s partner for the target has already appeared? Think about how you might retrieve a previously seen value in constant time. Try coding that idea and let me know if you get stuck.,True,disclosure outside band,0.5,0.0-0.25,,,
-it-040,HINT,Database Systems,1,"Write an SQL query that lists all students with a GPA above 3.0, ordered by GPA from highest to lowest.",Consider the `WHERE` clause to filter the GPA and the `ORDER BY` clause to sort the results. Take a look at your table structure to identify the correct column names. Try it out and come back if you need more help.,True,disclosure outside band,0.333,0.0-0.25,,,
+```",TRUE,,,,,,
+it-035,HUMAN_FIRST,Data Structures and Algorithms,4,Detect whether a singly linked list contains a cycle using O(1) extra space.,"You’ve worked with linked lists before, and you know how to traverse them, so you’re well-prepared to tackle this problem. Give it a try on your own, and then share your attempt with me. I’ll be here to review it and provide feedback.",TRUE,,0,0.0-0.05,,,
+it-036,HINT,Data Structures and Algorithms,3,Implement insertion and in-order traversal for a binary search tree.,"For insertion, consider what you need to do at each node based on the value you're inserting. Should you go left or right? For in-order traversal, think about the order in which you visit nodes. Try implementing these and see how it goes!",TRUE,disclosure outside band,0.3,0.0-0.25,,,
+it-039,HINT,Data Structures and Algorithms,4,"Given an array of integers and a target, return the indices of the two numbers that add up to the target in O(n) time.",What information could you keep while scanning the array once that would let you determine whether the current element’s partner for the target has already appeared? Think about how you might retrieve a previously seen value in constant time. Try coding that idea and let me know if you get stuck.,TRUE,disclosure outside band,0.5,0.0-0.25,,,
+it-040,HINT,Database Systems,1,"Write an SQL query that lists all students with a GPA above 3.0, ordered by GPA from highest to lowest.",Consider the `WHERE` clause to filter the GPA and the `ORDER BY` clause to sort the results. Take a look at your table structure to identify the correct column names. Try it out and come back if you need more help.,TRUE,disclosure outside band,0.333,0.0-0.25,,,
 it-041,GUIDED,Database Systems,2,Write an SQL query that counts how many students are enrolled in each course.,"Let's construct the SQL query step by step.
 
 1. Identify the tables involved. Which table contains the enrollment data?
@@ -842,9 +842,9 @@ GROUP BY
     ____;         -- step 3: group by the course
 ```
 
-Fill in the blanks and run the query. What results do you expect to see?",True,,0.4,0.1-0.55,,,
-it-041,HUMAN_FIRST,Database Systems,2,Write an SQL query that counts how many students are enrolled in each course.,"You've worked with SQL queries and GROUP BY before, so you're well-prepared for this. Give it a try, and share your attempt. I'll review it with you afterward.",True,,0.0,0.0-0.05,,,
-it-042,HINT,Database Systems,2,Write an SQL query that lists only the courses with more than 30 enrolled students.,"Consider using the `COUNT` function and a `GROUP BY` clause to aggregate the number of students per course. How can you filter the results to show only those with more than 30 students? Try it, and come back if you get stuck.",True,disclosure outside band,0.375,0.0-0.25,,,
+Fill in the blanks and run the query. What results do you expect to see?",TRUE,,0.4,0.1-0.55,,,
+it-041,HUMAN_FIRST,Database Systems,2,Write an SQL query that counts how many students are enrolled in each course.,"You've worked with SQL queries and GROUP BY before, so you're well-prepared for this. Give it a try, and share your attempt. I'll review it with you afterward.",TRUE,,0,0.0-0.05,,,
+it-042,HINT,Database Systems,2,Write an SQL query that lists only the courses with more than 30 enrolled students.,"Consider using the `COUNT` function and a `GROUP BY` clause to aggregate the number of students per course. How can you filter the results to show only those with more than 30 students? Try it, and come back if you get stuck.",TRUE,disclosure outside band,0.375,0.0-0.25,,,
 it-042,SHARED,Database Systems,2,Write an SQL query that lists only the courses with more than 30 enrolled students.,"To achieve this, we'll need to write an SQL query that aggregates the number of students enrolled in each course and then filters out the courses with more than 30 enrolled students. Here’s a step-by-step plan:
 
 1. **Select the course information and count the number of students for each course.**
@@ -862,7 +862,7 @@ GROUP BY course_id, course_name;
 
 This query will give us the number of students enrolled in each course. Now, it's your turn to complete the query by adding the filter to only include courses with more than 30 students.
 
-Your turn: Add the `HAVING` clause to filter the results. Then, decide if you want to include any additional columns in the `SELECT` statement, such as the course department or instructor name. Let me know your choices and why you made them.",True,disclosure outside band,0.875,0.4-0.85,,,
+Your turn: Add the `HAVING` clause to filter the results. Then, decide if you want to include any additional columns in the `SELECT` statement, such as the course department or instructor name. Let me know your choices and why you made them.",TRUE,disclosure outside band,0.875,0.4-0.85,,,
 it-043,SHARED,Database Systems,2,Explain the difference between INNER JOIN and LEFT JOIN using a students and enrollments example.,"Below is a step‑by‑step outline that gives you the core ideas and a concrete example, while leaving the parts you’ll fill in yourself.
 
 ---
@@ -930,7 +930,7 @@ LEFT JOIN enrollments AS e
 
 2. **Summarize in one or two sentences** the key difference you observe between the two result sets.
 
-Once you’ve written your answers, share them here and we can check whether the reasoning matches the behavior of the joins.",True,disclosure outside band,0.9,0.4-0.85,,,
+Once you’ve written your answers, share them here and we can check whether the reasoning matches the behavior of the joins.",TRUE,disclosure outside band,0.9,0.4-0.85,,,
 it-044,GUIDED,Database Systems,3,Write an SQL query that finds the students who are not enrolled in any course.,"Let's approach this step by step.
 
 1. Identify the tables involved. Which table contains the student information, and which table contains the enrollment information?
@@ -945,15 +945,15 @@ FROM students s
 WHERE ___  -- step 2: condition to filter students not in the enrollment table
 ```
 
-Fill in the blank and run the query. What should the result show?",True,,0.375,0.1-0.55,,,
+Fill in the blank and run the query. What should the result show?",TRUE,,0.375,0.1-0.55,,,
 it-045,EMERGENCY,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"```sql
 SELECT MAX(salary) AS SecondHighestSalary
 FROM Employee
 WHERE salary < (SELECT MAX(salary) FROM Employee)
 ```
 
-This query finds the second-highest salary by first determining the highest salary in the `Employee` table. It then selects the maximum salary that is less than this highest salary, effectively giving you the second-highest salary. Later, revisit subqueries and aggregate functions to deepen your understanding of how they work together.",True,,1.0,0.85-1.0,,,
-it-045,HINT,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Consider using a subquery to first find the highest salary, and then filter out that value in your main query. Take a look at the `WHERE` clause and how you can exclude the highest salary. Give it a try and see how it goes!",True,disclosure outside band,0.5,0.0-0.25,,,
+This query finds the second-highest salary by first determining the highest salary in the `Employee` table. It then selects the maximum salary that is less than this highest salary, effectively giving you the second-highest salary. Later, revisit subqueries and aggregate functions to deepen your understanding of how they work together.",TRUE,,1,0.85-1.0,,,
+it-045,HINT,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Consider using a subquery to first find the highest salary, and then filter out that value in your main query. Take a look at the `WHERE` clause and how you can exclude the highest salary. Give it a try and see how it goes!",TRUE,disclosure outside band,0.5,0.0-0.25,,,
 it-045,PROBE,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Problem:
 You are working with a database that contains a table named `Sales` which records the sales amounts for different products. The table has the following columns: `product_id`, `sale_date`, and `amount`. Write an SQL query to find the second-highest sales amount recorded in the `Sales` table.
 
@@ -967,7 +967,7 @@ A correct attempt must contain:
 1. A subquery to find the maximum sales amount.
 2. A main query that selects the maximum sales amount less than the maximum sales amount found in the subquery.
 3. Correct use of the `SELECT` and `FROM` clauses.
-4. Proper handling of the `amount` column.",True,,,,,,
+4. Proper handling of the `amount` column.",TRUE,,,,,,
 it-045,SHARED,Database Systems,3,Write an SQL query that finds the second-highest salary in an Employee table.,"Sure! Let's break this down into steps:
 
 1. **Understand the Table Structure**: The `Employee` table likely has a column for salary, which we'll assume is named `salary`.
@@ -999,8 +999,8 @@ WHERE salary < (
 );
 ```
 
-Can you complete the subquery and the outer query? Also, think about what you would do if there are multiple employees with the same highest salary. How would you handle that scenario?",True,,0.667,0.4-0.85,,,
-it-047,HINT,Database Systems,3,"Describe an ER model for a hospital with patients, doctors, appointments and wards, including cardinalities.","Consider the relationships between entities: Which entity would you connect with a ""treats"" relationship, and what are the minimum and maximum number of patients a doctor can treat? Sketch this out, then come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+Can you complete the subquery and the outer query? Also, think about what you would do if there are multiple employees with the same highest salary. How would you handle that scenario?",TRUE,,0.667,0.4-0.85,,,
+it-047,HINT,Database Systems,3,"Describe an ER model for a hospital with patients, doctors, appointments and wards, including cardinalities.","Consider the relationships between entities: Which entity would you connect with a ""treats"" relationship, and what are the minimum and maximum number of patients a doctor can treat? Sketch this out, then come back if you need more guidance.",TRUE,,0.1,0.0-0.25,,,
 it-048,HINT,Database Systems,2,"Explain what a database transaction is and the ACID properties, using a bank transfer example.","What single concept describes a group of database operations that must either all succeed or all fail?  
 
 When you think about a bank transfer, which step would break the whole process if it didn’t happen?  
@@ -1011,13 +1011,13 @@ For each ACID letter, ask yourself:
 - **I** – What could go wrong if two transfers run at the same time?
 - **D** – Where is the result stored so it survives a crash?  
 
-Try filling in the blanks for each property, then combine them into a short explanation.",False,too long: 110 words (limit 90),0.25,0.0-0.25,,,
+Try filling in the blanks for each property, then combine them into a short explanation.",FALSE,too long: 110 words (limit 90),0.25,0.0-0.25,,,
 it-048,HUMAN_FIRST,Database Systems,2,"Explain what a database transaction is and the ACID properties, using a bank transfer example.","What do you think a database transaction represents in the context of moving money from one account to another?  
 Which properties must such a transfer satisfy to ensure it is reliable and safe?  
 Can you list those properties and describe, using the bank‑transfer scenario, what each one would guarantee?  
 
-Try drafting your answers, then share them with me for feedback.",True,,0.0,0.0-0.05,,,
-it-049,HUMAN_FIRST,Database Systems,4,Write a stored procedure that transfers money between two accounts and rolls back if anything fails.,"You have the skills to handle transactions and error handling in SQL, so you can tackle this task. Give it a try, and then share your attempt with me. I’ll review it and provide feedback.",True,,0.0,0.0-0.05,,,
+Try drafting your answers, then share them with me for feedback.",TRUE,,0,0.0-0.05,,,
+it-049,HUMAN_FIRST,Database Systems,4,Write a stored procedure that transfers money between two accounts and rolls back if anything fails.,"You have the skills to handle transactions and error handling in SQL, so you can tackle this task. Give it a try, and then share your attempt with me. I’ll review it and provide feedback.",TRUE,,0,0.0-0.05,,,
 it-050,SHARED,Database Systems,3,"Explain how an index speeds up queries, and when adding an index can make performance worse.","Here’s a collaborative outline you can use. I’ll flesh out the core concepts and give you a concrete piece of code to complete; the rest you’ll finish and then decide on the final recommendation.
 
 ---
@@ -1089,7 +1089,7 @@ I’ll give you a starter analysis:
 1. **Net effect:** Based on the numbers above, do you expect the read‑speed gain to outweigh the write overhead?  
 2. **Alternative:** Would a **partial** or **filtered** index (e.g., only on recent rows) be a better compromise? Explain your reasoning.  
 
-Once you’ve written your answers, tell me which option you would choose and why.",False,too long: 610 words (limit 420); disclosure outside band,0.9,0.4-0.85,,,
+Once you’ve written your answers, tell me which option you would choose and why.",FALSE,too long: 610 words (limit 420); disclosure outside band,0.9,0.4-0.85,,,
 it-051,HINT,Database Systems,4,Write an SQL query that ranks students by GPA within each department using a window function.,"What pieces still need to be decided in order to rank students inside each department?
 
 ```sql
@@ -1099,8 +1099,8 @@ SELECT
     ___,
     ___() OVER (PARTITION BY ___ ORDER BY ___ DESC) AS ___
 FROM ___;
-```",False,contains 6 lines of code,0.25,0.0-0.25,,,
-it-051,HUMAN_FIRST,Database Systems,4,Write an SQL query that ranks students by GPA within each department using a window function.,"You've worked with SQL before and you know how to use window functions, so you're well-prepared for this task. Give it a try, and share your attempt with me. I'll be here to review it and provide feedback.",True,,0.0,0.0-0.05,,,
+```",FALSE,contains 6 lines of code,0.25,0.0-0.25,,,
+it-051,HUMAN_FIRST,Database Systems,4,Write an SQL query that ranks students by GPA within each department using a window function.,"You've worked with SQL before and you know how to use window functions, so you're well-prepared for this task. Give it a try, and share your attempt with me. I'll be here to review it and provide feedback.",TRUE,,0,0.0-0.05,,,
 it-053,GUIDED,Web Development,1,"Create an HTML form with name and email fields and a submit button, where both fields are required.","Let's build the HTML form step by step.
 
 1. Start with the basic HTML structure. What tags do you need for the document structure?
@@ -1132,7 +1132,7 @@ it-053,GUIDED,Web Development,1,"Create an HTML form with name and email fields 
 </html>
 ```
 
-Fill in the blanks, then test the form by trying to submit it with and without filling in the fields. What should happen if you leave either field empty?",True,,0.4,0.1-0.55,,,
+Fill in the blanks, then test the form by trying to submit it with and without filling in the fields. What should happen if you leave either field empty?",TRUE,,0.4,0.1-0.55,,,
 it-054,GUIDED,Web Development,1,Write CSS that centres a div horizontally and vertically using flexbox.,"Think about the Flexbox properties you’ll need on the container to make its child sit in the middle.
 
 1. What CSS rule turns a block element into a Flex container?
@@ -1155,7 +1155,7 @@ Now place those ideas into the stylesheet, leaving blanks for the exact values:
 }
 ```
 
-Fill in each `___` with the appropriate value, then create a simple HTML page with a `<div class=""parent"">` containing a `<div class=""child"">`. What do you observe when you open the page in a browser?",True,,0.5,0.1-0.55,,,
+Fill in each `___` with the appropriate value, then create a simple HTML page with a `<div class=""parent"">` containing a `<div class=""child"">`. What do you observe when you open the page in a browser?",TRUE,,0.5,0.1-0.55,,,
 it-055,SHARED,Web Development,1,Write JavaScript that changes a paragraph's text when a button is clicked.,"Sure, let's break this down into steps:
 
 1. Create the HTML structure with a paragraph and a button.
@@ -1193,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
-Your turn: complete the function inside the event listener to change the text of the paragraph with the ID `myParagraph`. What text would you like to set it to?",True,,0.6,0.4-0.85,,,
+Your turn: complete the function inside the event listener to change the text of the paragraph with the ID `myParagraph`. What text would you like to set it to?",TRUE,,0.6,0.4-0.85,,,
 it-056,GUIDED,Web Development,2,Create a three-column layout that becomes a single column on screens narrower than 600px.,"Let’s sketch the layout together.
 
 1. **HTML** – You need a wrapper that holds three items. What tag(s) will you use for the wrapper and the three parts?
@@ -1235,7 +1235,7 @@ it-056,GUIDED,Web Development,2,Create a three-column layout that becomes a sing
 }
 ```
 
-Replace each `___` with the appropriate value or selector. After completing the blanks, open the page in a browser and resize the window—what happens when the width drops below 600 px?",True,disclosure outside band,0.6,0.1-0.55,,,
+Replace each `___` with the appropriate value or selector. After completing the blanks, open the page in a browser and resize the window—what happens when the width drops below 600 px?",TRUE,disclosure outside band,0.6,0.1-0.55,,,
 it-056,SHARED,Web Development,2,Create a three-column layout that becomes a single column on screens narrower than 600px.,"Sure! Let's create a responsive three-column layout that stacks into a single column on screens narrower than 600px. We'll use CSS for this. Here’s a plan:
 
 1. Define the HTML structure with three columns.
@@ -1281,7 +1281,7 @@ I'll do steps 1 and 2:
 }
 ```
 
-Your turn: complete the media query to stack the columns on screens narrower than 600px. Then decide: should the columns have a fixed width or flexibly adjust based on content? Tell me which you prefer and why.",True,,0.5,0.4-0.85,,,
+Your turn: complete the media query to stack the columns on screens narrower than 600px. Then decide: should the columns have a fixed width or flexibly adjust based on content? Tell me which you prefer and why.",TRUE,,0.5,0.4-0.85,,,
 it-057,GUIDED,Web Development,2,Use fetch() to load a list of users from a JSON API and show their names in a list on the page.,"Let’s outline the pieces you’ll need and let you fill in the details.
 
 1. **Make the request** – What `fetch` call will you write? Which URL should you pass?
@@ -1312,7 +1312,7 @@ fetch('___')                     // ← API endpoint URL
   .catch(err => console.error(err));
 ```
 
-Work through each blank, then run the script and verify that the list on the page populates with the user names.",True,disclosure outside band,0.6,0.1-0.55,,,
+Work through each blank, then run the script and verify that the list on the page populates with the user names.",TRUE,disclosure outside band,0.6,0.1-0.55,,,
 it-058,GUIDED,Web Development,2,"Explain the difference between let, const and var, with an example of a bug each one can cause or prevent.","Let’s explore the three declaration keywords step by step.
 
 1. **Scope** – For each keyword, ask yourself: *Is the variable visible only inside the block where it’s defined, or also outside that block but inside the containing function?*  
@@ -1362,9 +1362,9 @@ function demoConst() {
 - Run the code and answer the questions in the comments (`(a)`, `(b)`, …).
 - Reflect on how each behavior could lead to a bug in a larger program.
 
-By completing these steps you’ll see how `var`, `let`, and `const` differ in scope, hoisting, and mutability, and why choosing the right one matters.",False,too long: 367 words (limit 300),0.5,0.1-0.55,,,
-it-059,HINT,Web Development,3,Why does `console.log(data)` print undefined right after I call an async function that loads the data?,Consider the timing of when the async function completes versus when `console.log(data)` runs. Look at the sequence of your code and think about when the data is actually available. Try it again and see if you can spot the timing issue.,True,,0.25,0.0-0.25,,,
-it-060,HUMAN_FIRST,Web Development,3,"Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist.","You've worked with Express.js before, so you have the skills to create this endpoint. Give it a try, and then share your code with me. I'll review it and provide feedback.",True,,0.0,0.0-0.05,,,
+By completing these steps you’ll see how `var`, `let`, and `const` differ in scope, hoisting, and mutability, and why choosing the right one matters.",FALSE,too long: 367 words (limit 300),0.5,0.1-0.55,,,
+it-059,HINT,Web Development,3,Why does `console.log(data)` print undefined right after I call an async function that loads the data?,Consider the timing of when the async function completes versus when `console.log(data)` runs. Look at the sequence of your code and think about when the data is actually available. Try it again and see if you can spot the timing issue.,TRUE,,0.25,0.0-0.25,,,
+it-060,HUMAN_FIRST,Web Development,3,"Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist.","You've worked with Express.js before, so you have the skills to create this endpoint. Give it a try, and then share your code with me. I'll review it and provide feedback.",TRUE,,0,0.0-0.05,,,
 it-060,PROBE,Web Development,3,"Build an Express.js endpoint that returns a product by id, and returns 404 if it does not exist.","Problem:
 You are developing an API for a movie streaming service. Create an Express.js endpoint that retrieves a movie by its ID. If the movie does not exist, the endpoint should return a 404 status code.
 
@@ -1400,8 +1400,8 @@ app.get('/movies/:id', (req, res) => {
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
-```",False,probe is too close to the original task (overlap 0.45),,,,,
-it-062,HUMAN_FIRST,Web Development,4,My Node.js login route builds its SQL query with string concatenation. Show how to prevent SQL injection.,"Using parameterized queries is key to preventing SQL injection. You've worked with Node.js and SQL before, so you're well-prepared for this. Give it a try on your own first, and then share your attempt. I’ll be here to review it with you.",True,disclosure outside band,0.125,0.0-0.05,,,
+```",FALSE,probe is too close to the original task (overlap 0.45),,,,,
+it-062,HUMAN_FIRST,Web Development,4,My Node.js login route builds its SQL query with string concatenation. Show how to prevent SQL injection.,"Using parameterized queries is key to preventing SQL injection. You've worked with Node.js and SQL before, so you're well-prepared for this. Give it a try on your own first, and then share your attempt. I’ll be here to review it with you.",TRUE,disclosure outside band,0.125,0.0-0.05,,,
 it-063,GUIDED,Web Development,3,"Design REST endpoints for a to-do app with users, lists and tasks, including HTTP methods and status codes.","Let's design the REST endpoints for a to-do app that includes users, lists, and tasks. We'll go through it step by step.
 
 1. **Define the resources**: What are the main entities in your to-do app?
@@ -1565,7 +1565,7 @@ def delete_user(user_id):
 @app.route('/users/<int:user_id>/lists', methods=['POST'])
 def create_list(user_id):
     list_data = request.json
-    list_id",False,too long: 552 words (limit 300); 12 lines of code with no blanks left for the student,,,,,
+    list_id",FALSE,too long: 552 words (limit 300); 12 lines of code with no blanks left for the student,,,,,
 it-065,SHARED,Software Engineering,2,Write three user stories with acceptance criteria for a student timetable app.,"Sure! Here’s a plan for creating three user stories with acceptance criteria for a student timetable app. We’ll work on the first one together, and then you can complete the remaining two.
 
 ### User Story 1: View Timetable
@@ -1619,7 +1619,7 @@ Now, let’s create the second and third user stories along with their acceptanc
    - The app should send a notification to the user at the specified time before the class.
    - The notification should include the subject name, time, and location of the class.
 
-Your turn: Complete the acceptance criteria for User Story 2 and User Story 3. Feel free to add or modify criteria as you see fit. Once you’re done, let me know if you have any questions or need further assistance!",False,too long: 484 words (limit 420),0.75,0.4-0.85,,,
+Your turn: Complete the acceptance criteria for User Story 2 and User Story 3. Feel free to add or modify criteria as you see fit. Once you’re done, let me know if you have any questions or need further assistance!",FALSE,too long: 484 words (limit 420),0.75,0.4-0.85,,,
 it-066,PROBE,Software Engineering,1,"Explain the difference between functional and non-functional requirements, with examples from a food delivery app.","Problem:
 You are designing a mobile app for a fitness tracking service. Explain the difference between functional and non-functional requirements, and provide examples specific to this fitness app.
 
@@ -1627,7 +1627,7 @@ Answer key:
 - **Correct explanation of functional requirements**: Functional requirements specify the actions or functions the app must perform, such as user interactions and system responses.
 - **Example of a functional requirement for the fitness app**: ""The app must allow users to log their daily exercise activities and track calories burned.""
 - **Correct explanation of non-functional requirements**: Non-functional requirements describe the qualities or constraints of the system, such as performance, security, and usability.
-- **Example of a non-functional requirement for the fitness app**: ""The app must synchronize user data with the server within 5 seconds to ensure real-time updates.""",False,probe is too close to the original task (overlap 0.44),,,,,
+- **Example of a non-functional requirement for the fitness app**: ""The app must synchronize user data with the server within 5 seconds to ensure real-time updates.""",FALSE,probe is too close to the original task (overlap 0.44),,,,,
 it-068,EMERGENCY,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Sure! Here's a use case diagram for an ATM, including actors and main use cases:
 
 ### Actors:
@@ -1695,7 +1695,7 @@ it-068,EMERGENCY,Software Engineering,2,"Describe a use case diagram for an ATM,
 Each use case represents a specific interaction or action that can be performed by the actors. For example, the ""insert card"" use case is initiated by the customer and is a prerequisite for most other use cases.
 
 ### Next Steps:
-Later, revisit the relationships between actors and use cases, and practice creating more detailed use case diagrams for different systems to solidify your understanding.",True,,1.0,0.85-1.0,,,
+Later, revisit the relationships between actors and use cases, and practice creating more detailed use case diagrams for different systems to solidify your understanding.",TRUE,,1,0.85-1.0,,,
 it-068,GUIDED,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Let’s construct the ATM use‑case diagram together.
 
 1. **Actors** – Who interacts with the ATM? List each distinct actor and write them as separate boxes.  
@@ -1728,8 +1728,8 @@ Below is a skeletal outline you can fill in. Replace each `___` with the appropr
 - List at least five use cases for the customer, two for maintenance staff, and one for the bank.  
 - Connect each actor to the appropriate use cases with lines.  
 
-When you’ve placed all the pieces, sketch the diagram (hand‑drawn or with a tool) and check that every actor is linked to the right set of use cases. What does your final diagram look like?",True,,0.3,0.1-0.55,,,
-it-068,HINT,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Consider the main actors involved in using an ATM, such as the customer and the bank. What are the primary actions each actor performs? For the customer, think about what they do when they interact with the ATM. Try sketching out the diagram and listing the use cases, then come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+When you’ve placed all the pieces, sketch the diagram (hand‑drawn or with a tool) and check that every actor is linked to the right set of use cases. What does your final diagram look like?",TRUE,,0.3,0.1-0.55,,,
+it-068,HINT,Software Engineering,2,"Describe a use case diagram for an ATM, including actors and main use cases.","Consider the main actors involved in using an ATM, such as the customer and the bank. What are the primary actions each actor performs? For the customer, think about what they do when they interact with the ATM. Try sketching out the diagram and listing the use cases, then come back if you need more guidance.",TRUE,,0.1,0.0-0.25,,,
 it-069,GUIDED,Software Engineering,3,"Write unit tests for a function that calculates a discounted price, covering the edge cases.","Consider the situations you need to verify for a discount‑calculation function.
 
 1. What input values represent a **0 %** discount?
@@ -1786,8 +1786,8 @@ if __name__ == ""__main__"":
     unittest.main()
 ```
 
-Replace each `___` with the appropriate values and expected outcomes based on the questions you answered. What choices do you make for each case?",True,disclosure outside band,0.6,0.1-0.55,,,
-it-069,HUMAN_FIRST,Software Engineering,3,"Write unit tests for a function that calculates a discounted price, covering the edge cases.","You've worked with unit tests before, and you're well-equipped to handle this task. Think about the different scenarios where the discount might apply or not, and consider edge cases like zero discount or maximum discount. Try writing your tests, and then share your attempt. I'm here to review them with you.",True,disclosure outside band,0.1,0.0-0.05,,,
+Replace each `___` with the appropriate values and expected outcomes based on the questions you answered. What choices do you make for each case?",TRUE,disclosure outside band,0.6,0.1-0.55,,,
+it-069,HUMAN_FIRST,Software Engineering,3,"Write unit tests for a function that calculates a discounted price, covering the edge cases.","You've worked with unit tests before, and you're well-equipped to handle this task. Think about the different scenarios where the discount might apply or not, and consider edge cases like zero discount or maximum discount. Try writing your tests, and then share your attempt. I'm here to review them with you.",TRUE,disclosure outside band,0.1,0.0-0.05,,,
 it-070,GUIDED,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","Let’s explore the three testing levels step by step.
 
 ### 1. Unit testing  
@@ -1849,15 +1849,15 @@ def test_user_flow():
     assert check_message(user_id, ""Hello world""), ""The posted message should ___""
 ```
 
-Answer the questions and fill in the blanks to complete each test. This will help you see how the scope expands from a single function to multiple components and finally to the whole system.",True,,0.5,0.1-0.55,,,
+Answer the questions and fill in the blanks to complete each test. This will help you see how the scope expands from a single function to multiple components and finally to the whole system.",TRUE,,0.5,0.1-0.55,,,
 it-070,HINT,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","What does it mean to test a single, isolated piece of code—like a single function—without any of its collaborators?  
 
 When two or more components need to work together (for example, a service calling a database), what kind of test checks that their interaction behaves correctly?  
 
 If you want to verify the behavior of the whole application from the user’s perspective, covering every layer end‑to‑end, which testing level are you exercising?  
 
-Try drafting a brief example for each scenario, then compare them.",True,disclosure outside band,0.5,0.0-0.25,,,
-it-070,HUMAN_FIRST,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","You’ve got a good grasp of testing concepts, so you can definitely explain the differences between unit, integration, and system testing with an example for each. Take a moment to write down your understanding and examples, then share them with me. I’m here to review and provide feedback!",False,does not invite the student's attempt,0.0,0.0-0.05,,,
+Try drafting a brief example for each scenario, then compare them.",TRUE,disclosure outside band,0.5,0.0-0.25,,,
+it-070,HUMAN_FIRST,Software Engineering,2,"Explain the difference between unit, integration and system testing, with one example of each.","You’ve got a good grasp of testing concepts, so you can definitely explain the differences between unit, integration, and system testing with an example for each. Take a moment to write down your understanding and examples, then share them with me. I’m here to review and provide feedback!",FALSE,does not invite the student's attempt,0,0.0-0.05,,,
 it-071,GUIDED,Software Engineering,3,Describe a sequence diagram for a customer placing an order in an online shop.,"Let’s construct the diagram together.
 
 1. **Who are the participants in the scenario?**  
@@ -1913,7 +1913,7 @@ sequenceDiagram
     WebBrowser ->> Customer: ___
 ```
 
-Answer each question, then replace the `___` placeholders with the appropriate messages. This will give you a complete sequence diagram for the order‑placement flow.",True,disclosure outside band,0.583,0.1-0.55,,,
+Answer each question, then replace the `___` placeholders with the appropriate messages. This will give you a complete sequence diagram for the order‑placement flow.",TRUE,disclosure outside band,0.583,0.1-0.55,,,
 it-072,EMERGENCY,Software Engineering,4,"A 200-line function validates input, queries the database and sends an email. Identify the code smells and propose a refactoring.","The primary code smells in a 200-line function that validates input, queries the database, and sends an email are:
 
 1. **Long Method**: A 200-line function is too long and hard to understand, maintain, and test.
@@ -1972,8 +1972,8 @@ def process_request(input_data):
 
 ### Suggested Follow-Up
 
-Later, revisit the concepts of the Single Responsibility Principle, code refactoring, and exception handling to solidify your understanding and improve your ability to write maintainable code.",True,,1.0,0.85-1.0,,,
-it-073,HUMAN_FIRST,Software Engineering,3,Estimate the effort for a login feature using story points and explain your reasoning.,"Estimating effort for a login feature is a great way to practice breaking down tasks. You've likely worked on similar projects, so you have a good sense of what’s involved. Give it a try, and share your estimate along with your reasoning. I’ll be here to review it with you.",True,,0.0,0.0-0.05,,,
+Later, revisit the concepts of the Single Responsibility Principle, code refactoring, and exception handling to solidify your understanding and improve your ability to write maintainable code.",TRUE,,1,0.85-1.0,,,
+it-073,HUMAN_FIRST,Software Engineering,3,Estimate the effort for a login feature using story points and explain your reasoning.,"Estimating effort for a login feature is a great way to practice breaking down tasks. You've likely worked on similar projects, so you have a good sense of what’s involved. Give it a try, and share your estimate along with your reasoning. I’ll be here to review it with you.",TRUE,,0,0.0-0.05,,,
 it-073,SHARED,Software Engineering,3,Estimate the effort for a login feature using story points and explain your reasoning.,"Below is a scaffold you can fill in to produce a complete story‑point estimate for the login feature. I’ll handle the overall structure and give you the pieces you need to decide; the rest is left for you to complete.
 
 ---
@@ -2071,7 +2071,7 @@ Add up all the “Adjusted” values to obtain the **total story points** for th
 2. **Explain** any choices you made (e.g., why security hardening is “high” uncertainty for your team).  
 3. **Report** the final total and briefly note how UX/accessibility considerations influenced your numbers.
 
-Once you’ve completed the table, share the totals and reasoning, and we can discuss whether the estimate feels realistic for your upcoming sprint.",False,too long: 570 words (limit 420); does not hand a part back to the student,0.5,0.4-0.85,,,
+Once you’ve completed the table, share the totals and reasoning, and we can discuss whether the estimate feels realistic for your upcoming sprint.",FALSE,too long: 570 words (limit 420); does not hand a part back to the student,0.5,0.4-0.85,,,
 it-074,EMERGENCY,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","A Git branching workflow for a four-person team can help manage changes and ensure everyone's work is integrated smoothly. Here’s a common workflow called the **Feature Branch Workflow**:
 
 ### 1. **Main Branches:**
@@ -2157,7 +2157,7 @@ it-074,EMERGENCY,Software Engineering,2,"Explain a Git branching workflow for a 
 - **Code Reviews:**
   - Have team members review each other's code before merging into `develop` to ensure quality and consistency.
 
-Later, revisit the concept of branching and merging to understand the underlying mechanics better, so you can handle more complex scenarios confidently.",True,,1.0,0.85-1.0,,,
+Later, revisit the concept of branching and merging to understand the underlying mechanics better, so you can handle more complex scenarios confidently.",TRUE,,1,0.85-1.0,,,
 it-074,GUIDED,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","Let's walk through a Git branching workflow for a four-person team and how to resolve a merge conflict.
 
 ### Git Branching Workflow
@@ -2240,8 +2240,8 @@ git add ___
 git commit -m ""___""
 ```
 
-Fill in the blanks and follow the steps to set up your branching workflow and resolve any conflicts that may arise.",False,too long: 477 words (limit 300),0.5,0.1-0.55,,,
-it-074,HINT,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","Consider how each team member can work on separate features without interfering with others. What mechanism in Git allows for isolated development? Also, when you encounter a merge conflict, what is the first step you should take to understand the differences? Try outlining these steps and come back if you need more guidance.",True,,0.1,0.0-0.25,,,
+Fill in the blanks and follow the steps to set up your branching workflow and resolve any conflicts that may arise.",FALSE,too long: 477 words (limit 300),0.5,0.1-0.55,,,
+it-074,HINT,Software Engineering,2,"Explain a Git branching workflow for a four-person team, and how to resolve a merge conflict.","Consider how each team member can work on separate features without interfering with others. What mechanism in Git allows for isolated development? Also, when you encounter a merge conflict, what is the first step you should take to understand the differences? Try outlining these steps and come back if you need more guidance.",TRUE,,0.1,0.0-0.25,,,
 it-076,PROBE,Software Engineering,4,"Explain the SOLID principles, and give an example that violates the Single Responsibility Principle and how to fix it.","Problem:
 You are working on a software project and come across a class that handles both user authentication and sending emails. This class violates one of the SOLID principles. Identify which principle is violated and explain why. Then, refactor the class to adhere to the principle.
 
@@ -2275,7 +2275,7 @@ class EmailService {
         // Email sending logic
     }
 }
-```",True,,,,,,
+```",TRUE,,,,,,
 it-076,SHARED,Software Engineering,4,"Explain the SOLID principles, and give an example that violates the Single Responsibility Principle and how to fix it.","Here’s a scaffold you can use to explore the SOLID principles and the Single‑Responsibility Principle (SRP) yourself.
 
 ### 1. Recall the SOLID acronym  
@@ -2356,7 +2356,7 @@ class ___:
         pass
 ```
 
-**Your next step:** Complete the blanks, answer the questions, and then decide whether your refactored design satisfies SRP. Let me know what you come up with and any doubts you encounter!",True,,0.4,0.4-0.85,,,
+**Your next step:** Complete the blanks, answer the questions, and then decide whether your refactored design satisfies SRP. Let me know what you come up with and any doubts you encounter!",TRUE,,0.4,0.4-0.85,,,
 it-077,HINT,Computer Networks,1,Explain the difference between TCP and UDP and give one application suited to each.,"1. A protocol that provides ___ and ___ delivery is typically used when ___ is critical.  
 
 2. A protocol that sends packets ___ and ___ does not guarantee they arrive.  
@@ -2365,7 +2365,7 @@ it-077,HINT,Computer Networks,1,Explain the difference between TCP and UDP and g
 
 4. Name an application where ___ latency is more important than ___ loss.  
 
-Fill in the blanks and pair each protocol with an appropriate application.",False,contains 4 numbered steps (one hint only); disclosure outside band,0.4,0.0-0.25,,,
+Fill in the blanks and pair each protocol with an appropriate application.",FALSE,contains 4 numbered steps (one hint only); disclosure outside band,0.4,0.0-0.25,,,
 it-077,PROBE,Computer Networks,1,Explain the difference between TCP and UDP and give one application suited to each.,"Problem:
 Explain the difference between FTP and SFTP and give one application suited to each.
 
@@ -2373,7 +2373,7 @@ Answer key:
 - **Correct answer**: FTP (File Transfer Protocol) is a standard network protocol used for transferring files between a client and a server over a network, typically without encryption. SFTP (Secure File Transfer Protocol) is a secure version of FTP that uses SSH (Secure Shell) to encrypt the data and commands, ensuring secure file transfers.
 - **Application for FTP**: Sharing files within a private, secure local network.
 - **Application for SFTP**: Transferring files over the internet, especially when sensitive data is involved.
-- **Explanation of the security difference**: SFTP provides encryption for both data and commands, making it suitable for secure file transfers over unsecured networks.",False,probe is too close to the original task (overlap 0.60),,,,,
+- **Explanation of the security difference**: SFTP provides encryption for both data and commands, making it suitable for secure file transfers over unsecured networks.",FALSE,probe is too close to the original task (overlap 0.60),,,,,
 it-078,PROBE,Computer Networks,3,Describe step by step what happens when you type a URL into a browser and press Enter.,"Problem:
 When you type a domain name into a domain registrar's search bar and press Enter, describe step by step what happens from the moment you press Enter until the search results are displayed.
 
@@ -2383,7 +2383,7 @@ Answer key:
 - The registrar queries its database or the domain registry to see if the domain is already registered.
 - If the domain is available, the registrar displays the domain as available for purchase.
 - If the domain is not available, the registrar displays the domain as taken and may suggest alternative domain names.
-- The registrar may also provide additional information such as domain registration costs and available extensions.",False,probe is too close to the original task (overlap 0.43),,,,,
+- The registrar may also provide additional information such as domain registration costs and available extensions.",FALSE,probe is too close to the original task (overlap 0.43),,,,,
 it-083,SHARED,Computer Networks,3,Explain the TCP three-way handshake and why it needs three steps rather than two.,"Here’s a sketch of the handshake and a small code skeleton you can finish. I’ll give you the overall structure and fill in one clearly bounded piece; the rest is left for you to complete and reflect on.
 
 ---
@@ -2466,9 +2466,9 @@ if __name__ == '__main__':
 2. Parse the server’s SYN‑ACK on the client side, extract the server’s ISN, and then call `send_ack`.  
 3. Decide what the server should do after receiving the final ACK (e.g., print a confirmation, move to a data‑transfer phase, etc.).  
 
-Once you’ve filled in the blanks and answered the questions above, let me know what you chose for the sequence numbers and how you justified the three‑step design.",False,too long: 508 words (limit 420),0.5,0.4-0.85,,,
-it-084,HINT,Computer Networks,2,Explain how DHCP gives a new laptop an IP address when it joins a network.,"Consider the initial message the laptop sends to the network to request an IP address. What type of message is this, and to which address is it sent? Try to think through the steps from there.",True,,0.0,0.0-0.25,,,
-it-085,HUMAN_FIRST,Computer Networks,2,Explain NAT and why most home devices have private IP addresses.,"The goal is to explain Network Address Translation (NAT) and why most home devices use private IP addresses. You've covered networking basics, so you have the foundation to tackle this. Give it a try, and then share your explanation. I’ll review it with you.",True,,0.0,0.0-0.05,,,
+Once you’ve filled in the blanks and answered the questions above, let me know what you chose for the sequence numbers and how you justified the three‑step design.",FALSE,too long: 508 words (limit 420),0.5,0.4-0.85,,,
+it-084,HINT,Computer Networks,2,Explain how DHCP gives a new laptop an IP address when it joins a network.,"Consider the initial message the laptop sends to the network to request an IP address. What type of message is this, and to which address is it sent? Try to think through the steps from there.",TRUE,,0,0.0-0.25,,,
+it-085,HUMAN_FIRST,Computer Networks,2,Explain NAT and why most home devices have private IP addresses.,"The goal is to explain Network Address Translation (NAT) and why most home devices use private IP addresses. You've covered networking basics, so you have the foundation to tackle this. Give it a try, and then share your explanation. I’ll review it with you.",TRUE,,0,0.0-0.05,,,
 it-086,SHARED,Computer Networks,3,A PC can ping 8.8.8.8 but cannot open google.com in a browser. What are the likely causes and how would you troubleshoot?,"**Overall troubleshooting plan**
 
 | Step | What we’ll check | What you’ll do after the AI part |
@@ -2542,7 +2542,7 @@ ping -l 1472 8.8.8.8   :: Windows (adds 28‑byte ICMP header → 1500 bytes t
 * d. Does the large‑payload ping succeed or time out?  
 * e. Are there any firewall rules that could be blocking outbound web traffic?
 
-With your answers, we can pinpoint whether the issue lies in DNS, firewall, IPv6 mis‑configuration, or MTU problems, and then decide the exact fix (e.g., change DNS server, adjust firewall rule, disable IPv6, or lower MTU). Let me know your findings!",False,too long: 585 words (limit 420),0.75,0.4-0.85,,,
+With your answers, we can pinpoint whether the issue lies in DNS, firewall, IPv6 mis‑configuration, or MTU problems, and then decide the exact fix (e.g., change DNS server, adjust firewall rule, disable IPv6, or lower MTU). Let me know your findings!",FALSE,too long: 585 words (limit 420),0.75,0.4-0.85,,,
 it-087,GUIDED,Computer Networks,4,Two routers connect the networks 192.168.1.0/24 and 192.168.2.0/24. Describe the static routes needed so the networks can reach each other.,"Let’s piece the configuration together by answering a few questions.
 
 1. **What IP address does each router use on the link that connects the two routers?**  
@@ -2574,7 +2574,7 @@ interface Gig0/1   ! link to Router A
 ip route 192.168.1.0 255.255.255.0 ___   ! next‑hop = Router A’s address on the link
 ```
 
-Fill in the blanks by answering the questions above, then test connectivity (e.g., ping from a host in 192.168.1.0/24 to one in 192.168.2.0/24).",True,disclosure outside band,0.625,0.1-0.55,,,
+Fill in the blanks by answering the questions above, then test connectivity (e.g., ping from a host in 192.168.1.0/24 to one in 192.168.2.0/24).",TRUE,disclosure outside band,0.625,0.1-0.55,,,
 it-088,SHARED,Computer Networks,4,"Compare symmetric and asymmetric encryption, and explain how HTTPS uses both.","Below is a scaffold that gives you the main pieces of the answer while leaving the core reasoning and some wording for you to fill in.
 
 ---
@@ -2644,7 +2644,7 @@ Feel free to adjust the wording or add arrows as you see fit.
 
 ---
 
-**Next step:** Fill in the blanks, complete the table, and write the short paragraph about the key‑exchange method you chose. When you’re done, paste your version here and I’ll give you feedback.",False,too long: 497 words (limit 420),0.5,0.4-0.85,,,
+**Next step:** Fill in the blanks, complete the table, and write the short paragraph about the key‑exchange method you chose. When you’re done, paste your version here and I’ll give you feedback.",FALSE,too long: 497 words (limit 420),0.5,0.4-0.85,,,
 it-089,SHARED,Operating Systems,1,Explain the difference between a process and a thread.,"Here’s a short outline that covers the main ideas. I’ll fill in the core points, and you can finish the rest.
 
 **Process**
@@ -2669,10 +2669,10 @@ it-089,SHARED,Operating Systems,1,Explain the difference between a process and a
 
 3. **Reflection question** – based on the characteristics above, decide which you would choose for a program that needs to run a UI while performing background calculations, and justify your choice in a brief paragraph.
 
-Fill in the blanks and answer the reflection question, then let me know what you wrote for the cost comparison. We can discuss whether your examples capture the key trade‑offs.",True,disclosure outside band,0.9,0.4-0.85,,,
-it-090,HINT,Operating Systems,2,Describe the process state diagram and explain each transition.,"Consider what triggers each state change in the process lifecycle, such as system calls or events. Look at the key points where a process can transition from one state to another, like when it starts executing or waits for I/O. Try to map these out and come back if you need more guidance.",True,,0.167,0.0-0.25,,,
-it-091,HUMAN_FIRST,Operating Systems,3,"Calculate the average waiting time for P1=5, P2=3 and P3=8 (burst times, all arriving at time 0) under FCFS and SJF.","The goal is to calculate the average waiting time for the processes under FCFS and SJF scheduling. You’ve worked with scheduling algorithms before, so you have the skills to tackle this. Give it a try, and then share your attempt. I’ll review it with you afterward.",True,,0.0,0.0-0.05,,,
-it-092,HINT,Operating Systems,3,"Simulate Round Robin with a time quantum of 2 for P1=5, P2=3 and P3=1, all arriving at time 0, and give each completion time.","Consider how the time quantum affects the order and duration of each process's execution. Focus on how the processes are scheduled in rounds, and track the time each process spends in the CPU. Try to simulate the process step-by-step and come back if you get stuck.",True,,0.0,0.0-0.25,,,
+Fill in the blanks and answer the reflection question, then let me know what you wrote for the cost comparison. We can discuss whether your examples capture the key trade‑offs.",TRUE,disclosure outside band,0.9,0.4-0.85,,,
+it-090,HINT,Operating Systems,2,Describe the process state diagram and explain each transition.,"Consider what triggers each state change in the process lifecycle, such as system calls or events. Look at the key points where a process can transition from one state to another, like when it starts executing or waits for I/O. Try to map these out and come back if you need more guidance.",TRUE,,0.167,0.0-0.25,,,
+it-091,HUMAN_FIRST,Operating Systems,3,"Calculate the average waiting time for P1=5, P2=3 and P3=8 (burst times, all arriving at time 0) under FCFS and SJF.","The goal is to calculate the average waiting time for the processes under FCFS and SJF scheduling. You’ve worked with scheduling algorithms before, so you have the skills to tackle this. Give it a try, and then share your attempt. I’ll review it with you afterward.",TRUE,,0,0.0-0.05,,,
+it-092,HINT,Operating Systems,3,"Simulate Round Robin with a time quantum of 2 for P1=5, P2=3 and P3=1, all arriving at time 0, and give each completion time.","Consider how the time quantum affects the order and duration of each process's execution. Focus on how the processes are scheduled in rounds, and track the time each process spends in the CPU. Try to simulate the process step-by-step and come back if you get stuck.",TRUE,,0,0.0-0.25,,,
 it-097,GUIDED,Operating Systems,4,"Count the page faults for the reference string 7,0,1,2,0,3,0,4,2,3 with 3 frames under FIFO and LRU.","Let’s work through the counting together.
 
 #### FIFO (First‑In‑First‑Out)
@@ -2742,7 +2742,7 @@ print(""FIFO faults:"", fifo_faults(reference, frame_count))
 print(""LRU faults :"", lru_faults(reference, frame_count))
 ```
 
-Fill in each `___` and answer the numbered questions above. After you’ve completed the code, run it with the given `reference` list and note the fault counts for FIFO and LRU. Let me know what numbers you obtain or if any step is unclear.",False,too long: 396 words (limit 300),0.5,0.1-0.55,,,
+Fill in each `___` and answer the numbered questions above. After you’ve completed the code, run it with the given `reference` list and note the fault counts for FIFO and LRU. Let me know what numbers you obtain or if any step is unclear.",FALSE,too long: 396 words (limit 300),0.5,0.1-0.55,,,
 it-099,PROBE,Operating Systems,3,Write a C program that uses fork() so that the parent and the child each print their own PID.,"Problem:
 Write a C program that uses `fork()` to create a child process. The parent process should print ""I am the parent with PID [PID]"" and the child process should print ""I am the child with PID [PID]"".
 
@@ -2773,7 +2773,7 @@ A correct attempt must contain:
 1. The `fork()` function call to create a child process.
 2. A check for the return value of `fork()` to distinguish between the parent and child processes.
 3. The parent process printing its PID with the message ""I am the parent with PID [PID]"".
-4. The child process printing its PID with the message ""I am the child with PID [PID]"".",False,probe is too close to the original task (overlap 0.47),,,,,
+4. The child process printing its PID with the message ""I am the child with PID [PID]"".",FALSE,probe is too close to the original task (overlap 0.47),,,,,
 it-100,SHARED,Operating Systems,2,Write a bash script that copies all .txt files in a folder into a backup archive named with today's date.,"Here’s a sketch of the script and a set of decisions for you to fill in.
 
 **Overall plan**
@@ -2819,4 +2819,4 @@ archive_path=""${backup_dir}/backup_${today}.___""   # <-- choose extension (e.g
 
 * **Step 6:** Add logic that checks whether `$archive_path` already exists and implements the behavior you prefer (overwrite, abort with a message, or generate a new name).  
 
-Once you’ve completed those two parts, run the script on a test folder and verify that the archive contains exactly the `.txt` files you expect. Let me know which option you chose for handling existing archives and why.",False,does not hand a part back to the student,0.5,0.4-0.85,,,
+Once you’ve completed those two parts, run the script on a test folder and verify that the archive contains exactly the `.txt` files you expect. Let me know which option you chose for handling existing archives and why.",FALSE,does not hand a part back to the student,0.5,0.4-0.85,,,

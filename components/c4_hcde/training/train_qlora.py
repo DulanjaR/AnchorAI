@@ -90,6 +90,9 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    # Use one GPU. With two visible (Kaggle "T4 x2") the Trainer wraps the model in DataParallel,
+    # which copies the 4-bit model and gathers the huge output tensor on GPU 0 -> out of memory.
+    os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
     import torch
     from peft import LoraConfig, get_peft_model
     from transformers import (AutoModelForCausalLM, AutoTokenizer, DataCollatorForSeq2Seq, Trainer,
