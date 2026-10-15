@@ -4,6 +4,16 @@ Newest first. Format: see CLAUDE.md Section 8.
 Working copy (since 13 Oct 2026): `D:\RESEARCH PROJECT\AnchorAI\components\c1_disruption` → GitHub `DulanjaR/AnchorAI`, branch `dev/ravindu`.
 Entries before 13 Oct 2026 are from the Node project `D:\RESEARCH PROJECT\anchor-ai-component1` (`ravindu912/anchor-ai-component1`), now read-only.
 
+## 2026-10-15 — Model 1 on REAL data (CESAW) and the PP1 demo — done
+Commit: see STATUS.md / the report (pushed to dev/ravindu)
+Files created: ml/drift/external/{__init__,settings,cesaw}.py; notebooks/04_model1_cesaw.ipynb; docs/results/c1_model1_cesaw.md; tests/ml/test_cesaw.py; demo/{__init__,pp1_demo,web_demo}.py, demo/web/index.html; tests/test_demo.py, tests/test_web_demo.py
+Files changed: app/settings.py (`C1_CESAW_PATH`), .gitignore (CESAW data), tests/test_notebooks.py (04 = REAL), notebooks/README.md, docs/METHODOLOGY.md §9, docs/DECISIONS.md, README.md, docs/STATUS.md
+Tests: `pytest` (repo root) → 618 passed
+Results (REAL, CESAW, professional developers): Model 1 does not beat B0 (cold 80.2 vs 75.0 min; warm 82.0 vs 76.6); coverage 0.74 / 0.73. The first run (one fold per developer) did not finish in 11 h; cold start now in 10 developer groups (owner approved).
+Decisions applied: DECISIONS.md 2026-10-15 (CESAW design)
+Open questions for owner: CESAW follow-ups (STATUS.md PROPOSED); demo explanation bug (STATUS.md PROPOSED)
+Next step: PP1 charts and rehearsal
+
 ## 2026-10-14 — Rerun of the SYNTHETIC simulation with 5 actions — done
 Commit: see STATUS.md / the report (pushed to dev/ravindu)
 Files changed: sim/results/c1_simulation_SYNTHETIC.md/.json, docs/STATUS.md

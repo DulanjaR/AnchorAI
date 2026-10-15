@@ -21,6 +21,7 @@ Every result is labelled REAL (CESAW, professional developers), never SYNTHETIC.
 """
 import csv
 import random
+import sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -235,7 +236,9 @@ def main(argv: list[str] | None = None) -> None:
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text, encoding="utf-8", newline="\n")
-    print(text)
+    # The Windows console may not be UTF-8 ("≤", "÷"): never fail after the file is written.
+    encoding = sys.stdout.encoding or "utf-8"
+    print(text.encode(encoding, "replace").decode(encoding))
 
 
 if __name__ == "__main__":

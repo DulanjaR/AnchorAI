@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`af90029` · 2026-10-15 · "wip: C1 CESAW - cold start in 10 developer groups, 3 workers, progress output" (this update is in the commit after it).
+`2af1fe2` · 2026-10-15 · "C1 Task 6: web demo with first setup, calendar sync (.ics), live day calendar and a Record-a-disruption button" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -17,9 +17,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Task 6 (part 1): PP1 demo script** `demo/pp1_demo.py`: one power-cut day end to end through the API (in-process, or `--url` for a running server): plan → confirmed disruption → MVD with all four tags and their explanations → accept → tags for C3/C4 → feedback logged. Tested (`tests/test_demo.py`).
 - **Task 6 (part 2): PP1 web demo** `demo/web_demo.py` + `demo/web/index.html`: a small page in front of the real API (add tasks, protected time, report a disruption, MVD timeline with original vs new slots, every tag explained, accept/reject, hand-off to C3/C4). `python -m components.c1_disruption.demo.web_demo`. Tested (`tests/test_web_demo.py`); checked in a headless browser.
 - **Task 6 (part 3): web demo reworked after owner feedback (15 Oct):** first setup (free hours, **Sync calendar** = import a calendar file (.ics) or a sample calendar → protected time; tasks with name, start, end, deadline, priority, or "no set time") next to a live day calendar; a visible **⚡ Record a disruption** button on the calendar opens the report, then the MVD review; accepting puts the new plan on the calendar with the disruption marked.
+- **Model 1 on REAL data (CESAW, professional developers):** `docs/results/c1_model1_cesaw.md`. 60,284 tasks from 247 developers (dropped: plan ≤ 0 692, no readable start 841). **Finding: Model 1 does not beat "trust the plan" on CESAW.** Cold MAE 80.2 min vs B0 75.0; warm 82.0 vs B0 76.6 (B3 78.9). Range coverage 0.74 / 0.73 (inside 70–90%). Real estimates are very noisy (sd of log ratio 1.07, median −0.06).
 
 ## In progress
-- **Model 1 on REAL data (CESAW):** code, tests, notebook 04, METHODOLOGY §9 and `C1_CESAW_PATH` done (wip commit). The full run (leave-one-developer-out over 247 developers + warm sample, 50 trees) did not finish in 11 h (a worker crashed) and was stopped; no result table yet. Waiting on owner: a faster evaluation design (see PROPOSED).
+- Nothing running.
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -27,16 +28,15 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
 - **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
-- CESAW evaluation design: cold start as grouped 10-fold by developer (every developer still unseen when predicted) instead of 247 single-developer folds; warm on the seeded 40-developer sample; progress logging.
-- CESAW mapping: priority `Medium` for every task (CESAW has none); tasks without a readable start time (843) dropped and counted.
 - deferOrder "deadline" keeps the groups and orders within them; recoveryTiming "latest" keeps window-first.
 - Model 2 simulation: count a shown plan as "preferred" when it equals the preferred strategy's plan (today the label decides; on persona days the compression actions rarely change the plan).
 - OVERRUN_RISK message wording; "end of window" read as the end of the free stretch the task starts in.
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
 ## Next step
-Decide the CESAW design and run it; PP1 demo (Task 6, PP1 = 19 Oct 2026); D-MOVE after PP1 (golden S17+ first).
+PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
 Root `pytest`: **618 passed** (C1 617 + C4 1), 15 Oct 2026.
