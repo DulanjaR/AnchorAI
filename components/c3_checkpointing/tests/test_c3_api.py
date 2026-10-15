@@ -309,3 +309,32 @@ def test_checker_rejects_answers_that_drop_the_students_question():
     no_question = r["output"].replace(cap(to_you(r["fields"]["problem"])), "something")
     assert no_question != r["output"]
     assert check_model_output(no_question, r["input"], r["fields"], r["level"]) != []
+
+
+def test_first_load_with_parallel_requests_seeds_the_demo_tasks_only_once(env):
+    import threading
+
+    from components.c3_checkpointing.app import service
+
+    _, Session = env
+    errors = []
+
+    def first_request():
+        db = Session()
+        try:
+            service.seed_if_empty(db, "parallel-user")
+        except Exception as exc:  # pragma: no cover - reported below
+            errors.append(exc)
+        finally:
+            db.close()
+
+    threads = [threading.Thread(target=first_request) for _ in range(6)]
+    for th in threads:
+        th.start()
+    for th in threads:
+        th.join()
+    assert not errors
+    db = Session()
+    titles = [t.title for t in db.scalars(select(m.Task).where(m.Task.user_id == "parallel-user"))]
+    db.close()
+    assert sorted(titles) == sorted(title for title, *_ in service.SEED_TASKS)

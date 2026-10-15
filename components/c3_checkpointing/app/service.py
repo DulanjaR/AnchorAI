@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import threading
 import uuid
 from datetime import timedelta
 
@@ -82,14 +83,18 @@ def _away(c: m.Checkpoint, away_minutes: float | None) -> float:
 
 
 # ------------------------------------------------------------------ tasks
+_SEED_LOCK = threading.Lock()  # the page fires several requests at once on first load; seed only once
+
+
 def seed_if_empty(db: Session, user: str) -> None:
-    if db.scalar(select(func.count()).select_from(m.Task).where(m.Task.user_id == user)):
-        return
-    base = m.utcnow()
-    for i, (title, kind, cx, status) in enumerate(SEED_TASKS):
-        db.add(m.Task(id=str(uuid.uuid4()), user_id=user, title=title, kind=kind, complexity=cx, status=status,
-                      created_at=base + timedelta(milliseconds=i)))
-    db.commit()
+    with _SEED_LOCK:
+        if db.scalar(select(func.count()).select_from(m.Task).where(m.Task.user_id == user)):
+            return
+        base = m.utcnow()
+        for i, (title, kind, cx, status) in enumerate(SEED_TASKS):
+            db.add(m.Task(id=str(uuid.uuid4()), user_id=user, title=title, kind=kind, complexity=cx, status=status,
+                          created_at=base + timedelta(milliseconds=i)))
+        db.commit()
 
 
 def list_tasks(db: Session, user: str) -> list[dict]:
