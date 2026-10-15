@@ -26,8 +26,15 @@
   const SOURCE_EXT = ['py', 'js', 'html', 'css', 'java', 'php'];
   const TEXT_EXT = ['md', 'txt'];
 
-  function formatMinutes(m) {
-    if (!(m >= 0)) return 'an unknown time';
+  function validMinutes(m) {
+    if (m === null || m === undefined || m === '') return null;
+    const n = Number(m);
+    return n >= 0 ? n : null;
+  }
+
+  function formatMinutes(value) {
+    const m = validMinutes(value);
+    if (m === null) return 'an unknown time';
     if (m < 1) return 'less than a minute';
     if (m < 60) return Math.round(m) + ' min';
     if (m < 1440) {
@@ -35,11 +42,13 @@
       return (Number.isInteger(h) ? h : h.toFixed(1)) + ' h';
     }
     const d = m / 1440;
+    if (d === 1) return '1 day';
     return (Number.isInteger(d) ? d : d.toFixed(1)) + ' days';
   }
 
-  function durationPoints(minutes) {
-    if (!(minutes >= 0)) return 0;
+  function durationPoints(value) {
+    const minutes = validMinutes(value);
+    if (minutes === null) return 0;
     if (minutes < 15) return 0;
     if (minutes < 60) return 1;
     if (minutes < 240) return 2;
@@ -55,7 +64,7 @@
   // Transparent, hand-set rule. Direction (longer interruption and more complex task -> harder)
   // follows the Model 1b weights; thresholds are placeholders until pilot data recalibrates them.
   function predictDifficulty(input) {
-    const minutes = Number(input.minutes);
+    const minutes = validMinutes(input.minutes);
     const complexity = Object.prototype.hasOwnProperty.call(COMPLEXITY, input.complexity) ? input.complexity : 'moderate';
     const openItems = Math.max(0, Math.floor(Number(input.openItems) || 0));
     const switches = input.type === 'other_task';
@@ -68,7 +77,7 @@
     const level = score >= 5 ? 'High' : score >= 3 ? 'Medium' : 'Low';
 
     const reasons = [
-      { text: minutes >= 0 ? 'Away about ' + formatMinutes(minutes) : 'Time away not given', points: d },
+      { text: minutes !== null ? 'Away about ' + formatMinutes(minutes) : 'Time away not given', points: d },
       { text: 'Task complexity: ' + complexity, points: c },
       { text: openItems + ' unfinished item' + (openItems === 1 ? '' : 's'), points: o },
       { text: switches ? 'Interrupted by another work task' : 'Interruption does not need another work task', points: s },

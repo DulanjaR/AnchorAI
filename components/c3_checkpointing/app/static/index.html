@@ -12,7 +12,7 @@
       <span class="logo">C3</span>
       <div>
         <h1>Cognitive Checkpointing</h1>
-        <p>Anchor AI &middot; task continuity prototype</p>
+        <p>Anchor AI &middot; task continuity prototype <span class="mode" id="modeBadge">...</span></p>
       </div>
     </div>
     <nav class="tabs" aria-label="Views">
@@ -39,7 +39,6 @@
         <div id="logStats" class="stats"></div>
         <div class="log-actions">
           <button class="btn" id="btnExport">Export CSV</button>
-          <button class="btn ghost" id="btnClearLog">Clear log</button>
         </div>
       </div>
       <div class="table-wrap">
@@ -80,6 +79,7 @@
   <div id="toasts" aria-live="polite"></div>
 
   <script src="core.js"></script>
+  <script src="store.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

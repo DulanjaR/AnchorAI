@@ -2,7 +2,6 @@
   'use strict';
 
   const C = window.C3Core;
-  const STORE_KEY = 'c3_prototype_v1';
   const COLUMNS = [
     { id: 'todo', title: 'To do' },
     { id: 'doing', title: 'In progress' },
@@ -16,91 +15,43 @@
     break: 'Break',
   };
   const COMPLEXITY_LABEL = { simple: 'Simple', moderate: 'Moderate', complex: 'Complex' };
-  const MAX_FILE_BYTES = 1024 * 1024;
 
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
-  // ---------------------------------------------------------------- state
-  function seedTasks() {
-    return [
-      { id: 't1', title: 'Hotel booking website', kind: 'code', complexity: 'moderate', column: 'doing' },
-      { id: 't2', title: 'Database assignment report', kind: 'document', complexity: 'moderate', column: 'doing' },
-      { id: 't3', title: 'Python data-cleaning script', kind: 'code', complexity: 'simple', column: 'todo' },
-      { id: 't4', title: 'Software architecture quiz notes', kind: 'document', complexity: 'simple', column: 'done' },
-    ];
-  }
-
-  function freshState() {
-    return { tasks: seedTasks(), log: [], interruptions: 0 };
-  }
-
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STORE_KEY);
-      if (raw) {
-        const s = JSON.parse(raw);
-        if (s && Array.isArray(s.tasks) && Array.isArray(s.log)) return s;
-      }
-    } catch (e) { /* storage unavailable: start fresh */ }
-    return freshState();
-  }
-
-  let state = loadState();
+  let store = null;
+  let cache = { tasks: [], events: 0 };
   let awayOverride = null;
 
-  function persist() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
-  }
-
-  function taskById(id) { return state.tasks.find((t) => t.id === id); }
-
-  function logEvent(event, task, details) {
-    state.log.push({ ts: Date.now(), event, taskId: task ? task.id : '', task: task ? task.title : '', details: details || {} });
-    persist();
-  }
-
-  function demoState() {
-    const now = Date.now();
-    const s = freshState();
-    const make = (task, cp, minutes, type, agoMin) => {
-      const prediction = C.predictDifficulty({ minutes, complexity: task.complexity, openItems: cp.openItems.length, type });
-      task.column = 'interrupted';
-      task.checkpoint = Object.assign({}, cp, {
-        type, minutes, level: prediction.level, depth: prediction.depth.name, savedAt: now - agoMin * 60000,
-      });
-    };
-    make(s.tasks[0], {
-      goal: 'Finish the hotel booking website for the web-technologies assignment',
-      completed: 'login.html, register.html and home.html are finished',
-      workingPoint: 'contact.html: the form has name and email fields but no submit handler',
-      problem: 'Should the email be validated in JavaScript or on the server?',
-      nextStep: 'Add the submit button and connect the form to the backend',
-      resources: 'Figma UI link, contact.html',
-      openItems: ['validate email format', 'add submit button and connect to backend', 'show error message under the field'],
-    }, 300, 'other_task', 300);
-    make(s.tasks[1], {
-      goal: 'Complete the database assignment report',
-      completed: 'ER diagram and normalisation to 3NF',
-      workingPoint: 'Writing the SQL queries section',
-      problem: '',
-      nextStep: 'Write the report queries and add references',
-      resources: 'report_notes.md',
-      openItems: ['SQL queries for the reports section'],
-    }, 20, 'quick_message', 20);
-    s.interruptions = 2;
-    s.log.push({ ts: now - 300 * 60000, event: 'checkpoint_saved', taskId: 't1', task: s.tasks[0].title, details: { level: 'High', depth: 'Full', minutes: 300, demo: true } });
-    s.log.push({ ts: now - 20 * 60000, event: 'checkpoint_saved', taskId: 't2', task: s.tasks[1].title, details: { level: 'Low', depth: 'Short', minutes: 20, demo: true } });
-    return s;
-  }
+  const taskById = (id) => cache.tasks.find((t) => t.id === id);
 
   // ---------------------------------------------------------------- helpers
-  function fmtTime(ts) {
-    const d = new Date(ts);
-    return d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' +
-      d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  function toast(message) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = message;
+    $('#toasts').appendChild(el);
+    setTimeout(() => el.remove(), 4800);
+  }
+
+  async function attempt(fn) {
+    try {
+      return await fn();
+    } catch (e) {
+      toast(e && e.message ? e.message : 'Something went wrong.');
+      return null;
+    }
+  }
+
+  function note(event, taskId, details) {
+    store.event(event, taskId, details).catch(() => { /* a lost note must never block the screen */ });
+  }
+
+  async function refresh() {
+    cache = await store.load();
+    renderBoard();
   }
 
   function awayMinutesFor(task) {
@@ -109,36 +60,25 @@
     return Math.max(0, (Date.now() - savedAt) / 60000);
   }
 
-  function toast(message) {
-    const el = document.createElement('div');
-    el.className = 'toast';
-    el.textContent = message;
-    $('#toasts').appendChild(el);
-    setTimeout(() => el.remove(), 4200);
-  }
-
   function badge(level) { return '<span class="badge ' + level + '">' + level + ' difficulty</span>'; }
 
   // ---------------------------------------------------------------- board
   function renderBoard() {
-    const board = $('#board');
-    board.innerHTML = COLUMNS.map((col) => {
-      const tasks = state.tasks.filter((t) => t.column === col.id);
+    $('#board').innerHTML = COLUMNS.map((col) => {
+      const tasks = cache.tasks.filter((t) => t.column === col.id);
       const cards = tasks.length ? tasks.map(cardHtml).join('') : '<div class="empty-col">Drop a task here</div>';
       return '<section class="col col-' + col.id + '" data-col="' + col.id + '">' +
         '<h2><span>' + esc(col.title) + '</span><span>' + tasks.length + '</span></h2>' +
-        '<div class="cards" data-drop="' + col.id + '">' + cards + '</div></section>';
+        '<div class="cards">' + cards + '</div></section>';
     }).join('');
-    $('#logCount').textContent = String(state.log.length);
+    $('#logCount').textContent = String(cache.events);
   }
 
   function cardHtml(t) {
     const cp = t.checkpoint;
     const moveOptions = COLUMNS.map((c) => '<option value="' + c.id + '"' + (c.id === t.column ? ' selected' : '') + '>' + esc(c.title) + '</option>').join('');
-    let extra = '';
-    if (t.column === 'interrupted' && cp) {
-      extra = '<p class="snippet"><strong>Stopped at:</strong> ' + esc(cp.workingPoint || 'not written') + '</p>';
-    }
+    const extra = t.column === 'interrupted' && cp
+      ? '<p class="snippet"><strong>Stopped at:</strong> ' + esc(cp.workingPoint || 'not written') + '</p>' : '';
     const actions = [];
     if (t.column === 'doing') actions.push('<button class="btn" data-action="interrupt" data-id="' + t.id + '">Interrupt</button>');
     if (t.column === 'interrupted') actions.push('<button class="btn primary" data-action="resume" data-id="' + t.id + '">Resume</button>');
@@ -151,7 +91,7 @@
       '<div class="card-actions">' + actions.join('') + '</div></article>';
   }
 
-  function moveTask(id, target) {
+  async function moveTask(id, target) {
     const t = taskById(id);
     if (!t || t.column === target) return;
     if (target === 'interrupted') {
@@ -164,10 +104,8 @@
       if (target === 'doing') { openSummary(t.id); renderBoard(); return; }
       if (target === 'todo') { toast('Resume or complete the task instead of moving it back.'); renderBoard(); return; }
     }
-    const from = t.column;
-    t.column = target;
-    logEvent('task_moved', t, { from, to: target });
-    renderBoard();
+    await attempt(() => store.move(id, target));
+    await refresh();
   }
 
   function bindBoard() {
@@ -211,9 +149,8 @@
     board.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action]');
       if (!btn) return;
-      const id = btn.dataset.id;
-      if (btn.dataset.action === 'interrupt') openCheckpoint(id, {});
-      if (btn.dataset.action === 'resume') openSummary(id);
+      if (btn.dataset.action === 'interrupt') openCheckpoint(btn.dataset.id, {});
+      if (btn.dataset.action === 'resume') openSummary(btn.dataset.id);
     });
     board.addEventListener('change', (e) => {
       const sel = e.target.closest('select[data-action="move"]');
@@ -222,12 +159,13 @@
   }
 
   // ---------------------------------------------------------------- checkpoint dialog
-  function openCheckpoint(taskId, preset) {
+  async function openCheckpoint(taskId, preset) {
     const task = taskById(taskId);
     if (!task) return;
     const dlg = $('#cpDialog');
     const insights = [];
     const form = { manualOpen: null };
+    let seq = 0;
 
     dlg.innerHTML =
       '<form method="dialog" id="cpForm">' +
@@ -245,7 +183,7 @@
       '<div class="field"><label for="cpOpen">Unfinished items</label><input type="number" id="cpOpen" min="0" step="1" value="0">' +
       '<div class="note" id="cpOpenNote">Counted from your files when you add them.</div></div>' +
       '</div>' +
-      '<div class="predict" aria-live="polite"><div><div class="note">Predicted resumption difficulty</div><div class="big" id="cpLevel"></div></div>' +
+      '<div class="predict" aria-live="polite"><div><div class="note">Predicted resumption difficulty</div><div class="big" id="cpLevel">...</div></div>' +
       '<div><div class="depth" id="cpDepth"></div><ul id="cpReasons"></ul></div></div>' +
       '<div class="section-title">2. Your checkpoint <span class="note" style="text-transform:none;letter-spacing:0">(you can skip any question)</span></div>' +
       '<div class="grid2">' +
@@ -255,7 +193,7 @@
       '</div>' +
       '<div class="section-title">3. Add your files (optional, read-only)</div>' +
       '<input type="file" id="cpFiles" multiple accept=".txt,.md,.py,.js,.html,.css,.java,.php,.docx">' +
-      '<div class="note">Text and code files are read in your browser to suggest what you were doing. Their text is not saved. Word (.docx) files will be read by the backend later.</div>' +
+      '<div class="note" id="cpFilesNote"></div>' +
       '<div class="insights" id="cpInsights"></div>' +
       '</div>' +
       '<div class="dlg-foot"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn primary" id="cpSave">Save checkpoint</button></div>' +
@@ -263,28 +201,33 @@
 
     $('#cpType', dlg).value = preset.type || 'meeting';
     $('#cpComplexity', dlg).value = task.complexity;
+    $('#cpFilesNote', dlg).textContent = store.mode === 'server'
+      ? 'Text, code and Word (.docx) files are analysed on the server. Only headings, open items and function names are kept; the file text is not stored.'
+      : 'Text and code files are read in your browser. Their text is not saved. Word (.docx) files need the backend server.';
 
-    function openItemsAuto() { return insights.reduce((n, i) => n + (i.supported ? i.openCount : 0), 0); }
+    const openItemsAuto = () => insights.reduce((n, i) => n + (i.supported ? i.openCount : 0), 0);
 
     function currentInput() {
-      const open = form.manualOpen != null ? form.manualOpen : openItemsAuto();
       return {
         minutes: Number($('#cpMinutes', dlg).value),
         complexity: $('#cpComplexity', dlg).value,
-        openItems: open,
+        openItems: form.manualOpen != null ? form.manualOpen : openItemsAuto(),
         type: $('#cpType', dlg).value,
       };
     }
 
-    function refresh() {
+    async function refreshPrediction() {
       const input = currentInput();
       $('#cpOpen', dlg).value = input.openItems;
       $('#cpOpenNote', dlg).textContent = form.manualOpen != null ? 'Set by you.' : 'Counted from your files when you add them.';
-      const p = C.predictDifficulty(input);
+      const mine = ++seq;
+      let p;
+      try { p = await store.predict(input); } catch (e) { return; }
+      if (mine !== seq) return;
       $('#cpLevel', dlg).innerHTML = badge(p.level).replace('badge ', 'badge big-badge ') + ' <span class="note">score ' + p.score + ' of ' + p.max + '</span>';
-      $('#cpDepth', dlg).innerHTML = '<strong>Checkpoint depth: ' + p.depth.name + '</strong> &middot; ' + p.depth.suggested.length + ' fields suggested';
+      $('#cpDepth', dlg).innerHTML = '<strong>Checkpoint depth: ' + esc(p.depth) + '</strong> &middot; ' + p.suggested.length + ' fields suggested';
       $('#cpReasons', dlg).innerHTML = p.reasons.map((r) => '<li>' + esc(r.text) + ' (+' + r.points + ')</li>').join('');
-      C.FIELDS.forEach((f) => $('#sug-' + f.key, dlg).classList.toggle('off', !p.depth.suggested.includes(f.key)));
+      C.FIELDS.forEach((f) => $('#sug-' + f.key, dlg).classList.toggle('off', !p.suggested.includes(f.key)));
     }
 
     function setField(key, text, append) {
@@ -296,12 +239,12 @@
     function renderInsights() {
       $('#cpInsights', dlg).innerHTML = insights.map((i, idx) => {
         if (!i.supported) {
-          return '<div class="insight"><strong>' + esc(i.name) + '</strong><div class="note">Not read here (' + esc(i.reason || 'type not supported') + '). It can still be added to resources.</div>' +
+          return '<div class="insight"><strong>' + esc(i.name) + '</strong><div class="note">Not read (' + esc(i.reason || 'type not supported') + '). It can still be added to resources.</div>' +
             '<div class="row"><button type="button" class="btn" data-use="resources" data-idx="' + idx + '">Add to resources</button></div></div>';
         }
         const bits = [i.lineCount + ' lines', i.openCount + ' open item' + (i.openCount === 1 ? '' : 's')];
-        if (i.symbols.length) bits.push('functions: ' + i.symbols.slice(0, 4).join(', '));
-        const sug = C.suggestFromFile(i);
+        if (i.symbols && i.symbols.length) bits.push('functions: ' + i.symbols.slice(0, 4).join(', '));
+        const sug = i.suggest || {};
         return '<div class="insight"><strong>' + esc(i.name) + '</strong><div class="note">' + esc(bits.join(' · ')) + '</div><div class="row">' +
           (sug.workingPoint ? '<button type="button" class="btn" data-use="workingPoint" data-idx="' + idx + '">Use as working point</button>' : '') +
           (sug.completed ? '<button type="button" class="btn" data-use="completed" data-idx="' + idx + '">Use as completed work</button>' : '') +
@@ -311,75 +254,65 @@
 
     dlg.oninput = (e) => {
       if (e.target.id === 'cpOpen') form.manualOpen = Math.max(0, Math.floor(Number(e.target.value) || 0));
-      if (['cpMinutes', 'cpOpen', 'cpType', 'cpComplexity'].includes(e.target.id)) refresh();
+      if (['cpMinutes', 'cpOpen', 'cpType', 'cpComplexity'].includes(e.target.id)) refreshPrediction();
     };
     dlg.onchange = async (e) => {
-      if (e.target.id === 'cpType' || e.target.id === 'cpComplexity') refresh();
+      if (e.target.id === 'cpType' || e.target.id === 'cpComplexity') refreshPrediction();
       if (e.target.id !== 'cpFiles') return;
-      for (const file of Array.from(e.target.files)) {
-        let info;
-        const lower = file.name.toLowerCase();
-        if (file.size > MAX_FILE_BYTES) info = { supported: false, name: file.name, reason: 'file is larger than 1 MB' };
-        else if (lower.endsWith('.docx')) info = { supported: false, name: file.name, reason: '.docx is read by the backend later' };
-        else info = C.analyzeFile(file.name, await file.text());
+      const files = Array.from(e.target.files);
+      e.target.value = '';
+      const result = await attempt(() => store.analyzeFiles(files));
+      if (!result) return;
+      result.forEach((info) => {
         const at = insights.findIndex((x) => x.name === info.name);
         if (at >= 0) insights[at] = info; else insights.push(info);
-      }
-      e.target.value = '';
+      });
       renderInsights();
-      refresh();
+      refreshPrediction();
     };
     dlg.onclick = (e) => {
       const quick = e.target.closest('[data-min]');
-      if (quick) { $('#cpMinutes', dlg).value = quick.dataset.min; refresh(); return; }
+      if (quick) { $('#cpMinutes', dlg).value = quick.dataset.min; refreshPrediction(); return; }
       const use = e.target.closest('[data-use]');
       if (use) {
         const info = insights[Number(use.dataset.idx)];
-        const sug = info.supported ? C.suggestFromFile(info) : { resources: info.name };
+        const sug = info.supported ? (info.suggest || {}) : { resources: info.name };
         setField(use.dataset.use, sug[use.dataset.use], use.dataset.use === 'resources');
         return;
       }
       if (e.target.closest('[data-close]')) dlg.close();
     };
-    $('#cpForm', dlg).addEventListener('submit', (e) => {
+    $('#cpForm', dlg).addEventListener('submit', async (e) => {
       e.preventDefault();
       const values = {};
       C.FIELDS.forEach((f) => { values[f.key] = $('#cp-' + f.key, dlg).value.trim(); });
       if (!Object.values(values).some(Boolean)) { toast('Write at least one line, or press Cancel.'); return; }
       const input = currentInput();
-      const p = C.predictDifficulty(input);
       const openList = [];
       insights.forEach((i) => {
         if (!i.supported) return;
         i.todos.forEach((t) => openList.push(t.text));
         i.openItems.forEach((t) => openList.push(t));
       });
-      task.checkpoint = Object.assign({}, values, {
-        type: input.type, minutes: input.minutes, complexity: input.complexity,
-        level: p.level, depth: p.depth.name, openItems: openList, savedAt: Date.now(),
-        files: insights.map((i) => i.name),
+      const payload = Object.assign({}, values, {
+        openItems: openList, files: insights.map((i) => i.name), type: input.type, minutes: input.minutes,
+        complexity: input.complexity, openItemsCount: input.openItems, trigger: preset.trigger || 'user',
       });
-      task.complexity = input.complexity;
-      task.column = 'interrupted';
-      state.interruptions += 1;
-      logEvent('checkpoint_saved', task, {
-        level: p.level, depth: p.depth.name, minutes: input.minutes, type: input.type,
-        fields_filled: Object.values(values).filter(Boolean).length, files: insights.length,
-      });
+      const saved = await attempt(() => store.saveCheckpoint(taskId, payload));
+      if (!saved) return;
       dlg.close();
-      renderBoard();
-      toast('Checkpoint saved. Predicted difficulty: ' + p.level + '.');
+      await refresh();
+      toast('Checkpoint saved. Predicted difficulty: ' + saved.checkpoint.level + '.');
     });
 
-    refresh();
-    renderInsights();
+    await refreshPrediction();
     dlg.showModal();
   }
 
   // ---------------------------------------------------------------- resume popup and summary
   function openResumeList() {
     const dlg = $('#resumeDialog');
-    const waiting = state.tasks.filter((t) => t.column === 'interrupted' && t.checkpoint);
+    const waiting = cache.tasks.filter((t) => t.column === 'interrupted' && t.checkpoint);
     if (!waiting.length) { toast('No interrupted tasks. Nothing to resume.'); return; }
     dlg.innerHTML =
       '<div class="dlg-head"><h2>Welcome back</h2><button class="x" data-close aria-label="Close">&times;</button></div>' +
@@ -406,50 +339,77 @@
       const r = e.target.closest('[data-resume]');
       if (r) { dlg.close(); openSummary(r.dataset.resume); return; }
       if (e.target.id === 'ignoreAll') {
-        waiting.forEach((t) => logEvent('resume_prompt_dismissed', t, { level: t.checkpoint.level }));
+        waiting.forEach((t) => note('resume_prompt_dismissed', t.id, { level: t.checkpoint.level }));
         dlg.close();
-        renderBoard();
         return;
       }
       if (e.target.closest('[data-close]')) dlg.close();
     };
-    logEvent('resume_prompt_shown', null, { waiting: waiting.length });
+    note('resume_prompt_shown', null, { waiting: waiting.length });
     dlg.showModal();
   }
 
-  function openSummary(taskId) {
+  async function openSummary(taskId) {
     const task = taskById(taskId);
     if (!task || !task.checkpoint) return;
-    const cp = task.checkpoint;
-    const level = cp.level;
     const away = awayMinutesFor(task);
-    const summary = C.buildSummary(task, cp, level, away);
     const opened = Date.now();
     const dlg = $('#summaryDialog');
+    let data = null;
+    let editing = false;
+    let wanted = 'template';
+
+    const writer = store.mode === 'server'
+      ? '<div class="away-row"><label for="sumMode">Summary writer</label><select id="sumMode">' +
+        '<option value="template">Rule-based template</option>' +
+        '<option value="lora"' + (store.loraAvailable ? '' : ' disabled') + '>AI model (fine-tuned Qwen)' + (store.loraAvailable ? '' : ' - not installed on this server') + '</option></select></div>'
+      : '<p class="note">Summary writer: rule-based template. The fine-tuned AI model runs on the backend server.</p>';
 
     dlg.innerHTML =
       '<div class="dlg-head"><h2>Restart summary</h2><button class="x" data-close aria-label="Close">&times;</button></div>' +
-      '<div class="dlg-body"><div class="tags">' + badge(level) + '<span class="tag">' + esc(summary.depth.name) + ' summary</span></div>' +
-      '<div id="sumView"><p class="summary-intro">' + esc(summary.intro) + '</p><div class="summary-lines">' +
-      (summary.lines.length ? summary.lines.map((l) => '<div class="summary-line"><b>' + esc(l.label) + '</b>' + esc(l.text) + '</div>').join('')
-        : '<div class="note">No checkpoint text was written.</div>') + '</div></div>' +
+      '<div class="dlg-body">' + writer + '<div class="tags" id="sumTags"></div>' +
+      '<div id="sumWarn" class="note warn" hidden></div>' +
+      '<div id="sumView"><p class="note">Writing your summary...</p></div>' +
       '<div id="sumEdit" hidden><label class="lbl" for="sumText">Edit the summary</label><textarea id="sumText" rows="10"></textarea></div>' +
       '<p class="note" style="margin-top:12px">This only restates what you wrote. It never adds code or answers.</p></div>' +
-      '<div class="dlg-foot"><button class="btn ghost" id="sumIgnore">Ignore</button><button class="btn" id="sumEditBtn">Edit</button>' +
-      '<button class="btn primary" id="sumAccept">Accept and resume</button></div>';
+      '<div class="dlg-foot"><button class="btn ghost" id="sumIgnore" disabled>Ignore</button><button class="btn" id="sumEditBtn" disabled>Edit</button>' +
+      '<button class="btn primary" id="sumAccept" disabled>Accept and resume</button></div>';
 
-    const text = C.summaryToText(summary);
-    $('#sumText', dlg).value = text;
-    let editing = false;
+    function paint() {
+      $('#sumTags', dlg).innerHTML = badge(data.level) + '<span class="tag">' + esc(data.depth) + ' summary</span>' +
+        '<span class="tag">' + (data.mode === 'lora' ? 'AI model' : 'Template') + '</span>';
+      const warn = $('#sumWarn', dlg);
+      warn.hidden = !data.fallbackReason;
+      warn.textContent = data.fallbackReason ? 'Showing the template summary. ' + data.fallbackReason : '';
+      if (data.mode === 'lora') {
+        $('#sumView', dlg).innerHTML = '<div class="summary-text">' + esc(data.text) + '</div>';
+      } else {
+        $('#sumView', dlg).innerHTML = '<p class="summary-intro">' + esc(data.intro) + '</p><div class="summary-lines">' +
+          (data.lines.length ? data.lines.map((l) => '<div class="summary-line"><b>' + esc(l.label) + '</b>' + esc(l.text) + '</div>').join('')
+            : '<div class="note">No checkpoint text was written.</div>') + '</div>';
+      }
+      $('#sumText', dlg).value = data.text;
+      $$('.dlg-foot button', dlg).forEach((b) => { b.disabled = false; });
+    }
 
-    function finish(action, extra) {
-      const seconds = Math.round((Date.now() - opened) / 1000);
-      logEvent('summary_' + action, task, Object.assign({ level, away_min: Math.round(away), viewed_s: seconds }, extra));
-      task.lastCheckpoint = task.checkpoint;
-      delete task.checkpoint;
-      task.column = 'doing';
+    async function load(mode) {
+      $$('.dlg-foot button', dlg).forEach((b) => { b.disabled = true; });
+      $('#sumView', dlg).innerHTML = '<p class="note">Writing your summary...</p>';
+      const result = await attempt(() => store.summary(taskId, { awayMinutes: away, mode }));
+      if (!result) { dlg.close(); return false; }
+      data = result;
+      paint();
+      return true;
+    }
+
+    async function finish(action, extra) {
+      const payload = Object.assign({
+        action, shownText: data.text, viewedSeconds: Math.round((Date.now() - opened) / 1000), awayMinutes: away, mode: data.mode,
+      }, extra);
+      const done = await attempt(() => store.resume(taskId, payload));
+      if (!done) return;
       dlg.close();
-      renderBoard();
+      await refresh();
       toast(action === 'ignored' ? 'Summary ignored. Task is back in progress.' : 'Summary ' + action + '. Task is back in progress.');
     }
 
@@ -458,7 +418,8 @@
       if (e.target.id === 'sumAccept') {
         if (editing) {
           const edited = $('#sumText', dlg).value;
-          finish(edited.trim() === text.trim() ? 'accepted' : 'edited', { chars_before: text.length, chars_after: edited.length });
+          if (edited.trim() === data.text.trim()) finish('accepted', {});
+          else finish('edited', { finalText: edited });
         } else finish('accepted', {});
       }
       if (e.target.id === 'sumIgnore') finish('ignored', {});
@@ -470,12 +431,23 @@
         $('#sumAccept', dlg).textContent = editing ? 'Save edit and resume' : 'Accept and resume';
       }
     };
+    dlg.onchange = async (e) => {
+      if (e.target.id !== 'sumMode') return;
+      wanted = e.target.value;
+      editing = false;
+      $('#sumView', dlg).hidden = false;
+      $('#sumEdit', dlg).hidden = true;
+      $('#sumEditBtn', dlg).textContent = 'Edit';
+      $('#sumAccept', dlg).textContent = 'Accept and resume';
+      await load(wanted);
+    };
     dlg.showModal();
+    await load(wanted);
   }
 
   // ---------------------------------------------------------------- incoming interruption
   function openIncoming() {
-    const doing = state.tasks.filter((t) => t.column === 'doing');
+    const doing = cache.tasks.filter((t) => t.column === 'doing');
     if (!doing.length) { toast('No task is in progress. Start a task first.'); return; }
     const dlg = $('#incomingDialog');
     dlg.innerHTML =
@@ -483,53 +455,38 @@
       '<div class="dlg-body"><p><strong>A meeting starts in 5 minutes.</strong> Save a checkpoint so you can pick up where you stopped?</p>' +
       '<label class="lbl" for="incTask">Task you are working on</label><select class="full" id="incTask">' +
       doing.map((t) => '<option value="' + t.id + '">' + esc(t.title) + '</option>').join('') + '</select></div>' +
-      '<div class="dlg-foot"><button class="btn ghost" data-close>Skip</button><button class="btn primary" id="incSave">Save checkpoint</button></div>';
+      '<div class="dlg-foot"><button class="btn ghost" data-skip>Skip</button><button class="btn primary" id="incSave">Save checkpoint</button></div>';
     dlg.onclick = (e) => {
       if (e.target.id === 'incSave') {
         const id = $('#incTask', dlg).value;
         dlg.close();
-        logEvent('interruption_notified', taskById(id), { type: 'meeting' });
-        openCheckpoint(id, { type: 'meeting' });
+        note('interruption_notified', id, { type: 'meeting' });
+        openCheckpoint(id, { type: 'meeting', trigger: 'notification' });
         return;
       }
-      if (e.target.closest('[data-close]')) {
-        if (e.target.textContent === 'Skip') logEvent('interruption_notified_skipped', null, {});
-        dlg.close();
-      }
+      if (e.target.closest('[data-skip]')) { note('interruption_notified_skipped', null, {}); dlg.close(); return; }
+      if (e.target.closest('[data-close]')) dlg.close();
     };
     dlg.showModal();
   }
 
   // ---------------------------------------------------------------- study log
-  function renderLog() {
-    const body = $('#logBody');
-    const rows = state.log.slice().reverse();
-    body.innerHTML = rows.map((r) =>
-      '<tr><td>' + esc(fmtTime(r.ts)) + '</td><td>' + esc(r.event) + '</td><td>' + esc(r.task) + '</td>' +
+  async function renderLog() {
+    const events = await attempt(() => store.events());
+    if (!events) return;
+    const rows = events.slice().reverse();
+    const fmt = (ts) => {
+      const d = new Date(ts);
+      return d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    };
+    $('#logBody').innerHTML = rows.map((r) =>
+      '<tr><td>' + esc(fmt(r.ts)) + '</td><td>' + esc(r.event) + '</td><td>' + esc(r.task) + '</td>' +
       '<td class="details">' + esc(JSON.stringify(r.details)) + '</td></tr>').join('');
     $('#logEmpty').hidden = rows.length > 0;
-    const count = (ev) => state.log.filter((r) => r.event === ev).length;
-    const stats = [
-      ['Checkpoints saved', count('checkpoint_saved')],
-      ['Summaries accepted', count('summary_accepted')],
-      ['Summaries edited', count('summary_edited')],
-      ['Summaries ignored', count('summary_ignored')],
-    ];
+    const count = (ev) => events.filter((r) => r.event === ev).length;
+    const stats = [['Checkpoints saved', count('checkpoint_saved')], ['Summaries accepted', count('summary_accepted')],
+      ['Summaries edited', count('summary_edited')], ['Summaries ignored', count('summary_ignored')]];
     $('#logStats').innerHTML = stats.map((s) => '<div class="stat"><b>' + s[1] + '</b><span>' + s[0] + '</span></div>').join('');
-  }
-
-  function exportCsv() {
-    const q = (v) => '"' + String(v).replace(/"/g, '""') + '"';
-    const lines = ['time,event,task,details'].concat(state.log.map((r) =>
-      [q(new Date(r.ts).toISOString()), q(r.event), q(r.task), q(JSON.stringify(r.details))].join(',')));
-    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'c3_study_log.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   // ---------------------------------------------------------------- wiring
@@ -540,24 +497,44 @@
     if (name === 'log') renderLog();
   }
 
-  function init() {
+  async function init() {
+    store = await window.C3Store.detect();
+    const badgeEl = $('#modeBadge');
+    badgeEl.textContent = store.mode === 'server' ? 'Server · ' + store.user : 'Browser only';
+    badgeEl.title = store.mode === 'server'
+      ? 'Data is stored by the C3 backend (database). Participant code: ' + store.user
+      : 'Data stays in this browser. Run the backend to store it in the database.';
+    badgeEl.classList.add(store.mode);
+
     bindBoard();
-    renderBoard();
     $$('.tab').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
     $('#btnIncoming').addEventListener('click', openIncoming);
     $('#btnBack').addEventListener('click', openResumeList);
     $('#btnRule').addEventListener('click', () => $('#ruleDialog').showModal());
-    $('#btnDemo').addEventListener('click', () => { state = demoState(); awayOverride = null; persist(); renderBoard(); toast('Demo data loaded: two interrupted tasks.'); });
-    $('#btnReset').addEventListener('click', () => { if (confirm('Reset the board and the study log?')) { state = freshState(); awayOverride = null; persist(); renderBoard(); renderLog(); } });
-    $('#btnExport').addEventListener('click', exportCsv);
-    $('#btnClearLog').addEventListener('click', () => { if (confirm('Clear the study log?')) { state.log = []; persist(); renderLog(); renderBoard(); } });
+    $('#btnDemo').addEventListener('click', async () => {
+      await attempt(() => store.demo());
+      awayOverride = null;
+      await refresh();
+      toast('Demo data loaded: two interrupted tasks.');
+    });
+    $('#btnReset').addEventListener('click', async () => {
+      if (!confirm('Reset the board and the study log?')) return;
+      await attempt(() => store.reset());
+      awayOverride = null;
+      await refresh();
+      renderLog();
+    });
+    $('#btnExport').addEventListener('click', () => attempt(() => store.exportCsv()));
     $$('dialog').forEach((d) => {
       d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
       d.addEventListener('click', (e) => { if (e.target.closest('[data-close]') && d.id === 'ruleDialog') d.close(); });
     });
-    if (state.tasks.some((t) => t.column === 'interrupted' && t.checkpoint)) setTimeout(openResumeList, 500);
+
+    const ok = await attempt(() => refresh());
+    if (ok === null && !cache.tasks.length) { toast('Could not load the tasks.'); return; }
+    if (cache.tasks.some((t) => t.column === 'interrupted' && t.checkpoint)) setTimeout(openResumeList, 500);
   }
 
   init();
-  window.C3App = { get state() { return state; } };
+  window.C3App = { get tasks() { return cache.tasks; }, get store() { return store; }, refresh };
 })();
