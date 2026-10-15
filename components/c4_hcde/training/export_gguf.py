@@ -15,6 +15,7 @@ Steps: merge in float16 -> llama.cpp convert_hf_to_gguf.py (f16) -> llama-quanti
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -50,6 +51,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--quant", default="Q4_K_M")
     ap.add_argument("--llama-cpp", type=Path, default=Path("/kaggle/working/llama.cpp"))
     ap.add_argument("--keep-merged", action="store_true", help="keep the merged float16 model folder")
+    ap.add_argument("--work-dir", type=Path, default=Path("/tmp/hcde-export"),
+                    help="scratch space for the ~15 GB merged model and ~15 GB f16 GGUF (Kaggle's "
+                         "/kaggle/working is limited to 20 GB, so these must not go there)")
     args = ap.parse_args(argv)
 
     import torch
@@ -58,8 +62,9 @@ def main(argv: list[str] | None = None) -> int:
 
     from .train_qlora import _new_transformers
 
-    merged = args.out / "merged"
+    merged = args.work_dir / "merged"
     args.out.mkdir(parents=True, exist_ok=True)
+    args.work_dir.mkdir(parents=True, exist_ok=True)
     print("merging adapter into base model (float16)...", flush=True)
     dtype_key = "dtype" if _new_transformers() else "torch_dtype"
     base = AutoModelForCausalLM.from_pretrained(args.base_model, **{dtype_key: torch.float16}, low_cpu_mem_usage=True)
@@ -71,9 +76,14 @@ def main(argv: list[str] | None = None) -> int:
     lc = args.llama_cpp
     if not lc.exists():
         run(["git", "clone", "--depth", "1", "https://github.com/ggml-org/llama.cpp", str(lc)])
-    run([sys.executable, "-m", "pip", "install", "-q", "-r", str(lc / "requirements" / "requirements-convert_hf_to_gguf.txt")])
-    f16 = args.out / "hcde-f16.gguf"
-    run([sys.executable, str(lc / "convert_hf_to_gguf.py"), str(merged), "--outfile", str(f16), "--outtype", "f16"])
+    # Use llama.cpp's own gguf-py instead of `pip install -r requirements`, which pins a CPU torch and
+    # would break the GPU environment for the evaluation cells that run afterwards.
+    run([sys.executable, "-m", "pip", "install", "-q", "sentencepiece", "protobuf"])
+    env = dict(os.environ, PYTHONPATH=str(lc / "gguf-py") + os.pathsep + os.environ.get("PYTHONPATH", ""))
+    f16 = args.work_dir / "hcde-f16.gguf"
+    cmd = [sys.executable, str(lc / "convert_hf_to_gguf.py"), str(merged), "--outfile", str(f16), "--outtype", "f16"]
+    print("+", " ".join(cmd), flush=True)
+    subprocess.run(cmd, check=True, env=env)
 
     quantize = lc / "build" / "bin" / "llama-quantize"
     if not quantize.exists():

@@ -82,13 +82,19 @@ def generate_all(model, tokenizer, prompts: list[list[dict]], max_new_tokens: in
     return outs
 
 
-def judge(rows: list[dict], elements: dict[str, list[str]]) -> None:
+def judge(rows: list[dict], elements: dict[str, list[str]], checkpoint=None) -> None:
+    """Score replies with the LLM judge. Resumable: rows that already have a judge result and a
+    disclosure score (without errors) are skipped, so a rerun only does what is missing."""
     from .build_dataset import chat
 
     base_url, key, model = (os.environ.get(k, "") for k in ("TEACHER_BASE_URL", "TEACHER_API_KEY", "TEACHER_MODEL"))
     judge_model = os.environ.get("JUDGE_MODEL") or model
     for i, r in enumerate(rows, 1):
         if r["tier"] == PROBE:
+            continue
+        done_j = "judge" in r and "error" not in r["judge"]
+        done_d = r["task_id"] not in elements or ("disclosure" in r and "error" not in r["disclosure"])
+        if done_j and done_d:
             continue
         prompt = JUDGE_PROMPT.format(rubric=rubric_system_prompt(r["tier"]), task=r["task"], reply=r["reply"])
         try:
@@ -103,7 +109,9 @@ def judge(rows: list[dict], elements: dict[str, list[str]]) -> None:
                 r["disclosure"] = summarise_disclosure(r["tier"], score_reply(r["task"], elements[r["task_id"]], r["reply"]))
             except Exception as e:
                 r["disclosure"] = {"error": str(e)[:200]}
-        if i % 20 == 0:
+        if checkpoint:
+            checkpoint()
+        if i % 10 == 0:
             print(f"  judged {i}/{len(rows)}", flush=True)
 
 
@@ -174,7 +182,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--batch-size", type=int, default=8)
     ap.add_argument("--no-4bit", action="store_true")
     ap.add_argument("--judge", action="store_true", help="also score with an LLM judge (TEACHER_* env vars)")
+    ap.add_argument("--from-generations", type=Path,
+                    help="skip generation: load a saved generations.jsonl and only judge + summarise (no GPU needed)")
+    ap.add_argument("--judge-conditions", nargs="+", choices=CONDITIONS,
+                    help="judge only these conditions (saves API calls)")
     args = ap.parse_args(argv)
+
+    if args.from_generations:
+        rows = load_rows(args.from_generations)
+        print(f"loaded {len(rows)} saved replies from {args.from_generations}")
+        return finish(args, rows)
 
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -222,17 +239,29 @@ def main(argv: list[str] | None = None) -> int:
                          "reply": reply, "reference": r["messages"][2]["content"],
                          "compliance": check(r["tier"], reply, r["messages"][1]["content"]).to_dict()})
 
+    return finish(args, rows)
+
+
+def save_rows(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    with tmp.open("w") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    tmp.replace(path)
+
+
+def finish(args, rows: list[dict]) -> int:
+    out_rows = args.out / "generations.jsonl"
+    save_rows(out_rows, rows)  # save the replies before judging, so a judge failure never loses them
     if args.judge:
         print("judging...")
         elements = json.loads(args.elements.read_text()) if args.elements.exists() else {}
         if not elements:
             print(f"  no solution elements at {args.elements}; disclosure scores skipped")
-        judge(rows, elements)
-
-    args.out.mkdir(parents=True, exist_ok=True)
-    with (args.out / "generations.jsonl").open("w") as f:
-        for r in rows:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        todo = [r for r in rows if not args.judge_conditions or r["condition"] in args.judge_conditions]
+        judge(todo, elements, checkpoint=lambda: save_rows(out_rows, rows))
+    save_rows(out_rows, rows)
     summary = summarise(rows)
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2))
     table = to_markdown(summary)
