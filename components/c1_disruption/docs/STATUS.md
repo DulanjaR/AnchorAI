@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`5e5fba8` · 2026-10-14 · "C1 sim: rerun SYNTHETIC results with the 5-action catalogue" (this update is in the commit after it).
+`a9989cd` · 2026-10-15 · "wip: C1 Model 1 on REAL CESAW data - loader, evaluation, notebook 04 (run not finished)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -14,6 +14,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Step 5:** `OVERRUN_RISK` warning for Keep tasks whose high estimate would cross the next fixed block or the end of the free time (planning still uses the point).
 - **Step 6:** strategy `deferOrder` (`fi` | `deadline`) and `recoveryTiming` (`earliest` | `latest`); 5-action catalogue (default, compress_25, no_compress, deadline_first, evening_first); distinctness check passed (no pair never differs).
 - **Rerun with the 5-action catalogue:** Model 1 unchanged; Model 2 mean acceptance (SYNTHETIC, assumed 0.85/0.3): most accepted 0.742, bandit 0.680, fixed 0.609, random 0.537.
+- **Task 6 (part 1): PP1 demo script** `demo/pp1_demo.py`: one power-cut day end to end through the API (in-process, or `--url` for a running server): plan → confirmed disruption → MVD with all four tags and their explanations → accept → tags for C3/C4 → feedback logged. Tested (`tests/test_demo.py`).
 
 ## In progress
 - **Model 1 on REAL data (CESAW):** code, tests, notebook 04, METHODOLOGY §9 and `C1_CESAW_PATH` done (wip commit). The full run (leave-one-developer-out over 247 developers + warm sample, 50 trees) did not finish in 11 h (a worker crashed) and was stopped; no result table yet. Waiting on owner: a faster evaluation design (see PROPOSED).
@@ -24,6 +25,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
 - CESAW evaluation design: cold start as grouped 10-fold by developer (every developer still unseen when predicted) instead of 247 single-developer folds; warm on the seeded 40-developer sample; progress logging.
 - CESAW mapping: priority `Medium` for every task (CESAW has none); tasks without a readable start time (843) dropped and counted.
 - deferOrder "deadline" keeps the groups and orders within them; recoveryTiming "latest" keeps window-first.
