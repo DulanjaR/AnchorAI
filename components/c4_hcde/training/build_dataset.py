@@ -209,6 +209,17 @@ def repair_message(tier: str, reasons: list[str]) -> str:
             f"{tier} rules exactly, using the example's amount of help. Reply with the rewritten answer only.")
 
 
+def reference_note(task: dict) -> str:
+    """Public-benchmark tasks carry the benchmark's own correct solution. The teacher sees it privately,
+    so its replies are correct; the training example never contains it (only the task and the reply)."""
+    ref = (task.get("reference") or "").strip()
+    if not ref:
+        return ""
+    return ("\n\nA verified correct solution, for YOUR reference only. Never mention that you were given it, and "
+            "reveal only as much of it as this tier allows (for EMERGENCY, give the full correct answer; you may "
+            "write it in your own way):\n" + ref)
+
+
 def build_example(task: dict, tier: str, reply: str, teacher: str, compliance: dict, attempts: int) -> dict:
     return {
         "task_id": task["id"],
@@ -270,7 +281,7 @@ def main(argv: list[str] | None = None) -> int:
     lock = threading.Lock()
 
     def run(task: dict, tier: str) -> dict:
-        messages = [{"role": "system", "content": teacher_system_prompt(tier)},
+        messages = [{"role": "system", "content": teacher_system_prompt(tier) + reference_note(task)},
                     {"role": "user", "content": task["task"]}]
         reply, result, attempts = "", None, 0
         # If the first reply breaks the tier, send it back with the exact reasons and ask for a
