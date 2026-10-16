@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`e7a096b` · 2026-10-15 · "docs: commits authored by the owner only; update cited commit hashes" (this update is in the commit after it).
+`34e8be1` · 2026-10-16 · "C1 Model 1: median point (q50) and earned-trust gate (drift 1.0 until the model beats B0 for the student)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -19,10 +19,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Task 6 (part 3): web demo reworked after owner feedback (15 Oct):** first setup (free hours, **Sync calendar** = import a calendar file (.ics) or a sample calendar → protected time; tasks with name, start, end, deadline, priority, or "no set time") next to a live day calendar; a visible **⚡ Record a disruption** button on the calendar opens the report, then the MVD review; accepting puts the new plan on the calendar with the disruption marked.
 - **Model 1 on REAL data (CESAW, professional developers):** `docs/results/c1_model1_cesaw.md`. 60,284 tasks from 247 developers (dropped: plan ≤ 0 692, no readable start 841). **Finding: Model 1 does not beat "trust the plan" on CESAW.** Cold MAE 80.2 min vs B0 75.0; warm 82.0 vs B0 76.6 (B3 78.9). Range coverage 0.74 / 0.73 (inside 70–90%). Real estimates are very noisy (sd of log ratio 1.07, median −0.06).
 - **Model 1: median point + earned-trust gate** (planning chat, 16 Oct): point = forest q50; the model corrects a student only after beating B0 on their recent tasks, else drift 1.0 (API `correctionSource: "gate"`). Model file format 2. Tests added (gate opens/closes, evidence uses earlier days only, margin, minimum records, gate off = old behaviour, mean = old point).
+- **Gate values approved** (lookback 20, minimum 5, margin 5%). **Notebook 01** saves the format-2 model (with the gate) and prints each persona's gate: ready to retrain in Colab. **PP1 demo script** runs as SYNTHETIC persona P01 with Model 1 on: P01's gate is open (model 6.2 min vs own estimate 14.0 min on 20 recent tasks), and the planner uses P01's corrected durations.
 
 ## In progress
-- CESAW rerun with the gate + median (results file keeps the earlier run as "Before gate").
-- The SYNTHETIC simulation results in `sim/results/` are from before the gate; to be rerun (not edited by hand).
+- CESAW rerun and full SYNTHETIC rerun with the gate (both results files keep the earlier run as "Before gate" and show gate open / closed students per method).
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -30,7 +30,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
-- Model 1 gate details (DECISIONS.md 2026-10-16): lookback 20 records, minimum 5, margin 5%, error in minutes, out-of-fold forest in the evidence, band widened when closed.
+- Model 1 gate details not covered by the approval (DECISIONS.md 2026-10-16): error in minutes, out-of-fold forest in the evidence, band widened when closed.
 - CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
 - **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
 - deferOrder "deadline" keeps the groups and orders within them; recoveryTiming "latest" keeps window-first.

@@ -2,6 +2,11 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-16 — Earned-trust gate values approved
+- Source: planning chat, 16 Oct 2026.
+- **Approved:** `GATE_LOOKBACK = 20`, `GATE_MIN_RECORDS = 5`, `GATE_MARGIN = 0.05` (`ml/drift/settings.py`), as proposed in "Model 1 earned-trust gate" below.
+- Also decided: rerun the full SYNTHETIC simulation with the gate on and keep the earlier results in the same file as "Before gate" (as for CESAW); both results files show, per method, how many students had the gate open vs closed; notebook 01 saves the format-2 model; the PP1 demo script uses SYNTHETIC persona P01 (enough history for the gate to open) and prints the gate state.
+
 ## 2026-10-16 — Model 1 point estimate: median (q50) instead of the mean
 - Source: planning chat, 16 Oct 2026.
 - The forest's point estimate f(x) is now the **median (q50)** of the log drift (`settings.POINT_QUANTILE = 0.5`), so outlier days pull it less. The q10–q90 band is unchanged. The rest of the formula is unchanged: ŷ = f(x) + w · r̄_s, w = n / (n + k), k by cross-validation; the out-of-fold residuals behind r̄_s are measured from the same median f(x) (they must use the same f).
