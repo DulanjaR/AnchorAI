@@ -3,7 +3,8 @@
 A record is one completed task:
     studentId, taskType, priority, estimatedMinutes, actualMinutes,
     date ('YYYY-MM-DD'), startHour (0–23), overlapMinutes (optional: minutes of a
-    confirmed disruption inside the task's start–done span)
+    confirmed disruption inside the task's start–done span), category (optional:
+    coding / writing / reading / revision, 16 Oct 2026; missing = None)
 
 Target y = log(actual ÷ estimated) (log drift; 0 = on time).
 """
@@ -26,6 +27,7 @@ class DriftRecord(TypedDict):
     date: str
     startHour: int
     overlapMinutes: NotRequired[float]
+    category: NotRequired[str | None]
 
 
 FEATURE_NAMES: tuple[str, ...] = (
@@ -36,6 +38,12 @@ FEATURE_NAMES: tuple[str, ...] = (
     "weekend",
     "priority_score",
 )
+# Added after FEATURE_NAMES when the model uses the category (settings.USE_CATEGORY).
+CATEGORY_FEATURE_NAMES: tuple[str, ...] = tuple(f"category_{c}" for c in engine_config.TASK_CATEGORIES)
+
+
+def feature_names(use_category: bool = False) -> tuple[str, ...]:
+    return FEATURE_NAMES + (CATEGORY_FEATURE_NAMES if use_category else ())
 
 
 def weekday(date_str: str) -> int:
@@ -43,9 +51,10 @@ def weekday(date_str: str) -> int:
     return Date.fromisoformat(date_str).weekday()
 
 
-def features(records: Iterable[Mapping[str, Any]]) -> np.ndarray:
-    """Feature matrix in FEATURE_NAMES order. The student is NOT a feature: the
-    pooled forest is the same for everyone; personalisation is the shrinkage term."""
+def features(records: Iterable[Mapping[str, Any]], use_category: bool = False) -> np.ndarray:
+    """Feature matrix in feature_names(use_category) order. The student is NOT a feature:
+    the pooled forest is the same for everyone; personalisation is the shrinkage term.
+    A missing or unknown category gives all-zero category columns (graceful)."""
     rows = []
     for r in records:
         if r["taskType"] not in engine_config.TASK_TYPES:
@@ -58,8 +67,9 @@ def features(records: Iterable[Mapping[str, Any]]) -> np.ndarray:
             float(day),
             1.0 if day >= 5 else 0.0,
             float(engine_config.PRIORITY_SCORE[r["priority"]]),
+            *((1.0 if r.get("category") == c else 0.0 for c in engine_config.TASK_CATEGORIES) if use_category else ()),
         ])
-    return np.array(rows, dtype=float).reshape(-1, len(FEATURE_NAMES))
+    return np.array(rows, dtype=float).reshape(-1, len(feature_names(use_category)))
 
 
 def log_drift(records: Iterable[Mapping[str, Any]]) -> np.ndarray:

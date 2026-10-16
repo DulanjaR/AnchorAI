@@ -37,6 +37,7 @@ class ModelCorrector:
             "estimatedMinutes": hours * 60,
             "date": context["date"],
             "startHour": to_minutes(start) // 60,
+            "category": task.get("category"),
         }
         try:
             (pred,) = self.model.predict([query])

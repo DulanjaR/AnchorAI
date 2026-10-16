@@ -30,6 +30,10 @@ MAX_COMPRESSION: Final = 0.5  # Reduce compresses by UP TO 50%
 
 TASK_TYPES: Final[tuple[str, ...]] = ("Digital", "Analog", "Meeting", "Fixed")
 
+# Optional task category (planning chat, 16 Oct 2026): a feature for ML Model 1 only, so it can
+# tell task kinds apart within a type. The MVD engine never reads it.
+TASK_CATEGORIES: Final[tuple[str, ...]] = ("coding", "writing", "reading", "revision")
+
 DisruptionKind = Literal["environment", "unavailable"]
 
 # Disruption kinds (Task 2a, 12 Oct 2026):

@@ -191,8 +191,9 @@
       </div>
       <div class="row">
         <div><label for="tType">Needs</label><select id="tType"></select></div>
-        <div style="display:flex;align-items:end"><label class="check" style="margin:0 0 8px"><input type="checkbox" id="tDelegable"> Others could do it</label></div>
+        <div><label for="tCategory">Kind of task (optional)</label><select id="tCategory"></select></div>
       </div>
+      <label class="check"><input type="checkbox" id="tDelegable"> Others could do it</label>
       <div class="actions"><button class="primary" id="btnTask">+ Add task</button></div>
       <ul class="list" id="setupTasks"></ul>
     </section>
@@ -476,6 +477,7 @@ async function addTask() {
   const title = $("tTitle").value.trim(); if (!title) throw new Error("Give the task a name");
   const body = { title, type: $("tType").value, priority: $("tPriority").value, deadline: $("tDeadline").value,
                  delegable: $("tDelegable").checked, plannedDate: day() };
+  if ($("tCategory").value) body.category = $("tCategory").value;
   if (!body.deadline) throw new Error("Set the deadline");
   if ($("tFlexible").checked) {
     body.estimatedHours = Number($("tHours").value);
@@ -539,6 +541,7 @@ function newStudent() {
 /* ================= wiring ================= */
 function fill(id, values, text = (v) => v) { $(id).innerHTML = values.map(v => `<option value="${v}">${esc(text(v))}</option>`).join(""); }
 fill("tType", CFG.taskTypes, v => TYPE_TEXT[v] || v); fill("tPriority", CFG.priorities);
+fill("tCategory", ["", ...(CFG.categories || [])], v => v || "— not set —");
 fill("dType", CFG.disruptionTypes, v => `${NAMES[v] || v}${CFG.disruptionKinds[v] === "unavailable" ? " (my time is taken)" : ""}`);
 $("tPriority").value = "Medium";
 const now = new Date(); $("day").value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;

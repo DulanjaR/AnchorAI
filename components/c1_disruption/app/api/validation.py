@@ -25,6 +25,7 @@ DISRUPTION_TYPES = tuple(config.DISRUPTION_KINDS)
 TASK_TYPES = config.TASK_TYPES
 PRIORITIES = tuple(config.PRIORITY_SCORE)
 TAGS = ("Keep", "Reduce", "Move", "Delegate")
+TASK_CATEGORIES = config.TASK_CATEGORIES
 
 _TWO_DIGIT_TIME = re.compile(r"[0-9]{2}:[0-9]{2}")
 

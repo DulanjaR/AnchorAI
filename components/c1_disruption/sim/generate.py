@@ -182,6 +182,6 @@ def generate(
             "estimatedMinutes": float(task.estimated_minutes), "actualMinutes": round(actual + overlap, 1),
             "overlapMinutes": float(overlap), "date": task.date,
             "startHour": _start(persona, task) // 60,
-            "taskId": task.task_id, "dataset": settings.DATASET,
+            "taskId": task.task_id, "category": task.category, "dataset": settings.DATASET,
         })
     return world

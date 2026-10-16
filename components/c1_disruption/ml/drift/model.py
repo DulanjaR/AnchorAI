@@ -25,6 +25,7 @@ import numpy as np
 from quantile_forest import RandomForestQuantileRegressor
 from sklearn.model_selection import KFold
 
+from components.c1_disruption.engine.config import TASK_CATEGORIES
 from components.c1_disruption.ml.drift import settings
 from components.c1_disruption.ml.drift.data import features, log_drift
 
@@ -128,6 +129,7 @@ class DriftModel:
         random_state: int = settings.RANDOM_STATE,
         gate: bool = settings.GATE_ENABLED,
         point_quantile: float | str = settings.POINT_QUANTILE,
+        use_category: bool = settings.USE_CATEGORY,
     ) -> None:
         self.k_fixed = k  # None = choose by cross-validation
         self.quantiles = quantiles
@@ -136,6 +138,8 @@ class DriftModel:
         self.gate = gate
         self.point_quantile = point_quantile  # 0.5 = median; "mean" = the model before 16 Oct 2026
         self.trust: dict[str, Trust] = {}  # student → gate evidence
+        self.use_category = use_category  # optional task category as a feature (16 Oct 2026)
+        self.category_used = False  # set by fit: True only if the training data has categories
         self.k: float | None = None
         self.forest: RandomForestQuantileRegressor | None = None
         self.offsets: dict[str, tuple[int, float]] = {}  # student → (n, mean residual)
@@ -155,7 +159,10 @@ class DriftModel:
     def fit(self, records: Sequence[Mapping[str, Any]]) -> "DriftModel":
         if len(records) < 2:
             raise ValueError("Need at least 2 training records")
-        X, y = features(records), log_drift(records)
+        # The category columns are added only if the training data has categories at all, so data
+        # without them (CESAW) gives exactly the model without the feature (graceful degradation).
+        self.category_used = self.use_category and any(r.get("category") in TASK_CATEGORIES for r in records)
+        X, y = features(records, self.uses_category), log_drift(records)
         students = [r["studentId"] for r in records]
 
         # Out-of-fold pooled predictions → honest residuals per record.
@@ -181,6 +188,12 @@ class DriftModel:
         k = self.k or 0.0
         return n, (n / (n + k) if (n + k) > 0 else 0.0)
 
+    @property
+    def uses_category(self) -> bool:
+        """The fitted model has category columns. A model saved before 16 Oct 2026 has no such
+        attribute: it was trained without categories."""
+        return getattr(self, "category_used", False)
+
     def is_trusted(self, student_id: str) -> bool:
         """The gate is open for this student (always True with the gate switched off)."""
         if not self.gate:
@@ -193,7 +206,7 @@ class DriftModel:
             raise RuntimeError("DriftModel is not trained")
         if not records:
             return []
-        X = features(records)
+        X = features(records, self.uses_category)
         point = self.forest.predict(X, quantiles=self.point_quantile)
         low, high = np.asarray(self.forest.predict(X, quantiles=list(self.quantiles))).T
         out = []

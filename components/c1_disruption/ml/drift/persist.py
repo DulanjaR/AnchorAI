@@ -53,6 +53,7 @@ def save_model(model: DriftModel, path: str | Path, dataset: str) -> dict[str, A
         "k": model.k,
         "quantiles": list(model.quantiles),
         "pointQuantile": model.point_quantile,
+        "useCategory": model.uses_category,
         "gate": {"enabled": model.gate, "lookback": settings.GATE_LOOKBACK, "minRecords": settings.GATE_MIN_RECORDS,
                  "margin": settings.GATE_MARGIN},
         "trustedStudents": sum(model.is_trusted(s) for s in model.offsets),

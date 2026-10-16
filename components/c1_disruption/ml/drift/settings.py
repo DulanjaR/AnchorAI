@@ -9,6 +9,11 @@ QUANTILES: Final[tuple[float, float]] = (0.1, 0.9)
 # less (planning chat, 16 Oct 2026; before: the mean). Used for the shrinkage residuals too.
 POINT_QUANTILE: Final = 0.5
 
+# Optional task category as a feature (planning chat, 16 Oct 2026): one-hot of
+# engine.config.TASK_CATEGORIES; a missing category is all zeros, so data without categories
+# (CESAW) gives the same model as before. False = the model without it (for comparisons).
+USE_CATEGORY: Final = True
+
 # Earned-trust gate (planning chat, 16 Oct 2026): the model corrects a student's estimates only
 # if, on that student's own most recent records, it beat B0 (drift 1.0) by the margin; otherwise
 # the student gets drift 1.0. Evidence per record: out-of-fold forest point + shrinkage from the

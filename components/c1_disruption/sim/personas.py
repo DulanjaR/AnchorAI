@@ -52,6 +52,7 @@ class PlannedTask:
     planned_start: str | None = None
     planned_end: str | None = None
     delegable: bool = False
+    category: str | None = None  # coding / writing / reading / revision (optional, 16 Oct 2026)
 
     @property
     def date(self) -> str:
@@ -216,13 +217,42 @@ def load_tasks(path: str | Path, personas: dict[str, Persona]) -> list[PlannedTa
         delegable = row.get("delegable", "").lower()
         if delegable not in ("", "true", "false"):
             raise _fail(path, line, "delegable", "must be true or false")
+        category = (row.get("category") or "").strip().lower() or None
+        if category is not None and category not in engine_config.TASK_CATEGORIES:
+            raise _fail(path, line, "category", f"must be empty or one of: {', '.join(engine_config.TASK_CATEGORIES)}")
         tasks.append(PlannedTask(
             persona_id=pid, day=int(day), task_id=task_id, title=row["title"], type=row["type"],
             priority=row["priority"], estimated_minutes=int(minutes), deadline_in_days=int(due),
             deadline_time=_time(path, line, row, "deadlineTime", required=False) or "23:59",
             planned_start=start, planned_end=end, delegable=delegable == "true",
+            category=category or infer_category(row["title"]),
         ))
     return tasks
+
+
+# --- task category from the title (PROPOSED rule, 16 Oct 2026) ---------------------------------
+
+# Used only when the tasks file has no `category` value. Checked in this order; the first match
+# wins; no match → None (meetings, planning, admin). Matching is on lower-case words.
+CATEGORY_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("reading", (r"\bread\b", r"\bre-read\b", r"\breading\b", r"\bskim\b", r"search and shortlist", r"collect sources",
+                 r"find sources")),
+    ("revision", (r"\brevision\b", r"notes review", r"definitions review", r"feedback review", r"flashcards",
+                  r"past paper", r"past lecture slides", r"\brecap\b", r"summary sheet")),
+    ("coding", (r"lab sheet", r"\bcode\b", r"lab environment", r"practice lab", r"web feature", r"portfolio site")),
+    ("writing", (r"assignment", r"\bwrit", r"\boutline\b", r"proofread", r"references", r"synthesis", r"\bslides\b",
+                 r"speaker notes", r"\bdraft\b", r"lit review", r"\bnotes for\b")),
+)
+
+
+def infer_category(title: str) -> str | None:
+    import re
+
+    text = title.lower()
+    for category, patterns in CATEGORY_RULES:
+        if any(re.search(p, text) for p in patterns):
+            return category
+    return None
 
 
 # --- schedule (one row per block of a persona's day) ------------------------------------------

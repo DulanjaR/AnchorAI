@@ -31,6 +31,7 @@ def page_config() -> dict:
         "apiKey": shared_settings.api_key,
         "prefix": c1_settings.api_prefix,
         "taskTypes": list(config.TASK_TYPES),
+        "categories": list(config.TASK_CATEGORIES),
         "priorities": list(PRIORITIES),
         "disruptionTypes": list(config.DISRUPTION_KINDS),
         "disruptionKinds": dict(config.DISRUPTION_KINDS),

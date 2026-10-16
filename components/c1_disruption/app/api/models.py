@@ -12,6 +12,7 @@ from components.c1_disruption.app.api.validation import (
     DISRUPTION_TYPES,
     PRIORITIES,
     TAGS,
+    TASK_CATEGORIES,
     TASK_TYPES,
     Body,
     Date,
@@ -60,6 +61,8 @@ class TaskBody(Body):
     # The original plan slot is optional; it feeds the three-way comparison.
     plannedStart: Time
     plannedEnd: Time
+    # Optional task category for ML Model 1 (16 Oct 2026); the engine ignores it.
+    category: choice(TASK_CATEGORIES)
 
 
 class NewTask(TaskBody):

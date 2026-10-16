@@ -23,10 +23,14 @@ def _task_fields(body: TaskBody, current: Record | None = None) -> Record:
     """The user-settable fields after a POST (current = None: defaults apply) or
     a PATCH (missing fields keep their current values)."""
     sent = body.model_dump()
+    category = sent.pop("category")
     if current is None:
         task = {**sent, "delegable": sent["delegable"] if sent["delegable"] is not None else False}
     else:
         task = {name: sent[name] if sent[name] is not None else current[name] for name in USER_FIELDS}
+        category = category if category is not None else current.get("category")
+    if category is not None:  # optional (ML Model 1 only): stored only when set
+        task["category"] = category
     if (task["plannedStart"] is None) != (task["plannedEnd"] is None):
         raise bad_request("'plannedStart' and 'plannedEnd' must be given together")
     if task["plannedStart"] is not None and to_minutes(task["plannedEnd"]) <= to_minutes(task["plannedStart"]):
