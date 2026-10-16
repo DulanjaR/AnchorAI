@@ -58,8 +58,10 @@ Answer with JSON only: {{"scores": [one number per element, in order]}}"""
 
 
 def _judge_config() -> tuple[str, str, str]:
-    base_url = os.environ.get("TEACHER_BASE_URL", "")
-    key = os.environ.get("TEACHER_API_KEY", "")
+    """The judge may live at a different provider from the teacher (e.g. MiMo while Groq is rate-limited):
+    JUDGE_BASE_URL / JUDGE_API_KEY override the TEACHER_* values when set."""
+    base_url = os.environ.get("JUDGE_BASE_URL") or os.environ.get("TEACHER_BASE_URL", "")
+    key = os.environ.get("JUDGE_API_KEY") or os.environ.get("TEACHER_API_KEY", "")
     model = os.environ.get("JUDGE_MODEL") or os.environ.get("TEACHER_MODEL", "")
     return base_url, key, model
 

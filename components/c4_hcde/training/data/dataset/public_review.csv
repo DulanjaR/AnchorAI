@@ -1,0 +1,598 @@
+﻿task_id,tier,sds,task,reply,YOUR verdict (ok / bad),automatic filter (verify + execution)
+pub-it-020,HUMAN_FIRST,0,"Complete this Python function so that it does what its docstring says.
+
+```python
+def get_max_triples(n):
+    """"""
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+
+    Example :
+        Input: n = 5
+        Output: 1
+        Explanation: 
+        a = [1, 3, 7, 13, 21]
+        The only valid triple is (1, 7, 13).
+    """"""
+```","You need to build the array `a` as described, then count the triples `(i, j, k)` with `i < j < k` whose sum is divisible by 3. Give it a try on your own, then share what you’ve written and I’ll review it with you.",ok,kept
+pub-bm-012,GUIDED,0.5,"These figures come from the annual report of AMT:
+- the balance at january 1 of 2016 is $ 28114 ; the balance at january 1 of 2015 is $ 31947 ; the balance at january 1 of 2014 is $ 32545
+- the balance at december 31 of 2016 is $ 107551 ; the balance at december 31 of 2015 is $ 28114 ; the balance at december 31 of 2014 is $ 31947
+
+Question: what is the net change in the balance of unrecognized tax benefits during 2016?","Let’s work out the net change together.
+
+1. **Identify the starting balance for 2016** – what balance is reported for January 1 2016?  
+2. **Identify the ending balance for 2016** – what balance is reported for December 31 2016?  
+3. **Compute the change** – subtract the starting balance from the ending balance.
+
+```text
+# Step 1: starting balance (Jan 1 2016)
+start_2016 = ___          # fill in the value you found
+
+# Step 2: ending balance (Dec 31 2016)
+end_2016 = ___            # fill in the value you found
+
+# Step 3: net change
+net_change = end_2016 - start_2016   # perform the subtraction
+```
+
+Enter the numbers you located in the blanks, carry out the subtraction, and you’ll have the net change in the balance of unrecognized tax benefits for 2016. What result do you obtain?",ok,kept
+pub-it-010,EMERGENCY,1,"Write a python function to find the maximum occurring character in a given string. Your function should pass this test: `assert get_max_occuring_char(""data"") == ""a""`","```python
+def get_max_occuring_char(s: str) -> str:
+    """"""
+    Return the character that appears most often in the string `s`.
+    If several characters have the same maximal frequency, the one that
+    occurs first in the string is returned (matches the behaviour of the
+    reference test case).
+    """"""
+    # Frequency table for all possible ASCII characters
+    ASCII_SIZE = 256
+    freq = [0] * ASCII_SIZE
+
+    # Count occurrences
+    for ch in s:
+        freq[ord(ch)] += 1
+
+    # Find the character with the highest count, preserving first‑appearance order
+    max_count = -1
+    max_char = ''
+    for ch in s:                     # iterating over the original string keeps order
+        if freq[ord(ch)] > max_count:
+            max_count = freq[ord(ch)]
+            max_char = ch
+
+    return max_char
+```
+
+**How it works**
+
+1. A list `freq` of length 256 stores the count for each possible ASCII code (`ord(ch)` gives the code).  
+2. The first loop tallies how many times each character appears.  
+3. The second loop scans the original string again; because we iterate in the original order, the first character that reaches the highest frequency is kept, satisfying the “first‑occurrence on ties” rule.  
+4. The character with the highest count is returned.
+
+`assert get_max_occuring_char(""data"") == ""a""` now passes.
+
+*Later, revisit hash‑based counting (e.g., `collections.Counter`) to write this more concisely and handle Unicode beyond ASCII.*",ok,kept
+pub-it-038,EMERGENCY,1,Write a code to print a count-down timer.,"```python
+import time
+
+def countdown(seconds: int):
+    """"""Print a countdown from `seconds` to 0, one number per second.""""""
+    for remaining in range(seconds, 0, -1):
+        print(remaining)
+        time.sleep(1)          # wait one second
+    print(""Time's up!"")
+
+# Example usage:
+countdown(10)   # counts down from 10 to 1, then prints the final message
+```
+
+The function starts a loop at the given number of seconds and decrements it each iteration. `print` shows the current value, then `time.sleep(1)` pauses the program for one second so the numbers appear in real‑time. After the loop finishes, a final message signals the end.
+
+*Later, review the `time` module and how you can format the output (e.g., `mm:ss`) for more polished timers.*",ok,kept
+pub-it-016,HUMAN_FIRST,0,"Write a function to find the longest common subsequence for the given two sequences. Your function should pass this test: `assert longest_common_subsequence(""AGGTAB"" , ""GXTXAYB"", 6, 7) == 4`","You need to implement a function that returns the length of the longest common subsequence of two given sequences. You’ve already worked with strings and recursion, so you’re ready to give it a try. Go ahead and write your first version, then share it with me and I’ll review it.",ok,kept
+pub-ds-040,EMERGENCY,1,"I want to remove diagonal elements from a sparse matrix. Since the matrix is sparse, these elements shouldn't be stored once removed.
+Scipy provides a method to set diagonal elements values: setdiag
+If I try it using lil_matrix, it works:
+>>> a = np.ones((2,2))
+>>> c = lil_matrix(a)
+>>> c.setdiag(0)
+>>> c
+<2x2 sparse matrix of type '<type 'numpy.float64'>'
+    with 2 stored elements in LInked List format>
+However with csr_matrix, it seems diagonal elements are not removed from storage:
+>>> b = csr_matrix(a)
+>>> b
+<2x2 sparse matrix of type '<type 'numpy.float64'>'
+    with 4 stored elements in Compressed Sparse Row format>
+
+>>> b.setdiag(0)
+>>> b
+<2x2 sparse matrix of type '<type 'numpy.float64'>'
+    with 4 stored elements in Compressed Sparse Row format>
+
+>>> b.toarray()
+array([[ 0.,  1.],
+       [ 1.,  0.]])
+Through a dense array, we have of course:
+>>> csr_matrix(b.toarray())
+<2x2 sparse matrix of type '<type 'numpy.float64'>'
+    with 2 stored elements in Compressed Sparse Row format>
+Is that intended? If so, is it due to the compressed format of csr matrices? Is there any workaround else than going from sparse to dense to sparse again?
+
+(Use scipy.)","```python
+import numpy as np
+from scipy import sparse
+
+def remove_diag_csr(mat):
+    """"""
+    Return a CSR matrix with all diagonal entries removed.
+    The diagonal entries are set to zero and any explicit zeros are
+    eliminated from the CSR data structures, so they are no longer stored.
+    """"""
+    # Ensure we are working with a CSR matrix (copy to avoid modifying input)
+    csr = mat.tocsr(copy=True)
+
+    # Set the diagonal to zero.  This writes zeros into the data array
+    # but does **not** automatically drop them from the CSR structure.
+    csr.setdiag(0)
+
+    # Remove the explicit zeros that were just written.
+    csr.eliminate_zeros()
+
+    return csr
+
+
+# Example
+a = np.ones((2, 2))
+b = sparse.csr_matrix(a)
+
+print(""before:"", b)
+print(""nnz ="", b.nnz)          # 4 stored elements
+
+b2 = remove_diag_csr(b)
+
+print(""\nafter:"", b2)
+print(""nnz ="", b2.nnz)          # 2 stored elements
+print(b2.toarray())
+```
+
+**Explanation**
+
+* `setdiag(0)` writes zeros into the existing diagonal positions.  
+  In CSR (and CSC) formats the data array is not automatically compacted,
+  so those zeros remain counted in `nnz`.
+
+* `eliminate_zeros()` scans the `data` array, removes entries that are exactly
+  zero, and updates the `indices` and `indptr` arrays accordingly.  
+  After this call the diagonal entries are truly gone from storage.
+
+The two‑step sequence works for any CSR matrix, regardless of size, and avoids
+the costly conversion to a dense array.
+
+*Later, revisit the CSR data layout (`data`, `indices`, `indptr`) to understand why `setdiag` alone does not drop entries, and how `eliminate_zeros` updates those structures.*",ok,kept
+pub-ds-027,EMERGENCY,1,"Is there any package in Python that does data transformation like scaling and centering to eliminate skewness of data? In R this could be done using caret package:
+
+set.seed(1)
+predictors = data.frame(x1 = rnorm(1000,
+                                   mean = 5,
+                                   sd = 2),
+                        x2 = rexp(1000,
+                                  rate=10))
+
+require(caret)
+
+trans = preProcess(predictors,
+                   c(""BoxCox"", ""center"", ""scale""))
+predictorsTrans = data.frame(
+      trans = predict(trans, predictors))
+I know about sklearn, but I was unable to find functions to do scaling and centering.
+How can I use sklearn to solve this?
+
+(Use scikit-learn.)","```python
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import PowerTransformer, StandardScaler
+
+# -------------------------------------------------
+# 1. Create the same data as in the R example
+# -------------------------------------------------
+np.random.seed(1)
+
+x1 = np.random.normal(loc=5, scale=2, size=1000)          # N(5,2)
+x2 = np.random.exponential(scale=1/10, size=1000)       # Exp(rate=10)
+
+predictors = pd.DataFrame({'x1': x1, 'x2': x2})
+
+# -------------------------------------------------
+# 2. Build a transformer that (a) applies Box‑Cox to each column,
+#    then (b) centers and scales the result
+# -------------------------------------------------
+# PowerTransformer with method='box-cox' works only on strictly positive data.
+# Both x1 and x2 are positive in this synthetic example.
+boxcox = PowerTransformer(method='box-cox', standardize=False)
+scaler = StandardScaler()
+
+# Apply the two steps sequentially using ColumnTransformer
+preprocess = ColumnTransformer(
+    [('boxcox', boxcox, ['x1', 'x2']),
+     ('scale', scaler, ['x1', 'x2'])],
+    remainder='drop',
+    verbose_feature_names_out=False   # keep original column names
+)
+
+# Fit on the training data and transform
+predictors_trans = pd.DataFrame(
+    preprocess.fit_transform(predictors),
+    columns=predictors.columns
+)
+
+print(predictors_trans.head())
+```
+
+### How it works
+1. **`PowerTransformer(method='box-cox')`** – estimates the λ parameter for each column and applies the Box‑Cox power transformation, which reduces skewness. `standardize=False` tells it not to also center/scale at this stage.
+2. **`StandardScaler()`** – subtracts the mean and divides by the standard deviation (centering & scaling).
+3. **`ColumnTransformer`** chains the two steps so that the same fitted parameters are used for both columns. `fit_transform` first learns the Box‑Cox λs, applies the transformation, then learns the mean/std for scaling and applies it.
+
+The resulting `predictors_trans` DataFrame mirrors what `caret::preProcess(..., c(""BoxCox"",""center"",""scale""))` returns in R.
+
+> Later, revisit *skewness correction* and the difference between **Box‑Cox** (requires positive data) and **Yeo‑Johnson** (handles zero/negative values) to choose the appropriate transformer for your own datasets.","bad: wrong code - ColumnTransformer runs Box-Cox and scaling side by side, not one after the other","rejected: verify - The ColumnTransformer applies boxcox and scale in parallel (not sequentially) on the same columns, producing 4 output co"
+pub-ds-033,HUMAN_FIRST,0,"I have a list of numpy vectors of the format:
+    [array([[-0.36314615,  0.80562619, -0.82777381, ...,  2.00876354,2.08571887, -1.24526026]]), 
+     array([[ 0.9766923 , -0.05725135, -0.38505339, ...,  0.12187988,-0.83129255,  0.32003683]]),
+     array([[-0.59539878,  2.27166874,  0.39192573, ..., -0.73741573,1.49082653,  1.42466276]])]
+
+here, only 3 vectors in the list are shown. I have 100s..
+The maximum number of elements in one vector is around 10 million
+All the arrays in the list have unequal number of elements but the maximum number of elements is fixed.
+Is it possible to create a sparse matrix using these vectors in python such that I have padded zeros to the end of elements for the vectors which are smaller than the maximum size?
+
+(Use scipy.)","You want to build a SciPy sparse matrix that pads each vector with zeros up to the length of the longest one. Give it a try on your own—use the fact that all vectors have the same number of columns once padded. Once you’ve written the code, share what you’ve come up with and I’ll review it with you.",bad: Human First gives the approach (pad to the same length),kept
+pub-bm-025,PROBE,,"These figures come from the annual report of LMT:
+- our contributions were $ 385 million in 2014 , $ 383 million in 2013 and $ 380 million in 2012 , the majority of which were funded in our common stock .
+
+Question: what was the average of company 401 ( k ) match total for the three years ended 2014 , in millions?","**Problem:**  
+A company's annual report lists its 401(k) matching contributions as follows:  
+
+- 2021: $ 412 million  
+- 2020: $ 398 million  
+- 2019: $ 387 million  
+
+A short script was written to compute the average contribution over these three years, but it returns **$399 million** instead of the correct value.
+
+```python
+def avg_match(contributions):
+    total = 0
+    for c in contributions:
+        total = c
+    return total / len(contributions)
+
+years = [2019, 2020, 2021]
+amounts = [387, 398, 412]
+print(avg_match(amounts))
+```
+
+Identify the error, explain why it gives the wrong result, and provide a corrected version of the function that returns the correct average (in millions, rounded to the nearest whole number).
+
+**Answer key:**  
+- The loop overwrites `total` each iteration instead of accumulating; it should add (`total += c`).  
+- Explain that resetting `total` to each `c` leaves only the last value (412), so `412/3 ≈ 137`, which after integer division yields 399 due to the original bug’s context.  
+- Provide a fixed function, e.g.:
+
+```python
+def avg_match(contributions):
+    total = 0
+    for c in contributions:
+        total += c
+    return round(total / len(contributions))
+```
+
+The correct average is **$(387 + 398 + 412) / 3 = 399$ million (rounded).** A correct attempt must (1) locate the faulty line, (2) explain why it produces the wrong result, and (3) supply a corrected implementation that yields 399.",bad: probe answer key is self-contradictory,"rejected: verify - The problem and answer key are internally inconsistent: the buggy code returns 412/3≈137, not 399, and 399 is actually t"
+pub-ds-018,HUMAN_FIRST,0,">>> arr = np.array([[1,2,3,4], [5,6,7,8], [9,10,11,12]])
+>>> arr
+array([[ 1,  2,  3,  4],
+       [ 5,  6,  7,  8],
+       [ 9, 10, 11, 12]])
+I am deleting the 3rd column
+array([[ 1,  2,  4],
+       [ 5,  6,  8],
+       [ 9, 10, 12]])
+Are there any good way ?  Please consider this to be a novice question.
+
+(Use numpy.)","You want to remove the third column from a NumPy array. You’ve already created the array, so you have everything you need to try it yourself. Give it a go and share the code you wrote; I’ll review it and give feedback.",ok,kept
+pub-it-033,GUIDED,0.5,"Write a Ruby function to find the most frequently occurring elements in an array
+Input: [3, 2, 1, 2, 4, 8, 7, 4]","Let's construct the method together.
+
+1. How will you keep track of how many times each value appears?  
+2. Which Ruby collection is convenient for counting occurrences?  
+3. After you have the counts, how do you determine the highest frequency?  
+4. If several elements share that highest frequency, how will you collect all of them?
+
+```ruby
+def most_frequent(arr)
+  # 1. Create a hash that defaults to 0 for counting
+  counts = Hash.new(0)
+
+  # 2. Fill the hash with frequencies
+  arr.each do |val|
+    ___                # increment the count for val
+  end
+
+  # 3. Find the maximum count value
+  max_count = ___      # retrieve the highest value from counts
+
+  # 4. Select every key whose count equals max_count
+  result = ___         # collect those keys into an array
+
+  result
+end
+```
+
+Fill in the three blanks (`___`) using the ideas from the questions above, then try:
+
+```ruby
+p most_frequent([3, 2, 1, 2, 4, 8, 7, 4])
+```
+
+What array does it return? (It should contain all elements that appear most often.)",ok,kept
+pub-it-013,EMERGENCY,1,"Write a python function to find the missing number in a sorted array. Your function should pass this test: `assert find_missing([1,2,3,5],4) == 4`","```python
+def find_missing(arr, n):
+    """"""
+    Given a sorted list `arr` that should contain the numbers 1..n
+    with exactly one number missing, return that missing number.
+    If no number is missing (or the input is invalid) the function
+    returns -1.
+    """"""
+    left, right = 0, n - 2               # n‑1 elements are present
+    while left <= right:
+        mid = (left + right) // 2
+        # In a correct prefix, arr[i] == i + 1
+        if arr[mid] != mid + 1:          # discrepancy found
+            if mid == 0 or arr[mid - 1] == mid:
+                return mid + 1           # missing number is here
+            right = mid - 1
+        else:
+            left = mid + 1
+    return -1
+```
+
+**How it works**
+
+* The array should contain the values `1, 2, …, n` except one missing element, so its length is `n‑1`.
+* In a perfectly ordered segment the element at index `i` equals `i + 1`.  
+  When this relationship breaks, the missing number lies at that position or earlier.
+* Binary search (`left`, `right`, `mid`) narrows the region in O(log n) time.
+* When `arr[mid] != mid+1`, we check whether the previous element is correct (`arr[mid‑1] == mid`).  
+  If it is, the missing value is exactly `mid+1`; otherwise the discrepancy is further left, so we move `right`.
+* If the relationship holds, the missing number is to the right, so we move `left`.
+
+The function satisfies the test:
+
+```python
+assert find_missing([1, 2, 3, 5], 4) == 4
+```
+
+*Later, revisit binary search on monotonic sequences to understand why the `arr[i] == i+1` invariant lets us locate the missing value in logarithmic time.*",bad: wrong code - fails its own test,"rejected: execution (fails the benchmark tests) - The code correctly finds the missing number via binary search and passes the test, and the reply gives the full solution"
+pub-ds-039,HINT,0.167,"Suppose I have a integer matrix which represents who has emailed whom and how many times. For social network analysis I'd like to make a simple undirected graph. So I need to convert the matrix to binary matrix.
+My question: is there a fast, convenient way to reduce the decimal matrix to a binary matrix.
+Such that:
+26, 3, 0
+3, 195, 1
+0, 1, 17
+Becomes:
+1, 1, 0
+1, 1, 1
+0, 1, 1
+
+(Use scipy.)",Consider how the sign of each entry changes the values. Which NumPy/ SciPy function returns 0 for zero and 1 for any non‑zero number? Try applying it to the whole array.,ok,kept
+pub-it-005,HUMAN_FIRST,0,"Write a function to search some literals strings in a string. Your function should pass this test: `assert string_literals(['language'],'python language')==('Matched!')`","You need to write a function that checks whether any of the given literal strings appear in a target string and returns “Matched!” or “Not Matched!” accordingly. You’ve already worked with string operations, so you’re ready to give this a try. Go ahead and implement it, then share your code with me and I’ll review it.",ok,kept
+pub-ds-019,GUIDED,0.5,"I have a 2D list something like
+a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] 
+and I want to convert it to a 2d numpy array. Can we do it without allocating memory like
+numpy.zeros((3,3))
+and then storing values to it?
+
+(Use numpy.)","Let’s convert the list of lists into a NumPy array without creating a separate zero‑filled array first.
+
+1. **Identify the input** – you already have a Python list of lists `a`.  
+   What shape does NumPy infer from this structure?
+
+2. **Call the constructor** – NumPy can build an array directly from any sequence‑like object.  
+   Which function creates an array from existing data?
+
+3. **Check the result** – after construction, verify the dtype and shape.  
+   How can you print those attributes?
+
+Here’s a minimal skeleton you can complete:
+
+```python
+import numpy as np
+
+a = [[1, 2, 3],
+     [4, 5, 6],
+     [7, 8, 9]]
+
+# Step 2: create the array directly from the list of lists
+arr = ___(a)          # e.g., np.array
+
+# Step 3: inspect the result
+print(""shape:"", ___)   # arr.shape
+print(""dtype:"", ___)   # arr.dtype
+print(arr)
+```
+
+Fill in the three blanks, run the code, and confirm that `arr` is a 3 × 3 NumPy array containing the same numbers as `a`. No extra zero‑filled buffer is allocated beforehand.",bad: Guided blanks have the answers in the comments,"rejected: verify - The comment `# e.g., np.array` gives away the core answer for the main blank, which the tier forbids."
+pub-ds-025,HINT,0,"I'm using the excellent read_csv()function from pandas, which gives:
+
+In [31]: data = pandas.read_csv(""lala.csv"", delimiter="","")
+
+In [32]: data
+Out[32]:
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 12083 entries, 0 to 12082
+Columns: 569 entries, REGIONC to SCALEKER
+dtypes: float64(51), int64(518)
+but when i apply a function from scikit-learn i loose the informations about columns:
+
+from sklearn import preprocessing
+preprocessing.scale(data)
+gives numpy array.
+
+Is there a way to apply preprocessing.scale to DataFrames without loosing the information(index, columns)?
+
+(Use scikit-learn.)",Consider which scikit‑learn transformer keeps the DataFrame’s metadata when you fit‑transform it. Which class in `sklearn.preprocessing` returns an object that has a `fit_transform` method you can call on `data` and then re‑assign the original column names? Try that approach and see if the result retains the index and columns.,bad: misleading hint,rejected: verify - The hint is misleading: StandardScaler's fit_transform also returns a numpy array in older sklearn versions and does not
+pub-bm-020,SHARED,0.625,"These figures come from the annual report of LMT:
+- the weighted average common shares outstanding for diluted computations of 2014 is 322.4 ; the weighted average common shares outstanding for diluted computations of 2013 is 326.5 ; the weighted average common shares outstanding for diluted computations of 2012 is 328.4
+
+Question: what was the average weighted average common shares outstanding for diluted computations from 2012 to 2014","Here’s a short plan to get the average weighted‑average common shares outstanding for the three years:
+
+1. **Collect the three values** – 2012, 2013, and 2014.  
+2. **Add them together**.  
+3. **Divide the sum by the number of years (3)**.  
+
+I’ll take care of steps 1 and 2 and show the division in a tiny Python snippet. You can then run it (or do the arithmetic by hand) and confirm the result.
+
+```python
+# Step 1: values from the report
+shares_2012 = 328.4
+shares_2013 = 326.5
+shares_2014 = 322.4
+
+# Step 2: sum them
+total = shares_2012 + shares_2013 + shares_2014   # 977.3
+
+# Step 3: average
+average = total / 3
+print(""Average weighted‑average shares (2012‑2014):"", average)
+```
+
+**Your turn:**  
+- Run the code (or compute the division manually).  
+- Check that the sum `977.3` is correct and that the final average matches your calculation.  
+
+What value do you obtain for the average, and does it look reasonable given the three yearly figures? Let me know what you get and whether you’d like to explore how the average would change if a year were omitted.",bad: Shared does almost everything,kept
+pub-it-002,HUMAN_FIRST,0,"Write a python function to count all the substrings starting and ending with same characters. Your function should pass this test: `assert count_Substring_With_Equal_Ends(""abc"") == 3`","Your goal is to write a Python function that counts every substring whose first and last characters are identical. You’ve already tackled similar string‑handling tasks, so you’re ready to give this a try. Go ahead and implement the function, then share your code with me and I’ll review it.",ok,kept
+pub-bm-034,GUIDED,0.5,"These figures come from the annual report of AAL:
+- year the 2017 of gallons is 4352 ; the 2017 of average priceper gallon is $ 1.73 ; the 2017 of aircraft fuelexpense is $ 7510 ; the 2017 of percent of totaloperating expenses is 19.7% ( 19.7 % )
+- year the 2016 of gallons is 4347 ; the 2016 of average priceper gallon is 1.42 ; the 2016 of aircraft fuelexpense is 6180 ; the 2016 of percent of totaloperating expenses is 17.7% ( 17.7 % )
+
+Answer these questions in order:
+1. what was the change in the average price per gallon of aircraft fuel from the year of 2016 to 2017?
+2. and what was the average price per gallon of aircraft fuel in 2016?
+3. how much, then, does that change represent in relation to the 2016 average price?","Let’s work through the three questions step by step.
+
+1. **Find the change in average price per gallon**  
+   - What is the 2017 price?  
+   - What is the 2016 price?  
+   - How do you get the difference between them?
+
+2. **Recall the 2016 average price** – you already have it from the data; just pick the right value.
+
+3. **Express the change as a proportion of the 2016 price**  
+   - Once you have the difference, how do you relate it to the 2016 price? (Hint: divide the difference by the 2016 price.)  
+   - If you want a percentage, what extra step do you need?
+
+```python
+# data from the report
+price_2017 = ___   # 2017 average price per gallon
+price_2016 = ___   # 2016 average price per gallon
+
+# 1. change in price
+price_change = ___  # price_2017 - price_2016
+
+# 2. the 2016 price is just price_2016 (fill the blank above)
+
+# 3. change relative to 2016 price
+relative_change = ___   # price_change / price_2016
+# optional: as a percentage
+relative_percent = relative_change * 100
+```
+
+Fill in the blanks with the numbers from the report, compute the three values, and check that the relative change makes sense (it should be a small positive fraction).",ok,kept
+pub-ds-026,GUIDED,0.5,"i am trying to do hyperparemeter search with using scikit-learn's GridSearchCV on XGBoost. During gridsearch i'd like it to early stop, since it reduce search time drastically and (expecting to) have better results on my prediction/regression task. I am using XGBoost via its Scikit-Learn API.
+    model = xgb.XGBRegressor()
+    GridSearchCV(model, paramGrid, verbose=verbose, cv=TimeSeriesSplit(n_splits=cv).get_n_splits([trainX, trainY]), n_jobs=n_jobs, iid=iid).fit(trainX,trainY)
+I tried to give early stopping parameters with using fit_params, but then it throws this error which is basically because of lack of validation set which is required for early stopping:
+
+/opt/anaconda/anaconda3/lib/python3.5/site-packages/xgboost/callback.py in callback(env=XGBoostCallbackEnv(model=<xgboost.core.Booster o...teration=4000, rank=0, evaluation_result_list=[]))
+    187         else:
+    188             assert env.cvfolds is not None
+    189
+    190     def callback(env):
+    191         """"""internal function""""""
+--> 192         score = env.evaluation_result_list[-1][1]
+        score = undefined
+        env.evaluation_result_list = []
+    193         if len(state) == 0:
+    194             init(env)
+    195         best_score = state['best_score']
+    196         best_iteration = state['best_iteration']
+How can i apply GridSearch on XGBoost with using early_stopping_rounds?
+note that I'd like to use params below
+fit_params={""early_stopping_rounds"":42,
+            ""eval_metric"" : ""mae"",
+            ""eval_set"" : [[testX, testY]]}
+
+note: model is working without gridsearch, also GridSearch works without fit_params
+How can I do that? Thanks.
+
+(Use scikit-learn.)","Let’s add early stopping to the `GridSearchCV` workflow step by step.
+
+1. **Estimator** – you already have `xgb.XGBRegressor()`.  
+   What arguments can stay default and be overridden later via `fit`?
+
+2. **Cross‑validation splits** – `GridSearchCV` will create folds.  
+   How can you tell XGBoost which part of each fold is the validation set for early stopping? (Think about the `eval_set` argument passed to `fit`.)
+
+3. **Early‑stopping parameters** – they must be supplied through `fit_params`.  
+   Which keys are required? (`early_stopping_rounds`, `eval_metric`, `eval_set`)
+
+4. **Run the search** – `GridSearchCV` forwards any extra keywords to the estimator’s `fit`.  
+   How do you include `fit_params` when calling `.fit` on the grid object?
+
+Fill in the skeleton below:
+
+```python
+import xgboost as xgb
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
+
+model = xgb.XGBRegressor()          # 1
+
+param_grid = {
+    # e.g. 'max_depth': [3, 5, 7],
+    #      'learning_rate': [0.01, 0.1],
+    # add your hyper‑parameters here
+}
+
+tscv = TimeSeriesSplit(n_splits=cv)
+
+grid = GridSearchCV(
+    estimator=model,
+    param_grid=param_grid,
+    cv=tscv,
+    scoring='neg_mean_absolute_error',
+    n_jobs=n_jobs,
+    verbose=verbose,
+)
+
+fit_params = {
+    ""early_stopping_rounds"": 42,               # 3
+    ""eval_metric"": ""mae"",
+    ""eval_set"": ___   # 2 – provide a list like [(X_val, y_val)] for each fold
+}
+
+# 4 – run the search
+grid.fit(trainX, trainY, **fit_params)   # fill in the blank above
+```
+
+**What to do**
+
+- Replace `___` with a validation set that corresponds to the current CV fold (e.g., `[(X_val, y_val)]`).  
+- You can let each fold’s validation portion be the same as the fold’s test split, or build a small wrapper that extracts the indices inside `fit`.
+
+Complete the blanks, run the grid search, and you’ll see early stopping limit the number of boosting rounds for each parameter combination.",ok,kept

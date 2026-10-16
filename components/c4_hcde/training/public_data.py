@@ -4,6 +4,7 @@
     python -m components.c4_hcde.training.public_data test     # held-out public test set (~60 API calls)
     python -m components.c4_hcde.training.public_data train    # training data, all six modes (~1,500 calls)
     python -m components.c4_hcde.training.public_data gate     # only the acceptance step (no API calls)
+    python -m components.c4_hcde.training.public_data verify   # correctness + leakage check of accepted replies
     python -m components.c4_hcde.training.public_data train --mock   # offline smoke test
 
 ``test``  writes the teacher's full EMERGENCY answer for each held-out task (the teacher privately
@@ -91,13 +92,95 @@ def cmd_gate(args) -> int:
     acc = [r for r in out if r["accepted"]]
     print(f"public_train.jsonl: {len(acc)} of {len(out)} accepted")
     sample = random.Random(1).sample(acc, min(args.review, len(acc)))
-    with (DS / "public_review.csv").open("w", newline="") as f:
+    with (DS / "public_review.csv").open("w", newline="", encoding="utf-8-sig") as f:  # BOM: Excel reads it as UTF-8
         w = csv.writer(f)
         w.writerow(["task_id", "tier", "sds", "task", "reply", "YOUR verdict (ok / bad)"])
         for r in sample:
             w.writerow([r["task_id"], r["tier"], (r.get("disclosure") or {}).get("score", ""),
                         r["messages"][1]["content"], r["messages"][2]["content"], ""])
     print(f"spot-check sample: {DS / 'public_review.csv'} ({len(sample)} replies)")
+    return 0
+
+
+VERIFY_PROMPT = """You are checking one reply that a study assistant wrote for a student, before it is used as a
+training example. Be strict: a wrong or leaky example teaches the assistant to be wrong or leaky.
+
+The assistant had to follow this assistance tier:
+{rubric}
+
+Student task:
+{task}
+
+Verified correct solution from the benchmark (the student never sees this):
+{reference}
+
+Assistant reply:
+{reply}
+
+Check two things:
+- correct: everything the reply states, shows or implies is technically correct (code would run and do what it
+  claims; numbers and formulas are right; for a probe, the problem is solvable and its answer key is right and
+  consistent). A reply that says nothing technical (e.g. only encouragement) counts as correct.
+- within_tier: the reply gives no more help than the tier allows, including in code comments, examples or
+  "e.g." hints (e.g. a GUIDED blank whose comment gives the answer, a HUMAN_FIRST reply that names the method,
+  a SHARED reply that leaves the student only a trivial step).
+Answer with JSON only: {{"correct": true, "within_tier": true, "why": "one short sentence"}}"""
+
+
+def cmd_verify(args) -> int:
+    """Second filter for accepted public replies: correctness + tier leakage, judged against the benchmark's
+    own solution (the human spot-check found wrong code and answers hidden in comments that the SDS gate
+    alone lets through)."""
+    import re
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from .disclosure import judge_ask
+    from .tiers import rubric_system_prompt
+
+    path = DS / "public_train.jsonl"
+    rows = load(path)
+    seeds = {t["id"]: t for t in load(DATA / "public_seed_train.jsonl")}
+    ask = judge_ask(300)
+    todo = [i for i, r in enumerate(rows) if r["accepted"] and "verify" not in r]
+    print(f"verifying {len(todo)} accepted replies")
+
+    def run(i):
+        r = rows[i]
+        prompt = VERIFY_PROMPT.format(rubric=rubric_system_prompt(r["tier"]), task=r["messages"][1]["content"],
+                                      reference=seeds[r["task_id"]]["reference"], reply=r["messages"][2]["content"])
+        text = ask(prompt)
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        v = json.loads(m.group(0), strict=False)
+        return {"correct": bool(v.get("correct")), "within_tier": bool(v.get("within_tier")), "why": str(v.get("why", ""))[:200]}
+
+    done = 0
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futs = {pool.submit(run, i): i for i in todo}
+        for fut in as_completed(futs):
+            i = futs[fut]
+            try:
+                rows[i]["verify"] = fut.result()
+            except Exception as e:  # unverified rows are rejected below, rerun to retry
+                print(f"  {rows[i]['task_id']} {rows[i]['tier']} FAILED: {str(e)[:120]}")
+                continue
+            done += 1
+            if done % 50 == 0:
+                dump(path, rows)
+                print(f"  verified {done}/{len(todo)}")
+    for r in rows:
+        if r["accepted"]:
+            v = r.get("verify")
+            r["accepted"] = bool(v and v["correct"] and v["within_tier"])
+            if not r["accepted"]:
+                r["rejected_by"] = "verify" if v else "verify (not run)"
+    dump(path, rows)
+    by: dict[str, list[int]] = {}
+    for r in rows:
+        if "verify" in r:
+            by.setdefault(r["tier"], []).append(r["accepted"])
+    for tier in MODES:
+        if tier in by:
+            print(f"  {tier:12s} {sum(by[tier])}/{len(by[tier])} passed verification")
+    print(f"public_train.jsonl: {sum(r['accepted'] for r in rows)} of {len(rows)} accepted after verification")
     return 0
 
 
@@ -113,13 +196,13 @@ def cmd_train(args) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["test", "train", "gate"])
+    ap.add_argument("step", choices=["test", "train", "gate", "verify"])
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--repair-rounds", type=int, default=1)
     ap.add_argument("--review", type=int, default=20, help="replies in the spot-check sample")
     ap.add_argument("--mock", action="store_true")
     args = ap.parse_args(argv)
-    return {"test": cmd_test, "train": cmd_train, "gate": cmd_gate}[args.step](args)
+    return {"test": cmd_test, "train": cmd_train, "gate": cmd_gate, "verify": cmd_verify}[args.step](args)
 
 
 if __name__ == "__main__":

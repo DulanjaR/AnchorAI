@@ -1,0 +1,739 @@
+{
+ "pub-it-001": [
+  "Identify the tuple in the list that has the smallest value in its second position.",
+  "Extract and return the first element (the name) of that specific tuple."
+ ],
+ "pub-it-017": [
+  "Construct a regular expression pattern that enforces the URL structure, including the http/https scheme, domain name, and top-level domain.",
+  "Anchor the regular expression to the start and end of the string to ensure the entire input matches the pattern.",
+  "Use the `re` module to compile the pattern and perform a match against the input string.",
+  "Return a boolean value indicating whether the match was successful."
+ ],
+ "pub-it-008": [
+  "Interpret the requirement as keeping characters at even 1-based positions (indices 2, 4, 6, ...) rather than odd positions.",
+  "Implement a mechanism to iterate through the string while tracking the 1-based index of each character.",
+  "Filter the characters to include only those where the 1-based index is divisible by 2.",
+  "Construct and return the final string by concatenating the selected characters in their original order."
+ ],
+ "pub-it-018": [
+  "Identify the correct closed-form formula for the area of a regular pentagon in terms of its side length.",
+  "Implement the calculation of the constant factor involving nested square roots (specifically sqrt(5 * (5 + 2*sqrt(5)))) using a math library.",
+  "Apply the formula by multiplying the constant factor by the square of the input side length and dividing by 4.",
+  "Ensure the function returns a floating-point value that matches the expected precision for the given test case."
+ ],
+ "pub-it-022": [
+  "Implement a helper function or logic to correctly determine if a given integer is a prime number, handling edge cases like numbers less than 2.",
+  "Split the input sentence string into a list of individual words based on whitespace.",
+  "Filter the list of words to retain only those whose length is a prime number.",
+  "Join the filtered words back into a single string separated by spaces to form the final output."
+ ],
+ "pub-it-024": [
+  "Maintain a counter variable to track the number of currently unmatched opening brackets.",
+  "Increment the counter when encountering an opening bracket and decrement it when encountering a closing bracket.",
+  "Detect and return False immediately if the counter becomes negative, indicating a closing bracket without a preceding match.",
+  "Return True only if the counter is exactly zero after processing the entire string, ensuring all opening brackets are closed."
+ ],
+ "pub-it-026": [
+  "Handle the edge case where the length of the second word is greater than the first word by returning False immediately.",
+  "Generate a string that contains all cyclic rotations of the second word as contiguous substrings, such as by concatenating the word with itself.",
+  "Iterate through all possible substrings of the first word that have the same length as the second word.",
+  "Check if any of these substrings from the first word exists within the generated rotation string.",
+  "Return True if a match is found during the iteration, otherwise return False."
+ ],
+ "pub-it-030": [
+  "Compute a numeric hash of the input string to obtain a base integer value.",
+  "Ensure the hash value is non-negative before processing its digits.",
+  "Iteratively extract the decimal digits of the hash value (e.g., using modulo and integer division).",
+  "Accumulate the sum of the extracted digits to form the final ID.",
+  "Return the computed sum as the integer ID."
+ ],
+ "pub-it-034": [
+  "Split the input sentence into a list of individual words based on whitespace.",
+  "Iterate through the list of words to count the frequency of each distinct word.",
+  "Construct a dictionary where each key is a unique word and the corresponding value is its total count in the sentence.",
+  "Produce the final dictionary with 'the' mapped to 2 and all other words mapped to 1."
+ ],
+ "pub-it-039": [
+  "Split the input string into a list of individual words based on whitespace delimiters.",
+  "Iterate through the list of words to count the occurrences of each unique word.",
+  "Construct and return a dictionary where each key is a word and the corresponding value is its frequency count."
+ ],
+ "pub-ds-005": [
+  "Formulate a boolean condition that checks if both col2 and col3 are less than or equal to 50.",
+  "Compute the row-wise maximum of col1, col2, and col3 for the cases where the condition is not met.",
+  "Apply a vectorized conditional selection (such as np.where or pandas.where) to assign col1 when the condition is true and the row-wise maximum otherwise.",
+  "Assign the resulting values to a new column named 'state' in the DataFrame."
+ ],
+ "pub-ds-009": [
+  "Convert the DataFrame to a NumPy array to enable vectorized operations instead of row-wise iteration.",
+  "Create a boolean mask to identify the positions of non-NaN values in the array.",
+  "Calculate the count of non-NaN values for each row to determine the number of positions to fill.",
+  "Construct a target boolean mask that marks the first N positions in each row (where N is the row's non-NaN count) as the destination for valid values.",
+  "Initialize an output array filled with NaN and assign the valid values from the source array to the positions indicated by the target mask, preserving the original order.",
+  "Wrap the resulting NumPy array back into a pandas DataFrame, ensuring the original index and column labels are preserved."
+ ],
+ "pub-ds-016": [
+  "Calculate the number of elements that form complete bins by performing integer division of the array size by the bin size and multiplying by the bin size.",
+  "Truncate the input array to the calculated length to discard any incomplete trailing elements.",
+  "Reshape the truncated 1D array into a 2D array where each row represents a single bin of the specified size.",
+  "Compute the mean of each bin by applying the mean reduction function along the axis corresponding to the bin elements."
+ ],
+ "pub-ds-006": [
+  "Parse the 'message' column strings into Python dictionaries, handling the bracket syntax and ensuring empty values are treated as the string 'none'.",
+  "Convert the list of dictionaries into a DataFrame to expand the keys into separate columns, allowing missing keys to be represented as NaN.",
+  "Fill the NaN values in the expanded DataFrame with the string 'none' to match the expected output format.",
+  "Concatenate the original identifier columns (name, status, number) with the newly expanded key-value columns to form the final result."
+ ],
+ "pub-ds-031": [
+  "Fit the entire pipeline on the input data to ensure all intermediate transformers are trained.",
+  "Access the specific fitted transformer instance from the pipeline using the named_steps attribute.",
+  "Call the transform method on the accessed transformer with the original input data to generate the intermediate representation."
+ ],
+ "pub-ds-036": [
+  "Recognize that the first dimension of the 3D array represents the individual blocks to be placed on the diagonal.",
+  "Utilize Python's argument unpacking operator (asterisk) to expand the array's first dimension into separate arguments.",
+  "Pass the unpacked 2D slices directly into scipy.linalg.block_diag to construct the final matrix in a single call."
+ ],
+ "pub-ds-032": [
+  "Recognize that the standard train_test_split function is unsuitable because it shuffles the data, breaking the chronological order required for the test set to be newer than the train set.",
+  "Ensure the dataframe is sorted by the date column in ascending order to establish a strict chronological sequence.",
+  "Calculate the specific integer index that separates the training and test sets based on the desired 20% training proportion.",
+  "Slice the dataframe using positional indexing to assign the first 20% of rows to the training set and the remaining 80% to the test set."
+ ],
+ "pub-ds-034": [
+  "Use scipy.ndimage.label with an 8-connected structuring element to assign unique identifiers to all connected components of foreground pixels.",
+  "Calculate the size of each labeled component to determine the number of pixels in each connected group.",
+  "Identify the specific components that consist of exactly one pixel, which correspond to the isolated cells to be removed.",
+  "Construct a boolean mask that selects the positions of pixels belonging to these size-1 components.",
+  "Set the values at the selected positions to 0 in a copy of the original array to produce the final result without modifying the input."
+ ],
+ "pub-bm-003": [
+  "Identify the 2012 value (24,296) as the base and the 2013 value (18,178) as the new value for the percentage change calculation.",
+  "Calculate the absolute difference between the 2013 and 2012 values, resulting in a decrease of 6,118.",
+  "Divide the difference by the 2012 base value to determine the proportional change.",
+  "Convert the resulting decimal to a percentage and round to an appropriate precision, yielding approximately -26.2%."
+ ],
+ "pub-ds-037": [
+  "Construct a cumulative distribution function (CDF) by numerically integrating the given probability density function (PDF) from a lower bound to each data point.",
+  "Normalize the integrated values by dividing by the total integral of the PDF over the defined support to ensure the CDF ranges from 0 to 1.",
+  "Estimate the distribution parameters (a, m, d) by fitting the PDF to the sample data, such as by matching the PDF to a density-normalized histogram using curve_fit.",
+  "Create a callable function that accepts a single argument (x) and returns the CDF value using the estimated parameters, satisfying the input requirement of scipy.stats.kstest.",
+  "Pass the sample data and the constructed CDF callable to scipy.stats.kstest to compute the test statistic and p-value."
+ ],
+ "pub-ds-038": [
+  "Recognize that the operation is element-wise multiplication (Hadamard product) rather than standard matrix multiplication, which explains the dimension mismatch with the `*` operator.",
+  "Use the `multiply` method on the CSR matrix to perform element-wise multiplication, which supports broadcasting a 1D array across the columns.",
+  "Ensure the scaling vector is provided as a 1D NumPy array (or a compatible sparse row vector) to allow correct broadcasting over the matrix rows.",
+  "Verify that the resulting object is a `csr_matrix` to satisfy the requirement of maintaining the sparse format."
+ ],
+ "pub-bm-015": [
+  "Identify the initial investment value as the stock price on the 2013 date (100.00) and the final sale value as the stock price on the 2018 date (198.27).",
+  "Apply the ROI formula by calculating the difference between the final and initial values, dividing by the initial value, and multiplying by 100 to express the result as a percentage.",
+  "Compute the final ROI value as 98.27%."
+ ],
+ "pub-bm-005": [
+  "Identify the total number of passenger service personnel (22,500) and the total number of active full-time equivalent employees (113,300) from the provided data.",
+  "Formulate the ratio of passenger service personnel to total active full-time equivalent employees.",
+  "Calculate the decimal value of the ratio (approximately 0.1987).",
+  "Convert the decimal ratio to a percentage by multiplying by 100.",
+  "State the final answer as approximately 19.9%."
+ ],
+ "pub-bm-016": [
+  "Identify the specific dollar amount for the 2012 maturities from the provided data.",
+  "Identify the total aggregate carrying value of long-term debt (including capital leases) as of December 31, 2008.",
+  "Divide the 2012 maturity amount by the total aggregate carrying value to determine the proportion.",
+  "Convert the resulting decimal proportion into a percentage by multiplying by 100.",
+  "State the final percentage, rounded to one decimal place."
+ ],
+ "pub-bm-022": [
+  "Identify the specific excess values for the two most recent years from the provided text",
+  "Calculate the absolute difference between the two identified values",
+  "State the final result as $0.5 million"
+ ],
+ "pub-bm-032": [
+  "Calculate the absolute change in operating profit by subtracting the 2010 value from the 2011 value.",
+  "Identify the operating profit for 2010 directly from the provided data.",
+  "Compute the percentage change by dividing the absolute change by the 2010 operating profit and multiplying by 100."
+ ],
+ "pub-bm-033": [
+  "Calculate the absolute change by subtracting the 2011 value from the 2012 value to get 53 million.",
+  "Identify the 2011 value as 450 million.",
+  "Compute the percent change by dividing the absolute change by the 2011 value and multiplying by 100 to get approximately 11.78%."
+ ],
+ "pub-bm-035": [
+  "Identify the 2008 North American paper sales figure from the provided text as $3.4 billion.",
+  "Convert the 2008 North American paper sales from billions to millions to align units with the total sales data.",
+  "Identify the 2008 total sales figure from the provided text as $6,810 million.",
+  "Calculate the ratio of the 2008 North American paper sales to the 2008 total sales."
+ ],
+ "pub-bm-036": [
+  "Identify the 'repurchase liability at end of period' values for 2014 and 2013 as the year-end liabilities for those respective years.",
+  "Calculate the absolute difference between the 2014 and 2013 year-end liabilities.",
+  "Compute the relative change by dividing the difference by the 2013 year-end liability.",
+  "Express the final result as a percentage to indicate the magnitude of the change relative to the 2013 value."
+ ],
+ "pub-bm-039": [
+  "Identify the total EBITDA value for the year 2015 from the provided data.",
+  "Identify the amortization of intangible assets value for the year 2015 from the provided data.",
+  "Calculate the difference between the 2015 total EBITDA and the 2015 amortization of intangible assets.",
+  "Identify the depreciation of fixed assets value for the year 2015 from the provided data.",
+  "Calculate the final difference by subtracting the 2015 depreciation of fixed assets from the result obtained in the previous step."
+ ],
+ "pub-it-003": [
+  "Iterate through the string from left to right to preserve the order of first occurrences.",
+  "Maintain a collection of characters that have already been encountered during the scan.",
+  "Check if the current character is already present in the collection of seen characters.",
+  "Return the current character immediately upon detecting it is a repeat.",
+  "Return a specific default value (such as '\\0') if the loop completes without finding any repeated character."
+ ],
+ "pub-it-004": [
+  "Identify or derive the analytic formula for the maximum area of a triangle inscribed in an ellipse with semi-axes a and b, which is (3 * sqrt(3) * a^2) / (4 * b).",
+  "Implement the function to calculate and return this area using the identified formula.",
+  "Handle invalid input by returning -1 if either semi-axis is negative."
+ ],
+ "pub-it-002": [
+  "Identify that a substring is defined by its start and end indices, and the condition is that the characters at these indices must be identical.",
+  "Iterate through all valid pairs of start and end indices (where start <= end) to examine every possible substring.",
+  "Check if the character at the start index matches the character at the end index for each pair.",
+  "Accumulate a count for every pair that satisfies the matching condition.",
+  "Return the final accumulated count as the result."
+ ],
+ "pub-it-007": [
+  "Define a function that accepts a list as its argument.",
+  "Calculate the number of occurrences for each distinct element in the input list.",
+  "Construct and return a dictionary where the keys are the unique elements and the values are their corresponding counts."
+ ],
+ "pub-it-006": [
+  "Recognize that the XOR operation can isolate the unique element because paired values cancel out (x ^ x = 0) and any value XORed with zero remains unchanged (x ^ 0 = x).",
+  "Initialize an accumulator variable to zero to store the cumulative XOR result.",
+  "Iterate through the array elements, applying the XOR operation between the accumulator and each element to update the result.",
+  "Return the final value of the accumulator, which will be the element that appears only once."
+ ],
+ "pub-it-005": [
+  "Define a function that accepts a list of literal strings and a target text string as parameters.",
+  "Iterate through the list of literals to check each one against the target text.",
+  "Use a substring containment check (such as the 'in' operator) to determine if a literal exists within the text.",
+  "Return the specific string 'Matched!' immediately upon finding the first matching literal.",
+  "Return the specific string 'Not Matched!' if the loop completes without finding any matches."
+ ],
+ "pub-it-010": [
+  "Count the frequency of each character in the input string.",
+  "Identify the character with the highest frequency.",
+  "Ensure that if multiple characters share the maximum frequency, the one appearing first in the original string is selected.",
+  "Return the identified character as the function's result."
+ ],
+ "pub-it-011": [
+  "Initialize an empty dictionary to store the character counts.",
+  "Iterate through each character in the input string.",
+  "Check if the current character already exists as a key in the dictionary.",
+  "Increment the count for the character if it exists, or set its count to 1 if it does not.",
+  "Return the completed dictionary mapping each character to its frequency."
+ ],
+ "pub-it-009": [
+  "Recognize that for any odd upper bound n, exactly half of the integers from 0 to n have an odd number of set bits, allowing a direct calculation of (n + 1) // 2.",
+  "For an even upper bound n, identify the largest power of two less than or equal to n to split the range into a complete block and a remainder.",
+  "Determine that in the complete block from 0 to 2^k - 1, exactly half of the numbers have an odd number of set bits.",
+  "Establish that the parity of the set bit count for numbers in the remainder range [2^k, n] is the inverse of the parity for the corresponding numbers in [0, n - 2^k].",
+  "Formulate a recursive or iterative step to calculate the count for the remainder by subtracting the odd-count of the smaller range from its total size, and sum it with the count from the complete block."
+ ],
+ "pub-it-012": [
+  "Recognize that the nth decimal digit can be found by simulating the long division process n times.",
+  "In each iteration, multiply the current remainder by 10 to shift the decimal place.",
+  "Extract the current digit using integer division of the scaled remainder by the denominator.",
+  "Update the remainder using the modulo operation to prepare for the next iteration.",
+  "Return the digit obtained after the nth iteration."
+ ],
+ "pub-it-013": [
+  "Recognize that in a complete sorted array of 1..n, the element at index i should equal i+1, and a missing number causes a deviation from this pattern.",
+  "Implement a binary search strategy to efficiently locate the first index where the value does not match the expected index+1.",
+  "Determine the correct boundary conditions for the search range, specifically that the right boundary is n-2 because the array length is n-1.",
+  "Verify that the discrepancy at the mid-point is the actual missing number by checking if the previous element is correct (arr[mid-1] == mid) or if it is the first element.",
+  "Return the calculated missing number (mid+1) when the specific condition is met, or -1 if no missing number is found."
+ ],
+ "pub-it-014": [
+  "Apply the mathematical formula for the volume of a sphere, V = (4/3) * π * r³.",
+  "Obtain a high-precision value for π, such as using the math.pi constant.",
+  "Compute the cube of the radius parameter.",
+  "Combine the constant factor (4/3), π, and the cubed radius to calculate the final volume."
+ ],
+ "pub-it-015": [
+  "Initialize an empty dictionary to store the grouped results.",
+  "Iterate through the input sequence, unpacking each item into a key and a value.",
+  "Ensure that a list exists for the current key in the dictionary, creating an empty list if the key is not already present.",
+  "Append the current value to the list associated with the key.",
+  "Return the completed dictionary mapping each key to its list of values."
+ ],
+ "pub-it-016": [
+  "Define the dynamic programming state where dp[i][j] represents the length of the longest common subsequence for the first i characters of the first sequence and the first j characters of the second sequence.",
+  "Establish the base case by initializing the table with zeros, recognizing that the LCS length is 0 when either sequence prefix is empty.",
+  "Implement the recurrence relation for matching characters by adding 1 to the diagonal value (dp[i-1][j-1] + 1).",
+  "Implement the recurrence relation for non-matching characters by taking the maximum of the value from the row above (dp[i-1][j]) and the value from the left (dp[i][j-1]).",
+  "Return the value at the bottom-right cell of the table (dp[m][n]) as the final LCS length."
+ ],
+ "pub-it-019": [
+  "Split the input string into individual groups of parentheses using whitespace as the delimiter.",
+  "Iterate through the characters of each group to track the current nesting depth by incrementing on opening parentheses and decrementing on closing parentheses.",
+  "Record the maximum depth reached during the traversal of each group.",
+  "Return a list containing the maximum depth for each group in the original order."
+ ],
+ "pub-it-021": [
+  "Reverse the shift direction by subtracting 5 from the character's position instead of adding it.",
+  "Apply modulo 26 to the adjusted position to handle wrap-around for characters near the start of the alphabet.",
+  "Convert the resulting numeric position back to a character using the ASCII value of 'a' as the base offset.",
+  "Process each character in the input string individually and join the results to form the final decoded string."
+ ],
+ "pub-it-023": [
+  "Identify that the problem reduces to checking if the number of even elements in lst2 is sufficient to replace all odd elements in lst1.",
+  "Count the number of odd elements in lst1.",
+  "Count the number of even elements in lst2.",
+  "Compare the count of even elements in lst2 against the count of odd elements in lst1 to determine if a valid exchange is possible.",
+  "Return the string \"YES\" if the condition is met, otherwise return \"NO\"."
+ ],
+ "pub-it-020": [
+  "Compute the value of each element in the array using the formula i * i - i + 1 for i from 1 to n.",
+  "Determine the count of elements in the array that have a remainder of 0, 1, and 2 when divided by 3.",
+  "Identify that a sum of three numbers is divisible by 3 if and only if their remainders modulo 3 are either all identical (0,0,0; 1,1,1; 2,2,2) or consist of one of each (0,1,2).",
+  "Calculate the number of valid triples for the 'all identical' cases using the combination formula C(n, 3) for each residue class count.",
+  "Calculate the number of valid triples for the 'one of each' case by multiplying the counts of the three residue classes.",
+  "Sum the counts from all valid residue patterns to obtain the final answer."
+ ],
+ "pub-it-027": [
+  "Verify that the sum of the list elements is less than or equal to the maximum weight parameter.",
+  "Determine if the list is a palindrome (balanced) by checking if it reads the same forwards and backwards.",
+  "Return True only if both the weight constraint and the palindrome condition are satisfied, otherwise return False."
+ ],
+ "pub-it-025": [
+  "Split the input string into a list of words based on whitespace.",
+  "Define the set of vowels (case-insensitive) to distinguish them from consonants.",
+  "Calculate the number of consonants in each word by counting characters that are not vowels.",
+  "Filter the words to include only those where the consonant count exactly matches the parameter n.",
+  "Return the filtered list of words, preserving their original order from the input string."
+ ],
+ "pub-it-028": [
+  "Ignore spaces in the input string while processing the parentheses.",
+  "Track the nesting depth by incrementing a counter for each opening parenthesis and decrementing it for each closing parenthesis.",
+  "Accumulate the characters of the current group as the depth is greater than zero.",
+  "Identify the end of a group when the depth counter returns to zero, then add the accumulated string to the result list and reset the accumulator.",
+  "Return the list of separated, balanced parenthesis groups."
+ ],
+ "pub-it-029": [
+  "Apply the background-color CSS property to the html and body elements to ensure the color covers the entire viewport.",
+  "Set the height of the html and body elements to 100% to prevent the background from being limited to the content height.",
+  "Remove the default margin from the body element to ensure the background color extends to the edges of the browser window."
+ ],
+ "pub-it-031": [
+  "Implement a nested loop structure where the outer loop controls the number of passes and the inner loop iterates through the unsorted portion of the array.",
+  "Compare adjacent elements within the inner loop and swap them if they are in the wrong order (e.g., if the left element is greater than the right).",
+  "Dynamically reduce the range of the inner loop in each subsequent pass to exclude elements that have already been sorted at the end of the array.",
+  "Produce the correctly sorted array [1, 2, 4, 5, 6, 7] as the final output for the given input."
+ ],
+ "pub-it-032": [
+  "Define a function that displays the menu options with clear labels and numbers.",
+  "Implement a loop that repeatedly prompts the user for input and keeps the program running until an exit option is selected.",
+  "Map each valid user input to the execution of the corresponding specific action or function.",
+  "Handle invalid inputs by displaying an error message and allowing the user to re-enter their choice without terminating the program.",
+  "Ensure the program terminates cleanly when the user selects the quit option."
+ ],
+ "pub-it-033": [
+  "Count the occurrences of each distinct element in the input array.",
+  "Determine the maximum frequency value from the collected counts.",
+  "Identify and return all elements whose occurrence count matches the maximum frequency."
+ ],
+ "pub-it-035": [
+  "Read the input sentence from standard input using a suitable method such as Scanner or BufferedReader.",
+  "Split the input string into individual words based on whitespace delimiters, ensuring that multiple consecutive spaces or leading/trailing whitespace do not create empty elements.",
+  "Determine the total number of words by counting the elements in the resulting array or list.",
+  "Output the calculated word count in the required format."
+ ],
+ "pub-it-036": [
+  "Maintain a separate collection to track which elements have already been encountered",
+  "Iterate through the input list and check if the current element is already in the tracking collection",
+  "Append the element to the result list only if it has not been seen before",
+  "Update the tracking collection to include the current element after processing it",
+  "Return the new list containing only the unique elements in their original order of first occurrence"
+ ],
+ "pub-it-037": [
+  "Normalize the input text by converting it to lowercase and removing or replacing punctuation characters to ensure accurate word matching.",
+  "Tokenize the cleaned text into a list of individual words by splitting on whitespace.",
+  "Iterate through the list of words to count the frequency of each unique word, storing the results in a dictionary.",
+  "Output the final word frequencies in a readable format, displaying each word alongside its count."
+ ],
+ "pub-it-038": [
+  "Create a loop that iterates from the initial number of seconds down to 1.",
+  "Print the current remaining time value during each iteration of the loop.",
+  "Insert a one-second delay between each printed number to simulate real-time passage.",
+  "Output a final message or signal indicating the countdown has completed."
+ ],
+ "pub-it-040": [
+  "Understand that Python list indexing is zero-based, so index 2 refers to the third element in the list.",
+  "Apply direct index access syntax (lst[idx]) to retrieve the specific element from the list.",
+  "Identify the correct value (7) as the result of accessing the list at the given index."
+ ],
+ "pub-it-041": [
+  "Initialize the sequence with the first two Fibonacci numbers (0 and 1).",
+  "Implement a loop that continues as long as the current Fibonacci number is less than or equal to the given limit.",
+  "Print the current Fibonacci number within the loop.",
+  "Calculate the next Fibonacci number by summing the two preceding numbers.",
+  "Update the tracking variables to shift the window forward for the next iteration."
+ ],
+ "pub-it-042": [
+  "Iterate through each character of the input string individually.",
+  "Use the current character as a key to retrieve its corresponding decoded value from the cipher dictionary.",
+  "Accumulate the retrieved decoded characters into a new string or list.",
+  "Return the final assembled decoded string."
+ ],
+ "pub-ds-001": [
+  "Select the specific subset of rows and columns from the DataFrame using a single indexing operation (such as .iloc or .loc) that accepts lists of indices.",
+  "Apply the .mean() method to the selected sub-DataFrame with axis=0 to compute the mean for each column across the selected rows."
+ ],
+ "pub-ds-003": [
+  "Determine the relationship type by calculating the maximum number of distinct values in the right column for each unique value in the left column, and vice versa.",
+  "Classify the relationship as one-to-one, one-to-many, many-to-one, or many-to-many based on whether these maximum distinct counts are equal to 1 or greater than 1.",
+  "Iterate through all ordered pairs of distinct columns in the DataFrame to evaluate every possible relationship.",
+  "Format the output as a list of strings where each entry follows the pattern 'LeftColumn RightColumn RelationshipType'."
+ ],
+ "pub-ds-004": [
+  "Recognize that the column values are string representations of lists rather than actual list objects, requiring a conversion step before concatenation.",
+  "Apply a safe evaluation method, such as ast.literal_eval, to each element in the column to convert the string representations into actual Python lists.",
+  "Flatten the resulting list of lists into a single combined list using a method such as sum with an empty list start, a list comprehension, or itertools.chain."
+ ],
+ "pub-ds-008": [
+  "Use the `str.rsplit` method to split the strings from the right side instead of the left.",
+  "Set the `n` parameter to 1 to ensure the string is split only once at the last delimiter.",
+  "Select the first element of the resulting list (index 0) to retain the portion before the last delimiter.",
+  "Verify that strings without the delimiter remain unchanged because the split operation returns the original string as the only element."
+ ],
+ "pub-ds-010": [
+  "Unpack the tuple returned by np.unique into two separate variables representing the unique values and their corresponding counts.",
+  "Construct the DataFrame using a dictionary where the keys are the desired column names and the values are the unpacked arrays.",
+  "Ensure the resulting DataFrame has the unique values in one column and the counts in the other, with the correct column headers."
+ ],
+ "pub-ds-011": [
+  "Identify that a vectorized operation on the column index is required to avoid manually mapping each column name.",
+  "Apply a method to append the suffix 'X' to all column labels simultaneously, such as using `add_suffix` or string concatenation on the `columns` attribute.",
+  "Ensure the resulting DataFrame has the updated column names while preserving the original data values."
+ ],
+ "pub-ds-002": [
+  "Construct a boolean mask that identifies rows where either SibSp or Parch is greater than zero to define the 'Has Family' condition.",
+  "Generate a temporary grouping key array (e.g., using np.where or a list comprehension) that assigns the labels 'Has Family' and 'No Family' to each row based on the condition, without permanently modifying the DataFrame.",
+  "Pass this temporary array directly as the grouping argument to the groupby method.",
+  "Select the 'Survived' column from the grouped object and apply the mean aggregation function to calculate the survival rate for each group."
+ ],
+ "pub-ds-012": [
+  "Apply pd.cut to the views column to create a categorical column representing the specified bins.",
+  "Group the DataFrame by both the username and the new bin column to count the number of rows for each user-bin combination.",
+  "Reshape the resulting grouped counts so that the bin categories become columns and the usernames become the index, filling missing combinations with zero."
+ ],
+ "pub-ds-007": [
+  "Split the target string column into a list of elements using the Dask string accessor's split method without the expand argument.",
+  "Apply the explode method to the dataframe to expand the list column into separate rows while duplicating the other columns.",
+  "Clean up the dataframe by dropping the original string column and renaming the exploded column to match the desired schema."
+ ],
+ "pub-ds-014": [
+  "Recognize that the operation is a matrix-vector multiplication applied to the last dimension of A for each spatial position, rather than a simple element-wise multiplication.",
+  "Identify the correct axes to contract: the last axis of A (size 3) and the first axis of B (size 3).",
+  "Formulate the operation using a tensor contraction function (such as np.tensordot or np.einsum) that preserves the leading spatial dimensions of A while replacing the last dimension with the result of the multiplication.",
+  "Ensure the output shape is (x, y, 3) by correctly mapping the remaining axis of B to the final dimension of the result."
+ ],
+ "pub-ds-015": [
+  "Recognize that the operation can be performed using vectorized broadcasting rather than iterating with apply or a loop.",
+  "Convert the list of values to be subtracted into a NumPy array to enable efficient vectorized operations.",
+  "Use a pandas DataFrame arithmetic method (such as subtract) with the axis parameter set to 0 to align the 1D array with the rows of the dataframe.",
+  "Verify that the resulting dataframe contains the correct values where each row has been reduced by its corresponding scalar from the array."
+ ],
+ "pub-ds-018": [
+  "Identify that the third column corresponds to index 2 due to zero-based indexing.",
+  "Select a NumPy method capable of removing elements from an array, such as np.delete or boolean indexing.",
+  "Specify the column axis (axis=1) to ensure the operation targets columns rather than rows.",
+  "Construct the command to remove the element at index 2 along the column axis.",
+  "Verify that the resulting array contains the remaining columns with the correct values."
+ ],
+ "pub-ds-019": [
+  "Identify that `np.array` (or `np.asarray`) can directly construct a NumPy array from a nested Python list in a single step.",
+  "Recognize that this direct construction method avoids the need to pre-allocate a zero-filled array and manually populate it.",
+  "Apply the chosen function to the input list to generate the resulting 2D NumPy array."
+ ],
+ "pub-ds-017": [
+  "Define the coordinate vectors for the original grid points corresponding to the array's dimensions.",
+  "Create a bilinear interpolation function using scipy.interpolate.interp2d with the original coordinates and array values.",
+  "Generate new coordinate vectors for the upsampled grid that span the original range with the desired increased resolution.",
+  "Evaluate the interpolation function on the new coordinate vectors to produce the final upsampled array."
+ ],
+ "pub-ds-021": [
+  "Select the first array in the list to serve as the reference for comparison.",
+  "Iterate through the remaining arrays and compare each one to the reference using a function that returns a single boolean value (such as np.array_equal) rather than an element-wise boolean array.",
+  "Use a mechanism to aggregate the individual comparison results into a single boolean outcome that is true only if all comparisons are true.",
+  "Handle the edge case of an empty list by returning true, as there are no arrays to compare."
+ ],
+ "pub-ds-013": [
+  "Apply a function to each row of the DataFrame using axis=1 to process values horizontally.",
+  "Filter out NaN values from the row data before concatenation.",
+  "Convert the remaining non-NaN values to strings to ensure compatibility with the join operation.",
+  "Concatenate the filtered string values using a comma as the separator.",
+  "Assign the resulting concatenated strings to a new column in the DataFrame."
+ ],
+ "pub-ds-023": [
+  "Recognize that the recurrence cannot be fully vectorized in a single NumPy operation due to the dependency of each element on the previous result, necessitating an iterative approach.",
+  "Convert the input pandas Series to a NumPy array to facilitate efficient element-wise operations and memory access.",
+  "Allocate an output array of the same length as the input to store the computed values.",
+  "Initialize the first element of the output array using the specific base case formula B[0] = a * A[0].",
+  "Iterate through the remaining indices from 1 to the end, calculating each element as the sum of the scaled current input value and the scaled previous output value."
+ ],
+ "pub-ds-024": [
+  "Use numpy's argmin function to find the index of the minimum value in the flattened array.",
+  "Convert the resulting flat index into a tuple of row and column indices using np.unravel_index with the array's shape."
+ ],
+ "pub-ds-020": [
+  "Set the random number generator's seed to a fixed integer value before generating the array.",
+  "Generate the array using the specified shape (100, 2000) and value range (-1, 0, 1) after seeding.",
+  "Reset the seed to the same fixed integer value before generating the second array.",
+  "Generate the second array using the same method and parameters as the first.",
+  "Verify that the two generated arrays are identical."
+ ],
+ "pub-ds-025": [
+  "Recognize that scikit-learn's scaling functions return NumPy arrays, necessitating a manual conversion back to a pandas DataFrame to preserve metadata.",
+  "Apply the scaling transformation to the DataFrame to obtain the standardized numerical values.",
+  "Construct a new pandas DataFrame using the scaled array as data.",
+  "Explicitly pass the original DataFrame's index and column labels to the new DataFrame constructor to restore the metadata."
+ ],
+ "pub-ds-027": [
+  "Identify and use the PowerTransformer class with the Box-Cox method to reduce data skewness, ensuring standardization is disabled at this stage.",
+  "Identify and use the StandardScaler class to perform centering and scaling on the data.",
+  "Construct a pipeline or ColumnTransformer to apply the skewness transformation first, followed by the scaling step.",
+  "Fit the combined transformer on the data and apply the transformation to generate the final processed dataset."
+ ],
+ "pub-ds-022": [
+  "Recognize that the proposed normalization of the input data is incorrect and that the ECDF is defined based on the rank of each observation relative to the total sample size.",
+  "Sort the input data in increasing order to establish the sequence of order statistics required for the cumulative distribution.",
+  "Calculate the cumulative probabilities by dividing the rank index (1 through n) of each sorted observation by the total number of observations (n).",
+  "Return the sorted data values and their corresponding cumulative probabilities as paired arrays to represent the function values at the data points."
+ ],
+ "pub-ds-028": [
+  "Retrieve the coordinates of the specific cluster center (index p) from the fitted KMeans model's cluster_centers_ attribute.",
+  "Compute the Euclidean distance between every sample in the dataset and the selected cluster center.",
+  "Identify the indices of the 50 samples with the smallest computed distances.",
+  "Use these indices to extract and return the actual data points (rows) from the original dataset, rather than just the indices."
+ ],
+ "pub-ds-026": [
+  "Reserve a separate validation set from the training data to serve as the `eval_set` for early stopping, ensuring it is distinct from the cross-validation folds.",
+  "Pass the early stopping parameters (`early_stopping_rounds`, `eval_metric`, and `eval_set`) via `fit_params` to the `GridSearchCV.fit` method so they are applied to every estimator fit during the search.",
+  "Set `refit=False` in the `GridSearchCV` constructor to prevent the automatic refitting of the best model on the full training set, which would otherwise fail due to the missing validation data."
+ ],
+ "pub-ds-030": [
+  "Convert the similarity matrix into a distance matrix by applying a transformation such as subtracting the values from 1.",
+  "Perform hierarchical clustering on the distance matrix using a linkage method to generate a dendrogram.",
+  "Cut the dendrogram to obtain exactly 2 clusters using a function like cut_tree.",
+  "Flatten the resulting cluster labels into a one-dimensional list format."
+ ],
+ "pub-ds-033": [
+  "Flatten each input vector to a 1-D array to handle both (n,) and (1, n) shapes uniformly.",
+  "Determine the maximum length among all vectors to define the number of columns in the resulting matrix.",
+  "Initialize a sparse matrix of shape (number_of_vectors, max_length) using a format that supports efficient row-wise assignment, such as LIL.",
+  "Populate each row of the sparse matrix with the corresponding vector's values, relying on the sparse format to implicitly store zeros for the remaining columns.",
+  "Convert the constructed sparse matrix to a compressed format like CSR for efficient storage and downstream operations."
+ ],
+ "pub-ds-039": [
+  "Identify that the conversion requires mapping all non-zero values to 1 and zero values to 0.",
+  "Apply an element-wise comparison operation (such as checking if values are greater than zero) to generate a boolean representation of the matrix.",
+  "Cast the resulting boolean matrix to an integer type to obtain the final binary matrix with 0s and 1s."
+ ],
+ "pub-ds-040": [
+  "Recognize that `setdiag(0)` in CSR format writes zeros to the data array but does not automatically remove them from storage.",
+  "Identify the `eliminate_zeros()` method as the mechanism to physically remove explicit zeros from the CSR data structures.",
+  "Apply `setdiag(0)` to the matrix to set the diagonal values to zero.",
+  "Call `eliminate_zeros()` on the matrix after setting the diagonal to remove the zero entries from storage.",
+  "Verify that the number of stored elements (`nnz`) has decreased to exclude the diagonal entries."
+ ],
+ "pub-bm-001": [
+  "Identify the total warehouse area (500,000 sq ft) and the approximate number of warehouses (15) from the provided data.",
+  "Recognize that the average size per warehouse is calculated by dividing the total area by the number of warehouses.",
+  "Perform the division of 500,000 by 15 to determine the approximate size per warehouse.",
+  "State the final result as approximately 33,333 square feet."
+ ],
+ "pub-bm-002": [
+  "Identify the specific net increase values for the years 2010 and 2009 from the provided text",
+  "Sum the identified values to calculate the total increase",
+  "State the final total increase as $307 million"
+ ],
+ "pub-bm-004": [
+  "Identify the 2013 value as the base (denominator) and the 2014 value as the new value for the percentage change calculation.",
+  "Calculate the absolute difference between the 2014 and 2013 total assets.",
+  "Divide the difference by the 2013 total assets to find the relative change.",
+  "Multiply the result by 100 to convert the ratio into a percentage.",
+  "Report the final percentage change, noting the negative sign to indicate a decrease."
+ ],
+ "pub-bm-006": [
+  "Identify the specific financial metric 'net derivative liabilities under bilateral agreements' for the years 2013 and 2012 from the provided data.",
+  "Extract the numerical value for 2013, which is 22,176 million dollars.",
+  "Extract the numerical value for 2012, which is 27,885 million dollars.",
+  "Present the extracted values clearly associated with their respective years as the maximum liabilities."
+ ],
+ "pub-bm-007": [
+  "Identify the specific monetary values for guarantees issued to consolidated subsidiaries and non-consolidated affiliates from the text.",
+  "Sum the two identified values to calculate the total amount.",
+  "Provide the final total value in millions."
+ ],
+ "pub-bm-008": [
+  "Identify the tons hedged value for 2017 from the provided data",
+  "Retrieve the tons hedged value for 2018 from the source report",
+  "Calculate the ratio by dividing the 2017 tons hedged by the 2018 tons hedged",
+  "State the final ratio as 1:1 or 1"
+ ],
+ "pub-bm-009": [
+  "Identify the correct values for the numerator (amortizable intangible assets) and denominator (net assets acquired) from the provided data.",
+  "Divide the amortizable intangible assets by the net assets acquired to find the ratio.",
+  "Multiply the resulting ratio by 100 to convert it into a percentage.",
+  "Calculate the final numerical value, which is approximately 7.34%."
+ ],
+ "pub-bm-010": [
+  "Identify the specific values for private crude oil pipelines and private refined products pipelines from the text, excluding the leased common carrier pipelines.",
+  "Calculate the sum of the identified private pipeline lengths.",
+  "State the final total as 1,026 miles."
+ ],
+ "pub-bm-011": [
+  "Identify the 2003 money pool activity usage of operating cash flows as $12.0 million.",
+  "Identify the 2003 receivables from the money pool as $19,064 thousand.",
+  "Convert the receivables figure to millions of dollars to match the units of the cash flow usage.",
+  "Calculate the percentage by dividing the cash flow usage by the receivables and multiplying by 100.",
+  "State the final result as approximately 63%."
+ ],
+ "pub-bm-012": [
+  "Identify the beginning balance for 2016 as the January 1, 2016 figure ($28,114).",
+  "Identify the ending balance for 2016 as the December 31, 2016 figure ($107,551).",
+  "Calculate the net change by subtracting the beginning balance from the ending balance.",
+  "State the final result as $79,437."
+ ],
+ "pub-bm-013": [
+  "Identify the total authorized purchase capacity of the October 2015 plan as $900.0 million.",
+  "Identify the remaining authorized purchase capacity as of December 31, 2016, as $451.7 million.",
+  "Calculate the percentage of the remaining capacity relative to the total authorized capacity by dividing the remaining amount by the total amount and multiplying by 100.",
+  "State the final result as approximately 50.2%."
+ ],
+ "pub-bm-014": [
+  "Identify the specific data points for 2007: 1.8 million shares and an average price of $64.20 per share.",
+  "Recognize that the total cash inflow is calculated by multiplying the number of shares by the average purchase price.",
+  "Compute the product of 1.8 and 64.20 to obtain the value in millions of dollars.",
+  "Provide the final answer as 115.56 or 115.6 million dollars."
+ ],
+ "pub-bm-017": [
+  "Identify the operating loss values for 2007 ($1.2 billion) and 2008 ($2.2 billion) from the text.",
+  "Calculate the absolute difference between the 2008 and 2007 losses.",
+  "Divide the difference by the 2007 loss value to determine the relative change.",
+  "Convert the relative change into a percentage.",
+  "Recognize that the loss increased, meaning the 'decline' is actually an increase of approximately 83.3%."
+ ],
+ "pub-bm-018": [
+  "Identify the two specific contingent payment amounts associated with the FDA approval milestones for the Impella 2.5 and Impella 5.0 devices.",
+  "Sum the identified payment amounts to calculate the total contingent consideration in dollars.",
+  "Convert the total dollar amount into millions by dividing by 1,000,000.",
+  "Round the resulting value to the appropriate precision (one decimal place) to match the report's format."
+ ],
+ "pub-bm-019": [
+  "Identify the correct start and end dates corresponding to the 4-year period (December 2009 to December 2013).",
+  "Extract the specific values for the DISCA series and the S&P 500 at the start and end of the identified period.",
+  "Calculate the total growth or return for the DISCA series over the 4-year period.",
+  "Calculate the total growth or return for the S&P 500 over the 4-year period.",
+  "Compare the calculated performance metrics of the two series to determine which one was higher.",
+  "State the final conclusion that the DISCA series outperformed the S&P 500."
+ ],
+ "pub-bm-020": [
+  "Identify the three specific weighted average common shares outstanding values for the years 2012, 2013, and 2014 from the provided data.",
+  "Calculate the sum of these three values.",
+  "Divide the sum by 3 to determine the arithmetic mean.",
+  "Round the calculated average to one decimal place to match the precision of the input data."
+ ],
+ "pub-bm-021": [
+  "Identify the correct fiscal years corresponding to the dates July 1, 2006, and July 2, 2007, to select the appropriate expense values ($92,710,000 for the base year and $100,690,000 for the current year).",
+  "Calculate the absolute difference between the two identified rental expense amounts.",
+  "Divide the difference by the base year amount to determine the relative change.",
+  "Convert the relative change into a percentage and round to the nearest whole number to obtain the final answer."
+ ],
+ "pub-bm-024": [
+  "Identify the three specific net state effective tax rate values for the years 2015, 2016, and 2017 from the provided data.",
+  "Calculate the sum of these three tax rate values.",
+  "Divide the total sum by 3 to determine the arithmetic mean.",
+  "Provide the final average value, rounded to two decimal places."
+ ],
+ "pub-bm-023": [
+  "Identify the statutory U.S. rate for 2017 as 35.0% from the provided data.",
+  "Identify the effective income tax rate for 2017 as 13.7% from the provided data.",
+  "Subtract the effective income tax rate from the statutory U.S. rate to find the difference.",
+  "State the final result as 21.3%."
+ ],
+ "pub-bm-025": [
+  "Identify the three specific contribution amounts for the years 2012, 2013, and 2014 from the provided text.",
+  "Calculate the sum of these three identified values.",
+  "Divide the total sum by 3 to determine the arithmetic mean.",
+  "State the final average value in millions, rounded appropriately."
+ ],
+ "pub-bm-026": [
+  "Identify the correct start and end values for the five-year period (2013 and 2017) from the provided data.",
+  "Apply the percentage change formula to calculate the cumulative return based on the difference between the ending and starting values.",
+  "Compute the final percentage value, which is approximately 130%."
+ ],
+ "pub-bm-027": [
+  "Identify the 2017 net revenue as 626.8 million USD",
+  "Identify the 2016 net revenue as 644.2 million USD",
+  "Calculate the absolute difference between the two years' revenues as -17.4 million USD",
+  "Determine the percentage change by dividing the difference by the 2016 revenue and multiplying by 100, resulting in approximately -2.7%"
+ ],
+ "pub-bm-028": [
+  "Identify the weighted average shares outstanding for diluted net earnings per share in 2008 as 228.3",
+  "Identify the weighted average shares outstanding for basic net earnings per share in 2008 as 227.3",
+  "Calculate the quotient of the diluted share count to the basic share count (228.3 / 227.3)",
+  "Subtract 1 from the calculated quotient to find the difference"
+ ],
+ "pub-bm-029": [
+  "Identify the specific values for the sweet/sour differential in 2009 and 2007 from the provided data, ignoring the 2008 value.",
+  "Calculate the absolute change by subtracting the 2007 value from the 2009 value.",
+  "Compute the percentage change by dividing the absolute change by the 2007 value and multiplying by 100."
+ ],
+ "pub-bm-030": [
+  "Calculate the absolute difference between the 2011 and 2012 deferred acquisition payments by subtracting the 2012 value from the 2011 value.",
+  "Identify the specific deferred acquisition payment amount for the year 2011.",
+  "Compute the ratio of the absolute change to the 2011 base amount to determine the decimal percentage change.",
+  "Convert the calculated decimal ratio into a percentage by multiplying by 100."
+ ],
+ "pub-bm-031": [
+  "Identify the stock price on 12/31/2015 as $418.67 and the starting price on 11/17/2011 as $100.00 from the provided data.",
+  "Calculate the absolute difference between the 2015 price and the 2011 starting price to find the dollar change.",
+  "Compute the percentage change by dividing the absolute difference by the original 2011 price and multiplying by 100."
+ ],
+ "pub-bm-034": [
+  "Calculate the absolute difference between the 2017 and 2016 average prices per gallon to find the change.",
+  "Identify the specific average price per gallon value for the year 2016 from the provided data.",
+  "Compute the relative change by dividing the absolute price difference by the 2016 average price.",
+  "Convert the resulting decimal ratio into a percentage to express the change relative to the 2016 price."
+ ],
+ "pub-bm-037": [
+  "Identify the total long-term debt value as 10282.8 from the provided text.",
+  "Calculate the total current portion of long-term debt by summing the absolute values of the two listed current maturities (1263.3 and 596.6).",
+  "Compute the sum by adding the total long-term debt and the calculated current portion.",
+  "Determine the ratio by dividing the current portion by the sum calculated in the previous step."
+ ],
+ "pub-bm-038": [
+  "Identify the net periodic pension cost values for 2011 and 2012 from the provided data.",
+  "Calculate the absolute net change by subtracting the 2011 cost from the 2012 cost.",
+  "State the specific net periodic pension cost for the year 2011.",
+  "Calculate the percent change by dividing the net change by the 2011 base value and multiplying by 100."
+ ],
+ "pub-bm-040": [
+  "Identify the index value for 2016 as $217",
+  "Identify the index value for 2011 as $100",
+  "Calculate the absolute difference between the 2016 and 2011 values to get 117",
+  "Divide the calculated difference by the 2011 starting value to obtain 1.17"
+ ],
+ "pub-ds-029": [
+  "Reshape the 1D array of mse values into a 2D column vector (shape n_samples, 1) to satisfy scikit-learn's input requirements.",
+  "Fit a KMeans model with 2 clusters on the reshaped mse data.",
+  "Extract the cluster labels for each data point to determine cluster membership.",
+  "Retrieve the cluster centroids to identify the mean value of each cluster."
+ ],
+ "pub-ds-035": [
+  "Use a time-based rolling window (e.g., '25S') on the dataframe column to define the integration interval for each timestamp.",
+  "Configure the rolling apply function to receive the window data as a pandas Series (raw=False) rather than a NumPy array, enabling access to the index.",
+  "Extract the timestamps from the rolling window's index and convert them to a numeric format (such as seconds) suitable for the integration function.",
+  "Pass both the column values and the converted numeric timestamps to scipy.integrate.trapz to compute the integral over time.",
+  "Ensure the resulting series is aligned with the original dataframe's time index."
+ ]
+}
