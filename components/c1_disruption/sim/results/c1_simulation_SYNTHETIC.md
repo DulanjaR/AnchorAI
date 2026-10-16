@@ -4,6 +4,138 @@
 
 ## Variant: planted (SYNTHETIC)
 
+| Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage | students: gate open / closed (warm) |
+|---|---|---|---|---|---|
+| model | 12.248 ± 0.301 | 8.865 ± 0.132 | 0.131 ± 0.001 | 0.771 ± 0.018 | 8.800 ± 0.447 open / 1.200 ± 0.447 closed |
+| B0 drift = 1.0 | 12.248 ± 0.301 | 12.192 ± 0.326 | 0.187 ± 0.004 | – | no gate |
+| B1 global mean | 9.070 ± 0.191 | 8.970 ± 0.199 | 0.134 ± 0.002 | – | no gate |
+| B2 per-student mean | 9.070 ± 0.191 | 8.035 ± 0.202 | 0.122 ± 0.001 | – | no gate |
+| B3 shrinkage only | 9.070 ± 0.191 | 8.043 ± 0.118 | 0.122 ± 0.002 | – | no gate |
+
+Gate open / closed = the earned-trust gate's state at each persona's last warm evaluation point (mean over seeds). In cold start it is closed for every persona (no history). Baselines have no gate.
+
+| Event metric (same events) | raw | corrected |
+|---|---|---|
+| ctrrPlanned | 0.373 ± 0.061 | 0.360 ± 0.048 |
+| ctrrRealised | 0.062 ± 0.063 | 0.144 ± 0.068 |
+| ptvr | 0.000 ± 0.000 | 0.000 ± 0.000 |
+| feasibilityTrue | 0.929 ± 0.041 | 0.964 ± 0.050 |
+| realisedFeasibility | 0.138 ± 0.138 | 0.306 ± 0.176 |
+| planCompletionRate | 0.156 ± 0.176 | 0.382 ± 0.235 |
+| decision-change rate | 0.018 ± 0.009 | |
+| events planned / skipped (engine cannot plan, e.g. None EF) | 96.800 ± 2.168 | 33.400 ± 9.581 |
+| disruptions with no effect (overlap no planned task) | 331.400 ± 39.488 | |
+| top-up disruptions drawn (to reach 10 per persona) | 357.600 ± 48.320 | |
+| personas short of 10 effective disruptions | 0.000 ± 0.000 | |
+
+| Model 1 learning curve (warm, model) | n records seen | MAE min |
+|---|---|---|
+| | 0–0 | – |
+| | 1–4 | 14.513 ± 0.613 |
+| | 5–9 | – |
+| | 10–19 | 8.275 ± 0.642 |
+| | 20–39 | 6.748 ± 0.169 |
+| | 40+ | 4.849 ± 0.315 |
+
+| Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
+|---|---|---|---|
+| fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
+
+## Variant: null (SYNTHETIC)
+
+| Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage | students: gate open / closed (warm) |
+|---|---|---|---|---|---|
+| model | 4.185 ± 0.180 | 4.200 ± 0.164 | 0.076 ± 0.002 | 0.734 ± 0.010 | 1.600 ± 1.517 open / 8.400 ± 1.517 closed |
+| B0 drift = 1.0 | 4.185 ± 0.180 | 4.177 ± 0.175 | 0.076 ± 0.002 | – | no gate |
+| B1 global mean | 4.175 ± 0.176 | 4.166 ± 0.170 | 0.075 ± 0.003 | – | no gate |
+| B2 per-student mean | 4.175 ± 0.176 | 4.393 ± 0.169 | 0.080 ± 0.002 | – | no gate |
+| B3 shrinkage only | 4.175 ± 0.176 | 4.171 ± 0.173 | 0.075 ± 0.002 | – | no gate |
+
+Gate open / closed = the earned-trust gate's state at each persona's last warm evaluation point (mean over seeds). In cold start it is closed for every persona (no history). Baselines have no gate.
+
+| Event metric (same events) | raw | corrected |
+|---|---|---|
+| ctrrPlanned | 0.373 ± 0.061 | 0.373 ± 0.061 |
+| ctrrRealised | 0.208 ± 0.065 | 0.208 ± 0.065 |
+| ptvr | 0.000 ± 0.000 | 0.000 ± 0.000 |
+| feasibilityTrue | 0.986 ± 0.032 | 0.986 ± 0.032 |
+| realisedFeasibility | 0.475 ± 0.140 | 0.475 ± 0.140 |
+| planCompletionRate | 0.555 ± 0.184 | 0.555 ± 0.184 |
+| decision-change rate | 0.000 ± 0.000 | |
+| events planned / skipped (engine cannot plan, e.g. None EF) | 96.800 ± 2.168 | 33.400 ± 9.581 |
+| disruptions with no effect (overlap no planned task) | 331.400 ± 39.488 | |
+| top-up disruptions drawn (to reach 10 per persona) | 357.600 ± 48.320 | |
+| personas short of 10 effective disruptions | 0.000 ± 0.000 | |
+
+| Model 1 learning curve (warm, model) | n records seen | MAE min |
+|---|---|---|
+| | 0–0 | – |
+| | 1–4 | 4.593 ± 0.419 |
+| | 5–9 | – |
+| | 10–19 | 4.486 ± 0.317 |
+| | 20–39 | 4.116 ± 0.269 |
+| | 40+ | 3.301 ± 0.234 |
+
+| Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
+|---|---|---|---|
+| fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
+
+## Variant: misspecified (SYNTHETIC)
+
+| Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage | students: gate open / closed (warm) |
+|---|---|---|---|---|---|
+| model | 17.954 ± 0.600 | 17.009 ± 0.191 | 0.256 ± 0.003 | 0.731 ± 0.010 | 5.600 ± 1.517 open / 4.400 ± 1.517 closed |
+| B0 drift = 1.0 | 17.954 ± 0.600 | 17.900 ± 0.623 | 0.271 ± 0.005 | – | no gate |
+| B1 global mean | 16.128 ± 0.564 | 16.029 ± 0.536 | 0.241 ± 0.006 | – | no gate |
+| B2 per-student mean | 16.128 ± 0.564 | 17.747 ± 0.903 | 0.265 ± 0.014 | – | no gate |
+| B3 shrinkage only | 16.128 ± 0.564 | 16.741 ± 0.879 | 0.250 ± 0.006 | – | no gate |
+
+Gate open / closed = the earned-trust gate's state at each persona's last warm evaluation point (mean over seeds). In cold start it is closed for every persona (no history). Baselines have no gate.
+
+| Event metric (same events) | raw | corrected |
+|---|---|---|
+| ctrrPlanned | 0.373 ± 0.061 | 0.365 ± 0.063 |
+| ctrrRealised | 0.100 ± 0.042 | 0.179 ± 0.067 |
+| ptvr | 0.000 ± 0.000 | 0.000 ± 0.000 |
+| feasibilityTrue | 0.905 ± 0.077 | 0.937 ± 0.059 |
+| realisedFeasibility | 0.218 ± 0.071 | 0.422 ± 0.142 |
+| planCompletionRate | 0.251 ± 0.097 | 0.490 ± 0.196 |
+| decision-change rate | 0.019 ± 0.016 | |
+| events planned / skipped (engine cannot plan, e.g. None EF) | 96.800 ± 2.168 | 33.400 ± 9.581 |
+| disruptions with no effect (overlap no planned task) | 331.400 ± 39.488 | |
+| top-up disruptions drawn (to reach 10 per persona) | 357.600 ± 48.320 | |
+| personas short of 10 effective disruptions | 0.000 ± 0.000 | |
+
+| Model 1 learning curve (warm, model) | n records seen | MAE min |
+|---|---|---|
+| | 0–0 | – |
+| | 1–4 | 20.340 ± 1.404 |
+| | 5–9 | – |
+| | 10–19 | 18.717 ± 1.655 |
+| | 20–39 | 14.723 ± 1.057 |
+| | 40+ | 13.466 ± 1.558 |
+
+| Model 2 policy (accept probabilities 0.85 / 0.3 are ASSUMPTIONS) | mean acceptance | first half | second half |
+|---|---|---|---|
+| fixed order | 0.609 ± 0.079 | 0.592 ± 0.072 | 0.625 ± 0.099 |
+| most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
+| random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
+| bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
+
+
+## Before gate (run of 14 Oct 2026, 5-action catalogue: mean point, no gate) — SYNTHETIC
+
+
+10 personas, 589 planned tasks; mean ± sd over seeds.
+
+### Variant: planted (SYNTHETIC)
+
 | Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage |
 |---|---|---|---|---|
 | model | 8.497 ± 0.230 | 7.248 ± 0.169 | 0.109 ± 0.002 | 0.747 ± 0.008 |
@@ -42,7 +174,7 @@
 | random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
 | bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
 
-## Variant: null (SYNTHETIC)
+### Variant: null (SYNTHETIC)
 
 | Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage |
 |---|---|---|---|---|
@@ -82,7 +214,7 @@
 | random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
 | bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
 
-## Variant: misspecified (SYNTHETIC)
+### Variant: misspecified (SYNTHETIC)
 
 | Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage |
 |---|---|---|---|---|
@@ -121,4 +253,3 @@
 | most accepted | 0.742 ± 0.085 | 0.687 ± 0.078 | 0.798 ± 0.094 |
 | random | 0.537 ± 0.064 | 0.541 ± 0.048 | 0.534 ± 0.089 |
 | bandit | 0.680 ± 0.080 | 0.619 ± 0.077 | 0.742 ± 0.090 |
-

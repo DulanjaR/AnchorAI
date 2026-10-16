@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`0728c2f` · 2026-10-16 · "wip: C1 results files keep the 'Before gate' run and show gate open/closed students per method (reruns in progress)" (this update is in the commit after it).
+`9384149` · 2026-10-16 · "docs: 16 Oct planning decisions (task category, approvals confirmed, D-MOVE and LLM-persona after PP1)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -20,9 +20,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Model 1 on REAL data (CESAW, professional developers):** `docs/results/c1_model1_cesaw.md`. 60,284 tasks from 247 developers (dropped: plan ≤ 0 692, no readable start 841). **Finding: Model 1 does not beat "trust the plan" on CESAW.** Cold MAE 80.2 min vs B0 75.0; warm 82.0 vs B0 76.6 (B3 78.9). Range coverage 0.74 / 0.73 (inside 70–90%). Real estimates are very noisy (sd of log ratio 1.07, median −0.06).
 - **Model 1: median point + earned-trust gate** (planning chat, 16 Oct): point = forest q50; the model corrects a student only after beating B0 on their recent tasks, else drift 1.0 (API `correctionSource: "gate"`). Model file format 2. Tests added (gate opens/closes, evidence uses earlier days only, margin, minimum records, gate off = old behaviour, mean = old point).
 - **Gate values approved** (lookback 20, minimum 5, margin 5%). **Notebook 01** saves the format-2 model (with the gate) and prints each persona's gate: ready to retrain in Colab. **PP1 demo script** runs as SYNTHETIC persona P01 with Model 1 on: P01's gate is open (model 6.2 min vs own estimate 14.0 min on 20 recent tasks), and the planner uses P01's corrected durations.
+- **SYNTHETIC rerun with the gate** (`sim/results/c1_simulation_SYNTHETIC.md`, earlier run kept as "Before gate"; 5 seeds × 3 variants). Warm MAE min, model with gate vs before vs B0: planted 8.87 vs 7.25 vs 12.19 (gate open for 8.8 of 10 personas, closed 1.2); null 4.20 vs 4.36 vs 4.18 (open 1.6 / closed 8.4: the model now no longer adds error where there is no drift); misspecified 17.01 vs 16.73 vs 17.90 (open 5.6 / closed 4.4). Cold start = B0 by design (planted 12.25 vs 8.50 before). The gate costs accuracy where the drift is real (cold start, early weeks) and protects where there is nothing to learn. Planned completion rate (corrected plans), planted 0.38 (before 0.42); null: identical to raw plans.
 
 ## In progress
-- CESAW rerun and full SYNTHETIC rerun with the gate (both results files keep the earlier run as "Before gate" and show gate open / closed students per method). Slow: the laptop is short of memory (7.7 GB, swapping); running overnight.
+- CESAW rerun with the gate (results file keeps the earlier run as "Before gate" and shows gate open / closed developers per method). Slow: the laptop is short of memory (7.7 GB, swapping); running overnight.
 - **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
