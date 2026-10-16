@@ -38,6 +38,26 @@ PARAMETER num_ctx 4096
 """
 
 
+LLAMA3_MODELFILE = """FROM ./{gguf}
+
+# Llama 3.1 chat format, matching the Hugging Face template used in training
+TEMPLATE \"\"\"<|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+{{{{ if .System }}}}{{{{ .System }}}}{{{{ end }}}}<|eot_id|>{{{{- range .Messages }}}}<|start_header_id|>{{{{ .Role }}}}<|end_header_id|>
+
+{{{{ .Content }}}}<|eot_id|>{{{{ end }}}}<|start_header_id|>assistant<|end_header_id|>
+
+\"\"\"
+PARAMETER stop "<|eot_id|>"
+PARAMETER stop "<|start_header_id|>"
+PARAMETER temperature 0.3
+PARAMETER num_ctx 4096
+"""
+
+
 def run(cmd: list[str], cwd: Path | None = None) -> None:
     print("+", " ".join(cmd), flush=True)
     subprocess.run(cmd, check=True, cwd=cwd)
@@ -95,7 +115,8 @@ def main(argv: list[str] | None = None) -> int:
     f16.unlink(missing_ok=True)
     if not args.keep_merged:
         shutil.rmtree(merged, ignore_errors=True)
-    (args.out / "Modelfile").write_text(MODELFILE.format(gguf=name))
+    template = LLAMA3_MODELFILE if "llama" in args.base_model.lower() else MODELFILE
+    (args.out / "Modelfile").write_text(template.format(gguf=name))
     print(f"\nDone: {args.out / name} and {args.out / 'Modelfile'}")
     print("Download both, put them in one folder on your Mac, then: ollama create hcde -f Modelfile")
     return 0

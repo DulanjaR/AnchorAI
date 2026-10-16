@@ -89,13 +89,16 @@ def generate_all(model, tokenizer, prompts: list[list[dict]], max_new_tokens: in
     tokenizer.padding_side = "left"
     outs: list[str] = []
     for i in range(0, len(prompts), batch_size):
-        batch = [tokenizer.apply_chat_template(p, add_generation_prompt=True, tokenize=False) for p in prompts[i:i + batch_size]]
+        # enable_thinking=False: Qwen3's own template then skips its <think> phase (other templates ignore it)
+        batch = [tokenizer.apply_chat_template(p, add_generation_prompt=True, tokenize=False, enable_thinking=False)
+                 for p in prompts[i:i + batch_size]]
         enc = tokenizer(batch, return_tensors="pt", padding=True, add_special_tokens=False).to(model.device)
         with torch.no_grad():
             gen = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False,
                                  pad_token_id=tokenizer.pad_token_id)
         for row in gen[:, enc["input_ids"].shape[1]:]:
-            outs.append(tokenizer.decode(row, skip_special_tokens=True).strip())
+            text = tokenizer.decode(row, skip_special_tokens=True)
+            outs.append(re.sub(r"<think>.*?</think>\s*", "", text, flags=re.DOTALL).strip())
         print(f"  generated {min(i + batch_size, len(prompts))}/{len(prompts)}", flush=True)
     return outs
 
