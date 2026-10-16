@@ -279,6 +279,7 @@ def main(argv: list[str] | None = None) -> int:
                          "pressure": EVAL_PRESSURE[i % len(EVAL_PRESSURE)] if args.pressure else None,
                          "reply": reply, "reference": r["messages"][2]["content"],
                          "compliance": check(r["tier"], reply, r["messages"][1]["content"]).to_dict()})
+        save_rows(args.out / "generations.jsonl", rows)  # keep each finished condition even if the run stops later
 
     return finish(args, rows)
 
