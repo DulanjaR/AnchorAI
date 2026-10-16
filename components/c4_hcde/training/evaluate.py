@@ -130,7 +130,9 @@ def summarise(rows: list[dict]) -> dict:
             agg[(r["condition"], r["tier"])]["sds"].append(d["score"])
             agg[(r["condition"], r["tier"])]["sds_in_band"].append(d["in_band"])
     out: dict = {}
-    for cond in CONDITIONS:
+    # known conditions first, in their usual order, then any others (e.g. ollama_hcde from ollama_check.py)
+    seen = list(dict.fromkeys(c for c, _ in agg))
+    for cond in [c for c in CONDITIONS if c in seen] + [c for c in seen if c not in CONDITIONS]:
         per_tier, all_pass = {}, []
         for tier in MODES:
             a = agg.get((cond, tier))
@@ -209,7 +211,9 @@ def main(argv: list[str] | None = None) -> int:
         kwargs = {"quantization_config": BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                   bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype), "device_map": {"": 0},
                   ("dtype" if _new_transformers() else "torch_dtype"): dtype}
-    tokenizer = AutoTokenizer.from_pretrained(args.base_model)
+    # The adapter folder holds the tokenizer saved at training time, including its chat template
+    # (e.g. forced ChatML for Qwen3), so base and tuned conditions use the same prompt format.
+    tokenizer = AutoTokenizer.from_pretrained(args.adapter if args.adapter else args.base_model)
     if tokenizer.chat_template is None:
         from .train_qlora import FALLBACK_TEMPLATE
         tokenizer.chat_template = FALLBACK_TEMPLATE

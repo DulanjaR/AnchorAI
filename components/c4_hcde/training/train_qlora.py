@@ -27,6 +27,13 @@ from pathlib import Path
 HERE = Path(__file__).parent
 DATA = HERE / "data" / "dataset"
 
+# Plain ChatML, as used by Qwen2.5. Forcing it on Qwen3 keeps training, evaluation and Ollama on exactly
+# the same format and keeps Qwen3's "thinking" mode (<think> blocks) out of the picture.
+CHATML_TEMPLATE = (
+    "{% for m in messages %}<|im_start|>{{ m['role'] }}\n{{ m['content'] }}<|im_end|>\n{% endfor %}"
+    "{% if add_generation_prompt %}<|im_start|>assistant\n{% endif %}"
+)
+
 FALLBACK_TEMPLATE = (
     "{% for m in messages %}<|{{ m['role'] }}|>\n{{ m['content'] }}\n{% endfor %}"
     "{% if add_generation_prompt %}<|assistant|>\n{% endif %}"
@@ -87,6 +94,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--lora-dropout", type=float, default=0.05)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no-4bit", action="store_true", help="full-precision LoRA (CPU smoke tests)")
+    ap.add_argument("--extra-train", type=Path, nargs="*", default=[],
+                    help="extra training files (e.g. data/dataset/aug_shared.jsonl); rows with accepted=false are skipped")
+    ap.add_argument("--chatml", action="store_true",
+                    help="force plain ChatML (use for Qwen3: no thinking tags). Saved with the adapter's tokenizer.")
     args = ap.parse_args(argv)
 
     os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
@@ -104,12 +115,21 @@ def main(argv: list[str] | None = None) -> int:
     compute_dtype = torch.bfloat16 if bf16 else torch.float16
 
     tokenizer = AutoTokenizer.from_pretrained(args.base_model)
-    if tokenizer.chat_template is None:
+    if args.chatml:
+        tokenizer.chat_template = CHATML_TEMPLATE
+    elif tokenizer.chat_template is None:
         tokenizer.chat_template = FALLBACK_TEMPLATE
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     train_rows, val_rows = load_rows(args.train), load_rows(args.val)
+    for extra in args.extra_train or []:
+        if extra.exists():
+            add = [r for r in load_rows(extra) if r.get("accepted", True)]
+            print(f"extra training data: {len(add)} rows from {extra}")
+            train_rows += add
+        else:
+            print(f"extra training file not found, skipped: {extra}")
     train_ds = [encode(tokenizer, r["messages"], args.max_len) for r in train_rows]
     val_ds = [encode(tokenizer, r["messages"], args.max_len) for r in val_rows]
     lengths = sorted(len(x["input_ids"]) for x in train_ds)
@@ -188,7 +208,7 @@ def main(argv: list[str] | None = None) -> int:
         "base_model": args.base_model, "train_examples": len(train_ds), "val_examples": len(val_ds),
         "max_len": args.max_len, "epochs": args.epochs, "max_steps": args.max_steps, "lr": args.lr,
         "effective_batch": args.batch_size * args.grad_accum, "lora": {"r": args.lora_r, "alpha": args.lora_alpha,
-        "dropout": args.lora_dropout, "targets": targets}, "quantized_4bit": use_4bit,
+        "dropout": args.lora_dropout, "targets": targets}, "quantized_4bit": use_4bit, "extra_train": [str(p) for p in (args.extra_train or [])], "chatml": args.chatml,
         "eval": metrics, "train_minutes": round((time.time() - t0) / 60, 1),
         "log_history": trainer.state.log_history,
     }
