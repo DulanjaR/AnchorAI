@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-WEIGHTS = {"gap": 0.45, "difficulty": 0.25, "urgency": 0.20, "recent_struggle": 0.10}
+WEIGHTS = {"gap": 0.45, "difficulty": 0.25, "urgency": 0.20, "recent_struggle": 0.10, "novelty": 0.15}
+# novelty: 1 = first task ever in this language/tool, 0.5 = known language but new skill in it, 0 = familiar.
+# The concept may transfer from another language (see the transfer prior), but the syntax does not.
 THRESHOLDS = [(0.30, "HUMAN_FIRST"), (0.45, "HINT"), (0.62, "GUIDED"), (1.01, "SHARED")]
 EMERGENCY_URGENCY, EMERGENCY_MAX_MASTERY = 0.8, 0.6
 
@@ -23,12 +25,14 @@ class Score:
     emergency_rule: bool
 
 
-def score(mastery: float, difficulty: int, urgency: float, fail_streak: int, unknown_skill: bool = False) -> Score:
+def score(mastery: float, difficulty: int, urgency: float, fail_streak: int, unknown_skill: bool = False,
+          novelty: float = 0.0) -> Score:
     factors = {
         "gap": 1 - mastery,
         "difficulty": (difficulty - 1) / 4,
         "urgency": urgency,
         "recent_struggle": min(1.0, fail_streak / 2),
+        "novelty": novelty,
     }
     contributions = {k: round(WEIGHTS[k] * v, 3) for k, v in factors.items()}
     need = round(sum(contributions.values()), 3)

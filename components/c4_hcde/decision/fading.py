@@ -13,6 +13,8 @@ STEP_DOWN_AFTER = 2
 def adjust(base_tier: str, last_tier: str | None, success_streak: int, fail_streak: int) -> tuple[str, str | None]:
     """Returns (tier, reason or None)."""
     i = TIER_ORDER.index(base_tier)
+    if last_tier == "PROBE_FAILED":
+        return base_tier, "your last quick check on this skill was not passed yet"
     if last_tier is None or last_tier not in TIER_ORDER:
         return base_tier, None
     j = TIER_ORDER.index(last_tier)

@@ -135,10 +135,14 @@ class HybridIndex:
                 self.vecs = None
         return len(self.texts) - 1
 
+    last_mode: str = "tfidf"  # which method answered the most recent search
+
     def search(self, text: str, k: int = 5) -> list[tuple[int, float]]:
         if self.vecs:
             q = embed([text])
             if q:
+                self.last_mode = "embedding"
                 scored = sorted(((i, cosine(q[0], v)) for i, v in enumerate(self.vecs)), key=lambda x: -x[1])
                 return scored[:k]
+        self.last_mode = "tfidf"  # embedding model unreachable right now: word overlap fallback
         return self.tfidf.search(text, k)

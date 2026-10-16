@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor AI · HCDE</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1d1d1b; --muted:#6b6a65; --line:#e3e1db; --accent:#2f5d50;
+          --t0:#4c8c6a; --t1:#6f9f5a; --t2:#c49a2c; --t3:#d07a35; --t4:#b84a3a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.55 -apple-system, "Segoe UI", Inter, sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:18px 28px; border-bottom:1px solid var(--line); background:var(--card); display:flex; gap:16px; align-items:baseline; }
+  header h1 { font-size:18px; margin:0; } header span { color:var(--muted); font-size:13px; }
+  #status { margin-left:auto; font-size:12px; }
+  main { display:grid; grid-template-columns: minmax(0,1fr) 340px; gap:20px; padding:20px 28px; max-width:1300px; margin:0 auto; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding:16px; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px; }
+  .card h2 { font-size:14px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:0 0 12px; font-weight:600; }
+  textarea, input, select { width:100%; font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+  textarea { min-height:90px; resize:vertical; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .row > * { flex:1; }
+  button { font:inherit; padding:9px 14px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--accent); }
+  button:disabled { opacity:.5; cursor:wait; }
+  .tiers { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0; }
+  .tier { flex:1; min-width:96px; border:2px solid var(--line); background:#fff; color:var(--ink); padding:8px; border-radius:8px; text-align:center; font-size:13px; }
+  .tier.rec { border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,93,80,.15); }
+  .tier .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+  .explain { background:#f1f6f3; border-left:3px solid var(--accent); padding:10px 12px; border-radius:6px; }
+  .meta { color:var(--muted); font-size:13px; }
+  .reply { border-top:1px solid var(--line); margin-top:14px; padding-top:12px; }
+  .reply pre { background:#f4f3ef; padding:10px; border-radius:8px; overflow:auto; }
+  .reply code { font-size:13px; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:12px; background:#eee; margin-right:6px; }
+  .skill { padding:10px 0; border-bottom:1px solid var(--line); }
+  .skill:last-child { border:0; }
+  .bar { height:8px; border-radius:6px; background:#eceae4; overflow:hidden; margin:6px 0; }
+  .bar > div { height:100%; background:var(--accent); }
+  .ledger { display:flex; gap:10px; font-size:12px; color:var(--muted); }
+  .ledger b { color:var(--ink); }
+  .hidden { display:none; }
+  .factors { font-size:12px; color:var(--muted); margin-top:8px; }
+  .factors span { margin-right:10px; }
+  .history-item { font-size:13px; padding:6px 0; border-bottom:1px dashed var(--line); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Anchor AI · Human Capability Development Engine</h1>
+  <span>right amount of help, explained, adapting to you</span>
+  <div id="status" class="meta">checking model…</div>
+</header>
+<main>
+  <section>
+    <div class="card">
+      <h2>1 · Your task</h2>
+      <div class="row" style="margin-bottom:10px">
+        <input id="user" value="dulanja" placeholder="user id (pseudonymous)">
+        <input id="minutes" type="number" min="0" placeholder="minutes until deadline (optional)">
+      </div>
+      <textarea id="task" placeholder="e.g. Write a SQL query that lists customers who have never placed an order">Write a SQL query that lists customers who have never placed an order. Tables: customers(id, name), orders(id, customer_id).</textarea>
+      <div class="row" style="margin-top:10px"><button id="btnRec" style="flex:0 0 auto">Get recommendation</button></div>
+    </div>
+
+    <div id="recCard" class="card hidden">
+      <h2>2 · Recommended help</h2>
+      <div id="profile" class="meta"></div>
+      <div class="tiers" id="tiers"></div>
+      <div class="explain" id="explain"></div>
+      <div class="factors" id="factors"></div>
+      <div class="row" style="margin-top:12px">
+        <textarea id="attempt" placeholder="(optional) paste your attempt so far" style="min-height:50px"></textarea>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button id="btnRespond" style="flex:0 0 auto">Get help at the selected level</button>
+        <span class="meta" id="chosenNote"></span>
+      </div>
+      <div id="replyBox" class="reply hidden">
+        <div class="meta" id="genMeta"></div>
+        <div id="reply"></div>
+        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:12px">
+          <div class="meta" style="margin-bottom:6px"><b>Check my answer</b> · feedback follows your help level, so it will not give away more than you chose</div>
+          <textarea id="answer" placeholder="Paste your answer or code here"></textarea>
+          <div class="row" style="margin-top:8px"><button id="btnCheck" style="flex:0 0 auto">Check my answer</button><span class="meta" id="checkMeta"></span></div>
+          <div id="checkFeedback" class="explain hidden" style="margin-top:10px"></div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <span class="meta" style="flex:0 0 auto">Or tell us yourself:</span>
+          <button id="btnSolved" class="ghost" style="flex:0 0 auto">I solved it</button>
+          <button id="btnNot" class="ghost" style="flex:0 0 auto">Not yet</button>
+          <span class="meta" id="outcomeNote"></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="probeCard" class="card hidden">
+      <h2>Quick unaided check (probe)</h2>
+      <div id="probeText"></div>
+      <textarea id="probeAnswer" placeholder="Your answer, without AI help"></textarea>
+      <div class="row" style="margin-top:10px"><button id="btnProbeAnswer" style="flex:0 0 auto">Submit answer</button><span class="meta" id="probeResult"></span></div>
+    </div>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2>Your capability profile</h2>
+      <div id="skills" class="meta">No skills yet.</div>
+      <div class="row" style="margin-top:12px"><button id="btnProbe" class="ghost" style="flex:0 0 auto">Take a quick check</button></div>
+    </div>
+    <div class="card">
+      <h2>Recent tasks</h2>
+      <div id="history" class="meta">Nothing yet.</div>
+    </div>
+    <div class="card meta" style="font-size:12px">
+      <b>How to read the ledger.</b> Help you receive is <i>borrowed</i> capability (Hint 0.25 · Guided 0.5 · Shared 0.75 · Emergency 1).
+      Solving without help or passing a quick check <i>builds</i> capability and <i>repays</i> what was borrowed. Mastery only rises when you did the work.
+    </div>
+  </aside>
+</main>
+<script>
+const TIERS = ["HUMAN_FIRST","HINT","GUIDED","SHARED","EMERGENCY"];
+const LABEL = {HUMAN_FIRST:"Human First",HINT:"Hint",GUIDED:"Guided",SHARED:"Shared",EMERGENCY:"Emergency",PROBE_FAILED:"check not passed"};
+const COLOR = {HUMAN_FIRST:"var(--t0)",HINT:"var(--t1)",GUIDED:"var(--t2)",SHARED:"var(--t3)",EMERGENCY:"var(--t4)"};
+let current = null, chosen = null, probe = null;
+const $ = id => document.getElementById(id);
+const api = async (path, body) => {
+  const r = await fetch(path, body === undefined ? {} : {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  if (!r.ok) throw new Error((await r.json().catch(()=>({detail:r.statusText}))).detail);
+  return r.json();
+};
+const md = el => { try { renderMathInElement(el, {delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true}], throwOnError:false}); } catch(e){} };
+const show = (el, text) => { el.innerHTML = (window.marked ? marked.parse(text||"") : (text||"").replace(/</g,"&lt;").replace(/\n/g,"<br>")); md(el); };
+async function busy(btn, fn){ btn.disabled = true; const t = btn.textContent; btn.textContent = "Working…"; try { await fn(); } catch(e){ alert(e.message); } finally { btn.disabled=false; btn.textContent=t; } }
+
+function renderTiers(rec){
+  $("tiers").innerHTML = "";
+  TIERS.forEach(t => {
+    const b = document.createElement("button");
+    b.className = "tier" + (t===rec ? " rec" : "");
+    b.innerHTML = `<span class="dot" style="background:${COLOR[t]}"></span>${LABEL[t]}${t===rec?"<br><small>recommended</small>":""}`;
+    if (t === chosen) { b.style.borderColor = COLOR[t]; b.style.background = "#fafaf7"; }
+    b.onclick = () => { chosen = t; renderTiers(rec); $("chosenNote").textContent = t===rec ? "" : `You chose ${LABEL[t]} instead of ${LABEL[rec]} (override is recorded).`; };
+    $("tiers").appendChild(b);
+  });
+}
+
+async function refreshProfile(){
+  const u = $("user").value.trim(); if (!u) return;
+  const l = await api(`/hcde/users/${encodeURIComponent(u)}/ledger`);
+  $("skills").innerHTML = l.skills.length ? l.skills.map(s => `
+    <div class="skill"><b>${s.skill}</b> <span class="badge" style="background:#e8efe9">${s.context}</span><span class="badge">${s.observations} obs</span>${s.last_tier?`<span class="badge">last: ${LABEL[s.last_tier]||s.last_tier}</span>`:""}
+      <div class="bar"><div style="width:${Math.round(s.mastery*100)}%"></div></div>
+      ${s.prior_note && s.observations===0 ? `<div class="meta" style="font-size:12px">${s.prior_note}</div>`:""}<div class="ledger"><span>mastery <b>${Math.round(s.mastery*100)}%</b></span><span>borrowed <b>${s.borrowed}</b></span><span>repaid <b>${s.repaid}</b></span><span>outstanding <b>${s.outstanding}</b></span></div>
+    </div>`).join("") : "No skills yet.";
+  const h = await api(`/hcde/users/${encodeURIComponent(u)}/history?limit=8`);
+  $("history").innerHTML = h.interactions.length ? h.interactions.map(i => `<div class="history-item">#${i.interaction_id} · <b>${i.skill}</b> (${i.context}) · ${LABEL[i.chosen_tier]||"—"}${i.overridden?" (override)":""} · ${i.outcome||"open"}${i.verified?" ✓ verified":""}${i.checks?` · ${i.checks} check(s)`:""}<br><span>${i.task.slice(0,80)}</span></div>`).join("") : "Nothing yet.";
+}
+
+$("btnRec").onclick = () => busy($("btnRec"), async () => {
+  const minutes = $("minutes").value === "" ? null : Number($("minutes").value);
+  current = await api("/hcde/recommend", {user_id:$("user").value.trim(), task:$("task").value.trim(), minutes_left:minutes});
+  chosen = current.recommended_tier;
+  $("recCard").classList.remove("hidden"); $("replyBox").classList.add("hidden"); $("checkFeedback").classList.add("hidden"); $("checkMeta").textContent=""; $("answer").value=""; $("chosenNote").textContent=""; $("outcomeNote").textContent="";
+  const p = current.decision, prof = current.decision.skill_state;
+  $("profile").innerHTML = `Skill <b>${current.skill}</b> · <b>${current.context}</b> · ${current.module} · difficulty ${current.difficulty}/5 · urgency ${Math.round(current.urgency*100)}% · your mastery ${Math.round(prof.mastery*100)}%`;
+  renderTiers(current.recommended_tier);
+  $("explain").textContent = current.explanation;
+  $("factors").innerHTML = "Need score " + p.need + " = " + Object.entries(p.contributions).map(([k,v])=>`<span>${k} ${v}</span>`).join(" + ")
+     + (p.memory && p.memory.similar && p.memory.similar.length ? `<br>Memory: ${p.memory.similar.length} similar past task(s)` : "");
+});
+
+$("btnRespond").onclick = () => busy($("btnRespond"), async () => {
+  const r = await api(`/hcde/interactions/${current.interaction_id}/respond`, {tier: chosen, student_attempt: $("attempt").value.trim() || null});
+  $("replyBox").classList.remove("hidden");
+  const g = r.generation;
+  $("genMeta").innerHTML = `<span class="badge" style="background:${COLOR[r.chosen_tier]};color:#fff">${LABEL[r.chosen_tier]}</span>`
+     + (g.attempts > 1 ? `guardrail regenerated ${g.attempts-1}× (${g.history.filter(h=>!h.passed).map(h=>h.reasons.join("; ")).join(" | ")})` : "passed the tier check first time")
+     + (g.passed ? "" : " · ⚠ still outside the rules after all attempts");
+  show($("reply"), r.reply);
+  await refreshProfile();
+});
+
+async function outcome(solved, btn){ return busy(btn, async () => {
+  const o = await api(`/hcde/interactions/${current.interaction_id}/outcome`, {solved});
+  $("outcomeNote").textContent = `Mastery ${Math.round(o.bkt.before*100)}% → ${Math.round(o.bkt.after*100)}% (${o.bkt.evidence})`;
+  await refreshProfile();
+});}
+$("btnSolved").onclick = () => outcome(true, $("btnSolved"));
+$("btnNot").onclick = () => outcome(false, $("btnNot"));
+
+$("btnCheck").onclick = () => busy($("btnCheck"), async () => {
+  const k = await api(`/hcde/interactions/${current.interaction_id}/check`, {answer: $("answer").value});
+  $("checkFeedback").classList.remove("hidden");
+  show($("checkFeedback"), k.feedback);
+  let meta = `attempt ${k.attempt} · graded at ${LABEL[k.tier]} level`;
+  if (k.outcome) meta += ` · verified solved: mastery ${Math.round(k.outcome.bkt.before*100)}% → ${Math.round(k.outcome.bkt.after*100)}%`;
+  $("checkMeta").textContent = meta;
+  await refreshProfile();
+});
+
+$("btnProbe").onclick = () => busy($("btnProbe"), async () => {
+  probe = await api("/hcde/probes", {user_id:$("user").value.trim()});
+  $("probeCard").classList.remove("hidden"); $("probeResult").textContent=""; $("probeAnswer").value="";
+  show($("probeText"), `**Skill: ${probe.skill}**\n\n` + probe.problem.replace(/^Problem:\s*/i,""));
+  $("probeCard").scrollIntoView({behavior:"smooth"});
+});
+$("btnProbeAnswer").onclick = () => busy($("btnProbeAnswer"), async () => {
+  const g = await api(`/hcde/probes/${probe.probe_id}/answer`, {answer:$("probeAnswer").value});
+  $("probeResult").textContent = ({pass:"✓ Passed. ",partial:"◐ Partly right. ",fail:"✗ Not yet. "}[g.result] || "") + g.feedback + ` (mastery ${Math.round(g.bkt.before*100)}% → ${Math.round(g.bkt.after*100)}%)`;
+  await refreshProfile();
+});
+$("user").onchange = refreshProfile;
+api("/hcde/status").then(s => $("status").textContent = s.model_available ? `model '${s.model}' ready (local, Ollama)` : `⚠ model '${s.model}' not found in Ollama`).catch(()=>{});
+refreshProfile();
+</script>
+</body>
+</html>

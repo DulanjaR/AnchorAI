@@ -1,6 +1,8 @@
 """HCDE HTTP API (see docs/api-contract.md)."""
 from __future__ import annotations
 
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
@@ -25,23 +27,28 @@ def get_db():
 class RecommendIn(BaseModel):
     user_id: str = Field(..., max_length=64, description="pseudonymous id")
     task: str = Field(..., min_length=3, max_length=8000)
-    minutes_left: float | None = Field(None, ge=0, description="time until the deadline, if any")
-    difficulty_hint: int | None = Field(None, ge=1, le=5)
+    minutes_left: Optional[float] = Field(None, ge=0, description="time until the deadline, if any")
+    difficulty_hint: Optional[int] = Field(None, ge=1, le=5)
 
 
 class RespondIn(BaseModel):
-    tier: str | None = Field(None, description="omit to accept the recommendation; any tier to override")
-    student_attempt: str | None = None
+    tier: Optional[str] = Field(None, description="omit to accept the recommendation; any tier to override")
+    student_attempt: Optional[str] = None
 
 
 class OutcomeIn(BaseModel):
     solved: bool
 
 
+class CheckIn(BaseModel):
+    answer: str = Field(..., min_length=1, max_length=12000)
+
+
 class ProbeIn(BaseModel):
     user_id: str
-    skill: str | None = None
-    interaction_id: int | None = None
+    skill: Optional[str] = None
+    context: Optional[str] = None
+    interaction_id: Optional[int] = None
 
 
 class AnswerIn(BaseModel):
@@ -49,10 +56,11 @@ class AnswerIn(BaseModel):
 
 
 def _interaction(it: Interaction) -> dict:
-    return {"interaction_id": it.id, "user_id": it.user_id, "task": it.task, "skill": it.skill, "module": it.module,
+    return {"interaction_id": it.id, "user_id": it.user_id, "task": it.task, "skill": it.skill, "context": it.context, "module": it.module,
             "difficulty": it.difficulty, "urgency": it.urgency, "recommended_tier": it.recommended_tier,
             "explanation": it.decision["explanation"], "decision": it.decision, "chosen_tier": it.chosen_tier,
-            "overridden": it.overridden, "reply": it.reply, "generation": it.generation, "outcome": it.outcome}
+            "overridden": it.overridden, "reply": it.reply, "generation": it.generation, "outcome": it.outcome,
+            "verified": it.verified, "checks": it.checks}
 
 
 @router.get("/status")
@@ -85,15 +93,26 @@ def outcome(interaction_id: int, body: OutcomeIn, db: Session = Depends(get_db))
         raise HTTPException(404, "interaction not found")
 
 
+@router.post("/interactions/{interaction_id}/check")
+def check(interaction_id: int, body: CheckIn, db: Session = Depends(get_db)) -> dict:
+    """Check my answer: graded against a hidden reference; feedback respects the chosen tier."""
+    try:
+        return service.check_answer(db, interaction_id, body.answer)
+    except service.NotFound:
+        raise HTTPException(404, "interaction not found")
+    except OSError as e:
+        raise HTTPException(503, f"model not reachable: {e}")
+
+
 @router.post("/probes")
 def create_probe(body: ProbeIn, db: Session = Depends(get_db)) -> dict:
     try:
-        p = service.create_probe(db, body.user_id, body.skill, body.interaction_id)
+        p = service.create_probe(db, body.user_id, body.skill, body.interaction_id, context=body.context)
     except service.NotFound as e:
         raise HTTPException(404, str(e))
     except OSError as e:
         raise HTTPException(503, f"model not reachable: {e}")
-    return {"probe_id": p.id, "skill": p.skill, "problem": p.problem}  # the answer key stays on the server
+    return {"probe_id": p.id, "skill": p.skill, "context": p.context, "problem": p.problem}  # the answer key stays on the server
 
 
 @router.post("/probes/{probe_id}/answer")

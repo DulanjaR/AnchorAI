@@ -13,6 +13,7 @@ from pathlib import Path
 
 import os
 
+from . import context as ctx
 from .text_index import HybridIndex
 
 DATA = Path(__file__).resolve().parents[1] / "training" / "data"
@@ -33,6 +34,7 @@ class TaskProfile:
     confidence: float               # similarity of the best matching reference task
     neighbours: list[dict] = field(default_factory=list)
     match_mode: str = "tfidf"       # "embedding" (semantic) or "tfidf" (word overlap)
+    context: str = "general"        # language / tool: python, java, sql, excel ... (see context.py)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -98,7 +100,8 @@ def analyze(text: str, minutes_left: float | None = None, difficulty_hint: int |
     tasks, index = _reference()
     query = for_matching(text)
     hits = index.search(query, k=max(k, 15))
-    if index.mode == "tfidf":
+    mode = index.last_mode
+    if mode == "tfidf":
         hinted = module_hints(text)
         if hinted:
             hits = sorted(((i, s * (MODULE_BOOST if tasks[i]["module"] in hinted else 1.0)) for i, s in hits),
@@ -107,7 +110,7 @@ def analyze(text: str, minutes_left: float | None = None, difficulty_hint: int |
     neighbours = [{"id": tasks[i]["id"], "skill": tasks[i]["skill"], "module": tasks[i]["module"],
                    "difficulty": tasks[i]["difficulty"], "similarity": round(min(1.0, s), 3)} for i, s in hits]
     best = neighbours[0] if neighbours else None
-    if best and best["similarity"] >= MIN_SIMILARITY[index.mode]:
+    if best and best["similarity"] >= MIN_SIMILARITY[mode]:
         # skill = similarity-weighted vote among the neighbours (more robust than the single best match)
         votes: dict[str, float] = {}
         for n in neighbours:
@@ -123,4 +126,5 @@ def analyze(text: str, minutes_left: float | None = None, difficulty_hint: int |
         diff = int(difficulty_hint)
     return TaskProfile(text=text, skill=skill, module=module, difficulty=max(1, min(5, diff)),
                        urgency=urgency_from_deadline(minutes_left), minutes_left=minutes_left,
-                       confidence=round(conf, 3), neighbours=neighbours, match_mode=index.mode)
+                       confidence=round(conf, 3), neighbours=neighbours, match_mode=mode,
+                       context=ctx.detect(text, module))

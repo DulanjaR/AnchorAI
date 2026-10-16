@@ -24,6 +24,8 @@ class SkillState:
     last_tier: str | None = None
     borrowed: float = 0.0     # Capability Ledger: help received and not yet repaid by an unaided check
     built: float = 0.0
+    prior_note: str | None = None  # why the starting estimate is what it is (transfer from related skills)
+    novelty: float = 0.0           # 1 first task in this language/tool, 0.5 new skill in a known one, else 0
 
 
 @dataclass
@@ -48,13 +50,14 @@ PROBE_DEBT = 1.5  # suggest an unaided check when this much help on a skill is s
 
 def recommend(profile: TaskProfile, state: SkillState, memory_note: str | None = None) -> Decision:
     s = score(state.mastery, profile.difficulty, profile.urgency, state.fail_streak,
-              unknown_skill=profile.skill == "general")
+              unknown_skill=profile.skill == "general", novelty=state.novelty)
     tier, reason = (s.tier, None) if s.emergency_rule else adjust(
         s.tier, state.last_tier, state.success_streak, state.fail_streak)
     debt = round(state.borrowed - state.built, 2)
     suggest_probe = debt >= PROBE_DEBT and not s.emergency_rule
     text = ex.explain(tier, profile.skill, state.mastery, state.observations, profile.difficulty, profile.urgency,
-                      profile.minutes_left, s.contributions, s.emergency_rule, reason, memory_note)
+                      profile.minutes_left, s.contributions, s.emergency_rule, reason, memory_note,
+                      context=profile.context, prior_note=state.prior_note)
     if suggest_probe:
         text += (f" You have relied on help for {profile.skill.replace('-', ' ')} a few times; "
                  f"a quick 5-minute check would turn that into skill you have shown yourself.")

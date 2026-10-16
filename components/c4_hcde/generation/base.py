@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from dataclasses import asdict, dataclass, field
 
-from ..training.compliance import PLACEHOLDER, check, split_probe
+from ..training.compliance import PLACEHOLDER, check, similarity, split_probe
 from ..training.tiers import control_system_prompt
 from . import ollama_client
 
@@ -55,7 +55,8 @@ def repair(tier: str, reasons: list[str]) -> str:
             f"Rewrite it so it follows the rules exactly. Reply with the rewritten answer only.")
 
 
-def generate(task: str, tier: str, student_attempt: str | None = None, call=None) -> GenResult:
+def generate(task: str, tier: str, student_attempt: str | None = None, call=None,
+             avoid: list[str] | None = None) -> GenResult:
     """call: optional chat function (tests); defaults to the local Ollama model."""
     call = call or ollama_client.chat
     user = task if not student_attempt else f"{task}\n\nMy attempt so far:\n{student_attempt}"
@@ -65,6 +66,12 @@ def generate(task: str, tier: str, student_attempt: str | None = None, call=None
         text = call(messages, temperature=TEMPERATURE[tier] + 0.15 * (attempt - 1))
         c = check(tier, text, task)
         reasons = list(c.reasons) + runtime_guards(tier, text)
+        if tier == "PROBE" and avoid:  # never re-ask a task the student recently saw (or was given the answer to)
+            parts = split_probe(text)
+            problem = parts[0] if parts else text
+            if any(similarity(problem, a) > 0.4 for a in avoid):
+                reasons.append("the problem repeats a task the student has recently seen; change what the student has "
+                               "to do (find and fix a bug, predict the output, or apply the idea to a new case)")
         history.append({"attempt": attempt, "passed": not reasons, "reasons": reasons})
         cand = GenResult(text, tier, attempt, not reasons, reasons, history)
         if not reasons:
@@ -77,19 +84,29 @@ def generate(task: str, tier: str, student_attempt: str | None = None, call=None
 
 
 GRADER = ("You are grading a student's answer to a short practice problem. Compare it with the answer key. "
-          "Reply with JSON only: {\"pass\": true or false, \"feedback\": \"one or two sentences for the student\"}. "
-          "Pass only if the answer meets the key's required points; small wording differences are fine.")
+          "Reply with JSON only: {\"result\": \"pass\" or \"partial\" or \"fail\", \"feedback\": \"one or two "
+          "sentences for the student\"}. pass = meets the key's required points (wording may differ); partial = the "
+          "key idea is right but the answer is incomplete or has a small error; fail = the key idea is missing or wrong.")
 
 
 def grade_probe(problem: str, answer_key: str, answer: str, call=None) -> dict:
+    """Returns {"result": pass|partial|fail, "pass": bool, "feedback": str}."""
     import json
     call = call or ollama_client.chat
     msg = f"Problem:\n{problem}\n\nAnswer key:\n{answer_key}\n\nStudent answer:\n{answer}"
     text = call([{"role": "system", "content": GRADER}, {"role": "user", "content": msg}], temperature=0.0)
     m = re.search(r"\{.*\}", text, re.DOTALL)
+    result, feedback = None, ""
     try:
         data = json.loads(m.group(0)) if m else {}
-        return {"pass": bool(data.get("pass")), "feedback": str(data.get("feedback", "")).strip()}
+        result = str(data.get("result", "")).lower().strip()
+        if not result and "pass" in data:  # older format
+            result = "pass" if data["pass"] else "fail"
+        feedback = str(data.get("feedback", "")).strip()
     except Exception:
-        passed = bool(re.search(r"\bpass\b[\"']?\s*:\s*true", text, re.I))
-        return {"pass": passed, "feedback": text.strip()[:300]}
+        low = text.lower()
+        result = "pass" if '"pass"' in low or "result: pass" in low else "partial" if "partial" in low else "fail"
+        feedback = text.strip()[:300]
+    if result not in ("pass", "partial", "fail"):
+        result = "fail"
+    return {"result": result, "pass": result == "pass", "feedback": feedback}

@@ -78,3 +78,133 @@ def test_guardrail_regenerates(monkeypatch):
 def test_bkt_ignores_emergency_success():
     assert bkt.update(0.4, "EMERGENCY", True).after == 0.4
     assert bkt.update(0.4, "HUMAN_FIRST", True).after > bkt.update(0.4, "GUIDED", True).after > 0.4
+
+
+def test_probe_rejects_copy_of_recent_task():
+    seen = "Write a SQL query that finds products that have never been sold."
+    copy = "Problem:\nWrite a SQL query that finds the products that have never been sold.\n\nAnswer key:\nLEFT JOIN sales, keep rows where sale is NULL."
+    calls = []
+
+    def fake(messages, temperature=0.2, **kw):
+        calls.append(1)
+        return copy if len(calls) == 1 else REPLIES["PROBE"]
+
+    res = base.generate(seen, "PROBE", call=fake, avoid=[seen])
+    assert res.passed and res.attempts == 2
+    assert any("repeats a task" in r for r in res.history[0]["reasons"])
+
+
+def test_partial_answer_keeps_mastery(monkeypatch):
+    def fake(messages, temperature=0.2, **kw):
+        if "grading" in messages[0]["content"]:
+            return '{"result": "partial", "feedback": "Right idea, but write the full query."}'
+        return fake_call(messages, temperature)
+
+    monkeypatch.setattr(base.ollama_client, "chat", fake)
+    c = TestClient(app)
+    task = "Write a SQL query that lists students who are not enrolled in any course."
+    r = c.post("/hcde/recommend", json={"user_id": "u2", "task": task}).json()
+    c.post(f"/hcde/interactions/{r['interaction_id']}/respond", json={})
+    c.post(f"/hcde/interactions/{r['interaction_id']}/outcome", json={"solved": True})
+    p = c.post("/hcde/probes", json={"user_id": "u2"}).json()
+    g = c.post(f"/hcde/probes/{p['probe_id']}/answer", json={"answer": "use a left join and IS NULL"}).json()
+    assert g["result"] == "partial" and g["bkt"]["after"] == g["bkt"]["before"] and g["ledger"]["repaid"] == 0
+
+
+def test_language_context_and_transfer_prior(monkeypatch):
+    """Strong in loops in Python -> Java loops is tracked separately but starts from a transfer prior."""
+    monkeypatch.setattr(base.ollama_client, "chat", fake_call)
+    c = TestClient(app)
+    py = ["Write a Python function that sums the numbers in a list using a for loop.",
+          "Write a Python loop that prints every second element of a list.",
+          "Write a Python function that counts the vowels in a string using a loop."]
+    for t in py:
+        r = c.post("/hcde/recommend", json={"user_id": "u3", "task": t}).json()
+        assert r["context"] == "python"
+        c.post(f"/hcde/interactions/{r['interaction_id']}/respond", json={"tier": "HUMAN_FIRST"})
+        c.post(f"/hcde/interactions/{r['interaction_id']}/outcome", json={"solved": True})
+    led = {(s["skill"], s["context"]): s for s in c.get("/hcde/users/u3/ledger").json()["skills"]}
+    py_skill = next(k for k in led if k[1] == "python")
+    assert led[py_skill]["mastery"] > 0.8
+
+    j = c.post("/hcde/recommend", json={"user_id": "u3", "task": "Write a Java for loop that sums the numbers in an array."}).json()
+    st = j["decision"]["skill_state"]
+    assert j["context"] == "java" and st["observations"] == 0
+    if j["skill"] == py_skill[0]:          # same concept, new language: transfer prior, not a cold start
+        assert 0.3 < st["prior"] <= 0.75 and "Java" in (st["prior_note"] or "")
+        assert "Java" in j["explanation"]
+    led2 = {(s["skill"], s["context"]) for s in c.get("/hcde/users/u3/ledger").json()["skills"]}
+    assert (j["skill"], "java") in led2 and py_skill in led2  # separate fading lines per language
+
+
+GRADE_PARTIAL = ('{"result": "partial", "where": "the JOIN in your FROM clause", '
+                 '"what": "an inner JOIN drops customers who have no orders, so the NULL filter never matches", '
+                 '"fix": "use LEFT JOIN so every customer is kept", "why": ""}')
+GRADE_PASS = '{"result": "pass", "where": "", "what": "", "fix": "", "why": "A LEFT JOIN keeps every customer and IS NULL keeps those without orders."}'
+
+
+TEST_DB = ("```sql\nCREATE TABLE customers(id INTEGER, name TEXT);\nCREATE TABLE orders(id INTEGER, customer_id INTEGER);\n"
+           "INSERT INTO customers VALUES (1,'Ann'),(2,'Ben'),(3,'Cal');\nINSERT INTO orders VALUES (10,1),(11,3);\n```")
+
+
+def checking_call(messages, temperature=0.2, **kw):
+    system = messages[0]["content"]
+    if "SQLite test database" in system:
+        return TEST_DB
+    if "check a student's answer" in system:
+        student = messages[1]["content"].split("Student answer:")[-1]
+        return GRADE_PASS if "LEFT JOIN" in student.upper() else GRADE_PARTIAL
+    return fake_call(messages, temperature)
+
+
+def test_check_answer_respects_tier_and_verifies(monkeypatch):
+    monkeypatch.setattr(base.ollama_client, "chat", checking_call)
+    c = TestClient(app)
+    task = "Write a SQL query that lists customers who have never placed an order."
+    wrong = "SELECT c.name FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.id IS NULL;"
+
+    # HINT: only WHERE to look, never the fix
+    r = c.post("/hcde/recommend", json={"user_id": "u4", "task": task}).json()
+    c.post(f"/hcde/interactions/{r['interaction_id']}/respond", json={"tier": "HINT"})
+    k1 = c.post(f"/hcde/interactions/{r['interaction_id']}/check", json={"answer": wrong}).json()
+    assert k1["result"] == "partial" and "JOIN in your FROM clause" in k1["feedback"]
+    assert "LEFT JOIN" not in k1["feedback"] and "inner JOIN drops" not in k1["feedback"]
+    # second try passes -> verified solved, but counted as solved-with-help (HINT) because it took 2 attempts
+    k2 = c.post(f"/hcde/interactions/{r['interaction_id']}/check",
+                json={"answer": wrong.replace("JOIN orders", "LEFT JOIN orders")}).json()
+    assert k2["result"] == "pass" and k2["feedback"].startswith("✅") and "same" in k2["feedback"]  # proven by execution
+    assert k2["outcome"]["verified"] and k2["attempt"] == 2 and k2["outcome"]["evidence_tier"] == "HINT"
+    assert k2["outcome"]["ledger"]["borrowed"] == 0.35  # hint 0.25 + one corrective feedback 0.1
+
+    # GUIDED reveals what is wrong but not the fix; EMERGENCY reveals the fix and a correct version
+    for tier, must, must_not in [("GUIDED", "inner JOIN drops", "use LEFT JOIN"),
+                                 ("EMERGENCY", "use LEFT JOIN", None)]:
+        r = c.post("/hcde/recommend", json={"user_id": "u5", "task": task}).json()
+        c.post(f"/hcde/interactions/{r['interaction_id']}/respond", json={"tier": tier})
+        k = c.post(f"/hcde/interactions/{r['interaction_id']}/check", json={"answer": wrong}).json()
+        assert must in k["feedback"]
+        if must_not:
+            assert must_not not in k["feedback"]
+        else:
+            assert "A correct version" in k["feedback"]
+
+
+def test_python_syntax_error_is_exact():
+    from components.c4_hcde.generation.check import python_syntax
+    assert python_syntax("def f(x)\n    return x", "python").startswith("line 1")
+    assert python_syntax("def f(x):\n    return x", "python") == ""
+    assert python_syntax("I would use a loop", "python") == ""
+
+
+def test_sql_execution_accepts_equivalent_answers():
+    from components.c4_hcde.generation.sql_check import compare
+    schema = TEST_DB.split("```sql")[1].split("```")[0]
+    ref = "SELECT c.id, c.name FROM customers c LEFT JOIN orders o ON c.id = o.customer_id WHERE o.customer_id IS NULL;"
+    ok = ["SELECT c.name FROM customers c LEFT JOIN orders o ON c.id = o.customer_id WHERE o.id IS NULL;",
+          "SELECT name FROM customers WHERE id NOT IN (SELECT customer_id FROM orders)",
+          "SELECT * FROM customers c WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id)"]
+    bad = ["SELECT c.name FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.id IS NULL",
+           "SELECT name FROM customers"]
+    assert all(compare("t", ref, a, schema)[0].status == "equal" for a in ok)
+    assert all(compare("t", ref, a, schema)[0].status == "different" for a in bad)
+    assert compare("t", ref, "SELECT nme FROM customers", schema)[0].status == "error"

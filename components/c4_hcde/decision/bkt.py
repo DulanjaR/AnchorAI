@@ -22,9 +22,13 @@ class BKTUpdate:
     evidence: str
 
 
+SLIP = {"PROBE": 0.2}  # a short unaided check: allow more room for a slip than for a full task
+
+
 def update(p: float | None, tier: str, success: bool) -> BKTUpdate:
     p0 = P_INIT if p is None else p
     g = GUESS[tier]
+    P_SLIP = SLIP.get(tier, globals()["P_SLIP"])
     if success:
         if g >= 1.0:
             return BKTUpdate(p0, p0, "no evidence: the AI produced the solution")
