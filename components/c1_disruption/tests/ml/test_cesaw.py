@@ -100,3 +100,49 @@ def test_evaluation_runs_on_a_small_file_and_is_labelled_real(tmp_path):
     text = cesaw.to_markdown(report, dropped, cesaw.describe(records))
     assert "REAL (CESAW, professional developers)" in text and "SYNTHETIC" not in text
     assert "not students" in text
+
+
+# --- earned-trust gate in the CESAW report (16 Oct 2026) -------------------------------------
+
+OLD_RESULTS = """# Model 1 on CESAW — REAL (CESAW, professional developers)
+
+intro
+
+## Cold start — developers held out in groups (n = 0)
+
+| Method | MAE minutes | MAE log ratio | q10–q90 coverage | n |
+|---|---|---|---|---|
+| model | 80.20 | 0.792 | 0.738 | 60284 |
+| B0 drift = 1.0 | 75.04 | 0.760 | – | 60284 |
+
+## Warm — rolling-origin (sampled developers)
+
+| Method | MAE minutes | MAE log ratio | q10–q90 coverage | n |
+|---|---|---|---|---|
+| model | 82.00 | 0.790 | 0.728 | 13322 |
+"""
+
+
+def test_earlier_results_become_the_before_gate_section_once():
+    before = cesaw.before_section(OLD_RESULTS)
+    assert before.startswith("## Before gate (run of 15 Oct 2026: mean point, no gate)")
+    assert "### Cold start" in before and "# Model 1" not in before
+    assert cesaw.before_section(before + "\nmore") .startswith("## Before gate")
+    assert cesaw.before_section(f"# new\n\n## Summary\n\n{before}") == before  # kept as it is on the next run
+    tables = cesaw.parse_tables(before)
+    assert tables["cold"]["model"] == {"maeMinutes": 80.2, "maeLog": 0.792, "coverage": 0.738}
+    assert tables["cold"]["B0 drift = 1.0"]["coverage"] is None and tables["warm"]["model"]["maeMinutes"] == 82.0
+
+
+def test_report_shows_the_gate_and_keeps_the_before_results(tmp_path):
+    records, dropped = small_world(tmp_path)
+    report = cesaw.evaluate(records, n_estimators=10, n_jobs=1, folds=2)
+    assert report["gate"]["cold"]["openShare"] == 0.0  # an unseen developer never passes the gate
+    warm = report["gate"]["warm"]
+    assert warm["developers"] == 4 and warm["developersEverOpen"] + warm["developersNeverOpen"] == 4
+    assert warm["whereOpen"]["model"]["n"] == warm["open"] == warm["whereOpen"]["B0"]["n"]
+    text = cesaw.to_markdown(report, dropped, cesaw.describe(records), cesaw.before_section(OLD_RESULTS))
+    assert "## Summary: does the gate close the gap to B0?" in text
+    assert "| Cold start MAE minutes | 80.20 |" in text  # the before-gate number, next to the new one
+    assert "## Before gate" in text and "SYNTHETIC" not in text
+    assert ("fell back to B0 for most predictions" in text) == ((warm["openShare"] or 0) < 0.5)

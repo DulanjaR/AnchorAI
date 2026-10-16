@@ -18,7 +18,14 @@ from components.c1_disruption.ml.bandit.context import FEATURE_NAMES
 from components.c1_disruption.ml.bandit.policies import FixedOrderPolicy, MostAcceptedPolicy, RandomPolicy
 from components.c1_disruption.ml.drift import baselines
 from components.c1_disruption.ml.drift.data import clean
-from components.c1_disruption.ml.drift.evaluation import leave_one_student_out, learning_curve, rolling_origin, score
+from components.c1_disruption.ml.drift.evaluation import (
+    gate_students,
+    keep_before,
+    leave_one_student_out,
+    learning_curve,
+    rolling_origin,
+    score,
+)
 from components.c1_disruption.ml.drift.model import DriftModel
 from components.c1_disruption.sim import settings
 from components.c1_disruption.sim.events import CANNOT_PLAN, NO_EFFECT, Event, build_events, event_metrics
@@ -33,11 +40,14 @@ LABEL = "SYNTHETIC — pipeline validation only, not a research finding"
 def model1(world: World, n_estimators: int) -> dict[str, Any]:
     records = clean(world.records)
     methods = {"model": lambda: DriftModel(n_estimators=n_estimators), **{c.name: c for c in baselines.BASELINES}}
-    out: dict[str, Any] = {"records": len(records), "cold": {}, "warm": {}}
+    out: dict[str, Any] = {"records": len(records), "cold": {}, "warm": {}, "gateStudents": {"cold": {}, "warm": {}}}
     for name, factory in methods.items():
-        out["cold"][name] = score(leave_one_student_out(records, factory))
+        cold = leave_one_student_out(records, factory)
+        out["cold"][name] = score(cold)
         warm = rolling_origin(records, factory, min_history_days=1, step_days=settings.ROLLING_STEP_DAYS)
         out["warm"][name] = score(warm)
+        out["gateStudents"]["cold"][name] = gate_students(cold)
+        out["gateStudents"]["warm"][name] = gate_students(warm)
         if name == "model":
             out["learningCurve"] = learning_curve(warm)
     return out
@@ -139,16 +149,23 @@ def to_markdown(report: dict[str, Any]) -> str:
              f"{report['personas']} personas, {report['tasks']} planned tasks; mean ± sd over seeds.", ""]
     for variant in dict.fromkeys(r["variant"] for r in report["runs"]):
         runs = [r for r in report["runs"] if r["variant"] == variant]
-        lines += [f"## Variant: {variant} (SYNTHETIC)", "", "| Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage |",
-                  "|---|---|---|---|---|"]
+        lines += [f"## Variant: {variant} (SYNTHETIC)", "",
+                  "| Model 1 method | cold MAE min | warm MAE min | warm MAE log | warm coverage "
+                  "| students: gate open / closed (warm) |", "|---|---|---|---|---|---|"]
         for name in runs[0]["model1"]["warm"]:
+            counts = [r["model1"].get("gateStudents", {}).get("warm", {}).get(name) for r in runs]
+            gate = ("no gate" if all(c is None for c in counts) else
+                    f"{_mean_sd([c['open'] for c in counts if c])} open / {_mean_sd([c['closed'] for c in counts if c])} closed")
             lines.append("| " + " | ".join([
                 name,
                 _mean_sd([r["model1"]["cold"][name]["maeMinutes"] for r in runs]),
                 _mean_sd([r["model1"]["warm"][name]["maeMinutes"] for r in runs]),
                 _mean_sd([r["model1"]["warm"][name]["maeLog"] for r in runs]),
                 _mean_sd([r["model1"]["warm"][name]["coverage"] for r in runs]),
+                gate,
             ]) + " |")
+        lines += ["", "Gate open / closed = the earned-trust gate's state at each persona's last warm evaluation point "
+                  "(mean over seeds). In cold start it is closed for every persona (no history). Baselines have no gate."]
         lines += ["", "| Event metric (same events) | raw | corrected |", "|---|---|---|"]
         for key in ("ctrrPlanned", "ctrrRealised", "ptvr", "feasibilityTrue", "realisedFeasibility", "planCompletionRate"):
             lines.append(f"| {key} | " + " | ".join(_mean_sd([r["events"]["summary"][p][key] for r in runs]) for p in ("raw", "corrected")) + " |")
@@ -217,9 +234,17 @@ def main(argv: list[str] | None = None) -> None:
                  profile_csv=str(data / "SYNTHETIC_disruption_profile.csv"))
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    (out / "c1_simulation_SYNTHETIC.md").write_text(to_markdown(report) + "\n", encoding="utf-8", newline="\n")
-    (out / "c1_simulation_SYNTHETIC.json").write_text(json.dumps(summary(report), indent=1) + "\n", encoding="utf-8",
-                                                      newline="\n")
+    md, js = out / "c1_simulation_SYNTHETIC.md", out / "c1_simulation_SYNTHETIC.json"
+    # Keep the earlier results in the same files, labelled "Before gate" (planning chat, 16 Oct 2026).
+    before = keep_before(md.read_text(encoding="utf-8") if md.is_file() else None,
+                         "## Before gate (run of 14 Oct 2026, 5-action catalogue: mean point, no gate) — SYNTHETIC")
+    text = to_markdown(report) + "\n" + (f"\n{before}" if before else "")
+    data = summary(report)
+    if js.is_file():
+        old = json.loads(js.read_text(encoding="utf-8"))
+        data["beforeGate"] = old.get("beforeGate", old)
+    md.write_text(text, encoding="utf-8", newline="\n")
+    js.write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(to_markdown(report))
 
 

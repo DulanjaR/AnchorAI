@@ -326,3 +326,22 @@ def test_model_1_in_the_api_corrects_a_student_who_earned_trust(trained):
                                                "timeLostMinutes": 60, "severity": 1, "confirmed": True}).json()
     (log,) = call("POST", f"/api/disruptions/{report['id']}/mvd").json()["taskLog"]
     assert log["correctionSource"] == "model" and log["correctedHours"] > 1  # s1 runs over
+
+
+def test_gate_students_counts_open_and_closed_at_the_last_point():
+    from components.c1_disruption.ml.drift.evaluation import gate_students
+
+    p = Predictions(records=[{"studentId": s} for s in ("a", "a", "b", "c")], log_pred=[0] * 4, log_low=[0] * 4,
+                    log_high=[0] * 4, n_seen=[3, 9, 5, 0], trusted=[False, True, True, False])
+    assert gate_students(p) == {"students": 3, "open": 2, "closed": 1, "everOpen": 2}
+    assert gate_students(Predictions(records=[{"studentId": "a"}], log_pred=[0], log_low=[None], log_high=[None],
+                                     n_seen=[0], trusted=[None])) is None  # baselines have no gate
+
+
+def test_keep_before_wraps_old_results_once():
+    from components.c1_disruption.ml.drift.evaluation import keep_before
+
+    before = keep_before("# Old title\n\n## Variant: planted\n\n| a |", "## Before gate (old run)")
+    assert before == "## Before gate (old run)\n\n\n### Variant: planted\n\n| a |\n"
+    assert keep_before("# New\n\n## Variant\n\n" + before, "## Before gate (other)") == before
+    assert keep_before(None, "## Before gate") is None

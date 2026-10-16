@@ -90,6 +90,37 @@ def learning_curve(p: Predictions, bins: Sequence[int] = (0, 1, 5, 10, 20, 40)) 
     return rows
 
 
+def gate_students(p: Predictions) -> dict[str, int] | None:
+    """How many students had the earned-trust gate open vs closed, at each student's LAST
+    evaluation point (largest n seen; in cold start the only point). None: no gate (baselines)."""
+    if not p.trusted or any(t is None for t in p.trusted):
+        return None
+    last: dict[str, tuple[int, bool]] = {}
+    ever: dict[str, bool] = defaultdict(bool)
+    for r, n, t in zip(p.records, p.n_seen, p.trusted):
+        s = r["studentId"]
+        if s not in last or n >= last[s][0]:
+            last[s] = (n, bool(t))
+        ever[s] = ever[s] or bool(t)
+    open_now = sum(t for _, t in last.values())
+    return {"students": len(last), "open": open_now, "closed": len(last) - open_now, "everOpen": sum(ever.values())}
+
+
+BEFORE_HEADING = "## Before gate"
+
+
+def keep_before(previous: str | None, heading: str) -> str | None:
+    """Earlier results kept in a results file: an existing "Before gate" section as it is, or a
+    whole earlier results file under `heading` (title dropped, headings one level down)."""
+    if not previous:
+        return None
+    if BEFORE_HEADING in previous:
+        return previous[previous.index(BEFORE_HEADING):].rstrip() + "\n"
+    body = [line for line in previous.splitlines() if not line.startswith("# ")]
+    body = ["#" + line if line.startswith("## ") else line for line in body]
+    return "\n".join([heading, "", *body]).rstrip() + "\n"
+
+
 def leave_one_student_out(records: Records, factory: Factory) -> Predictions:
     out = Predictions()
     for student in sorted({r["studentId"] for r in records}):
