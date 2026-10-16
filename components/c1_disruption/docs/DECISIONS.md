@@ -2,6 +2,21 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-16 — After PP1: D-MOVE first, the LLM-persona idea only as a later stress test
+- Source: planning chat, 16 Oct 2026.
+- **D-MOVE carry-over:** not now. After PP1: golden S17+ written and approved first, then the implementation (rules: DECISIONS.md 2026-10-14 "D-MOVE carry-over").
+- **Model 2 LLM-persona idea:** not used for any result. At most an exploratory stress test later, clearly labelled.
+
+## 2026-10-16 — Model 1: optional task category as a feature
+- Source: planning chat, 16 Oct 2026.
+- An optional task **category** — `coding`, `writing`, `reading`, `revision` — is a Model 1 feature, so the model can tell task kinds apart within a type. It must degrade gracefully when the category is missing (CESAW has none). Re-run SYNTHETIC to show whether it lowers error; report honestly if it does not.
+- Implementation (PROPOSED details): `engine.config.TASK_CATEGORIES`; one-hot columns added after the existing features; a missing or unknown category is all zeros, and the columns are added **only if the training data has categories at all**, so data without them (CESAW) gives exactly the model without the feature. API tasks get an optional `category` (stored only when set, so existing task objects and the frozen API cases are unchanged). SYNTHETIC tasks: an optional `category` column in the tasks CSV; when empty, a fixed keyword rule on the title (`sim/personas.infer_category`, PROPOSED). `settings.USE_CATEGORY = True`; `False` is the model without it, for the comparison (`sim/category_ablation.py` → `sim/results/c1_category_SYNTHETIC.md`).
+- The SYNTHETIC generator plants no category drift (only persona P08's writing-task title habit is close to one); none is added for this test, so the result is not built in.
+
+## 2026-10-16 — Approved items confirmed
+- Source: planning chat, 16 Oct 2026.
+- Confirms as approved and done: the earned-trust gate (20 most recent training tasks, minimum 5, model MAE in minutes at least 5% below B0, else drift 1.0; `GATE_LOOKBACK 20`, `GATE_MIN_RECORDS 5`, `GATE_MARGIN 0.05`); the median point (q50; q10–q90 band and formula unchanged); notebook 01 saves the format-2 model; the PP1 demo script runs as persona P01 and prints the gate. The CESAW and SYNTHETIC reruns with the gate keep the earlier results as "Before gate" and show gate open vs closed students per method.
+
 ## 2026-10-16 — Earned-trust gate values approved
 - Source: planning chat, 16 Oct 2026.
 - **Approved:** `GATE_LOOKBACK = 20`, `GATE_MIN_RECORDS = 5`, `GATE_MARGIN = 0.05` (`ml/drift/settings.py`), as proposed in "Model 1 earned-trust gate" below.

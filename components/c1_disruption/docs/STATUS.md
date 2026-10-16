@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`34e8be1` · 2026-10-16 · "C1 Model 1: median point (q50) and earned-trust gate (drift 1.0 until the model beats B0 for the student)" (this update is in the commit after it).
+`0728c2f` · 2026-10-16 · "wip: C1 results files keep the 'Before gate' run and show gate open/closed students per method (reruns in progress)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -22,7 +22,8 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Gate values approved** (lookback 20, minimum 5, margin 5%). **Notebook 01** saves the format-2 model (with the gate) and prints each persona's gate: ready to retrain in Colab. **PP1 demo script** runs as SYNTHETIC persona P01 with Model 1 on: P01's gate is open (model 6.2 min vs own estimate 14.0 min on 20 recent tasks), and the planner uses P01's corrected durations.
 
 ## In progress
-- CESAW rerun and full SYNTHETIC rerun with the gate (both results files keep the earlier run as "Before gate" and show gate open / closed students per method).
+- CESAW rerun and full SYNTHETIC rerun with the gate (both results files keep the earlier run as "Before gate" and show gate open / closed students per method). Slow: the laptop is short of memory (7.7 GB, swapping); running overnight.
+- **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
 - **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
@@ -38,8 +39,12 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - OVERRUN_RISK message wording; "end of window" read as the end of the free stretch the task starts in.
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
+## Planned after PP1 (not now)
+- **D-MOVE carry-over:** golden S17+ first (owner approves), then implement.
+- **Model 2 LLM-persona idea:** not used for results; at most an exploratory stress test later.
+
 ## Next step
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **629 passed** (C1 628 + C4 1), 16 Oct 2026.
+Root `pytest`: **635 passed** (C1 634 + C4 1), 16 Oct 2026.
