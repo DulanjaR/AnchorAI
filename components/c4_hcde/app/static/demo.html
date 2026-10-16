@@ -67,6 +67,14 @@
       <div class="row" style="margin-top:10px"><button id="btnRec" style="flex:0 0 auto">Get recommendation</button></div>
     </div>
 
+    <div id="calCard" class="card hidden">
+      <h2>Before your first <span id="calModule"></span> task</h2>
+      <div class="meta" style="margin-bottom:8px">Three quick questions so the first recommendation fits you. After this, your real results take over.</div>
+      <div id="calQuestions"></div>
+      <div class="row" style="margin-top:10px"><button id="btnCal" style="flex:0 0 auto">Continue</button>
+        <button id="btnCalSkip" style="flex:0 0 auto;background:#fff;color:#333;border:1px solid #ccc">Skip</button></div>
+    </div>
+
     <div id="recCard" class="card hidden">
       <h2>2 · Recommended help</h2>
       <div id="profile" class="meta"></div>
@@ -161,9 +169,24 @@ async function refreshProfile(){
   $("history").innerHTML = h.interactions.length ? h.interactions.map(i => `<div class="history-item">#${i.interaction_id} · <b>${i.skill}</b> (${i.context}) · ${LABEL[i.chosen_tier]||"—"}${i.overridden?" (override)":""} · ${i.outcome||"open"}${i.verified?" ✓ verified":""}${i.checks?` · ${i.checks} check(s)`:""}<br><span>${i.task.slice(0,80)}</span></div>`).join("") : "Nothing yet.";
 }
 
-$("btnRec").onclick = () => busy($("btnRec"), async () => {
+function renderCalibration(c){
+  $("calModule").textContent = c.module;
+  $("calQuestions").innerHTML = c.questions.map(q => {
+    const opts = q.type === "scale"
+      ? [1,2,3,4,5].map(v => `<label style="margin-right:10px"><input type="radio" name="cal_${q.id}" value="${v}"> ${v}${q.labels[v]?` <small>(${q.labels[v]})</small>`:""}</label>`).join("")
+      : q.options.map(o => `<label style="margin-right:12px"><input type="radio" name="cal_${q.id}" value="${o.value}"> ${o.label}</label>`).join("");
+    return `<div style="margin:8px 0"><b>${q.text}</b>${q.optional?" <small>(optional)</small>":""}<div style="margin-top:4px">${opts}</div>${q.note?`<div class="meta" style="font-size:12px">${q.note}</div>`:""}</div>`;
+  }).join("");
+  $("calCard").classList.remove("hidden"); $("recCard").classList.add("hidden");
+}
+const picked = id => { const el = document.querySelector(`input[name="cal_${id}"]:checked`); return el ? el.value : null; };
+
+async function getRecommendation(calibration){
   const minutes = $("minutes").value === "" ? null : Number($("minutes").value);
-  current = await api("/hcde/recommend", {user_id:$("user").value.trim(), task:$("task").value.trim(), minutes_left:minutes});
+  const body = {user_id:$("user").value.trim(), task:$("task").value.trim(), minutes_left:minutes};
+  if (calibration) body.calibration = calibration;
+  $("calCard").classList.add("hidden");
+  current = await api("/hcde/recommend", body);
   chosen = current.recommended_tier;
   $("recCard").classList.remove("hidden"); $("replyBox").classList.add("hidden"); $("checkFeedback").classList.add("hidden"); $("checkMeta").textContent=""; $("answer").value=""; $("chosenNote").textContent=""; $("outcomeNote").textContent="";
   const p = current.decision, prof = current.decision.skill_state;
@@ -172,7 +195,22 @@ $("btnRec").onclick = () => busy($("btnRec"), async () => {
   $("explain").textContent = current.explanation;
   $("factors").innerHTML = "Need score " + p.need + " = " + Object.entries(p.contributions).map(([k,v])=>`<span>${k} ${v}</span>`).join(" + ")
      + (p.memory && p.memory.similar && p.memory.similar.length ? `<br>Memory: ${p.memory.similar.length} similar past task(s)` : "");
+  if (prof.prior_note && prof.observations === 0) $("explain").textContent += " (Starting point " + prof.prior_note + ".)";
+}
+
+$("btnRec").onclick = () => busy($("btnRec"), async () => {
+  const u = $("user").value.trim(), t = $("task").value.trim();
+  const c = await api(`/hcde/users/${encodeURIComponent(u)}/calibration?task=${encodeURIComponent(t)}`);
+  if (c.needs_calibration) { renderCalibration(c); return; }
+  await getRecommendation(null);
 });
+$("btnCal").onclick = () => busy($("btnCal"), async () => {
+  const conf = picked("confidence"), exp = picked("experience");
+  if (!conf || !exp) { alert("Please answer the first two questions (or press Skip)."); return; }
+  await getRecommendation({confidence:Number(conf), experience:exp, preference:picked("preference")});
+  await refreshProfile();
+});
+$("btnCalSkip").onclick = () => busy($("btnCalSkip"), async () => { await getRecommendation(null); });
 
 $("btnRespond").onclick = () => busy($("btnRespond"), async () => {
   const r = await api(`/hcde/interactions/${current.interaction_id}/respond`, {tier: chosen, student_attempt: $("attempt").value.trim() || null});

@@ -208,3 +208,26 @@ def test_sql_execution_accepts_equivalent_answers():
     assert all(compare("t", ref, a, schema)[0].status == "equal" for a in ok)
     assert all(compare("t", ref, a, schema)[0].status == "different" for a in bad)
     assert compare("t", ref, "SELECT nme FROM customers", schema)[0].status == "error"
+
+
+def test_calibration_seeds_first_task_only():
+    client = TestClient(app)
+    task = "Explain the difference between TCP and UDP and when you would use each."
+    user = "cal-user"
+    c = client.get(f"/hcde/users/{user}/calibration", params={"task": task}).json()
+    assert c["needs_calibration"] and [q["id"] for q in c["questions"]] == ["confidence", "experience", "preference"]
+    low = client.post("/hcde/recommend", json={"user_id": user, "task": task,
+                                               "calibration": {"confidence": 1, "experience": "never"}}).json()
+    high = client.post("/hcde/recommend", json={"user_id": "cal-user-2", "task": task,
+                                                "calibration": {"confidence": 5, "experience": "often"}}).json()
+    p_low, p_high = low["decision"]["skill_state"]["prior"], high["decision"]["skill_state"]["prior"]
+    assert p_low < bkt.prior_for(low["difficulty"]) < p_high
+    assert "from your answers" in high["decision"]["skill_state"]["prior_note"]
+    # answered once: not asked again for this subject
+    assert not client.get(f"/hcde/users/{user}/calibration", params={"task": task}).json()["needs_calibration"]
+
+
+def test_fitted_bkt_parameters_loaded():
+    assert bkt.GUESS["EMERGENCY"] == 1.0  # design rule, never fitted
+    assert bkt.GUESS["PROBE"] < bkt.GUESS["HUMAN_FIRST"] < bkt.GUESS["HINT"] < bkt.GUESS["GUIDED"] < bkt.GUESS["SHARED"]
+    assert bkt.prior_for(1) > bkt.prior_for(3) > bkt.prior_for(5)

@@ -116,6 +116,18 @@ class Check(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
+class Calibration(Base):
+    """First-task calibration answers per subject (proposal 3.2): seeds the Capability Profile before
+    there is any history. Self-report only sets the starting point; observed outcomes take over."""
+    __tablename__ = "hcde_calibration"
+    user_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    module: Mapped[str] = mapped_column(String(80), primary_key=True)
+    confidence: Mapped[int] = mapped_column(Integer)            # 1-5
+    experience: Mapped[str] = mapped_column(String(20))         # never / a_few / often
+    preference: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)  # try_first / guidance_early
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
 class Probe(Base):
     __tablename__ = "hcde_probes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

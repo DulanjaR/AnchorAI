@@ -21,7 +21,7 @@ from ..decision.text_index import HybridIndex
 from ..generation.base import generate, grade_probe
 from ..training.compliance import split_probe
 from ..generation.check import check as check_answer_text
-from .db.models import Check, Interaction, LedgerEntry, Probe, SkillStateRow
+from .db.models import Calibration, Check, Interaction, LedgerEntry, Probe, SkillStateRow
 
 BORROW = {"HUMAN_FIRST": 0.0, "HINT": 0.25, "GUIDED": 0.5, "SHARED": 0.75, "EMERGENCY": 1.0}
 TIERS = list(BORROW)
@@ -37,20 +37,92 @@ class NotFound(Exception):
 MAX_SAME_SKILL, W_MODULE, PRIOR_CAP = 0.6, 0.25, 0.75
 
 
-def _prior(db: Session, user_id: str, skill: str, context: str, module: str) -> tuple[float, str | None]:
-    """Starting mastery for a skill-context the student has never done (near vs far transfer)."""
+# ---------------------------------------------------------------- first-task calibration
+CONFIDENCE_PRIOR = {1: 0.10, 2: 0.25, 3: 0.40, 4: 0.55, 5: 0.70}
+EXPERIENCE_SHIFT = {"never": -0.08, "a_few": 0.0, "often": 0.08}
+EXPERIENCE_TEXT = {"never": "never done tasks like this", "a_few": "done tasks like this a few times",
+                   "often": "often done tasks like this"}
+SELF_REPORT_WEIGHT = 0.5  # the rest is the fitted population prior; evidence takes over after that
+
+
+def calibration_questions(module: str) -> list[dict]:
+    subject = module if module and module != "General" else "this subject"
+    return [
+        {"id": "confidence", "text": f"How confident do you feel with {subject} tasks like this one?",
+         "type": "scale", "min": 1, "max": 5, "labels": {"1": "not at all", "3": "somewhat", "5": "very"}},
+        {"id": "experience", "text": "How often have you done tasks like this before?", "type": "choice",
+         "options": [{"value": "never", "label": "Never"}, {"value": "a_few", "label": "A few times"},
+                     {"value": "often", "label": "Often"}]},
+        {"id": "preference", "text": "When you start a task, what do you usually prefer?", "type": "choice", "optional": True,
+         "note": "Saved for your profile; it does not change the recommendation, and you can always pick another level.",
+         "options": [{"value": "try_first", "label": "Try it myself first"},
+                     {"value": "guidance_early", "label": "Some guidance early on"}]},
+    ]
+
+
+def needs_calibration(db: Session, user_id: str, module: str) -> bool:
+    """Only before the first task in a subject: no calibration yet and no observed history there."""
+    if db.get(Calibration, (user_id, module)) is not None:
+        return False
+    seen = db.scalars(select(SkillStateRow).where(SkillStateRow.user_id == user_id, SkillStateRow.module == module,
+                                                  SkillStateRow.observations > 0)).first()
+    return seen is None
+
+
+def _self_report(db: Session, user_id: str, module: str) -> tuple[float, str] | None:
+    c = db.get(Calibration, (user_id, module))
+    if c is None:
+        return None
+    est = CONFIDENCE_PRIOR.get(c.confidence, 0.4) + EXPERIENCE_SHIFT.get(c.experience, 0.0)
+    note = (f"from your answers: confidence {c.confidence}/5 and you have {EXPERIENCE_TEXT.get(c.experience, c.experience)}; "
+            "this is only a starting point until you complete tasks")
+    return min(0.8, max(0.05, est)), note
+
+
+def calibrate(db: Session, user_id: str, module: str, confidence: int, experience: str,
+              preference: str | None = None) -> dict:
+    """Store the answers and re-seed any skill in this subject that has no observations yet."""
+    if confidence not in CONFIDENCE_PRIOR or experience not in EXPERIENCE_SHIFT:
+        raise ValueError("confidence must be 1-5 and experience one of never / a_few / often")
+    c = db.get(Calibration, (user_id, module))
+    if c is None:
+        c = Calibration(user_id=user_id, module=module, confidence=confidence, experience=experience, preference=preference)
+        db.add(c)
+    else:
+        c.confidence, c.experience, c.preference = confidence, experience, preference
+    db.flush()
+    reseeded = []
+    for row in db.scalars(select(SkillStateRow).where(SkillStateRow.user_id == user_id, SkillStateRow.module == module,
+                                                      SkillStateRow.observations == 0)).all():
+        p, note = _prior(db, user_id, row.skill, row.context, module)
+        row.prior = row.mastery = p
+        row.prior_note = note
+        reseeded.append({"skill": row.skill, "context": row.context, "prior": round(p, 3)})
+    db.commit()
+    return {"user_id": user_id, "module": module, "confidence": confidence, "experience": experience,
+            "preference": preference, "reseeded": reseeded}
+
+
+def _prior(db: Session, user_id: str, skill: str, context: str, module: str,
+           difficulty: int | None = None) -> tuple[float, str | None]:
+    """Starting mastery for a skill-context the student has never done (near vs far transfer). With no
+    related history it is the fitted population prior for the task's difficulty (decision/bkt_fit.py)."""
+    base = bkt.prior_for(difficulty)
     from ..decision.context import similarity as ctx_sim
     rows = db.scalars(select(SkillStateRow).where(SkillStateRow.user_id == user_id,
                                                   SkillStateRow.observations > 0)).all()
     same = [r for r in rows if r.skill == skill and r.context != context]
     mod = [r for r in rows if r.module == module and r.skill != skill]
     if not same and not mod:
-        return bkt.P_INIT, None
+        sr = _self_report(db, user_id, module)
+        if sr:  # first task in this subject: blend the population prior with what the student told us
+            return round(min(PRIOR_CAP, SELF_REPORT_WEIGHT * sr[0] + (1 - SELF_REPORT_WEIGHT) * base), 3), sr[1]
+        return base, None
     best = max(same, key=lambda r: ctx_sim(r.context, context) * r.mastery) if same else None
     w_same = min(MAX_SAME_SKILL, ctx_sim(best.context, context)) if best else 0.0
     mod_m = sum(r.mastery for r in mod) / len(mod) if mod else 0.0
     w_mod = min(W_MODULE, 1 - w_same) if mod else 0.0
-    p = w_same * (best.mastery if best else 0) + w_mod * mod_m + (1 - w_same - w_mod) * bkt.P_INIT
+    p = w_same * (best.mastery if best else 0) + w_mod * mod_m + (1 - w_same - w_mod) * base
     p = round(min(PRIOR_CAP, max(0.05, p)), 3)
     if best:
         verb = "strong at" if best.mastery >= 0.7 else "working on"
@@ -62,10 +134,11 @@ def _prior(db: Session, user_id: str, skill: str, context: str, module: str) -> 
     return p, note
 
 
-def _state_row(db: Session, user_id: str, skill: str, context: str = "general", module: str = "General") -> SkillStateRow:
+def _state_row(db: Session, user_id: str, skill: str, context: str = "general", module: str = "General",
+               difficulty: int | None = None) -> SkillStateRow:
     row = db.get(SkillStateRow, (user_id, skill, context))
     if row is None:
-        p, note = _prior(db, user_id, skill, context, module)
+        p, note = _prior(db, user_id, skill, context, module, difficulty)
         row = SkillStateRow(user_id=user_id, skill=skill, context=context, module=module, mastery=p, prior=p,
                             prior_note=note, observations=0, success_streak=0, fail_streak=0,
                             borrowed=0.0, built=0.0, repaid=0.0)
@@ -118,10 +191,20 @@ def memory(db: Session, user_id: str, task: str, k: int = 3, min_sim: float = 0.
     return {"similar": similar, "note": note, "mode": index.last_mode}
 
 
+def calibration_for_task(db: Session, user_id: str, task: str) -> dict:
+    """Whether to ask the calibration questions before recommending for this task."""
+    module = analyze(task).module
+    need = needs_calibration(db, user_id, module)
+    return {"module": module, "needs_calibration": need, "questions": calibration_questions(module) if need else []}
+
+
 def recommend_for(db: Session, user_id: str, task: str, minutes_left: float | None = None,
-                  difficulty_hint: int | None = None) -> Interaction:
+                  difficulty_hint: int | None = None, calibration: dict | None = None) -> Interaction:
     profile = analyze(task, minutes_left, difficulty_hint)
-    row = _state_row(db, user_id, profile.skill, profile.context, profile.module)
+    if calibration:
+        calibrate(db, user_id, profile.module, int(calibration["confidence"]), calibration["experience"],
+                  calibration.get("preference"))
+    row = _state_row(db, user_id, profile.skill, profile.context, profile.module, profile.difficulty)
     mem = memory(db, user_id, task)
     decision = recommend(profile, _as_state(row, _novelty(db, row)), mem["note"])
     d = decision.to_dict()

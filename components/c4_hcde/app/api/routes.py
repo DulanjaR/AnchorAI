@@ -24,11 +24,22 @@ def get_db():
         db.close()
 
 
+class CalibrationIn(BaseModel):
+    confidence: int = Field(..., ge=1, le=5)
+    experience: str = Field(..., pattern="^(never|a_few|often)$")
+    preference: Optional[str] = Field(None, pattern="^(try_first|guidance_early)$")
+
+
+class CalibrationForModuleIn(CalibrationIn):
+    module: str = Field(..., max_length=80)
+
+
 class RecommendIn(BaseModel):
     user_id: str = Field(..., max_length=64, description="pseudonymous id")
     task: str = Field(..., min_length=3, max_length=8000)
     minutes_left: Optional[float] = Field(None, ge=0, description="time until the deadline, if any")
     difficulty_hint: Optional[int] = Field(None, ge=1, le=5)
+    calibration: Optional[CalibrationIn] = Field(None, description="first-task answers, if the user just gave them")
 
 
 class RespondIn(BaseModel):
@@ -70,7 +81,22 @@ def status() -> dict:
 
 @router.post("/recommend")
 def recommend(body: RecommendIn, db: Session = Depends(get_db)) -> dict:
-    return _interaction(service.recommend_for(db, body.user_id, body.task, body.minutes_left, body.difficulty_hint))
+    cal = body.calibration.model_dump() if body.calibration else None
+    return _interaction(service.recommend_for(db, body.user_id, body.task, body.minutes_left, body.difficulty_hint, cal))
+
+
+@router.get("/users/{user_id}/calibration")
+def calibration_check(user_id: str, task: str, db: Session = Depends(get_db)) -> dict:
+    """Ask this before /recommend: on a user's first task in a subject it returns the calibration questions."""
+    return service.calibration_for_task(db, user_id, task)
+
+
+@router.post("/users/{user_id}/calibration")
+def calibration_save(user_id: str, body: CalibrationForModuleIn, db: Session = Depends(get_db)) -> dict:
+    try:
+        return service.calibrate(db, user_id, body.module, body.confidence, body.experience, body.preference)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
 
 
 @router.post("/interactions/{interaction_id}/respond")

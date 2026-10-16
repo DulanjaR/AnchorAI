@@ -1,0 +1,45 @@
+{
+ "source": "simulated attempt log (parameter recovery)",
+ "fitted_at": "2026-10-16T15:34:27+00:00",
+ "attempts": 10800,
+ "students": 300,
+ "guess": {
+  "EMERGENCY": 0.943,
+  "GUIDED": 0.63,
+  "HINT": 0.513,
+  "HUMAN_FIRST": 0.174,
+  "PROBE": 0.106,
+  "SHARED": 0.834
+ },
+ "slip": {
+  "EMERGENCY": 0.018,
+  "GUIDED": 0.132,
+  "HINT": 0.126,
+  "HUMAN_FIRST": 0.103,
+  "PROBE": 0.22,
+  "SHARED": 0.103
+ },
+ "learn": {
+  "EMERGENCY": 0.01,
+  "GUIDED": 0.017,
+  "HINT": 0.163,
+  "HUMAN_FIRST": 0.174,
+  "PROBE": 0.013,
+  "SHARED": 0.001
+ },
+ "prior_by_level": {
+  "hard": 0.157,
+  "easy": 0.402,
+  "medium": 0.234
+ },
+ "heldout": {
+  "assistance-aware": {
+   "auc": 0.7427,
+   "rmse": 0.4264
+  },
+  "standard": {
+   "auc": 0.6243,
+   "rmse": 0.4531
+  }
+ }
+}
