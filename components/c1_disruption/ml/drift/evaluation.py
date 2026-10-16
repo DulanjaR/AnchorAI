@@ -32,6 +32,7 @@ class Predictions:
     log_low: list[float | None] = field(default_factory=list)
     log_high: list[float | None] = field(default_factory=list)
     n_seen: list[int] = field(default_factory=list)  # the student's training records at prediction time
+    trusted: list[bool | None] = field(default_factory=list)  # earned-trust gate open (None: no gate)
 
     def add(self, records: Records, model: Any, n_seen: int) -> None:
         if not records:
@@ -46,12 +47,14 @@ class Predictions:
             self.log_low.extend([None] * len(records))
             self.log_high.extend([None] * len(records))
         self.n_seen.extend([n_seen] * len(records))
+        gate = getattr(model, "is_trusted", None)
+        self.trusted.extend(gate(r["studentId"]) if gate else None for r in records)
 
 
 def score(p: Predictions) -> dict[str, float | None]:
     """MAE (minutes), MAE (log ratio), interval coverage."""
     if not p.records:
-        return {"maeMinutes": None, "maeLog": None, "coverage": None, "n": 0}
+        return {"maeMinutes": None, "maeLog": None, "coverage": None, "n": 0, "trustedShare": None}
     y = log_drift(p.records)
     pred = np.array(p.log_pred)
     est = np.array([r["estimatedMinutes"] for r in p.records], dtype=float)
@@ -61,6 +64,9 @@ def score(p: Predictions) -> dict[str, float | None]:
         "maeLog": float(np.mean(np.abs(pred - y))),
         "coverage": None,
         "n": len(y),
+        # Share of predictions where the earned-trust gate let the model correct (None: no gate).
+        "trustedShare": (float(np.mean([bool(t) for t in p.trusted]))
+                         if p.trusted and all(t is not None for t in p.trusted) else None),
     }
     if all(v is not None for v in p.log_low):
         low, high = np.array(p.log_low, dtype=float), np.array(p.log_high, dtype=float)
@@ -78,6 +84,7 @@ def learning_curve(p: Predictions, bins: Sequence[int] = (0, 1, 5, 10, 20, 40)) 
         sub = Predictions(
             [p.records[i] for i in idx], [p.log_pred[i] for i in idx], [p.log_low[i] for i in idx],
             [p.log_high[i] for i in idx], [p.n_seen[i] for i in idx],
+            [p.trusted[i] for i in idx] if p.trusted else [],
         )
         rows.append({"nFrom": lo, "nTo": None if hi == 10**9 else hi, **score(sub)})
     return rows

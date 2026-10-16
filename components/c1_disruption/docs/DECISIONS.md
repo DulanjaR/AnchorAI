@@ -2,6 +2,20 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-16 — Model 1 point estimate: median (q50) instead of the mean
+- Source: planning chat, 16 Oct 2026.
+- The forest's point estimate f(x) is now the **median (q50)** of the log drift (`settings.POINT_QUANTILE = 0.5`), so outlier days pull it less. The q10–q90 band is unchanged. The rest of the formula is unchanged: ŷ = f(x) + w · r̄_s, w = n / (n + k), k by cross-validation; the out-of-fold residuals behind r̄_s are measured from the same median f(x) (they must use the same f).
+- `DriftModel(point_quantile="mean")` reproduces the model before 16 Oct (kept for comparisons).
+
+## 2026-10-16 — Model 1 earned-trust gate
+- Source: planning chat, 16 Oct 2026.
+- The model corrects a student's estimates **only if it has proven, on that student's own recent tasks, that it beats B0** (trusting the raw estimate). Otherwise that student gets drift 1.0 (their own estimate). Goal: Model 1 must not make plans worse than trusting the estimate.
+- Implementation (`ml/drift/model.py` `gate_evidence`, settings in `ml/drift/settings.py`): at training time, for each student, the `GATE_LOOKBACK` (20) most recent training records by date; for each, an honest model prediction = out-of-fold forest point (the record was not in that forest's training) + the shrinkage term from the student's records of **earlier days only** (rolling origin). Model MAE vs B0 MAE in minutes on the same records. Gate open only with ≥ `GATE_MIN_RECORDS` (5) records and model MAE < (1 − `GATE_MARGIN`) × B0 MAE, margin 0.05.
+- Gate closed (incl. a new student, n = 0) → point = drift 1.0; the q10–q90 band stays, widened to contain the estimate. The API logs `correctionSource: "gate"` for these tasks (`"model"` when corrected, `"fallback"` when no model).
+- **PROPOSED (values and details not given by the planning chat):** lookback 20 records, minimum 5, margin 5%, minutes as the error unit, the forest part of the evidence out-of-fold rather than refitted per day (a full per-day refit is far too slow on CESAW), the band kept and widened when closed. `GATE_ENABLED = False` switches the gate off for comparisons.
+- Model files: format 2 (saved with the gate evidence); a format-1 file made before is refused → drift 1.0 until retrained in notebook 01.
+- Consequence: in cold start (no history) the model equals B0 by design. The committed SYNTHETIC simulation results (`sim/results/`) were made before this change and are **not** edited by hand; they must be rerun to reflect it.
+
 ## 2026-10-15 — Commit authorship: owner only, no attribution trailers
 - Source: owner, 15 Oct 2026.
 - All commits are authored and committed by the owner's git identity (Ravindu, `ravindu912`) with no `Co-Authored-By` lines (CLAUDE.md §0.3 rule 4).

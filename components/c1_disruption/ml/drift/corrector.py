@@ -2,7 +2,8 @@
 
 Graceful fallback (CLAUDE.md §3.6): no model, an untrained model, or any error
 while predicting → drift = 1.0 (the user's estimate), source 'fallback'. The
-engine keeps working either way.
+engine keeps working either way. Earned-trust gate closed for the student (16 Oct
+2026) → drift 1.0 too, source 'gate' (the range stays, widened to contain the estimate).
 """
 import logging
 from pathlib import Path
@@ -43,6 +44,8 @@ class ModelCorrector:
             log.exception("Drift model failed; falling back to drift 1.0")
             return Correction(hours, hours, hours, "fallback")
         point, low, high = (m / 60 for m in pred.corrected_minutes(hours * 60))
+        if not pred.trusted:  # earned-trust gate closed: the student's own estimate
+            return Correction(hours, min(low, hours), max(high, hours), "gate")
         # Keep low ≤ point ≤ high for the engine (quantiles of a forest can cross the mean).
         return Correction(point, min(low, point), max(high, point), "model")
 

@@ -2,12 +2,17 @@
 
     ŷ = f(x) + w · r̄_s,   w = n_s / (n_s + k)
 
-f = pooled quantile regression forest on log drift (all students), r̄_s = the
-student's mean residual y − f(x) on their own training records, computed from
-OUT-OF-FOLD forest predictions (in-sample forest residuals are close to 0 and
-would hide a student's real drift). k is chosen from settings.K_GRID by
-leave-one-record-out on the training data only. A day-1 student (n = 0) gets f(x).
-The q10/q90 range is shifted by the same w · r̄_s.
+f = pooled quantile regression forest on log drift (all students); its point is the
+median q50 (settings.POINT_QUANTILE, 16 Oct 2026). r̄_s = the student's mean residual
+y − f(x) on their own training records, computed from OUT-OF-FOLD forest predictions
+(in-sample forest residuals are close to 0 and would hide a student's real drift). k is
+chosen from settings.K_GRID by leave-one-record-out on the training data only. The
+q10/q90 range is shifted by the same w · r̄_s.
+
+Earned-trust gate (settings.GATE_*, 16 Oct 2026): ŷ is used for a student only if, on
+that student's most recent training records, it beat B0 (drift 1.0) by the margin.
+Otherwise, and for a student with too little evidence (a day-1 student, n = 0), the
+point is drift 1.0 (log 0) and the range is widened to contain it.
 
 Library: quantile-forest (RandomForestQuantileRegressor, scikit-learn API); see
 DECISIONS.md for why.
@@ -31,6 +36,7 @@ class DriftPrediction:
     log_high: float
     n: int  # the student's training records
     weight: float  # w = n / (n + k)
+    trusted: bool = True  # False = the gate is closed for this student: drift 1.0
 
     @property
     def drift(self) -> float:
@@ -39,6 +45,49 @@ class DriftPrediction:
     def corrected_minutes(self, estimated_minutes: float) -> tuple[float, float, float]:
         """(point, low, high) minutes for a task estimated at `estimated_minutes`."""
         return tuple(float(estimated_minutes * np.exp(v)) for v in (self.log_point, self.log_low, self.log_high))
+
+
+@dataclass(frozen=True)
+class Trust:
+    """Gate evidence for one student (most recent records, honest predictions)."""
+
+    n_recent: int
+    model_mae: float | None  # minutes
+    b0_mae: float | None     # minutes
+    trusted: bool
+
+
+def gate_evidence(
+    records: Sequence[Mapping[str, Any]], y: np.ndarray, oof: np.ndarray, k: float,
+    lookback: int = settings.GATE_LOOKBACK, min_records: int = settings.GATE_MIN_RECORDS,
+    margin: float = settings.GATE_MARGIN,
+) -> dict[str, Trust]:
+    """For each student: on their `lookback` most recent records (by date), the model's
+    honest prediction = out-of-fold forest point + w · mean residual of the student's
+    records from EARLIER days (w with that earlier count). Compared with B0 (log 0) in
+    minutes. Open only with >= min_records of evidence and model MAE < (1 − margin) · B0 MAE."""
+    by_student: dict[str, list[int]] = defaultdict(list)
+    for i, r in enumerate(records):
+        by_student[r["studentId"]].append(i)
+    residuals = y - oof
+    out = {}
+    for student, idx in by_student.items():
+        idx = sorted(idx, key=lambda i: (records[i]["date"], i))
+        recent = idx[-lookback:] if lookback > 0 else []
+        model_err, b0_err = [], []
+        for i in recent:
+            earlier = [j for j in idx if records[j]["date"] < records[i]["date"]]
+            n = len(earlier)
+            w = n / (n + k) if (n + k) > 0 else 0.0
+            shift = w * float(np.mean(residuals[earlier])) if n else 0.0
+            est, actual = records[i]["estimatedMinutes"], records[i]["actualMinutes"]
+            model_err.append(abs(est * np.exp(oof[i] + shift) - actual))
+            b0_err.append(abs(est - actual))
+        m = float(np.mean(model_err)) if model_err else None
+        b = float(np.mean(b0_err)) if b0_err else None
+        trusted = len(recent) >= min_records and m is not None and m < (1 - margin) * b
+        out[student] = Trust(len(recent), m, b, trusted)
+    return out
 
 
 def choose_k(students: Sequence[str], residuals: np.ndarray, grid: Sequence[float] = settings.K_GRID) -> float:
@@ -77,11 +126,16 @@ class DriftModel:
         quantiles: tuple[float, float] = settings.QUANTILES,
         n_estimators: int = settings.N_ESTIMATORS,
         random_state: int = settings.RANDOM_STATE,
+        gate: bool = settings.GATE_ENABLED,
+        point_quantile: float | str = settings.POINT_QUANTILE,
     ) -> None:
         self.k_fixed = k  # None = choose by cross-validation
         self.quantiles = quantiles
         self.n_estimators = n_estimators
         self.random_state = random_state
+        self.gate = gate
+        self.point_quantile = point_quantile  # 0.5 = median; "mean" = the model before 16 Oct 2026
+        self.trust: dict[str, Trust] = {}  # student → gate evidence
         self.k: float | None = None
         self.forest: RandomForestQuantileRegressor | None = None
         self.offsets: dict[str, tuple[int, float]] = {}  # student → (n, mean residual)
@@ -109,7 +163,7 @@ class DriftModel:
         folds = min(settings.RESIDUAL_FOLDS, len(records))
         for train_idx, test_idx in KFold(folds, shuffle=True, random_state=self.random_state).split(X):
             f = self._forest().fit(X[train_idx], y[train_idx])
-            oof[test_idx] = f.predict(X[test_idx], quantiles="mean")
+            oof[test_idx] = f.predict(X[test_idx], quantiles=self.point_quantile)
         residuals = y - oof
 
         self.k = self.k_fixed if self.k_fixed is not None else choose_k(students, residuals)
@@ -117,6 +171,7 @@ class DriftModel:
         for s, r in zip(students, residuals):
             sums[s].append(float(r))
         self.offsets = {s: (len(v), float(np.mean(v))) for s, v in sums.items()}
+        self.trust = gate_evidence(records, y, oof, self.k) if self.gate else {}
         self.forest = self._forest().fit(X, y)
         self.n_records = len(records)
         return self
@@ -126,19 +181,30 @@ class DriftModel:
         k = self.k or 0.0
         return n, (n / (n + k) if (n + k) > 0 else 0.0)
 
+    def is_trusted(self, student_id: str) -> bool:
+        """The gate is open for this student (always True with the gate switched off)."""
+        if not self.gate:
+            return True
+        trust = self.trust.get(student_id)
+        return trust is not None and trust.trusted
+
     def predict(self, records: Sequence[Mapping[str, Any]]) -> list[DriftPrediction]:
         if self.forest is None:
             raise RuntimeError("DriftModel is not trained")
         if not records:
             return []
         X = features(records)
-        point = self.forest.predict(X, quantiles="mean")
+        point = self.forest.predict(X, quantiles=self.point_quantile)
         low, high = np.asarray(self.forest.predict(X, quantiles=list(self.quantiles))).T
         out = []
         for r, p, lo, hi in zip(records, point, low, high):
             n, w = self.weight(r["studentId"])
             shift = w * self.offsets.get(r["studentId"], (0, 0.0))[1]
-            out.append(DriftPrediction(float(p + shift), float(lo + shift), float(hi + shift), n, w))
+            p, lo, hi = float(p + shift), float(lo + shift), float(hi + shift)
+            if self.is_trusted(r["studentId"]):
+                out.append(DriftPrediction(p, lo, hi, n, w))
+            else:  # gate closed: the student's own estimate, range widened to contain it
+                out.append(DriftPrediction(0.0, min(lo, 0.0), max(hi, 0.0), n, w, trusted=False))
         return out
 
     def predict_log(self, records: Sequence[Mapping[str, Any]]) -> np.ndarray:

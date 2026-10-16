@@ -32,7 +32,7 @@ class Correction:
     point_hours: float
     low_hours: float
     high_hours: float
-    source: str  # 'model' or 'fallback'
+    source: str  # 'model', 'gate' (earned-trust gate closed: drift 1.0) or 'fallback'
 
 
 @dataclass(frozen=True)

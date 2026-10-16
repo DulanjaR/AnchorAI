@@ -48,7 +48,7 @@ and every earlier-deadline task. Only deadlines on the plan day are checked.
   0 = on time; +0.405 = 50% over; symmetric for over- and under-runs.
 - **Features:** task type, estimated minutes, start hour, day of week (weekend flag),
   priority score.
-- **Pooled model:** one Random Forest over all students' records.
+- **Pooled model:** one Random Forest over all students' records; its point is the **median (q50)** of the log drift (16 Oct 2026; before: the mean).
 - **Per-student shrinkage:** `ŷ = f(x) + w · r̄_s`, with `r̄_s` the student's mean
   residual `y − f(x)` on their own past records and `w = n_s ÷ (n_s + k)`. **k is chosen by
   cross-validation** over a fixed grid. Day-1 students (n = 0) get the pooled `f(x)`.
@@ -64,6 +64,7 @@ and every earlier-deadline task. Only deadlines on the plan day are checked.
   - Measures: MAE in minutes, MAE of the log ratio, interval coverage (share of actuals inside q10–q90; nominal 80%), learning curve (MAE against n).
   - No tuning on test data: k is chosen by cross-validation inside the training fold only.
 - **Exclusion rule (9 Oct 2026):** time lost to a confirmed disruption is not task time.
+- **Earned-trust gate (16 Oct 2026):** the correction is used for a student only if, on their 20 most recent training tasks (honest predictions: out-of-fold forest + shrinkage from earlier days only), its error in minutes was at least 5% below B0's (at least 5 tasks). Otherwise drift = 1.0 for that student; a new student always starts at 1.0. So in cold start the model equals B0 by design.
 - **Fallback:** model unavailable or untrained → drift = 1.0; the engine keeps working.
 
 ## 4. Model 2 — Strategy Personalizer (lightweight)

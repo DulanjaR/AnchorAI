@@ -31,6 +31,15 @@ def test_round_trip_gives_identical_predictions(saved):
     loaded, _ = load_model(path)
     assert loaded.predict(QUERIES) == model.predict(QUERIES)
     assert loaded.k == model.k and loaded.offsets == model.offsets
+    assert loaded.trust == model.trust  # earned-trust gate evidence is saved with the model
+
+
+def test_metadata_records_the_median_point_and_the_gate(saved):
+    _, _, meta = saved
+    assert FORMAT_VERSION == 2  # files from before the gate (format 1) are refused → drift 1.0
+    assert meta["pointQuantile"] == 0.5
+    assert meta["gate"] == {"enabled": True, "lookback": 20, "minRecords": 5, "margin": 0.05}
+    assert meta["trustedStudents"] == 6
 
 
 def test_metadata_file(saved):

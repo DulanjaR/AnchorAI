@@ -14,7 +14,8 @@ from components.c1_disruption.ml.drift.evaluation import (
     rolling_origin,
     score,
 )
-from components.c1_disruption.ml.drift.model import DriftModel, choose_k
+from components.c1_disruption.ml.drift import settings
+from components.c1_disruption.ml.drift.model import DriftModel, choose_k, gate_evidence
 from components.c1_disruption.tests.ml import fixtures
 
 FAST = 40  # trees in tests (the real setting is ml/drift/settings.py)
@@ -85,13 +86,71 @@ def test_planted_student_drift_is_recovered(trained):
     assert high.n == 60 and 0 < high.weight <= 1
 
 
-def test_day_one_student_gets_the_pooled_estimate(trained):
-    query = {"taskType": "Analog", "priority": "Medium", "estimatedMinutes": 60, "date": "2026-10-07", "startHour": 10}
-    new, known = trained.predict([{**query, "studentId": "brand-new"}, {**query, "studentId": "s1"}])
-    pooled = float(trained.forest.predict(features([query]), quantiles="mean")[0])
-    assert (new.n, new.weight) == (0, 0.0)
-    assert new.log_point == pytest.approx(pooled)
-    assert known.log_point != pytest.approx(pooled)
+QUERY = {"taskType": "Analog", "priority": "Medium", "estimatedMinutes": 60, "date": "2026-10-07", "startHour": 10}
+
+
+def test_day_one_student_gets_their_own_estimate_until_the_model_has_earned_trust(trained):
+    # Earned-trust gate (16 Oct 2026): no evidence yet → drift 1.0, range widened to contain it.
+    new, known = trained.predict([{**QUERY, "studentId": "brand-new"}, {**QUERY, "studentId": "s1"}])
+    assert (new.n, new.weight, new.trusted, new.log_point) == (0, 0.0, False, 0.0)
+    assert new.log_low <= 0.0 <= new.log_high
+    assert known.trusted and known.log_point > 0.25
+
+
+def test_without_the_gate_a_day_one_student_gets_the_pooled_median(data):
+    model = DriftModel(n_estimators=FAST, gate=False).fit(data)
+    (new,) = model.predict([{**QUERY, "studentId": "brand-new"}])
+    pooled_median = float(model.forest.predict(features([QUERY]), quantiles=0.5)[0])
+    assert new.trusted and new.log_point == pytest.approx(pooled_median)
+
+
+def test_the_point_is_the_median_and_mean_reproduces_the_old_model(data):
+    assert settings.POINT_QUANTILE == 0.5
+    old = DriftModel(n_estimators=FAST, gate=False, point_quantile="mean").fit(data)
+    (p,) = old.predict([{**QUERY, "studentId": "brand-new"}])
+    assert p.log_point == pytest.approx(float(old.forest.predict(features([QUERY]), quantiles="mean")[0]))
+
+
+# --- earned-trust gate ----------------------------------------------------------------------
+
+def test_gate_is_open_for_every_fixture_student_with_planted_drift(trained):
+    assert all(t.trusted and t.n_recent == settings.GATE_LOOKBACK for t in trained.trust.values())
+    assert all(t.model_mae < t.b0_mae for t in trained.trust.values())
+
+
+def test_gate_stays_closed_for_a_student_whose_estimates_are_already_right(data):
+    exact = [{**r, "studentId": "exact", "actualMinutes": r["estimatedMinutes"]} for r in data if r["studentId"] == "s3"]
+    model = DriftModel(n_estimators=FAST).fit(data + exact)
+    assert model.trust["exact"].b0_mae == 0 and not model.is_trusted("exact")
+    (p,) = model.predict([{**QUERY, "studentId": "exact"}])
+    assert (p.trusted, p.log_point) == (False, 0.0)
+
+
+def test_gate_needs_enough_evidence_and_respects_the_margin():
+    records = [{"studentId": "a", "estimatedMinutes": 60, "actualMinutes": 90, "date": f"2026-09-0{d}"} for d in (1, 2, 3)]
+    y = np.log(np.full(3, 1.5))
+    perfect = y.copy()  # an oracle forest: model error 0, B0 error 30 min
+    assert not gate_evidence(records, y, perfect, k=0, min_records=5)["a"].trusted   # 3 < 5 records
+    assert gate_evidence(records, y, perfect, k=0, min_records=3)["a"].trusted
+    assert not gate_evidence(records, y, perfect, k=0, min_records=3, margin=1.0)["a"].trusted
+
+
+def test_gate_evidence_uses_only_earlier_days_for_the_shrinkage_term():
+    # Forest says 0 (no drift); the student's residuals are +log 2 on day 1 and day 2.
+    records = [{"studentId": "a", "estimatedMinutes": 60, "actualMinutes": 120, "date": d}
+               for d in ("2026-09-01", "2026-09-02")]
+    y, oof = np.log(np.full(2, 2.0)), np.zeros(2)
+    t = gate_evidence(records, y, oof, k=0, min_records=1, lookback=2)["a"]
+    # Day 1 has no earlier day → model = 60 min (error 60); day 2 uses day 1 → 120 min (error 0).
+    assert t.model_mae == pytest.approx(30) and t.b0_mae == pytest.approx(60) and t.trusted
+
+
+def test_switching_the_gate_off_restores_ungated_predictions(data):
+    gated, ungated = DriftModel(n_estimators=FAST).fit(data), DriftModel(n_estimators=FAST, gate=False).fit(data)
+    queries = [{**QUERY, "studentId": s} for s in ("s1", "s4", "brand-new")]
+    g, u = gated.predict(queries), ungated.predict(queries)
+    assert [p.log_point for p in g[:2]] == pytest.approx([p.log_point for p in u[:2]])  # trusted students: same
+    assert g[2].log_point == 0.0 and u[2].log_point != 0.0
 
 
 def test_range_contains_the_point_and_converts_to_minutes(trained):
@@ -195,7 +254,14 @@ def test_null_persona_model_does_not_invent_drift():
 
 
 def test_score_of_nothing():
-    assert score(Predictions()) == {"maeMinutes": None, "maeLog": None, "coverage": None, "n": 0}
+    assert score(Predictions()) == {"maeMinutes": None, "maeLog": None, "coverage": None, "n": 0, "trustedShare": None}
+
+
+def test_score_reports_how_often_the_gate_let_the_model_correct(warm, data):
+    assert 0 <= score(warm["model"])["trustedShare"] <= 1
+    assert score(warm["B0 drift = 1.0"])["trustedShare"] is None  # baselines have no gate
+    cold = score(leave_one_student_out(data, fast_model))
+    assert cold["trustedShare"] == 0.0  # an unseen student never passes the gate
 
 
 # --- fallback ---------------------------------------------------------------------------------
@@ -218,6 +284,12 @@ def test_a_failing_model_falls_back_and_planning_continues(trained, monkeypatch)
     assert corrector.correct("s1", TASK, CTX).source == "fallback"
 
 
+def test_a_closed_gate_gives_the_estimate_with_source_gate(trained):
+    c = ModelCorrector(trained).correct("brand-new", TASK, CTX)
+    assert (c.point_hours, c.source) == (2, "gate")
+    assert c.low_hours <= 2 <= c.high_hours
+
+
 def test_a_trained_model_corrects_with_an_ordered_range(trained):
     c = ModelCorrector(trained).correct("s1", TASK, CTX)
     assert c.source == "model"
@@ -234,9 +306,23 @@ def test_model_1_plugged_into_the_api(trained):
                                                  "deadline": "2026-10-07T23:59", "plannedDate": "2026-10-07"}).json()
     report = ctx.call("POST", "/api/disruptions", body={"date": "2026-10-07", "type": "transport_delay", "start": "09:00",
                                                          "timeLostMinutes": 60, "severity": 1, "confirmed": True}).json()
-    ctx.store.set("users", "s1", ctx.store.get("users", "u1"))  # "s1" has history in the fixture
     mvd = ctx.call("POST", f"/api/disruptions/{report['id']}/mvd").json()
     assert mvd["modelOn"] is True
     (log,) = mvd["taskLog"]
-    assert log["taskId"] == task["id"] and log["correctionSource"] == "model"
+    # "u1" has no history: the gate keeps their own estimate.
+    assert log["taskId"] == task["id"] and log["correctionSource"] == "gate" and log["correctedHours"] == 1
     assert log["correctedLowHours"] <= log["correctedHours"] <= log["correctedHighHours"]
+
+
+def test_model_1_in_the_api_corrects_a_student_who_earned_trust(trained):
+    from components.c1_disruption.tests.api.client import setup
+
+    ctx = setup("2026-10-07T09:00", corrector=ModelCorrector(trained))
+    call = lambda method, path, body=None: ctx.call(method, path, user="s1", body=body)  # "s1" has fixture history
+    call("PUT", "/api/me/settings", {"workStart": "09:00", "workEnd": "18:00"})
+    call("POST", "/api/tasks", {"title": "Lab", "type": "Digital", "priority": "High", "estimatedHours": 1,
+                                "deadline": "2026-10-07T23:59", "plannedDate": "2026-10-07"})
+    report = call("POST", "/api/disruptions", {"date": "2026-10-07", "type": "transport_delay", "start": "09:00",
+                                               "timeLostMinutes": 60, "severity": 1, "confirmed": True}).json()
+    (log,) = call("POST", f"/api/disruptions/{report['id']}/mvd").json()["taskLog"]
+    assert log["correctionSource"] == "model" and log["correctedHours"] > 1  # s1 runs over

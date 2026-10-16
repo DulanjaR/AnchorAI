@@ -19,9 +19,12 @@ import numpy
 import quantile_forest
 import sklearn
 
+from components.c1_disruption.ml.drift import settings
 from components.c1_disruption.ml.drift.model import DriftModel
 
-FORMAT_VERSION = 1
+# 2 (16 Oct 2026): median point + earned-trust gate. A version-1 file (made before) is
+# refused, so the API falls back to drift 1.0 until the model is retrained.
+FORMAT_VERSION = 2
 
 
 def metadata_path(model_path: str | Path) -> Path:
@@ -49,6 +52,10 @@ def save_model(model: DriftModel, path: str | Path, dataset: str) -> dict[str, A
         "synthetic": dataset == "SYNTHETIC",
         "k": model.k,
         "quantiles": list(model.quantiles),
+        "pointQuantile": model.point_quantile,
+        "gate": {"enabled": model.gate, "lookback": settings.GATE_LOOKBACK, "minRecords": settings.GATE_MIN_RECORDS,
+                 "margin": settings.GATE_MARGIN},
+        "trustedStudents": sum(model.is_trusted(s) for s in model.offsets),
         "libraries": _versions(),
     }
     joblib.dump(model, path)
