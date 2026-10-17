@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`7b76d7a` · 2026-10-17 · "C1 rearranger: engine/rearrange.py reproduces the approved golden R01-R08" (this update is in the commit after it).
+`4eff6e5` · 2026-10-17 · "C1 API: rearranger endpoints (propose, choose A-E, accept/edit/reject), location and effort fields, routine" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -25,9 +25,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Notebooks 01–04 on Colab (17 Oct):** setup clones once into `/content/AnchorAI`, installs only `notebooks/requirements.txt` (no web server), prints versions, stops with "Runtime → Restart session, then run from cell 2" if a loaded package was replaced; progress lines with elapsed seconds; charts labelled SYNTHETIC / REAL (MAE by method, learning curve, predicted vs actual, gate per student; 02: acceptance over time). **All four run top to bottom** in a clean environment with only the notebook packages (01: 68 s, 4 charts; 02: 9 s, 1 chart; 03: 951 s, 8 charts; 04 quick: 266 s, 4 charts). Ready for Colab.
 - **Rearranger** `engine/rearrange.py` (owner-approved R01–R08, all eight reproduced exactly; plus unit tests: deadline day, horizon, deadline time, early warning, effort rounding, input never changed). Settings in `engine/config.py` (horizon 7, sessions 30–120, effort step 5, locations).
 - **Rearranger in the API:** `POST /api/rearrange` (proposal for the day's Move tasks + effort tasks over 7 days), `choose` (A–E), `accept` / `edit` / `reject` (logged for Model 2, `kind: "rearrange"`), `POST /api/tasks/:id/sessions/done`; optional task fields `location`, `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`; optional `routine` in settings (located study windows). Frozen API cases unchanged. Docs: API.md.
+- **Web demo rebuilt (17 Oct):** the 7-day week calendar is the main screen, everything else is a popup (task form with location pre-filled from the routine and effort fields; setup with routine, protected time and calendar sync; disruption; today's MVD; the rest-of-the-week proposal with reasons; options A–E dialog; task details with "why it is here"; start prompts). Simulated clock drives reminders, "Time to start" quick replies, the +15 prompt, the silent +30 and "What happened?" on return, and "Delayed on the way?" with simulated motion. Checked in a headless browser; tested through the demo app.
 
 ## In progress
-- Web demo rebuild: week calendar as the main screen, everything else in popups; rearranger in the API (options A–E dialog), location + effort fields, simulated clock with start prompts.
+- Nothing running.
 - **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
@@ -36,6 +37,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- Rearranger: a moved task waiting for a decision keeps the free time its option C would use, so a less urgent task in the same run does not take it (DECISIONS.md 2026-10-17 web demo entry).
 - Model 1 gate details not covered by the approval (DECISIONS.md 2026-10-16): error in minutes, out-of-fold forest in the evidence, band widened when closed.
 - CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
 - **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
@@ -52,4 +54,4 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **690 passed, 2 skipped** (C1 689 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.
+Root `pytest`: **694 passed, 2 skipped** (C1 693 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.

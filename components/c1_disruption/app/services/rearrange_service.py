@@ -139,10 +139,16 @@ def _apply(store: Any, user_id: str, rec: Record, placements: list[dict[str, Any
         if c["action"] == "place":
             by_task.setdefault(c["taskId"], []).append(c)
     effort_ids = {e["id"] for e in rec["input"]["effort"]}
+    reasons = {d["taskId"]: next(o["reason"] for o in d["options"] if o["code"] == rec["choices"].get(d["taskId"]))
+               for d in rec["result"]["needsDecision"] if d["taskId"] in rec["choices"]}
     for task_id, places in by_task.items():
         task = store.get("tasks", task_id)
         sessions = [{"date": p["date"], "start": p["start"], "end": p["end"],
                      "minutes": to_minutes(p["end"]) - to_minutes(p["start"]), "done": False} for p in places]
+        # Why it is there (shown in the app): the rearranger's reason, the chosen option's, or "edited".
+        reason = (reasons.get(task_id) or ("You chose this time yourself." if places[0].get("edited") else None)
+                  or places[0].get("reason"))
+        store.update("tasks", task_id, {"rearrangeReason": reason})
         if task_id in effort_ids:
             keep = [s for s in task.get("sessions") or [] if s.get("done") or s["date"] < rec["input"]["from"][:10]]
             store.update("tasks", task_id, {"sessions": keep + sessions})

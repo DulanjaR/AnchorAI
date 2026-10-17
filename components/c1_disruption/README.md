@@ -61,12 +61,19 @@ plans with drift 1.0. Model files are never committed (`components/c1_disruption
 python -m components.c1_disruption.demo.web_demo     # opens http://127.0.0.1:8000
 ```
 
-A small page in front of the real C1 API. First setup: free hours, **Sync calendar** (a calendar
-file (.ics) exported from Google/Outlook/Apple, or a sample calendar → protected time) and tasks (name, start, end,
-deadline, priority). The day calendar updates live; **⚡ Record a disruption** opens the report, then the
-Minimum Viable Day (timeline + every tag explained) to accept or reject; accepting updates the calendar. **Load sample day** fills
-a ready-made day; `http://127.0.0.1:8000/?auto` loads it and builds the MVD in one go (`?auto=accept` also accepts it). Data is in
-memory and is gone when the server stops. A terminal version: `python -m components.c1_disruption.demo.pp1_demo`.
+The main screen is a **7-day week calendar**; everything else opens as a popup. **Load sample week**
+fills a student's week (routine: bus = commute, campus mornings; lunch and dinner protected; tasks
+today and on later days; an effort task). The **simulated clock** (+5 / +15 / +30 min or set a time)
+drives reminders (5 min before, adjustable) and the start prompt ("Time to start" → Started / Power
+cut / Delayed / Something urgent came up; one more prompt at +15; silent at +30 and "What happened?"
+when you return; "Delayed on the way?" first if the task is at Home and *sustained motion* is ticked).
+Nothing starts by itself. A disruption → today's MVD (accept / reject) → the **rest of the week**
+proposal from the rearranger (moved tasks and effort sessions on their new day, each with its reason;
+options A–E for a task that does not fit; accept / edit times / reject). Task form: location
+(pre-filled from the routine) and effort-task fields; Setup: free hours, routine, protected time,
+calendar sync (.ics). Quick start: `?auto=prompt`, `?auto=mvd`, `?auto=rearrange`, `?auto=options`,
+`?auto=week`. Data is in memory and is gone when the server stops. A terminal version:
+`python -m components.c1_disruption.demo.pp1_demo`.
 
 Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
 in-memory store behind a repository interface, so no database is needed to run it.

@@ -3,260 +3,257 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anchor AI · Disruption Recovery</title>
+<title>Anchor AI · Week Planner</title>
 <style>
   :root {
     --bg: #f4f5f8; --card: #ffffff; --ink: #1d2433; --muted: #667085; --line: #e3e6ec; --soft: #f0f2f6;
     --accent: #2f5bea; --accent-ink: #ffffff; --danger: #d23b30; --danger-ink: #ffffff;
-    --keep: #1f9d55; --reduce: #d98a00; --move: #5b6b82; --delegate: #7a4bd1;
-    --protect: #d5d9e1; --protect-ink: #475467; --task: #2f5bea; --off: rgba(16,24,40,.05);
+    --keep: #1f9d55; --reduce: #d98a00; --move: #5b6b82; --delegate: #7a4bd1; --task: #2f5bea; --session: #0f8b8d;
+    --protect: #d5d9e1; --protect-ink: #475467; --off: rgba(16,24,40,.06);
+    --campus: rgba(31,157,85,.10); --commute: rgba(217,138,0,.13); --office: rgba(47,91,234,.08);
     --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #12151c; --card: #1b2029; --ink: #e8ebf1; --muted: #9aa3b2; --line: #2c3340; --soft: #232935;
       --accent: #6d8dff; --accent-ink: #0d1020; --danger: #ff6b5f; --danger-ink: #1b0705;
-      --keep: #34c375; --reduce: #f0ae35; --move: #8090a8; --delegate: #a487ef;
-      --protect: #343c4a; --protect-ink: #c3cad6; --task: #5a7dff; --off: rgba(0,0,0,.25); --shadow: none;
+      --keep: #34c375; --reduce: #f0ae35; --move: #8090a8; --delegate: #a487ef; --task: #5a7dff; --session: #2bb5b7;
+      --protect: #343c4a; --protect-ink: #c3cad6; --off: rgba(0,0,0,.28);
+      --campus: rgba(52,195,117,.10); --commute: rgba(240,174,53,.12); --office: rgba(109,141,255,.10); --shadow: none;
     }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  header { padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--card);
-           display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
-  header h1 { font-size: 18px; margin: 0; }
-  header .sub { color: var(--muted); font-size: 13px; }
-  .hbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  main { max-width: 1320px; margin: 0 auto; padding: 18px 16px 60px;
-         display: grid; grid-template-columns: 380px 1fr; gap: 18px; align-items: start; }
-  main.setup-closed { grid-template-columns: 1fr; }
-  main.setup-closed #setup { display: none; }
-  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
-          box-shadow: var(--shadow); margin-bottom: 16px; }
-  .card h2 { font-size: 15px; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
-  .card .hint { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
-  .step { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
-          background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 700; }
-  label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
-  input, select { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px;
-                  background: var(--bg); color: var(--ink); font: inherit; min-width: 0; }
-  input[type=checkbox] { width: auto; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .row3 { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; }
-  .check { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 14px; color: var(--ink); }
-  button { font: inherit; border-radius: 8px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line);
-           background: var(--card); color: var(--ink); }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line);
+           padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 17px; margin: 0; }
+  .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  button { font: inherit; border-radius: 8px; padding: 7px 12px; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
   button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   button.alert { background: var(--danger); border-color: var(--danger); color: var(--danger-ink); font-weight: 700; }
-  button.big { padding: 11px 18px; font-size: 15px; }
-  button.link { border: none; background: none; color: var(--accent); padding: 0; }
   button.small { padding: 2px 8px; font-size: 12px; }
-  button:disabled { opacity: .5; cursor: default; }
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
-  .muted { color: var(--muted); font-size: 13px; }
-  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; }
-  .Keep { background: var(--keep); } .Reduce { background: var(--reduce); }
-  .Move { background: var(--move); } .Delegate { background: var(--delegate); }
-  .chip { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--line); border-radius: 999px;
-          padding: 2px 4px 2px 10px; font-size: 12px; }
-  .chip.plain { padding: 2px 10px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
-  .list { list-style: none; margin: 8px 0 0; padding: 0; }
-  .list li { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 7px 0;
-             border-top: 1px solid var(--line); font-size: 13px; }
-  .list .t { font-weight: 600; } .list .m { color: var(--muted); font-size: 12px; }
-  .done-row .t { text-decoration: line-through; color: var(--muted); }
-  /* day calendar */
-  .cal-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .cal-head h2 { margin: 0; font-size: 17px; }
-  .cal-wrap { display: grid; grid-template-columns: 1fr 230px; gap: 16px; }
-  @media (max-width: 760px) { .cal-wrap { grid-template-columns: 1fr; } }
-  .cal { position: relative; border-top: 1px solid var(--line); margin-left: 48px; }
-  .hour { position: absolute; left: -48px; right: 0; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
-  .hour span { position: absolute; top: -8px; left: 0; width: 42px; text-align: right; background: var(--card); padding-right: 4px; }
-  .off { position: absolute; left: 0; right: 0; background: var(--off); }
-  .ev { position: absolute; border-radius: 7px; padding: 3px 8px; font-size: 12px; overflow: hidden; line-height: 1.3;
-        border: 1px solid transparent; }
+  button.link { border: none; background: none; color: var(--accent); padding: 0; }
+  button:disabled { opacity: .45; cursor: default; }
+  input, select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; min-width: 0; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
+  .full { width: 100%; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .check { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 14px; color: var(--ink); }
+  .muted { color: var(--muted); font-size: 12px; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; color: #fff; }
+  .Keep { background: var(--keep); } .Reduce { background: var(--reduce); } .Move { background: var(--move); }
+  .Delegate { background: var(--delegate); } .task { background: var(--task); } .session { background: var(--session); }
+  .chip { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; margin: 2px; }
+  .clock { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 16px; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .clock b { font-variant-numeric: tabular-nums; }
+  main { padding: 10px 12px 60px; }
+  .weekhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 4px 8px; flex-wrap: wrap; }
+  .weekhead h2 { margin: 0; font-size: 16px; }
+  .banner { border: 1px solid var(--line); border-left: 4px solid var(--reduce); background: var(--card); border-radius: 8px; padding: 8px 12px; margin: 0 4px 8px; }
+  .scroll { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  .grid { display: grid; grid-template-columns: 50px repeat(7, minmax(130px, 1fr)); min-width: 980px; }
+  .dayhead { padding: 8px 6px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); background: var(--card); min-height: 64px; }
+  .dayhead.today { background: var(--soft); }
+  .dayhead .dn { font-weight: 700; }
+  .tray { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+  .tray .pill { cursor: pointer; }
+  .axis { position: relative; }
+  .axis span { position: absolute; right: 6px; font-size: 10px; color: var(--muted); transform: translateY(-6px); }
+  .col { position: relative; border-left: 1px solid var(--line); cursor: copy; }
+  .col.today { background: rgba(47,91,234,.03); }
+  .hl { position: absolute; left: 0; right: 0; border-top: 1px solid var(--line); pointer-events: none; }
+  .off { position: absolute; left: 0; right: 0; background: var(--off); pointer-events: none; }
+  .routine { position: absolute; left: 0; right: 0; font-size: 10px; color: var(--muted); padding: 1px 4px; pointer-events: none; }
+  .routine.Campus { background: var(--campus); } .routine.Commute { background: var(--commute); } .routine.Office { background: var(--office); }
+  .ev { position: absolute; border-radius: 6px; padding: 2px 6px; font-size: 11px; overflow: hidden; line-height: 1.25; color: #fff; cursor: pointer; z-index: 2; border: 1px solid rgba(0,0,0,.08); }
   .ev .et { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ev .em { opacity: .85; font-size: 11px; }
-  .ev.task { background: var(--task); color: #fff; }
-  .ev.protect { background: var(--protect); color: var(--protect-ink); }
-  .ev.Keep { background: var(--keep); color: #fff; } .ev.Reduce { background: var(--reduce); color: #fff; }
-  .ev.ghost { background: transparent; border: 2px dashed var(--task); color: var(--muted); opacity: .8; }
-  .ev { z-index: 1; }
-  .band { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 2; border-top: 2px solid var(--danger); border-bottom: 2px solid var(--danger);
-          background: repeating-linear-gradient(45deg, rgba(210,59,48,.20) 0 7px, rgba(210,59,48,.06) 7px 14px); }
-  .band span { position: absolute; right: 6px; top: 2px; font-size: 11px; font-weight: 700; color: var(--danger); }
-  .side h3 { font-size: 13px; margin: 0 0 4px; color: var(--muted); font-weight: 600; }
-  .banner { border: 1px solid var(--line); border-left: 4px solid var(--keep); border-radius: 8px; padding: 9px 12px; margin-bottom: 12px; font-size: 13px; }
-  .banner.pending { border-left-color: var(--reduce); }
-  .empty { color: var(--muted); font-size: 14px; padding: 30px 10px; text-align: center; border: 1px dashed var(--line); border-radius: 10px; }
-  /* dialogs */
-  dialog { border: none; border-radius: 14px; padding: 0; background: var(--card); color: var(--ink);
-           width: min(960px, calc(100vw - 32px)); max-height: calc(100vh - 40px); box-shadow: 0 20px 50px rgba(0,0,0,.3); }
-  dialog.narrow { width: min(460px, calc(100vw - 32px)); }
-  dialog::backdrop { background: rgba(10,14,22,.55); }
-  .dlg-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .dlg-head h2 { margin: 0; font-size: 16px; }
-  .dlg-body { padding: 14px 18px; overflow-y: auto; overflow-x: hidden; max-height: calc(100vh - 170px); }
-  .dlg-foot { padding: 12px 18px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
-  /* MVD comparison */
-  .tl-axis, .tl-row { display: grid; grid-template-columns: 200px 1fr; align-items: center; }
-  .tl-row { min-height: 34px; border-top: 1px solid var(--line); }
-  .tl-name { font-size: 13px; padding-right: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .track { position: relative; height: 34px; }
+  .ev.protect { background: var(--protect); color: var(--protect-ink); cursor: default; z-index: 1; }
+  .ev.task { background: var(--task); } .ev.Keep { background: var(--keep); } .ev.Reduce { background: var(--reduce); }
+  .ev.moved { background: var(--move); } .ev.session { background: repeating-linear-gradient(135deg, var(--session) 0 8px, color-mix(in srgb, var(--session) 82%, #000) 8px 16px); }
+  .ev.done { opacity: .45; text-decoration: line-through; } .ev.started { outline: 2px solid var(--keep); outline-offset: 1px; }
+  .ev.ghost { background: color-mix(in srgb, var(--card) 70%, transparent); color: var(--ink); border: 2px dashed var(--accent); z-index: 3; }
+  .band { position: absolute; left: 0; right: 0; z-index: 3; pointer-events: none; border-top: 2px solid var(--danger); border-bottom: 2px solid var(--danger);
+          background: repeating-linear-gradient(45deg, rgba(210,59,48,.20) 0 7px, rgba(210,59,48,.05) 7px 14px); }
+  .now { position: absolute; left: 0; right: 0; border-top: 2px solid var(--danger); z-index: 4; pointer-events: none; }
+  .now::before { content: ""; position: absolute; left: -4px; top: -5px; width: 8px; height: 8px; border-radius: 50%; background: var(--danger); }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin: 8px 4px; }
+  .legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+  dialog { border: none; border-radius: 14px; padding: 0; background: var(--card); color: var(--ink); width: min(560px, calc(100vw - 24px));
+           max-height: calc(100vh - 32px); box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+  dialog.wide { width: min(980px, calc(100vw - 24px)); }
+  dialog::backdrop { background: rgba(10,14,22,.5); }
+  .dh { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .dh h2 { margin: 0; font-size: 16px; }
+  .db { padding: 12px 16px; overflow: auto; max-height: calc(100vh - 160px); }
+  .df { padding: 10px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; align-items: center; }
+  .card { border: 1px solid var(--line); border-left: 4px solid var(--move); border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+  .card.Keep { border-left-color: var(--keep); } .card.Reduce { border-left-color: var(--reduce); } .card.Delegate { border-left-color: var(--delegate); }
+  .card.decide { border-left-color: var(--danger); }
+  .opt { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; display: grid; grid-template-columns: 28px 1fr; gap: 10px; cursor: pointer; }
+  .opt.na { opacity: .5; cursor: not-allowed; }
+  .opt.sel { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .code { font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: var(--muted); }
+  .risk { color: var(--danger); font-weight: 600; }
+  .replies { display: grid; gap: 8px; margin-top: 10px; }
+  .replies button { text-align: left; padding: 10px 12px; }
+  .replies button.first { border-color: var(--accent); font-weight: 600; }
+  .tl-row { display: grid; grid-template-columns: 200px 1fr; align-items: center; border-top: 1px solid var(--line); min-height: 32px; }
+  .track { position: relative; height: 32px; }
+  .bar2 { position: absolute; top: 6px; height: 20px; border-radius: 5px; font-size: 11px; color: #fff; padding: 1px 6px; white-space: nowrap; overflow: hidden; }
+  .bar2.ghost { background: transparent; border: 2px dashed var(--task); top: 4px; height: 24px; }
+  .ovl { position: absolute; top: 0; bottom: 0; pointer-events: none; }
+  .ovl.p { background: var(--protect); opacity: .55; }
+  .ovl.w { background: repeating-linear-gradient(45deg, rgba(210,59,48,.2) 0 6px, rgba(210,59,48,.05) 6px 12px); border-left: 2px solid var(--danger); border-right: 2px solid var(--danger); }
   .tick { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--line); font-size: 10px; color: var(--muted); }
   .tick span { position: absolute; top: 2px; left: 3px; }
-  .bar { position: absolute; top: 7px; height: 20px; border-radius: 5px; font-size: 11px; color: #fff; padding: 1px 6px; white-space: nowrap; overflow: hidden; }
-  .bar.ghost { background: transparent; border: 2px dashed var(--task); top: 5px; height: 24px; }
-  .overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; }
-  .overlay.protect { background: var(--protect); opacity: .55; }
-  .overlay.window { background: repeating-linear-gradient(45deg, rgba(210,59,48,.2) 0 6px, rgba(210,59,48,.05) 6px 12px);
-                    border-left: 2px solid var(--danger); border-right: 2px solid var(--danger); }
-  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 10px; }
-  .legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
-  .explain { display: grid; gap: 10px; margin-top: 14px; }
-  .ex { border: 1px solid var(--line); border-left: 4px solid var(--move); border-radius: 8px; padding: 9px 12px; }
-  .ex.Keep { border-left-color: var(--keep); background: none; } .ex.Reduce { border-left-color: var(--reduce); background: none; }
-  .ex.Move { border-left-color: var(--move); background: none; } .ex.Delegate { border-left-color: var(--delegate); background: none; }
-  .ex-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
-  .ex-meta { font-size: 12px; color: var(--muted); font-weight: 400; }
-  .code { font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: var(--muted); }
-  .risk { color: var(--danger); font-weight: 600; font-size: 12px; }
-  .warn { border: 1px solid var(--reduce); border-radius: 8px; padding: 8px 12px; margin-top: 10px; font-size: 13px; }
-  #toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 90vw;
-           background: var(--danger); color: #fff; padding: 10px 16px; border-radius: 10px; display: none; z-index: 99; }
-  #toast.ok { background: var(--keep); }
-  #fab { position: fixed; right: 22px; bottom: 22px; z-index: 5; box-shadow: 0 8px 20px rgba(210,59,48,.35); border-radius: 999px; }
-  @media (min-width: 981px) { #fab { display: none; } }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td, th { padding: 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: 92vw; background: var(--danger); color: #fff; padding: 10px 16px; border-radius: 10px; display: none; z-index: 99; }
+  #toast.ok { background: var(--keep); } #toast.info { background: var(--accent); color: var(--accent-ink); }
 </style>
 </head>
 <body>
 <header>
-  <div>
-    <h1>Anchor AI · Disruption Recovery Planner</h1>
-    <div class="sub">Set up your day once. When something goes wrong, record it and get a Minimum Viable Day.</div>
-  </div>
-  <div class="hbar">
-    <input type="date" id="day" aria-label="Day" style="width:auto">
-    <button id="btnSetup">Edit setup</button>
-    <button id="btnSample">Load sample day</button>
-    <button id="btnNew">New student</button>
-    <span class="muted" id="who"></span>
+  <h1>Anchor AI · Disruption Recovery</h1>
+  <div class="bar">
+    <button id="bPrev" aria-label="Previous week">‹</button><button id="bToday">This week</button><button id="bNext" aria-label="Next week">›</button>
+    <button class="primary" id="bAdd">+ Task</button>
+    <button id="bSetup">⚙ Setup</button>
+    <button id="bSample">Load sample week</button>
+    <button id="bNew">New student</button>
+    <button class="alert" id="bDisrupt">⚡ Record a disruption</button>
   </div>
 </header>
+<div class="clock" id="clock">
+  <span>🕒 Simulated time: <b id="simNow">–</b></span>
+  <button class="small" data-jump="5">+5 min</button><button class="small" data-jump="15">+15 min</button><button class="small" data-jump="30">+30 min</button>
+  <input type="datetime-local" id="simSet" aria-label="Set the simulated time"><button class="small" id="bSet">Set</button>
+  <span class="muted">· reminder</span><input type="number" id="remind" min="0" max="60" value="5" style="width:56px" aria-label="Reminder minutes"><span class="muted">min before</span>
+  <label class="check" style="margin:0"><input type="checkbox" id="motion"> sustained motion (simulated)</label>
+  <span class="muted" id="who"></span>
+</div>
 
-<main id="main">
-  <!-- ======== first setup ======== -->
-  <div id="setup">
-    <section class="card">
-      <h2><span class="step">1</span> Fixed schedule</h2>
-      <p class="hint">Your free hours and the things that never move (lectures, lunch, the bus).</p>
-      <div class="row">
-        <div><label for="workStart">Free from</label><input type="time" id="workStart" value="08:00"></div>
-        <div><label for="workEnd">Until</label><input type="time" id="workEnd" value="18:00"></div>
-      </div>
-      <div class="actions">
-        <button class="primary" id="btnSync">⟳ Sync calendar</button>
-        <button class="link" id="btnSampleCal">use a sample calendar</button>
-        <input type="file" id="icsFile" accept=".ics,text/calendar" hidden>
-      </div>
-      <p class="muted" style="margin:6px 0 0">Calendar file (.ics) from Google, Outlook or Apple Calendar: its events on this day become protected time.</p>
-      <label>Protected time</label>
-      <div id="blocks" class="chips"></div>
-      <input id="blkLabel" placeholder="e.g. Lunch, Gym, Part-time job" aria-label="Name">
-      <div class="row" style="margin-top:8px">
-        <input type="time" id="blkStart" value="12:30" aria-label="From">
-        <input type="time" id="blkEnd" value="13:30" aria-label="Until">
-      </div>
-      <div class="actions"><button id="btnBlock">+ Add protected time</button></div>
-    </section>
-
-    <section class="card">
-      <h2><span class="step">2</span> Tasks</h2>
-      <p class="hint">What you plan to do today.</p>
-      <label for="tTitle">Task name</label>
-      <input id="tTitle" placeholder="e.g. Finish lab report">
-      <div id="timeFields" class="row">
-        <div><label for="tStart">Start</label><input type="time" id="tStart" value="09:00"></div>
-        <div><label for="tEnd">End</label><input type="time" id="tEnd" value="10:00"></div>
-      </div>
-      <div id="hoursField" hidden><label for="tHours">Takes (hours)</label><input type="number" id="tHours" min="0.25" step="0.25" value="1"></div>
-      <label class="check"><input type="checkbox" id="tFlexible"> No set time (do it when there is time)</label>
-      <div class="row">
-        <div><label for="tDeadline">Deadline</label><input type="datetime-local" id="tDeadline"></div>
-        <div><label for="tPriority">Priority</label><select id="tPriority"></select></div>
-      </div>
-      <div class="row">
-        <div><label for="tType">Needs</label><select id="tType"></select></div>
-        <div><label for="tCategory">Kind of task (optional)</label><select id="tCategory"></select></div>
-      </div>
-      <label class="check"><input type="checkbox" id="tDelegable"> Others could do it</label>
-      <div class="actions"><button class="primary" id="btnTask">+ Add task</button></div>
-      <ul class="list" id="setupTasks"></ul>
-    </section>
-
-    <button class="primary big" id="btnDone" style="width:100%">Done: show my day →</button>
+<main>
+  <div class="weekhead"><h2 id="weekTitle">Week</h2><span class="muted">Tap a task for details and its reason · tap an empty slot to add a task</span></div>
+  <div id="banners"></div>
+  <div class="scroll"><div class="grid" id="week"></div></div>
+  <div class="legend">
+    <span><i class="task"></i>planned</span><span><i class="Keep"></i>Keep</span><span><i class="Reduce"></i>Reduce</span>
+    <span><i class="Move"></i>moved here</span><span><i class="session"></i>session (effort / split)</span>
+    <span><i style="background:var(--protect)"></i>protected</span><span><i style="background:var(--campus)"></i>campus</span>
+    <span><i style="background:var(--commute)"></i>commute</span><span><i style="border:2px dashed var(--accent)"></i>proposed</span>
   </div>
-
-  <!-- ======== the daily schedule ======== -->
-  <section class="card" id="daycard">
-    <div class="cal-head">
-      <h2 id="dayTitle">My day</h2>
-      <button class="alert big" id="btnDisrupt">⚡ Record a disruption</button>
-    </div>
-    <div id="dayBanner"></div>
-    <div class="cal-wrap">
-      <div id="calendar"></div>
-      <div class="side">
-        <h3>Tasks today</h3>
-        <ul class="list" id="sideTasks"></ul>
-        <div id="notToday"></div>
-      </div>
-    </div>
-  </section>
 </main>
-<button class="alert big" id="fab">⚡ Disruption</button>
 
-<!-- ======== record a disruption ======== -->
-<dialog id="dlgDisrupt" class="narrow">
-  <div class="dlg-head"><h2>⚡ Record a disruption</h2><button class="small" data-close>✕</button></div>
-  <div class="dlg-body">
-    <label for="dType">What happened?</label>
-    <select id="dType"></select>
+<dialog id="dTask">
+  <div class="dh"><h2 id="tHead">Add a task</h2><button class="small" data-close>✕</button></div>
+  <div class="db">
+    <label for="tTitle">Task name</label><input id="tTitle" class="full" placeholder="e.g. Finish lab report">
     <div class="row">
-      <div><label for="dStart">Started at</label><input type="time" id="dStart" value="09:00"></div>
-      <div><label for="dLost">Time lost (minutes)</label><input type="number" id="dLost" min="1" max="1439" value="150"></div>
+      <div><label for="tType">Needs</label><select id="tType" class="full"></select></div>
+      <div><label for="tPriority">Priority</label><select id="tPriority" class="full"></select></div>
+    </div>
+    <label class="check"><input type="checkbox" id="tEffort"> Effort task: a total amount of work, spread over the days before the deadline</label>
+    <div id="normalFields">
+      <div class="row3">
+        <div><label for="tDay">Day</label><input type="date" id="tDay" class="full"></div>
+        <div><label for="tStart">Start</label><input type="time" id="tStart" class="full" value="09:00"></div>
+        <div><label for="tEnd">End</label><input type="time" id="tEnd" class="full" value="10:00"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="tFlex"> No set time (do it when there is time)</label>
+      <div id="hoursRow" hidden><label for="tHours">Takes (hours)</label><input type="number" id="tHours" min="0.25" step="0.25" value="1" class="full"></div>
+      <label class="check"><input type="checkbox" id="tSplit" checked> Can be split into sessions</label>
+    </div>
+    <div id="effortFields" hidden>
+      <div class="row3">
+        <div><label for="eTotal">Total work (hours)</label><input type="number" id="eTotal" min="0.5" step="0.5" value="6" class="full"></div>
+        <div><label for="eMin">Shortest session (min)</label><input type="number" id="eMin" min="5" step="5" value="30" class="full"></div>
+        <div><label for="eMax">Longest session (min)</label><input type="number" id="eMax" min="5" step="5" value="90" class="full"></div>
+      </div>
     </div>
     <div class="row">
-      <div><label for="dSeverity">How bad</label>
-        <select id="dSeverity"><option value="1">1 · minor</option><option value="2">2 · moderate</option><option value="3" selected>3 · severe</option></select></div>
-      <div><label for="dFrom">Replan from</label><input type="time" id="dFrom" value="09:00"></div>
+      <div><label for="tDeadline">Deadline</label><input type="datetime-local" id="tDeadline" class="full"></div>
+      <div><label for="tLocation">Where</label><select id="tLocation" class="full"></select><div class="muted" id="locHint"></div></div>
     </div>
-    <label class="check"><input type="checkbox" id="dConfirm"> Yes, this really happened</label>
-    <p class="muted">Nothing changes until you accept: the planner suggests, you decide.</p>
+    <div class="row">
+      <div><label for="tCategory">Kind (optional)</label><select id="tCategory" class="full"></select></div>
+      <div style="display:flex;align-items:end"><label class="check" style="margin:0 0 6px"><input type="checkbox" id="tDelegable"> Others could do it</label></div>
+    </div>
   </div>
-  <div class="dlg-foot"><button data-close>Cancel</button><button class="primary" id="btnMvd">Build my Minimum Viable Day</button></div>
+  <div class="df"><button data-close>Cancel</button><button class="primary" id="bSaveTask">Add task</button></div>
 </dialog>
 
-<!-- ======== review the MVD ======== -->
-<dialog id="dlgMvd">
-  <div class="dlg-head"><h2>Your Minimum Viable Day</h2><button class="small" data-close>✕</button></div>
-  <div class="dlg-body">
-    <div id="mvdSummary" class="chips"></div>
-    <div id="mvdTimeline"></div>
-    <div class="legend">
-      <span><i style="border:2px dashed var(--task)"></i>original plan</span>
-      <span><i class="Keep"></i>Keep</span><span><i class="Reduce"></i>Reduce (shortened)</span>
-      <span><i class="Move"></i>Move to tomorrow</span><span><i class="Delegate"></i>Delegate</span>
-      <span><i style="background:var(--protect)"></i>protected</span><span><i style="background:rgba(210,59,48,.4)"></i>disruption</span>
+<dialog id="dSetup" class="wide">
+  <div class="dh"><h2>⚙ Setup: your normal week</h2><button class="small" data-close>✕</button></div>
+  <div class="db">
+    <div class="row">
+      <div><label for="workStart">Free from</label><input type="time" id="workStart" value="08:00" class="full"></div>
+      <div><label for="workEnd">Until</label><input type="time" id="workEnd" value="22:00" class="full"></div>
     </div>
-    <div id="mvdWarnings"></div>
-    <div class="explain" id="mvdExplain"></div>
+    <h3 style="font-size:14px;margin:14px 0 4px">Routine — where you usually are (gives tasks their place)</h3>
+    <div id="routineList"></div>
+    <div class="row3" style="grid-template-columns:1.4fr 1fr 1fr 1fr">
+      <input id="rLabel" placeholder="e.g. Lectures"><input type="time" id="rStart" value="09:00"><input type="time" id="rEnd" value="12:30"><select id="rLoc"></select>
+    </div>
+    <div style="margin-top:6px"><button class="small" id="bAddRoutine">+ Add routine block</button></div>
+    <h3 style="font-size:14px;margin:14px 0 4px">Protected time — never moved (lunch, dinner, gym)</h3>
+    <div id="blockList"></div>
+    <div class="row3"><input id="pLabel" placeholder="e.g. Lunch"><input type="time" id="pStart" value="12:30"><input type="time" id="pEnd" value="13:30"></div>
+    <div style="margin-top:6px"><button class="small" id="bAddBlock">+ Add protected time</button>
+      <button class="small" id="bSync">⟳ Sync calendar (.ics)</button> <button class="link small" id="bSampleCal">use a sample calendar</button>
+      <input type="file" id="icsFile" accept=".ics,text/calendar" hidden></div>
+    <p class="muted">Calendar sync reads a calendar file exported from Google, Outlook or Apple Calendar; events on the shown week's first day become protected time.</p>
   </div>
-  <div class="dlg-foot"><button class="danger" id="btnReject">Reject (keep my plan)</button><button class="primary" id="btnAccept">Accept this plan</button></div>
+  <div class="df"><button class="primary" id="bSaveSetup">Save</button></div>
+</dialog>
+
+<dialog id="dDisrupt">
+  <div class="dh"><h2>⚡ Record a disruption</h2><button class="small" data-close>✕</button></div>
+  <div class="db">
+    <label for="xType">What happened?</label><select id="xType" class="full"></select>
+    <div class="row">
+      <div><label for="xStart">Started at</label><input type="time" id="xStart" class="full" value="09:00"></div>
+      <div><label for="xLost">Time lost (minutes)</label><input type="number" id="xLost" min="1" max="1439" value="120" class="full"></div>
+    </div>
+    <div class="row">
+      <div><label for="xSev">How bad</label><select id="xSev" class="full"><option value="1">1 · minor</option><option value="2">2 · moderate</option><option value="3" selected>3 · severe</option></select></div>
+      <div><label for="xFrom">Replan from</label><input type="time" id="xFrom" class="full" value="09:00"></div>
+    </div>
+    <label class="check"><input type="checkbox" id="xConfirm"> Yes, this really happened</label>
+    <p class="muted">Nothing changes until you accept: the planner suggests, you decide.</p>
+  </div>
+  <div class="df"><button data-close>Cancel</button><button class="primary" id="bMvd">Build my Minimum Viable Day</button></div>
+</dialog>
+
+<dialog id="dMvd" class="wide">
+  <div class="dh"><h2>Today's Minimum Viable Day</h2><button class="small" data-close>✕</button></div>
+  <div class="db"><div id="mvdSummary"></div><div id="mvdTimeline"></div><div id="mvdCards"></div></div>
+  <div class="df"><button id="bMvdReject">Reject (keep my plan)</button><button class="primary" id="bMvdAccept">Accept today's plan</button></div>
+</dialog>
+
+<dialog id="dRe" class="wide">
+  <div class="dh"><h2>The rest of the week: where the moved tasks go</h2><button class="small" data-close>✕</button></div>
+  <div class="db"><div id="reBody"></div></div>
+  <div class="df"><span class="muted" id="reHint" style="margin-right:auto"></span>
+    <button id="bReReject">Reject</button><button id="bReEdit">Edit times</button><button class="primary" id="bReAccept">Accept</button></div>
+</dialog>
+
+<dialog id="dOpt" class="wide">
+  <div class="dh"><h2 id="optHead">This task does not fit — you choose</h2><button class="small" data-close>✕</button></div>
+  <div class="db"><p id="optReason"></p><div id="optList"></div></div>
+  <div class="df"><button data-close>Later</button><button class="primary" id="bChoose" disabled>Choose this option</button></div>
+</dialog>
+
+<dialog id="dDetail">
+  <div class="dh"><h2 id="detHead">Task</h2><button class="small" data-close>✕</button></div>
+  <div class="db" id="detBody"></div>
+  <div class="df" id="detActions"></div>
+</dialog>
+
+<dialog id="dPrompt">
+  <div class="dh"><h2 id="prHead">Time to start</h2><button class="small" data-close>✕</button></div>
+  <div class="db"><p id="prText"></p><div class="replies" id="prReplies"></div></div>
 </dialog>
 
 <div id="toast" role="status"></div>
@@ -264,326 +261,460 @@
 <script>
 const CFG = /*__CONFIG__*/{};
 const $ = (id) => document.getElementById(id);
-const TAG_ORDER = ["Keep", "Reduce", "Delegate", "Move"];
-const TAG_TEXT = { Keep: "Keep", Reduce: "Reduce", Move: "Move to tomorrow", Delegate: "Delegate" };
-const NAMES = { power_outage: "Power cut", transport_delay: "Transport delay", connectivity_failure: "No internet",
-                urgent_work: "Urgent work", family_obligation: "Family obligation", health_issue: "Health issue" };
+const pad = (n) => String(n).padStart(2, "0");
+const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const toHHMM = (m) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+const addDays = (iso, n) => { const d = new Date(iso + "T00:00"); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const dayName = (iso, long) => new Date(iso + "T00:00").toLocaleDateString(undefined, long ? { weekday: "long", day: "numeric", month: "short" } : { weekday: "short", day: "numeric", month: "short" });
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const NAMES = { power_outage: "Power cut", transport_delay: "Transport delay", connectivity_failure: "No internet", urgent_work: "Urgent work", family_obligation: "Family obligation", health_issue: "Health issue" };
 const TYPE_TEXT = { Digital: "Digital (computer / power)", Analog: "Analog (paper, reading)", Meeting: "Meeting", Fixed: "Fixed appointment" };
-const state = { user: "", tasks: [], blocks: [], settings: null, mvd: null, accepted: {} };
-const PX = 1.15; // pixels per minute in the day calendar
+const TAG_TEXT = { Keep: "Keep", Reduce: "Reduce", Move: "Move", Delegate: "Delegate" };
+const OPT_TITLE = { A: "Make room on another day", B: "Split across days", C: "Shorten it", D: "Delegate it", E: "Keep it: needs a slot" };
+const PX = 0.8, H0 = 6 * 60, H1 = 23 * 60;
+const state = { user: "", settings: null, blocks: [], tasks: [], weekStart: "", now: "", mvd: null, explain: {}, rearr: null,
+                editRe: false, prompts: {}, returnQueue: [], promptQueue: [], optTask: null, optPick: null, current: null };
 
-function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
-function toast(msg, ok = false) {
-  const t = $("toast"); t.textContent = msg; t.className = ok ? "ok" : ""; t.style.display = "block";
-  clearTimeout(toast.timer); toast.timer = setTimeout(() => (t.style.display = "none"), ok ? 2400 : 6000);
-}
-async function api(method, path, body) {
-  const res = await fetch(CFG.prefix + path, {
-    method, headers: { "X-API-Key": CFG.apiKey, "X-User-Id": state.user, "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+function toast(msg, kind = "err") { const t = $("toast"); t.textContent = msg; t.className = kind === "err" ? "" : kind; t.style.display = "block";
+  clearTimeout(toast.t); toast.t = setTimeout(() => (t.style.display = "none"), kind === "err" ? 6000 : 3500); }
+async function api(method, path, body, raw) {
+  const res = await fetch((raw ? "" : CFG.prefix) + path, { method, headers: { "X-API-Key": CFG.apiKey, "X-User-Id": state.user, "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body) });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error((data && data.error && data.error.message) || `${res.status} ${res.statusText}`);
+  if (!res.ok) throw new Error((data && data.error && data.error.message) || (data && data.detail) || `${res.status} ${res.statusText}`);
   return data;
 }
 async function run(fn) { try { await fn(); } catch (e) { toast(e.message); } }
+const today = () => state.now.slice(0, 10);
+const nowMin = () => toMin(state.now.slice(11, 16));
 
-const day = () => $("day").value;
-const pad = (n) => String(n).padStart(2, "0");
-const toMin = (hhmm) => { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; };
-const toHHMM = (m) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
-const addDays = (n, hhmm) => { const d = new Date(day() + "T00:00"); d.setDate(d.getDate() + n);
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${hhmm}`; };
-const fmtDue = (iso) => { const days = Math.round((new Date(iso.slice(0, 10) + "T00:00") - new Date(day() + "T00:00")) / 864e5);
-  const when = days === 0 ? "today" : days === 1 ? "tomorrow" : days < 0 ? iso.slice(0, 10) : `in ${days} days`;
-  return `${when} ${iso.slice(11, 16)}`; };
-const hoursText = (h) => (h >= 1 ? `${+h.toFixed(2)} h` : `${Math.round(h * 60)} min`);
+/* ===================== clock ===================== */
+async function setClock(iso) {
+  const before = state.now;
+  state.now = (await api("PUT", "/demo/clock", { now: iso }, true)).now;
+  $("simNow").textContent = `${dayName(today(), true)} ${state.now.slice(11, 16)}`;
+  $("simSet").value = state.now;
+  if (!state.weekStart || (before && before.slice(0, 10) !== today())) state.weekStart = today();
+  render(); checkPrompts();
+}
+function jump(minutes) { const d = new Date(state.now); d.setMinutes(d.getMinutes() + minutes);
+  return setClock(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`); }
 
-/* ================= calendar sync (.ics) ================= */
-function parseIcs(text, isoDay) {
-  // Events on isoDay (single events, and simple DAILY / WEEKLY repeats). All-day events are skipped.
-  const lines = text.replace(/\r\n[ \t]/g, "").split(/\r?\n/);
-  const events = []; let ev = null;
-  for (const line of lines) {
-    if (line === "BEGIN:VEVENT") ev = {};
-    else if (line === "END:VEVENT") { if (ev) events.push(ev); ev = null; }
-    else if (ev) { const i = line.indexOf(":"); if (i > 0) ev[line.slice(0, i).split(";")[0].toUpperCase()] = line.slice(i + 1); }
-  }
-  const when = (v) => {
-    const m = /^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z?))?$/.exec((v || "").trim()); if (!m || !m[4]) return null;
-    const d = m[7] ? new Date(Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5])) : new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]);
-    return d;
-  };
-  const target = new Date(isoDay + "T00:00"); const out = [];
-  const WD = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-  for (const e of events) {
-    const s = when(e.DTSTART), f = when(e.DTEND); if (!s || !f) continue;
-    const sameDay = (d) => d.getFullYear() === target.getFullYear() && d.getMonth() === target.getMonth() && d.getDate() === target.getDate();
-    let on = sameDay(s);
-    if (!on && e.RRULE && s <= new Date(target.getTime() + 864e5)) {
-      const r = Object.fromEntries(e.RRULE.split(";").map(p => p.split("=")));
-      const until = r.UNTIL ? when(r.UNTIL.length === 8 ? r.UNTIL + "T235959" : r.UNTIL) : null;
-      if (!until || until >= target) {
-        if (r.FREQ === "DAILY") on = true;
-        if (r.FREQ === "WEEKLY") on = (r.BYDAY ? r.BYDAY.split(",") : [WD[s.getDay()]]).includes(WD[target.getDay()]);
-      }
+/* ===================== what goes on the calendar ===================== */
+function itemsFor() {
+  const items = [], tray = {};
+  const addTray = (date, entry) => (tray[date] = tray[date] || []).push(entry);
+  for (const t of state.tasks) {
+    if (t.sessions && t.sessions.length) {
+      t.sessions.forEach((s, i) => items.push({ kind: "session", task: t, date: s.date, start: s.start, end: s.end, done: s.done,
+        label: `${t.title} (${i + 1}/${t.sessions.length})`, reason: t.rearrangeReason }));
+      continue;
     }
-    if (!on) continue;
-    const start = s.getHours() * 60 + s.getMinutes();
-    const end = sameDay(f) || e.RRULE ? f.getHours() * 60 + f.getMinutes() : 23 * 60 + 59;
-    if (end > start) out.push({ label: (e.SUMMARY || "Calendar event").replace(/\\,/g, ",").slice(0, 60), start: toHHMM(start), end: toHHMM(end) });
+    if (t.totalEffortMinutes) { addTray(t.plannedDate, { cls: "session", text: `${t.title}: ${t.totalEffortMinutes} min to spread`, task: t }); continue; }
+    const date = t.plannedDate;
+    if (t.needsSlot) { addTray(date, { cls: "Move", text: `Needs a slot: ${t.title} (${t.shortfallMinutes} min short)`, task: t, risk: true }); continue; }
+    if (t.mvdTag === "Delegate") { addTray(date, { cls: "Delegate", text: `Delegate: ${t.title}`, task: t }); continue; }
+    if (t.mvdTag === "Move" && !t.rearrangedBy) { addTray(date, { cls: "Move", text: `Moved: ${t.title}`, task: t }); continue; }
+    if (t.rearrangedFrom && t.plannedStart) { items.push({ kind: "moved", task: t, date, start: t.plannedStart, end: t.plannedEnd, label: `↪ ${t.title}`, reason: t.rearrangeReason }); continue; }
+    if ((t.mvdTag === "Keep" || t.mvdTag === "Reduce") && t.mvdStart) { items.push({ kind: t.mvdTag, task: t, date, start: t.mvdStart, end: t.mvdEnd, label: t.title, reason: state.explain[t.id] }); continue; }
+    if (t.plannedStart) { items.push({ kind: "task", task: t, date, start: t.plannedStart, end: t.plannedEnd, label: t.title,
+      reason: t.movedBy ? "Moved here to make room for a more urgent task (the option you chose)." : t.shortenedBy ? `Shortened by ${t.shortenedBy} min to make room (the option you chose).` : null }); continue; }
+    addTray(date, { cls: "task", text: `If time: ${t.title}`, task: t });
   }
-  return out.sort((a, b) => a.start.localeCompare(b.start));
-}
-function sampleIcs() {
-  const d = day().replaceAll("-", "");
-  const ev = (s, e, title) => `BEGIN:VEVENT\r\nDTSTART:${d}T${s}00\r\nDTEND:${d}T${e}00\r\nSUMMARY:${title}\r\nEND:VEVENT`;
-  return ["BEGIN:VCALENDAR", "VERSION:2.0", ev("0800", "0900", "Lecture: Data Structures"), ev("1230", "1330", "Lunch"),
-          ev("1700", "1745", "Bus home"), "END:VCALENDAR"].join("\r\n");
-}
-async function importCalendar(text, source) {
-  const found = parseIcs(text, day());
-  if (!found.length) throw new Error(`No timed events on ${day()} in ${source}`);
-  let added = 0;
-  for (const e of found) {
-    if (state.blocks.some(b => b.label === e.label && b.start === e.start && b.end === e.end)) continue;
-    await api("POST", "/protected-blocks", e); added++;
-  }
-  await refresh(); toast(`Calendar synced: ${added} event${added === 1 ? "" : "s"} added as protected time`, true);
-}
-
-/* ================= render: setup lists ================= */
-function renderSetup() {
-  $("blocks").innerHTML = state.blocks.length ? state.blocks.map(b =>
-    `<span class="chip">${esc(b.label)} ${b.start}–${b.end}<button class="small" data-del-block="${b.id}" aria-label="Remove">✕</button></span>`).join("")
-    : `<span class="muted">none yet: sync your calendar or add one</span>`;
-  $("setupTasks").innerHTML = state.tasks.map(t => `<li><div><div class="t">${esc(t.title)}</div>
-      <div class="m">${t.plannedStart ? `${t.plannedStart}–${t.plannedEnd}` : `no set time · ${hoursText(t.estimatedHours)}`} · ${esc(t.priority)} · due ${fmtDue(t.deadline)}</div></div>
-      <button class="small" data-del-task="${t.id}" aria-label="Delete">✕</button></li>`).join("");
-}
-
-/* ================= render: the day calendar ================= */
-function layout(items) {
-  // Side-by-side columns for overlapping items.
-  items.sort((a, b) => a.s - b.s || b.e - a.e);
-  let cluster = [], clusterEnd = -1;
-  const flush = () => { const lanes = Math.max(...cluster.map(i => i.lane)) + 1; cluster.forEach(i => (i.lanes = lanes)); cluster = []; };
-  for (const it of items) {
-    if (it.s >= clusterEnd && cluster.length) flush();
-    const used = new Set(cluster.filter(c => c.e > it.s).map(c => c.lane));
-    let lane = 0; while (used.has(lane)) lane++;
-    it.lane = lane; cluster.push(it); clusterEnd = Math.max(clusterEnd, it.e);
-  }
-  if (cluster.length) flush();
-  return items;
-}
-function renderDay() {
-  const s = state.settings || { workStart: $("workStart").value, workEnd: $("workEnd").value };
-  const accepted = state.accepted[day()];
-  const tasks = state.tasks.filter(t => t.status !== "done");
-  const items = [];
-  for (const b of state.blocks) items.push({ s: toMin(b.start), e: toMin(b.end), cls: "protect", title: b.label, meta: `${b.start}–${b.end} · protected` });
-  for (const t of tasks) {
-    if (t.mvdTag) {
-      if (t.mvdStart) items.push({ s: toMin(t.mvdStart), e: toMin(t.mvdEnd), cls: t.mvdTag, title: t.title,
-        meta: `${t.mvdStart}–${t.mvdEnd} · ${t.mvdTag}` });
-    } else if (t.plannedStart) {
-      items.push({ s: toMin(t.plannedStart), e: toMin(t.plannedEnd), cls: "task", title: t.title, meta: `${t.plannedStart}–${t.plannedEnd} · ${t.priority}` });
+  if (state.rearr && state.rearr.status === "proposed") {
+    for (const p of state.rearr.result.placements) {
+      const t = state.tasks.find(x => x.id === p.taskId);
+      items.push({ kind: "ghost", task: t, date: p.date, start: p.start, end: p.end, label: `proposed: ${t ? t.title : p.taskId}`, reason: p.reason });
     }
   }
-  const band = accepted && accepted.disruption;
-  const all = [toMin(s.workStart), toMin(s.workEnd), ...items.flatMap(i => [i.s, i.e]), ...(band ? [toMin(band.start), toMin(band.end)] : [])];
-  const from = Math.max(0, Math.floor(Math.min(...all) / 60) * 60 - 60), to = Math.min(24 * 60, Math.ceil(Math.max(...all) / 60) * 60 + 60);
-  const y = (m) => (m - from) * PX;
-  let html = `<div class="cal" style="height:${(to - from) * PX}px">`;
-  html += `<div class="off" style="top:0;height:${y(toMin(s.workStart))}px"></div><div class="off" style="top:${y(toMin(s.workEnd))}px;bottom:0"></div>`;
-  for (let m = from; m <= to; m += 60) html += `<div class="hour" style="top:${y(m)}px"><span>${pad(m / 60 % 24)}:00</span></div>`;
-  if (band) html += `<div class="band" style="top:${y(toMin(band.start))}px;height:${(toMin(band.end) - toMin(band.start)) * PX}px"><span>⚡ ${esc(NAMES[band.type] || band.type)}</span></div>`;
-  for (const it of layout(items)) {
-    const w = 100 / it.lanes;
-    html += `<div class="ev ${it.cls}" style="top:${y(it.s) + 1}px;height:${Math.max((it.e - it.s) * PX - 2, 16)}px;left:calc(${it.lane * w}% + 2px);width:calc(${w}% - 4px)" title="${esc(it.title)} ${esc(it.meta)}">
-      <div class="et">${esc(it.title)}</div><div class="em">${esc(it.meta)}</div></div>`;
+  return { items, tray };
+}
+function lanes(list) {
+  list.sort((a, b) => a.s - b.s || b.e - a.e); let cl = [], end = -1;
+  const flush = () => { const n = Math.max(...cl.map(i => i.lane)) + 1; cl.forEach(i => (i.lanes = n)); cl = []; };
+  for (const it of list) { if (it.s >= end && cl.length) flush(); const used = new Set(cl.filter(c => c.e > it.s).map(c => c.lane));
+    let l = 0; while (used.has(l)) l++; it.lane = l; cl.push(it); end = Math.max(end, it.e); }
+  if (cl.length) flush(); return list;
+}
+function render() {
+  if (!state.weekStart) return;
+  const days = [...Array(7)].map((_, i) => addDays(state.weekStart, i));
+  $("weekTitle").textContent = `${dayName(days[0])} – ${dayName(days[6])}`;
+  const { items, tray } = itemsFor();
+  const y = (m) => (m - H0) * PX, height = (H1 - H0) * PX;
+  const s = state.settings || { workStart: "08:00", workEnd: "22:00" };
+  let html = `<div class="dayhead"></div>`;
+  for (const d of days) {
+    html += `<div class="dayhead ${d === today() ? "today" : ""}"><div class="dn">${esc(dayName(d))}${d === today() ? " · today" : ""}</div>
+      <div class="tray">${(tray[d] || []).map(e => `<span class="pill ${e.cls}" data-task="${e.task.id}" title="${esc(e.text)}">${e.risk ? "⚠ " : ""}${esc(e.text.length > 30 ? e.text.slice(0, 29) + "…" : e.text)}</span>`).join("")}</div></div>`;
   }
-  $("calendar").innerHTML = (items.length ? "" : `<div class="empty" style="margin-bottom:12px">Nothing planned yet. Add protected time and tasks in the setup, or press <b>Load sample day</b>.</div>`) + html + "</div>";
-  const d = new Date(day() + "T00:00");
-  $("dayTitle").textContent = d.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" });
-  $("sideTasks").innerHTML = state.tasks.map(t => {
-    const slot = t.mvdTag ? (t.mvdStart ? `${t.mvdStart}–${t.mvdEnd}` : "not today") : t.plannedStart ? `${t.plannedStart}–${t.plannedEnd}` : `when there is time · ${hoursText(t.estimatedHours)}`;
-    return `<li class="${t.status === "done" ? "done-row" : ""}"><div><div class="t">${t.mvdTag ? `<span class="pill ${t.mvdTag}">${t.mvdTag}</span> ` : ""}${esc(t.title)}</div>
-      <div class="m">${slot} · due ${fmtDue(t.deadline)}</div></div>
-      ${t.status === "done" ? '<span class="m">done</span>' : `<button class="small" data-done="${t.id}">Done</button>`}</li>`;
-  }).join("") || `<li class="m">No tasks yet.</li>`;
-  const later = state.tasks.filter(t => t.mvdTag === "Move" || t.mvdTag === "Delegate");
-  $("notToday").innerHTML = later.length ? `<h3 style="margin-top:14px">Not today</h3><ul class="list">${later.map(t =>
-    `<li><div><div class="t">${esc(t.title)}</div><div class="m">${t.mvdTag === "Move" ? "moved to tomorrow" : "delegate: ask someone or use AI help"}</div></div><span class="pill ${t.mvdTag}">${t.mvdTag}</span></li>`).join("")}</ul>` : "";
-  if (accepted) {
-    const keep = state.tasks.filter(t => t.mvdTag === "Keep").length, dele = later.filter(t => t.mvdTag === "Delegate").length;
-    $("dayBanner").innerHTML = `<div class="banner">Replanned after <b>${esc(NAMES[band.type] || band.type)} ${band.start}–${band.end}</b>.
-      Focus (Component 3) gets ${keep} Keep task${keep === 1 ? "" : "s"}; Delegation (Component 4) gets ${dele}.</div>`;
-  } else if (state.mvd && state.mvd.status === "proposed") {
-    $("dayBanner").innerHTML = `<div class="banner pending">A new plan is waiting for your decision. <button class="link" id="reopen">Review it</button></div>`;
-  } else $("dayBanner").innerHTML = "";
+  html += `<div class="axis" style="height:${height}px">`;
+  for (let m = H0; m <= H1; m += 60) html += `<span style="top:${y(m)}px">${pad(m / 60)}:00</span>`;
+  html += `</div>`;
+  for (const d of days) {
+    html += `<div class="col ${d === today() ? "today" : ""}" data-day="${d}" style="height:${height}px">`;
+    html += `<div class="off" style="top:0;height:${y(toMin(s.workStart))}px"></div><div class="off" style="top:${y(toMin(s.workEnd))}px;bottom:0"></div>`;
+    for (let m = H0; m <= H1; m += 60) html += `<div class="hl" style="top:${y(m)}px"></div>`;
+    for (const r of (s.routine || [])) html += `<div class="routine ${r.location}" style="top:${y(toMin(r.start))}px;height:${(toMin(r.end) - toMin(r.start)) * PX}px">${esc(r.label)} · ${r.location}</div>`;
+    const evs = [];
+    for (const b of state.blocks) evs.push({ s: toMin(b.start), e: toMin(b.end), cls: "protect", label: b.label, meta: `${b.start}–${b.end}` });
+    for (const it of items.filter(i => i.date === d)) {
+      const extra = (it.kind === "session" ? it.done : it.task && it.task.status === "done") ? " done" : it.task && it.task.status === "in_progress" && it.kind !== "session" ? " started" : "";
+      const tag = it.task && it.task.mvdTag && (it.kind === "Keep" || it.kind === "Reduce") ? ` · ${it.task.mvdTag}` : "";
+      evs.push({ s: toMin(it.start), e: toMin(it.end), cls: it.kind + extra, label: it.label, meta: `${it.start}–${it.end}${tag}`, ref: it });
+    }
+    for (const ev of lanes(evs)) {
+      const w = 100 / ev.lanes;
+      html += `<div class="ev ${ev.cls}" data-ev="${ev.ref ? items.indexOf(ev.ref) : ""}" style="top:${y(ev.s)}px;height:${Math.max((ev.e - ev.s) * PX - 1, 14)}px;left:calc(${ev.lane * w}% + 1px);width:calc(${w}% - 2px)" title="${esc(ev.label)} ${esc(ev.meta)}"><div class="et">${esc(ev.label)}</div><div>${esc(ev.meta)}</div></div>`;
+    }
+    if (state.mvd && state.mvd.date === d && state.mvd.status !== "rejected") {
+      const w = state.mvd.plan.disruption;
+      html += `<div class="band" style="top:${y(toMin(w.start))}px;height:${(toMin(w.end) - toMin(w.start)) * PX}px"></div>`;
+    }
+    if (d === today()) html += `<div class="now" style="top:${y(nowMin())}px"></div>`;
+    html += `</div>`;
+  }
+  $("week").innerHTML = html;
+  render.items = items;
+  const b = [];
+  if (state.mvd && state.mvd.status === "proposed") b.push(`A new plan for today is waiting. <button class="link" data-open="mvd">Review it</button>`);
+  if (state.rearr && state.rearr.status === "proposed") {
+    const open = state.rearr.result.needsDecision.filter(d => !state.rearr.choices[d.taskId]).length;
+    b.push(`The rest of the week has a proposal (dashed)${open ? ` — <b>${open} task${open > 1 ? "s" : ""} need${open > 1 ? "" : "s"} your choice</b>` : ""}. <button class="link" data-open="re">Review it</button>`);
+  }
+  $("banners").innerHTML = b.map(x => `<div class="banner">${x}</div>`).join("");
 }
 async function refresh() {
-  [state.tasks, state.blocks] = await Promise.all([api("GET", `/tasks?date=${day()}`), api("GET", "/protected-blocks")]);
-  renderSetup(); renderDay();
+  [state.tasks, state.blocks] = await Promise.all([api("GET", "/tasks"), api("GET", "/protected-blocks")]);
+  try { state.settings = await api("GET", "/me/settings"); } catch { state.settings = null; }
+  render();
 }
 
-/* ================= the MVD review ================= */
-function timeline(rows, opts) {
-  const from = Math.floor(opts.from / 60) * 60, to = Math.ceil(opts.to / 60) * 60, span = Math.max(to - from, 60);
-  const pct = (m) => `${((Math.min(Math.max(m, from), to) - from) / span) * 100}%`;
-  const width = (a, b) => `${((Math.min(b, to) - Math.max(a, from)) / span) * 100}%`;
-  const overlays = (opts.protect || []).map(p =>
-      `<div class="overlay protect" style="left:${pct(toMin(p.start))};width:${width(toMin(p.start), toMin(p.end))}"></div>`).join("")
-    + `<div class="overlay window" style="left:${pct(toMin(opts.window.start))};width:${width(toMin(opts.window.start), toMin(opts.window.end))}"></div>`;
-  let ticks = ""; for (let m = from; m <= to; m += 60) ticks += `<div class="tick" style="left:${pct(m)}"><span>${pad(m / 60 % 24)}:00</span></div>`;
-  let html = `<div class="tl-axis"><div></div><div class="track" style="height:22px">${ticks}</div></div>`;
-  for (const r of rows) {
-    const bars = r.bars.filter(b => b.start && b.end).map(b =>
-      `<div class="bar ${b.cls}" style="left:${pct(toMin(b.start))};width:${width(toMin(b.start), toMin(b.end))}">${esc(b.text || "")}</div>`).join("");
-    html += `<div class="tl-row"><div class="tl-name" title="${esc(r.name)}">${r.label}</div><div class="track">${overlays}${bars}</div></div>`;
-  }
-  return html;
+/* ===================== task form ===================== */
+function routineAt(hhmm) { const m = toMin(hhmm); return (state.settings?.routine || []).find(r => toMin(r.start) <= m && m < toMin(r.end)) || null; }
+function prefillLocation() {
+  if ($("tEffort").checked || $("tFlex").checked) { $("locHint").textContent = ""; return; }
+  const r = routineAt($("tStart").value);
+  $("tLocation").value = r ? r.location : "Home";
+  $("locHint").textContent = r ? `from your routine: ${r.label}` : "outside your routine: Home";
 }
-function renderMvd() {
-  const m = state.mvd, plan = m.plan, d = plan.disruption;
-  const original = Object.fromEntries((m.comparison.original || []).map(o => [o.taskId, o]));
-  const tasks = [...plan.tasks].sort((a, b) => TAG_ORDER.indexOf(a.tag) - TAG_ORDER.indexOf(b.tag) || (a.start || "99").localeCompare(b.start || "99"));
-  const counts = TAG_ORDER.map(t => [t, tasks.filter(x => x.tag === t).length]).filter(([, n]) => n);
-  $("mvdSummary").innerHTML = `<span class="chip plain">⚡ ${esc(NAMES[d.type] || d.type)} ${d.start}–${d.end}: ${d.kind === "unavailable" ? "your time is taken" : "some tasks can't be done during it"}</span>`
-    + counts.map(([t, n]) => `<span class="pill ${t}">${n} × ${TAG_TEXT[t]}</span>`).join(" ")
-    + `<span class="chip plain">replanned from ${plan.horizon.start} · ${plan.freeMinutesLeft} min free left</span>`;
-  const times = [plan.horizon.start, plan.horizon.end, d.start, d.end, ...tasks.flatMap(t => [t.start, t.end, original[t.id]?.start, original[t.id]?.end])].filter(Boolean).map(toMin);
-  $("mvdTimeline").innerHTML = timeline(tasks.map(t => ({
-    name: t.title, label: `<span class="pill ${t.tag}" style="margin-right:6px">${t.tag[0]}</span>${esc(t.title)}`,
-    bars: [{ start: original[t.id]?.start, end: original[t.id]?.end, cls: "ghost" },
-           { start: t.start, end: t.end, cls: t.tag, text: t.tag === "Reduce" ? `−${t.compressionPct}%` : t.tag }],
-  })), { from: Math.min(...times), to: Math.max(...times), protect: plan.protect, window: d });
-  $("mvdWarnings").innerHTML = (plan.warnings || []).map(w => `<div class="warn">⚠ ${esc(w.message)} <span class="code">${esc(w.code)}</span></div>`).join("");
-  $("mvdExplain").innerHTML = tasks.map(t => `<div class="ex ${t.tag}">
-      <div class="ex-head"><span class="pill ${t.tag}">${TAG_TEXT[t.tag]}</span>${esc(t.title)}
-        <span class="ex-meta">${t.start ? `${t.start}–${t.end}` : "not today"}${t.tag === "Reduce" ? ` · shortened by ${t.compressionPct}%` : ""}</span>
-        ${t.deadlineRisk ? '<span class="risk">⚠ deadline at risk</span>' : ""}</div>
-      <div>${esc(t.explanation)}</div>
-      <div class="code">reason ${esc(t.reason)} · Fi ${t.fi == null ? "–" : +t.fi.toFixed(3)} · due ${fmtDue(t.deadline)}</div></div>`).join("");
+function syncForm() {
+  const effort = $("tEffort").checked;
+  $("effortFields").hidden = !effort; $("normalFields").hidden = effort; $("hoursRow").hidden = !$("tFlex").checked;
+  if (!$("tSplit").dataset.touched) $("tSplit").checked = ["Digital", "Analog"].includes($("tType").value);
 }
-
-/* ================= actions ================= */
-async function saveHours() {
-  state.settings = await api("PUT", "/me/settings", { workStart: $("workStart").value, workEnd: $("workEnd").value });
+function openTask(day, start) {
+  $("tTitle").value = ""; $("tDay").value = day || today(); $("tFlex").checked = false; $("tEffort").checked = false; delete $("tSplit").dataset.touched;
+  if (start) { $("tStart").value = start; $("tEnd").value = toHHMM(Math.min(toMin(start) + 60, 23 * 60 + 59)); }
+  $("tDeadline").value = `${$("tDay").value}T23:59`; $("tDelegable").checked = false; $("tCategory").value = "";
+  syncForm(); prefillLocation(); $("dTask").showModal(); $("tTitle").focus();
 }
-async function addTask() {
+async function saveTask() {
   const title = $("tTitle").value.trim(); if (!title) throw new Error("Give the task a name");
-  const body = { title, type: $("tType").value, priority: $("tPriority").value, deadline: $("tDeadline").value,
-                 delegable: $("tDelegable").checked, plannedDate: day() };
-  if ($("tCategory").value) body.category = $("tCategory").value;
+  const body = { title, type: $("tType").value, priority: $("tPriority").value, deadline: $("tDeadline").value, delegable: $("tDelegable").checked };
   if (!body.deadline) throw new Error("Set the deadline");
-  if ($("tFlexible").checked) {
-    body.estimatedHours = Number($("tHours").value);
+  if ($("tCategory").value) body.category = $("tCategory").value;
+  if ($("tLocation").value) body.location = $("tLocation").value;
+  if ($("tEffort").checked) {
+    const total = Math.round(Number($("eTotal").value) * 60);
+    Object.assign(body, { plannedDate: today(), estimatedHours: total / 60, totalEffortMinutes: total, minSession: Number($("eMin").value), maxSession: Number($("eMax").value), splittable: true });
   } else {
-    const s = $("tStart").value, e = $("tEnd").value;
-    if (!s || !e) throw new Error("Set the start and end time (or tick “No set time”)");
-    if (toMin(e) <= toMin(s)) throw new Error("The end time must be after the start time");
-    Object.assign(body, { plannedStart: s, plannedEnd: e, estimatedHours: (toMin(e) - toMin(s)) / 60 });
+    body.plannedDate = $("tDay").value; body.splittable = $("tSplit").checked;
+    if ($("tFlex").checked) body.estimatedHours = Number($("tHours").value);
+    else { const s = $("tStart").value, e = $("tEnd").value; if (toMin(e) <= toMin(s)) throw new Error("The end time must be after the start time");
+      Object.assign(body, { plannedStart: s, plannedEnd: e, estimatedHours: (toMin(e) - toMin(s)) / 60 }); }
   }
-  await api("POST", "/tasks", body);
-  $("tTitle").value = ""; $("tDelegable").checked = false;
-  if (!$("tFlexible").checked) { const e = toMin($("tEnd").value); $("tStart").value = toHHMM(e); $("tEnd").value = toHHMM(Math.min(e + 60, 23 * 60 + 59)); }
-  await refresh(); toast("Task added", true); $("tTitle").focus();
+  await api("POST", "/tasks", body); $("dTask").close(); await refresh(); toast("Task added", "ok");
 }
-function openDisrupt() {
-  if (!state.tasks.some(t => t.status !== "done")) { toast("Add some tasks first: the planner replans your tasks"); return; }
-  $("dConfirm").checked = false; $("dlgDisrupt").showModal();
+
+/* ===================== setup ===================== */
+let draftRoutine = [];
+function openSetup() {
+  const s = state.settings || { workStart: "08:00", workEnd: "22:00" };
+  $("workStart").value = s.workStart; $("workEnd").value = s.workEnd; draftRoutine = [...(s.routine || [])];
+  renderSetup(); $("dSetup").showModal();
+}
+function renderSetup() {
+  $("routineList").innerHTML = draftRoutine.map((r, i) => `<span class="chip">${esc(r.label)} ${r.start}–${r.end} · ${r.location}<button class="small" data-del-routine="${i}">✕</button></span>`).join("") || `<span class="muted">none: all free time counts as Home</span>`;
+  $("blockList").innerHTML = state.blocks.map(b => `<span class="chip">${esc(b.label)} ${b.start}–${b.end}<button class="small" data-del-block="${b.id}">✕</button></span>`).join("") || `<span class="muted">none</span>`;
+}
+async function saveSetup() {
+  state.settings = await api("PUT", "/me/settings", { workStart: $("workStart").value, workEnd: $("workEnd").value, routine: draftRoutine });
+  $("dSetup").close(); await refresh(); toast("Setup saved", "ok");
+}
+function parseIcs(text, iso) {
+  const lines = text.replace(/\r\n[ \t]/g, "").split(/\r?\n/); const evs = []; let ev = null;
+  for (const l of lines) { if (l === "BEGIN:VEVENT") ev = {}; else if (l === "END:VEVENT") { if (ev) evs.push(ev); ev = null; }
+    else if (ev) { const i = l.indexOf(":"); if (i > 0) ev[l.slice(0, i).split(";")[0].toUpperCase()] = l.slice(i + 1); } }
+  const when = (v) => { const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})/.exec(v || ""); return m ? { d: `${m[1]}-${m[2]}-${m[3]}`, t: `${m[4]}:${m[5]}` } : null; };
+  return evs.map(e => ({ s: when(e.DTSTART), f: when(e.DTEND), r: !!e.RRULE, label: (e.SUMMARY || "Calendar event").slice(0, 60) }))
+            .filter(e => e.s && e.f && (e.s.d === iso || e.r)).map(e => ({ label: e.label, start: e.s.t, end: e.f.t })).filter(e => e.end > e.start);
+}
+async function importCalendar(text) {
+  const found = parseIcs(text, state.weekStart); if (!found.length) throw new Error("No timed events on " + state.weekStart);
+  for (const e of found) if (!state.blocks.some(b => b.label === e.label && b.start === e.start)) await api("POST", "/protected-blocks", e);
+  await refresh(); renderSetup(); toast(`Calendar synced: ${found.length} event(s) → protected time`, "ok");
+}
+const sampleIcs = () => { const d = state.weekStart.replaceAll("-", ""); return `BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART:${d}T123000\nDTEND:${d}T133000\nSUMMARY:Lunch\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:${d}T190000\nDTEND:${d}T193000\nSUMMARY:Dinner\nEND:VEVENT\nEND:VCALENDAR`; };
+
+/* ===================== disruption → today's MVD → the rest of the week ===================== */
+function openDisrupt(type, at) {
+  if (type) $("xType").value = type; const t = at || toHHMM(Math.floor(nowMin() / 5) * 5);
+  $("xStart").value = t; $("xFrom").value = t; $("xConfirm").checked = false; $("dDisrupt").showModal();
 }
 async function buildMvd() {
-  if (!$("dConfirm").checked) throw new Error("Tick “Yes, this really happened” first: the planner only acts on confirmed disruptions");
-  await saveHours();
-  const report = await api("POST", "/disruptions", { date: day(), type: $("dType").value, start: $("dStart").value,
-    timeLostMinutes: Number($("dLost").value), severity: Number($("dSeverity").value), confirmed: true });
-  state.mvd = await api("POST", `/disruptions/${report.id}/mvd`, { planFrom: $("dFrom").value });
-  $("dlgDisrupt").close(); renderMvd(); renderDay(); $("dlgMvd").showModal();
+  if (!$("xConfirm").checked) throw new Error("Tick “Yes, this really happened” first: the planner only acts on confirmed disruptions");
+  const rep = await api("POST", "/disruptions", { date: today(), type: $("xType").value, start: $("xStart").value, timeLostMinutes: Number($("xLost").value), severity: Number($("xSev").value), confirmed: true });
+  state.mvd = await api("POST", `/disruptions/${rep.id}/mvd`, { planFrom: $("xFrom").value });
+  $("dDisrupt").close(); renderMvd(); render(); $("dMvd").showModal();
 }
-async function decide(action) {
+function timeline(rows, from, to, protect, w) {
+  from = Math.floor(from / 60) * 60; to = Math.ceil(to / 60) * 60; const span = Math.max(to - from, 60);
+  const pc = (m) => `${((Math.min(Math.max(m, from), to) - from) / span) * 100}%`, wd = (a, b) => `${((Math.min(b, to) - Math.max(a, from)) / span) * 100}%`;
+  const ov = protect.map(p => `<div class="ovl p" style="left:${pc(toMin(p.start))};width:${wd(toMin(p.start), toMin(p.end))}"></div>`).join("") + `<div class="ovl w" style="left:${pc(toMin(w.start))};width:${wd(toMin(w.start), toMin(w.end))}"></div>`;
+  let ticks = ""; for (let m = from; m <= to; m += 60) ticks += `<div class="tick" style="left:${pc(m)}"><span>${pad(m / 60 % 24)}</span></div>`;
+  let html = `<div class="tl-row" style="border:none"><div></div><div class="track" style="height:18px">${ticks}</div></div>`;
+  for (const r of rows) html += `<div class="tl-row"><div style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.label}</div><div class="track">${ov}${r.bars.filter(b => b.start).map(b => `<div class="bar2 ${b.cls}" style="left:${pc(toMin(b.start))};width:${wd(toMin(b.start), toMin(b.end))}">${esc(b.text || "")}</div>`).join("")}</div></div>`;
+  return html;
+}
+const ORDER = ["Keep", "Reduce", "Delegate", "Move"];
+function renderMvd() {
+  const m = state.mvd, p = m.plan, d = p.disruption;
+  const orig = Object.fromEntries((m.comparison.original || []).map(o => [o.taskId, o]));
+  const tasks = [...p.tasks].sort((a, b) => ORDER.indexOf(a.tag) - ORDER.indexOf(b.tag));
+  $("mvdSummary").innerHTML = `<p>⚡ <b>${esc(NAMES[d.type] || d.type)} ${d.start}–${d.end}</b> · replanned from ${p.horizon.start}. ` +
+    ORDER.map(t => [t, tasks.filter(x => x.tag === t).length]).filter(x => x[1]).map(([t, n]) => `<span class="pill ${t}">${n} × ${t}</span>`).join(" ") +
+    `</p><p class="muted">After you accept, the moved tasks are placed on later days — you will see that proposal and decide it too.</p>`;
+  const times = [p.horizon.start, p.horizon.end, d.start, d.end, ...tasks.flatMap(t => [t.start, t.end, orig[t.id]?.start, orig[t.id]?.end])].filter(Boolean).map(toMin);
+  $("mvdTimeline").innerHTML = timeline(tasks.map(t => ({ label: `<span class="pill ${t.tag}">${t.tag[0]}</span> ${esc(t.title)}`,
+    bars: [{ start: orig[t.id]?.start, end: orig[t.id]?.end, cls: "ghost" }, { start: t.start, end: t.end, cls: t.tag, text: t.tag === "Reduce" ? `−${t.compressionPct}%` : t.tag }] })),
+    Math.min(...times), Math.max(...times), p.protect, d);
+  $("mvdCards").innerHTML = tasks.map(t => `<div class="card ${t.tag}"><b><span class="pill ${t.tag}">${TAG_TEXT[t.tag]}</span> ${esc(t.title)}</b>
+    <span class="muted">${t.start ? `${t.start}–${t.end}` : "not today"}</span> ${t.deadlineRisk ? '<span class="risk">⚠ deadline at risk</span>' : ""}<div>${esc(t.explanation)}</div>
+    <div class="code">reason ${esc(t.reason)} · Fi ${t.fi == null ? "–" : +t.fi.toFixed(3)}</div></div>`).join("") +
+    (p.warnings || []).map(w => `<div class="card" style="border-left-color:var(--reduce)">⚠ ${esc(w.message)}</div>`).join("");
+  for (const t of p.tasks) state.explain[t.id] = t.explanation;
+}
+async function decideMvd(action) {
   state.mvd = await api("POST", `/mvds/${state.mvd.id}/${action}`, action === "reject" ? {} : undefined);
-  if (action === "accept") state.accepted[day()] = { disruption: state.mvd.plan.disruption };
-  $("dlgMvd").close(); await refresh();
-  toast(action === "accept" ? "Plan accepted: your day is updated" : "Rejected: your original plan stays (decision logged)", true);
+  $("dMvd").close(); await refresh();
+  if (action !== "accept") { toast("Rejected: your plan stays (decision logged)", "info"); return; }
+  toast("Today's plan accepted", "ok");
+  state.rearr = await api("POST", "/rearrange", { date: today() });
+  if (!state.rearr.result.placements.length && !state.rearr.result.needsDecision.length) { state.rearr = null; render(); return; }
+  state.editRe = false; renderRe(); render(); $("dRe").showModal();
 }
-function setSetupOpen(open) { $("main").classList.toggle("setup-closed", !open); $("btnSetup").textContent = open ? "Hide setup" : "Edit setup"; }
-async function loadSample() {
-  $("workStart").value = "09:00"; $("workEnd").value = "17:00"; await saveHours();
-  await importCalendar(sampleIcs(), "the sample calendar");
-  const sample = [
-    ["Lab report (submit tonight)", "Digital", "High", addDays(0, "23:59"), "09:00", "11:00"],
-    ["Revise for tomorrow's quiz", "Analog", "High", addDays(1, "09:00"), "11:00", "12:30"],
-    ["Maths problem sheet", "Analog", "High", addDays(1, "17:00"), "13:30", "15:30"],
-    ["Group slides", "Digital", "Medium", addDays(2, "17:00"), "15:30", "17:00", null, true],
-    ["Read chapter 5", "Analog", "Medium", addDays(3, "17:00"), null, null, 1],
-    ["Online course video", "Digital", "Medium", addDays(2, "23:59"), null, null, 2],
-  ];
-  for (const [title, type, priority, deadline, s, e, hours, delegable] of sample) {
-    const body = { title, type, priority, deadline, plannedDate: day(), delegable: !!delegable,
-                   estimatedHours: s ? (toMin(e) - toMin(s)) / 60 : hours };
-    if (s) Object.assign(body, { plannedStart: s, plannedEnd: e });
-    await api("POST", "/tasks", body);
+function renderRe() {
+  const r = state.rearr, res = r.result, title = (id) => (state.tasks.find(t => t.id === id) || { title: id }).title;
+  const groups = {}; res.placements.forEach((p) => (groups[p.taskId] = groups[p.taskId] || []).push(p));
+  let html = `<p class="muted">Nothing changes until you accept. Tasks already planned on those days are never changed unless you choose an option that says so.</p>`;
+  if (res.missedSessions?.length) html += res.missedSessions.map(m => `<div class="card decide">Missed session: <b>${esc(title(m.taskId))}</b> on ${esc(dayName(m.date))} (${m.minutes} min) — the rest is re-spread.</div>`).join("");
+  for (const d of res.needsDecision) {
+    const pick = r.choices[d.taskId], opt = pick && d.options.find(o => o.code === pick);
+    html += `<div class="card decide"><b>⚠ ${esc(title(d.taskId))}</b> — does not fit (${d.shortfallMinutes} min short)<div>${esc(d.reason)}</div>
+      ${opt ? `<div style="margin-top:6px"><span class="pill Keep">Chosen: ${pick}</span> ${esc(OPT_TITLE[pick])} — <span class="muted">${esc(opt.reason)}</span></div>` : ""}
+      <div style="margin-top:6px"><button class="${pick ? "small" : "primary small"}" data-options="${d.taskId}">${pick ? "Change choice" : "Choose an option (A–E)"}</button></div></div>`;
   }
-  $("dType").value = "power_outage"; $("dStart").value = "09:00"; $("dLost").value = 150; $("dSeverity").value = "3"; $("dFrom").value = "09:00";
-  await refresh(); setSetupOpen(false); toast("Sample day loaded: now press ⚡ Record a disruption", true);
+  for (const [id, ps] of Object.entries(groups)) {
+    html += `<div class="card"><b>${esc(title(id))}</b>${ps.map(p => `<div style="margin-top:4px">${state.editRe && ps.length === 1 ?
+      `<select data-edit-day="${id}">${[...Array(8)].map((_, k) => addDays(today(), k)).map(d => `<option value="${d}" ${d === p.date ? "selected" : ""}>${esc(dayName(d))}</option>`).join("")}</select>
+       <input type="time" data-edit-start="${id}" value="${p.start}"> – <input type="time" data-edit-end="${id}" value="${p.end}">`
+      : `<b>${esc(dayName(p.date))} ${p.start}–${p.end}</b>${p.session ? ` · session ${p.session}` : ""}`}<div class="muted">${esc(p.reason)}</div></div>`).join("")}</div>`;
+  }
+  (res.warnings || []).forEach(w => (html += `<div class="card" style="border-left-color:var(--reduce)">⚠ ${esc(w.message)}</div>`));
+  $("reBody").innerHTML = html;
+  const open = res.needsDecision.filter(d => !r.choices[d.taskId]).length;
+  $("bReAccept").disabled = open > 0; $("bReEdit").textContent = state.editRe ? "Save my times" : "Edit times";
+  $("reHint").textContent = open ? `Choose an option for ${open} task${open > 1 ? "s" : ""} first.` : "";
 }
-function newStudent() {
-  state.user = "student-" + Math.random().toString(36).slice(2, 7);
-  state.settings = null; state.mvd = null; state.accepted = {}; $("who").textContent = state.user;
-  setSetupOpen(true);
-  return run(async () => { await saveHours(); await refresh(); });
+function openOptions(taskId) {
+  const d = state.rearr.result.needsDecision.find(x => x.taskId === taskId); state.optTask = taskId; state.optPick = state.rearr.choices[taskId] || null;
+  $("optHead").textContent = `“${(state.tasks.find(t => t.id === taskId) || {}).title}” does not fit — you choose`;
+  $("optReason").textContent = d.reason;
+  $("optList").innerHTML = d.options.map(o => `<div class="opt ${o.available ? "" : "na"} ${state.optPick === o.code ? "sel" : ""}" data-pick="${o.available ? o.code : ""}">
+    <div class="code" style="font-size:16px;font-weight:800">${o.code}</div><div><b>${OPT_TITLE[o.code]}</b>${o.available ? "" : ' <span class="muted">(not available)</span>'}<div>${esc(o.reason)}</div></div></div>`).join("");
+  $("bChoose").disabled = !state.optPick; $("dOpt").showModal();
+}
+async function chooseOption() {
+  state.rearr = await api("POST", `/rearrangements/${state.rearr.id}/choose`, { taskId: state.optTask, option: state.optPick });
+  $("dOpt").close(); renderRe(); render();
+}
+async function decideRe(action) {
+  if (action === "edit") {
+    if (!state.editRe) { state.editRe = true; renderRe(); return; }
+    const changes = [];
+    document.querySelectorAll("[data-edit-day]").forEach(sel => { const id = sel.dataset.editDay;
+      const p = state.rearr.result.placements.find(x => x.taskId === id), st = document.querySelector(`[data-edit-start="${id}"]`).value, en = document.querySelector(`[data-edit-end="${id}"]`).value;
+      if (sel.value !== p.date || st !== p.start || en !== p.end) changes.push({ taskId: id, date: sel.value, start: st, end: en }); });
+    if (!changes.length) throw new Error("Change a day or time first (or press Accept)");
+    state.rearr = await api("POST", `/rearrangements/${state.rearr.id}/edit`, { changes });
+  } else state.rearr = await api("POST", `/rearrangements/${state.rearr.id}/${action}`, action === "reject" ? {} : undefined);
+  $("dRe").close(); await refresh();
+  toast(action === "reject" ? "Rejected: nothing changed (decision logged)" : "The week is updated (decision logged)", action === "reject" ? "info" : "ok");
 }
 
-/* ================= wiring ================= */
-function fill(id, values, text = (v) => v) { $(id).innerHTML = values.map(v => `<option value="${v}">${esc(text(v))}</option>`).join(""); }
-fill("tType", CFG.taskTypes, v => TYPE_TEXT[v] || v); fill("tPriority", CFG.priorities);
-fill("tCategory", ["", ...(CFG.categories || [])], v => v || "— not set —");
-fill("dType", CFG.disruptionTypes, v => `${NAMES[v] || v}${CFG.disruptionKinds[v] === "unavailable" ? " (my time is taken)" : ""}`);
-$("tPriority").value = "Medium";
-const now = new Date(); $("day").value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-$("tDeadline").value = `${day()}T23:59`;
-$("tFlexible").onchange = () => { $("timeFields").hidden = $("tFlexible").checked; $("hoursField").hidden = !$("tFlexible").checked; };
-$("dStart").onchange = () => ($("dFrom").value = $("dStart").value);
-$("day").onchange = () => run(async () => { $("tDeadline").value = `${day()}T23:59`; await refresh(); });
-$("workStart").onchange = $("workEnd").onchange = () => run(async () => { await saveHours(); renderDay(); });
-$("btnSync").onclick = () => $("icsFile").click();
-$("icsFile").onchange = () => run(async () => { const f = $("icsFile").files[0]; if (f) await importCalendar(await f.text(), f.name); $("icsFile").value = ""; });
-$("btnSampleCal").onclick = () => run(() => importCalendar(sampleIcs(), "the sample calendar"));
-$("btnBlock").onclick = () => run(async () => {
-  await api("POST", "/protected-blocks", { label: $("blkLabel").value.trim() || "Protected", start: $("blkStart").value, end: $("blkEnd").value });
-  $("blkLabel").value = ""; await refresh();
-});
-$("btnTask").onclick = () => run(addTask);
-$("tTitle").onkeydown = (e) => { if (e.key === "Enter") run(addTask); };
-$("btnDone").onclick = () => run(async () => { await saveHours(); setSetupOpen(false); renderDay(); });
-$("btnSetup").onclick = () => setSetupOpen($("main").classList.contains("setup-closed"));
-$("btnDisrupt").onclick = $("fab").onclick = openDisrupt;
-$("btnMvd").onclick = () => run(buildMvd);
-$("btnAccept").onclick = () => run(() => decide("accept"));
-$("btnReject").onclick = () => run(() => decide("reject"));
-$("btnSample").onclick = () => run(loadSample);
-$("btnNew").onclick = newStudent;
+/* ===================== task details ===================== */
+function openDetail(it) {
+  const t = it.task; if (!t) return;
+  $("detHead").textContent = t.title;
+  const rows = [["When", it.start ? `${dayName(it.date)} ${it.start}–${it.end}` : "not scheduled"], ["Needs", TYPE_TEXT[t.type] || t.type], ["Priority", t.priority],
+    ["Due", t.deadline.replace("T", " ")], ["Where", t.location || "—"], t.totalEffortMinutes ? ["Effort", `${t.actualMinutesDone || 0} of ${t.totalEffortMinutes} min done`] : null,
+    t.mvdTag ? ["Today's plan", t.mvdTag] : null, ["Status", it.kind === "session" ? (it.done ? "session done" : "session planned") : t.status]].filter(Boolean);
+  $("detBody").innerHTML = `<table>${rows.map(([k, v]) => `<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>` +
+    (it.reason ? `<div class="card" style="margin-top:10px"><b>Why it is here</b><div>${esc(it.reason)}</div></div>` : "") +
+    (t.needsSlot ? `<div class="card decide">⚠ Needs a slot: ${t.shortfallMinutes} min of free time are missing before the deadline.</div>` : "");
+  const acts = [];
+  if (it.kind === "session" && !it.done) acts.push(`<button class="primary" data-act="session" data-id="${t.id}" data-date="${it.date}">Session done</button>`);
+  if (it.kind !== "session" && it.kind !== "ghost" && t.status === "planned") acts.push(`<button class="primary" data-act="start" data-id="${t.id}">Start task</button>`);
+  if (t.status !== "done" && it.kind !== "session" && it.kind !== "ghost") acts.push(`<button data-act="done" data-id="${t.id}">Mark done</button>`);
+  if (it.kind !== "ghost") acts.push(`<button data-act="delete" data-id="${t.id}">Delete</button>`);
+  $("detActions").innerHTML = acts.join("") || `<button data-close>Close</button>`; $("dDetail").showModal();
+}
+
+/* ===================== reminders and start prompts ===================== */
+function startable() {
+  return (render.items || []).filter(i => i.date === today() && ["task", "Keep", "Reduce", "moved", "session"].includes(i.kind))
+    .filter(i => i.kind === "session" ? !i.done : i.task.status === "planned");
+}
+function checkPrompts() {
+  const R = Number($("remind").value) || 0, now = nowMin();
+  for (const it of startable()) {
+    const key = `${it.task.id}|${it.date}|${it.start}`, p = (state.prompts[key] = state.prompts[key] || { stage: 0, answered: false });
+    if (p.answered) continue;
+    const diff = now - toMin(it.start);
+    if (diff >= 30 && p.stage < 4) { p.stage = 4; state.returnQueue.push(it); }        // silent now; "What happened?" when you return
+    else if (diff >= 15 && diff < 30 && p.stage < 3) { p.stage = 3; state.promptQueue.push({ it, kind: "again" }); }
+    else if (diff >= 0 && diff < 15 && p.stage < 2) { p.stage = 2; state.promptQueue.push({ it, kind: "start" }); }
+    else if (diff < 0 && diff >= -R && p.stage < 1) { p.stage = 1; toast(`🔔 Reminder: “${it.task.title}” starts at ${it.start} (in ${-diff} min)`, "info"); }
+  }
+  showNextPrompt();
+}
+function replies(it) {
+  const list = [["started", "▶ Started"], ["power_outage", "⚡ Power cut"], ["transport_delay", "🚌 Delayed"], ["urgent_work", "❗ Something urgent came up"]];
+  if ((it.task.location || "Home") === "Home" && $("motion").checked) { list.splice(2, 1); list.unshift(["transport_delay", "🚌 Delayed on the way?"]); }
+  return list;
+}
+function showPrompt(it, kind) {
+  state.current = it;
+  $("prHead").textContent = kind === "what" ? "What happened?" : kind === "again" ? "Still not started?" : "⏰ Time to start";
+  $("prText").innerHTML = kind === "what" ? `<b>${esc(it.task.title)}</b> was planned for ${it.start}. The reminders went unanswered — what happened?`
+    : `<b>${esc(it.task.title)}</b> is planned for ${it.start}–${it.end}${it.task.location ? ` (${esc(it.task.location)})` : ""}.` +
+      (kind === "again" ? " It was due to start 15 minutes ago — this is the last prompt." : "") + ` <span class="muted">Nothing starts by itself: tap Started when you begin.</span>`;
+  const list = replies(it); if (kind === "what") list.push(["done", "✓ I did it already"]);
+  $("prReplies").innerHTML = list.map(([v, t], i) => `<button class="${i === 0 ? "first" : ""}" data-reply="${v}">${t}</button>`).join("");
+  $("dPrompt").showModal();
+}
+function showNextPrompt() { if ($("dPrompt").open || document.querySelector("dialog[open]")) return; const n = state.promptQueue.shift(); if (n) showPrompt(n.it, n.kind); }
+async function reply(value) {
+  const it = state.current, key = `${it.task.id}|${it.date}|${it.start}`; state.prompts[key].answered = true; $("dPrompt").close();
+  if (value === "started") { if (it.kind !== "session") await api("POST", `/tasks/${it.task.id}/start`); toast(`Started “${it.task.title}”`, "ok"); await refresh(); }
+  else if (value === "done") { if (it.kind === "session") await api("POST", `/tasks/${it.task.id}/sessions/done`, { date: it.date }); else await api("POST", `/tasks/${it.task.id}/done`); await refresh(); }
+  else openDisrupt(value, toHHMM(Math.floor(nowMin() / 5) * 5));
+}
+document.addEventListener("pointerdown", (e) => {   // the student "returns" after a silent 30 min: ask what happened
+  if (!state.returnQueue.length || e.target.closest("dialog") || e.target.closest("#clock")) return;
+  const it = state.returnQueue.shift(); setTimeout(() => showPrompt(it, "what"), 0);
+}, true);
+
+/* ===================== sample week ===================== */
+async function loadSample() {
+  const d0 = today(), at = (n, t) => `${addDays(d0, n)}T${t}`;
+  state.settings = await api("PUT", "/me/settings", { workStart: "08:00", workEnd: "22:00", routine: [
+    { label: "Bus", start: "08:00", end: "08:45", location: "Commute" }, { label: "On campus", start: "09:00", end: "12:30", location: "Campus" }] });
+  for (const b of [{ label: "Lunch", start: "12:30", end: "13:30" }, { label: "Dinner", start: "19:00", end: "19:30" }]) await api("POST", "/protected-blocks", b);
+  const T = (title, type, priority, hours, deadline, date, s, e, extra = {}) => ({ title, type, priority, estimatedHours: hours, deadline, plannedDate: date, ...(s ? { plannedStart: s, plannedEnd: e } : {}), ...extra });
+  for (const t of [
+    T("Lab report (submit tonight)", "Digital", "High", 2, at(0, "23:59"), d0, "14:00", "16:00", { location: "Home" }),
+    T("Revise for tomorrow's quiz", "Analog", "High", 1.5, at(1, "09:00"), d0, "16:00", "17:30", { location: "Home" }),
+    T("Group slides", "Digital", "Medium", 1.5, at(2, "17:00"), d0, "17:30", "19:00", { location: "Home", delegable: true }),
+    T("Essay plan (Module B)", "Digital", "Medium", 2.5, at(1, "23:59"), d0, "19:30", "22:00", { location: "Home", category: "writing" }),
+    T("Group report section", "Digital", "Medium", 2, at(1, "23:59"), d0, null, null, { location: "Home", category: "writing" }),
+    T("Read chapter 5", "Analog", "Medium", 1, at(3, "17:00"), d0, null, null, { location: "Home", category: "reading" }),
+    T("Online course video", "Digital", "Low", 2, at(4, "23:59"), d0),
+    T("Project report", "Digital", "Medium", 6, at(7, "23:59"), d0, null, null, { totalEffortMinutes: 360, minSession: 30, maxSession: 90, splittable: true, category: "writing" }),
+    T("Part-time shift", "Fixed", "High", 8, at(1, "23:59"), addDays(d0, 1), "09:00", "17:00", { location: "Office" }),
+    T("Tutorial prep", "Analog", "Medium", 1, at(1, "23:59"), addDays(d0, 1), "18:00", "19:00"),
+    T("Assignment B: final check", "Digital", "High", 2.5, at(1, "23:59"), addDays(d0, 1), "19:30", "22:00"),
+    T("Lab bench measurements", "Analog", "Medium", 1, at(3, "23:59"), addDays(d0, 2), "10:00", "11:00", { location: "Campus" }),
+  ]) await api("POST", "/tasks", t);
+  $("xType").value = "power_outage"; $("xLost").value = 180;
+  state.weekStart = d0; await refresh();
+  await setClock(`${d0}T13:45`);
+  toast("Sample week loaded. Press +5 min twice: the reminder, then “Time to start” at 14:00.", "info");
+}
+async function newStudent() {
+  state.user = "student-" + Math.random().toString(36).slice(2, 7); $("who").textContent = "· " + state.user;
+  Object.assign(state, { settings: null, mvd: null, rearr: null, explain: {}, prompts: {}, returnQueue: [], promptQueue: [] });
+  state.weekStart = today(); await refresh();
+}
+
+/* ===================== wiring ===================== */
+const fill = (id, vals, txt = v => v) => ($(id).innerHTML = vals.map(v => `<option value="${v}">${esc(txt(v))}</option>`).join(""));
+fill("tType", CFG.taskTypes, v => TYPE_TEXT[v] || v); fill("tPriority", CFG.priorities); $("tPriority").value = "Medium";
+fill("tCategory", ["", ...(CFG.categories || [])], v => v || "— not set —"); fill("tLocation", ["", ...(CFG.locations || [])], v => v || "— not set —");
+fill("rLoc", CFG.locations || []); fill("xType", CFG.disruptionTypes, v => `${NAMES[v] || v}${CFG.disruptionKinds[v] === "unavailable" ? " (my time is taken)" : ""}`);
+$("tEffort").onchange = () => { syncForm(); prefillLocation(); }; $("tFlex").onchange = () => { syncForm(); prefillLocation(); };
+$("tStart").onchange = prefillLocation; $("tType").onchange = syncForm; $("tSplit").onchange = () => ($("tSplit").dataset.touched = "1");
+$("tDay").onchange = () => ($("tDeadline").value = `${$("tDay").value}T23:59`);
+$("bAdd").onclick = () => openTask(); $("bSaveTask").onclick = () => run(saveTask);
+$("bSetup").onclick = openSetup; $("bSaveSetup").onclick = () => run(saveSetup);
+$("bAddRoutine").onclick = () => { if (!$("rLabel").value.trim()) return toast("Name the routine block");
+  draftRoutine.push({ label: $("rLabel").value.trim(), start: $("rStart").value, end: $("rEnd").value, location: $("rLoc").value }); $("rLabel").value = ""; renderSetup(); };
+$("bAddBlock").onclick = () => run(async () => { await api("POST", "/protected-blocks", { label: $("pLabel").value.trim() || "Protected", start: $("pStart").value, end: $("pEnd").value }); $("pLabel").value = ""; await refresh(); renderSetup(); });
+$("bSync").onclick = () => $("icsFile").click(); $("icsFile").onchange = () => run(async () => { const f = $("icsFile").files[0]; if (f) await importCalendar(await f.text()); $("icsFile").value = ""; });
+$("bSampleCal").onclick = () => run(() => importCalendar(sampleIcs()));
+$("bDisrupt").onclick = () => openDisrupt(); $("bMvd").onclick = () => run(buildMvd);
+$("xStart").onchange = () => ($("xFrom").value = $("xStart").value);
+$("bMvdAccept").onclick = () => run(() => decideMvd("accept")); $("bMvdReject").onclick = () => run(() => decideMvd("reject"));
+$("bReAccept").onclick = () => run(() => decideRe("accept")); $("bReReject").onclick = () => run(() => decideRe("reject")); $("bReEdit").onclick = () => run(() => decideRe("edit"));
+$("bChoose").onclick = () => run(chooseOption);
+$("bSample").onclick = () => run(loadSample); $("bNew").onclick = () => run(newStudent);
+$("bPrev").onclick = () => { state.weekStart = addDays(state.weekStart, -7); render(); };
+$("bNext").onclick = () => { state.weekStart = addDays(state.weekStart, 7); render(); };
+$("bToday").onclick = () => { state.weekStart = today(); render(); };
+document.querySelectorAll("[data-jump]").forEach(b => (b.onclick = () => run(() => jump(Number(b.dataset.jump)))));
+$("bSet").onclick = () => run(() => setClock($("simSet").value));
 document.addEventListener("click", (e) => {
-  const t = e.target.dataset;
-  if (e.target.id === "reopen") { renderMvd(); $("dlgMvd").showModal(); }
-  if ("close" in t) e.target.closest("dialog").close();
-  if (t.done) run(async () => { await api("POST", `/tasks/${t.done}/done`, {}); await refresh(); });
-  if (t.delTask) run(async () => { await api("DELETE", `/tasks/${t.delTask}`); await refresh(); });
-  if (t.delBlock) run(async () => { await api("DELETE", `/protected-blocks/${t.delBlock}`); await refresh(); });
+  const t = e.target, ds = t.dataset;
+  if ("close" in ds) return t.closest("dialog").close();
+  if (ds.open === "mvd") { renderMvd(); return $("dMvd").showModal(); }
+  if (ds.open === "re") { renderRe(); return $("dRe").showModal(); }
+  if (ds.options) return openOptions(ds.options);
+  if (ds.reply) return run(() => reply(ds.reply));
+  if (ds.delRoutine !== undefined) { draftRoutine.splice(Number(ds.delRoutine), 1); return renderSetup(); }
+  if (ds.delBlock) return run(async () => { await api("DELETE", `/protected-blocks/${ds.delBlock}`); await refresh(); renderSetup(); });
+  if (ds.act) return run(async () => {
+    if (ds.act === "start") await api("POST", `/tasks/${ds.id}/start`);
+    if (ds.act === "done") await api("POST", `/tasks/${ds.id}/done`);
+    if (ds.act === "session") await api("POST", `/tasks/${ds.id}/sessions/done`, { date: ds.date });
+    if (ds.act === "delete") await api("DELETE", `/tasks/${ds.id}`);
+    $("dDetail").close(); await refresh(); });
+  const pick = t.closest("[data-pick]"); if (pick && pick.dataset.pick) { state.optPick = pick.dataset.pick;
+    document.querySelectorAll("#optList .opt").forEach(o => o.classList.toggle("sel", o === pick)); $("bChoose").disabled = false; return; }
+  const ev = t.closest(".ev[data-ev]"); if (ev && ev.dataset.ev !== "") return openDetail(render.items[Number(ev.dataset.ev)]);
+  const chip = t.closest(".tray [data-task]"); if (chip) { const task = state.tasks.find(x => x.id === chip.dataset.task); return openDetail({ task, kind: "tray", date: task.plannedDate, reason: task.rearrangeReason || state.explain[task.id] }); }
+  const col = t.closest(".col"); if (col && t === col) { const r = col.getBoundingClientRect(); const m = Math.round(((e.clientY - r.top) / PX + H0) / 15) * 15; return openTask(col.dataset.day, toHHMM(m)); }
 });
-newStudent().then(() => {
-  // ?auto: sample day → record the power cut → show the MVD (quick start / screenshots).
-  // ?auto=accept also accepts it, to show the updated day.
+document.querySelectorAll("dialog").forEach(d => d.addEventListener("close", () => setTimeout(showNextPrompt, 50)));
+
+(async () => {
+  state.now = (await api("GET", "/demo/clock", undefined, true)).now;
+  await newStudent(); await setClock(state.now);
+  // ?auto=prompt | mvd | rearrange | options | week — the sample story in one go (quick start, screenshots)
   const auto = new URLSearchParams(location.search).get("auto");
-  if (auto !== null) run(async () => {
-    await loadSample(); $("dConfirm").checked = true; await buildMvd();
-    if (auto === "accept") await decide("accept");
+  if (auto) run(async () => {
+    await loadSample();
+    if (auto === "prompt") { await jump(15); return; }
+    state.promptQueue = []; state.prompts = {};
+    await setClock(`${today()}T14:00`); if ($("dPrompt").open) $("dPrompt").close(); state.promptQueue = [];
+    openDisrupt("power_outage", "14:00"); $("xConfirm").checked = true; await buildMvd();
+    if (auto === "mvd") return;
+    await decideMvd("accept");
+    if (auto === "options") { const d = state.rearr.result.needsDecision[0]; if (d) { $("dRe").close(); openOptions(d.taskId); } return; }
+    if (auto === "week") { for (const d of state.rearr.result.needsDecision) { state.optTask = d.taskId; state.optPick = "C"; await chooseOption(); }
+      await decideRe("accept"); }
   });
-});
+})();
 </script>
 </body>
 </html>

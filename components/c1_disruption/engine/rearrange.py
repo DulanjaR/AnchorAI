@@ -499,7 +499,8 @@ def _needs_decision(state: State, item: Item, config: ModuleType) -> dict[str, A
     if not gaps:
         reason = f"There is no free time before the deadline ({due}). You choose:"
     elif item.splittable:
-        free = ", ".join(f"{day_label(g.date, False)} {hhmm(g.start)}–{hhmm(g.end)}" for g in gaps)
+        # Only the gaps that count (at least minSession long) are named.
+        free = ", ".join(f"{day_label(g.date, False)} {hhmm(g.start)}–{hhmm(g.end)}" for g in _capacity(item, gaps))
         reason = f"No free time before the deadline ({due}) holds {item.minutes} min: only {fit} min are free ({free}). You choose:"
     else:
         best = _capacity(item, gaps)[0]
@@ -614,6 +615,10 @@ def rearrange(data: dict[str, Any], config: ModuleType = default_config) -> dict
                                              f"{hhmm(s)}–{hhmm(s + m)} ({m} min)."})
             continue
         decisions.append(_needs_decision(state, item, config))
+        # PROPOSED (17 Oct 2026): until the student decides, the free time this more urgent task
+        # could use stays reserved for it, so a less urgent task does not take it.
+        for g in _capacity(item, usable_gaps(state, item, _all_dates(state, item))):
+            state.take(g.date, g.start, g.start + (min(g.minutes, item.max_session) if item.splittable else g.minutes))
     for task in data.get("effort", []):
         p, m, w = _effort(state, task, config)
         placements += p

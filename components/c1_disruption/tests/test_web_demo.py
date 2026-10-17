@@ -53,3 +53,43 @@ def test_the_page_flow_works_on_the_demo_app():
     assert accepted["status"] == "accepted"
     tasks = call("GET", f"/tasks?date={day}").json()
     assert all(t["mvdTag"] for t in tasks)
+
+
+def test_demo_clock_can_be_set_and_drives_the_api():
+    c = client()
+    assert c.put("/demo/clock", json={"now": "2026-11-02T13:55"}).json() == {"now": "2026-11-02T13:55"}
+    assert c.get("/demo/clock").json()["now"] == "2026-11-02T13:55"
+    assert c.put("/demo/clock", json={"now": "not a time"}).status_code == 400
+    headers = {"X-API-Key": settings.api_key, "X-User-Id": "s"}
+    task = c.post("/api/tasks", headers=headers, json={"title": "T", "type": "Analog", "priority": "High", "estimatedHours": 1,
+                                                       "deadline": "2026-11-02T23:59", "plannedDate": "2026-11-02"}).json()
+    started = c.post(f"/api/tasks/{task['id']}/start", headers=headers).json()
+    assert started["startedAt"] == "2026-11-02T08:25:00.000Z"  # 13:55 Colombo = 08:25 UTC: the simulated time
+
+
+def test_page_config_has_the_new_lists():
+    cfg = json.loads(re.search(r"const CFG = (\{.*?\});", client().get("/").text).group(1))
+    assert cfg["locations"] == list(config.LOCATIONS) and cfg["categories"] == list(config.TASK_CATEGORIES)
+
+
+def test_the_week_story_works_through_the_demo_app():
+    """Sample-like day: power cut → MVD accepted → the rest of the week proposed → choose → accept."""
+    c = client()
+    headers = {"X-API-Key": settings.api_key, "X-User-Id": "week"}
+    call = lambda m, p, b=None: c.request(m, "/api" + p, headers=headers, json=b).json()
+    c.put("/demo/clock", json={"now": "2026-11-02T14:00"})
+    call("PUT", "/me/settings", {"workStart": "17:00", "workEnd": "18:00"})
+    tight = call("POST", "/tasks", {"title": "Report", "type": "Digital", "priority": "Medium", "estimatedHours": 2,
+                                    "deadline": "2026-11-03T23:59", "plannedDate": "2026-11-02"})
+    rep = call("POST", "/disruptions", {"date": "2026-11-02", "type": "power_outage", "start": "17:00",
+                                        "timeLostMinutes": 60, "severity": 3, "confirmed": True})
+    mvd = call("POST", f"/disruptions/{rep['id']}/mvd", {"planFrom": "17:00"})
+    call("POST", f"/mvds/{mvd['id']}/accept")
+    rec = call("POST", "/rearrange", {"date": "2026-11-02"})
+    (d,) = rec["result"]["needsDecision"]
+    assert d["taskId"] == tight["id"] and [o["code"] for o in d["options"] if o["available"]] == ["C", "E"]
+    call("POST", f"/rearrangements/{rec['id']}/choose", {"taskId": tight["id"], "option": "C"})
+    assert call("POST", f"/rearrangements/{rec['id']}/accept")["status"] == "accepted"
+    t = call("GET", f"/tasks/{tight['id']}")
+    assert (t["plannedDate"], t["plannedStart"], t["plannedEnd"]) == ("2026-11-03", "17:00", "18:00")
+    assert t["rearrangeReason"].startswith("Shorten it to 60 min")

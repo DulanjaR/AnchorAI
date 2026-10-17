@@ -84,3 +84,15 @@ def test_several_moved_tasks_share_the_free_time_in_fi_order():
     later = task(id="L", priority="Low", durationMinutes=60, deadline="2026-11-08T23:59")
     out = rearrange(data([evening("2026-11-03", "19:00", "20:00"), evening("2026-11-04", "19:00", "20:00")], [later, urgent]))
     assert [(p["taskId"], p["date"]) for p in out["placements"]] == [("U", "2026-11-03"), ("L", "2026-11-04")]
+
+
+def test_free_time_of_a_task_waiting_for_a_decision_is_kept_for_it():
+    # PROPOSED (17 Oct 2026): the urgent task U cannot be placed (needs 120, only Tue 17:00–18:00
+    # before its deadline); until the student decides, the less urgent L may not take that hour.
+    urgent = task(id="U", priority="High", durationMinutes=120, deadline="2026-11-03T23:59", splittable=True)
+    later = task(id="L", priority="Low", durationMinutes=60, deadline="2026-11-08T23:59")
+    days = [evening("2026-11-03", "17:00", "18:00"), evening("2026-11-04", "17:00", "18:00")]
+    out = rearrange(data(days, [later, urgent]))
+    assert [d["taskId"] for d in out["needsDecision"]] == ["U"]
+    assert [(p["taskId"], p["date"]) for p in out["placements"]] == [("L", "2026-11-04")]
+    assert "only 60 min are free (Tue 17:00–18:00)" in out["needsDecision"][0]["reason"]

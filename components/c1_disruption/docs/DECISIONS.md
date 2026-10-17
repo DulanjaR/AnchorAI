@@ -2,6 +2,11 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-17 — Web demo: week calendar, rearranger dialog, simulated clock and start prompts
+- Source: planning chat, 17 Oct 2026, and owner ("main interface is the calendar with tasks; others are popups").
+- 7-day week view: today's MVD as before; moved tasks and effort sessions on their new day with the reason. The rearranger's `needsDecision` opens a dialog with options A–E and their reasons; nothing changes until one is picked; then Accept / Edit / Reject (logged for Model 2). Task form: location (pre-filled from the routine) and effort-task fields. Simulated clock (+5 / +15 / +30 min, set a time): reminder 5 min before start (setting); at start "Time to start" with quick replies Started / Power cut / Delayed / Something urgent came up; +15 one more prompt; +30 silent + "What happened?" on return; planned at Home + simulated sustained motion → "Delayed on the way?" first. Started only by a tap.
+- **PROPOSED (not in the approved R01–R08 rules):** while a moved task waits for the student's decision, the free time it could use (option C's slots) is kept for it, so a less urgent task placed after it in the same run does not take that time. Golden R01–R08 are unaffected (one moved task each). Found while building the demo: without it, option C of an urgent task could clash with a less urgent task's automatic placement.
+
 ## 2026-10-17 — Rearranger golden R01–R08 approved; main screen = calendar
 - Source: owner, 17 Oct 2026.
 - **R01–R08 approved as written**, with the 11 interpretations in `tests/golden/rearrange/README.md` (now approved, no longer PROPOSED). `engine/rearrange.py` reproduces all eight exactly.
