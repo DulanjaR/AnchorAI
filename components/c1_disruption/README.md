@@ -75,5 +75,28 @@ calendar sync (.ics). Quick start: `?auto=prompt`, `?auto=mvd`, `?auto=rearrange
 `?auto=week`. Data is in memory and is gone when the server stops. A terminal version:
 `python -m components.c1_disruption.demo.pp1_demo`.
 
-Database: open team decision (PostgreSQL vs Firestore). Until then C1 uses an
-in-memory store behind a repository interface, so no database is needed to run it.
+## Using the demo for real (5-day self-trial) and Supabase
+
+```bash
+python -m components.c1_disruption.demo.web_demo                 # data in a local file (kept between runs)
+python -m components.c1_disruption.demo.web_demo --db supabase   # data in the team's Supabase database
+```
+
+- **Your data is kept.** By default it is stored in `anchor_c1_demo.sqlite3` in your home folder, so
+  closing the server or the PC loses nothing. The bar under the header shows where the data is.
+- **Supabase:** in the Supabase dashboard, *Connect* → *Session pooler* → copy the URI and put it in the
+  repo's `.env` (never commit it): `DATABASE_URL=postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres`.
+  Start with `--db supabase`. C1 creates its table `c1_records` itself (row-level security on, so
+  Supabase's public API cannot read it).
+- **Each day:** keep the page open (the clock is LIVE; tap *Allow notifications* to get reminders when
+  the tab is in the background). Add the day's tasks, tap *Started* / *Mark done* (that is what gives
+  Model 1 real durations), record disruptions when they happen, decide the plans (Model 2's data), and
+  use **🌙 End of day** for tasks you did not mark (with the minutes they really took, if you know).
+- **Export my data** downloads everything (JSON) and the Model 1 records (CSV). Notebook 01 can train on
+  them (dataset `PILOT`: your own data, one person — for checking the system, not a study result).
+- The pretend clock (+5 / +15 / +30, *Go*) is only for trying the prompts; it is marked PRETEND, and
+  *Back to real time* returns to live. *Try the sample week* uses a separate sample student.
+
+Database: the team database is Supabase (PostgreSQL), 17 Oct 2026; C1's `SqlStore` (`app/data/sql_store.py`)
+keeps its records in one table. Tests use the in-memory store.
+

@@ -1,9 +1,9 @@
 """Data-access interface (CLAUDE.md rule 4). Routes and services only ever call
 these methods; nothing else talks to storage.
 
-The database is an open team decision (PostgreSQL vs Firestore). Every store,
-the in-memory one now and the real one later, implements this Protocol and must
-pass the same contract tests (tests/data/store_contract.py).
+The team database is Supabase (PostgreSQL), decided 17 Oct 2026. Every store —
+MemoryStore (tests) and SqlStore (Supabase/PostgreSQL or a local SQLite file) —
+implements this Protocol and passes the same contract tests (tests/data/store_contract.py).
 
 Records are plain JSON-like dicts. A store returns COPIES, so changing a returned
 dict never changes stored data (this is also how a real database behaves).

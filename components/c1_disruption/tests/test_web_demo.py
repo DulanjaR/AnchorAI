@@ -57,7 +57,8 @@ def test_the_page_flow_works_on_the_demo_app():
 
 def test_demo_clock_can_be_set_and_drives_the_api():
     c = client()
-    assert c.put("/demo/clock", json={"now": "2026-11-02T13:55"}).json() == {"now": "2026-11-02T13:55"}
+    assert c.get("/demo/clock").json()["live"] is True  # real time by default
+    assert c.put("/demo/clock", json={"now": "2026-11-02T13:55"}).json() == {"now": "2026-11-02T13:55", "live": False}
     assert c.get("/demo/clock").json()["now"] == "2026-11-02T13:55"
     assert c.put("/demo/clock", json={"now": "not a time"}).status_code == 400
     headers = {"X-API-Key": settings.api_key, "X-User-Id": "s"}
@@ -93,3 +94,47 @@ def test_the_week_story_works_through_the_demo_app():
     t = call("GET", f"/tasks/{tight['id']}")
     assert (t["plannedDate"], t["plannedStart"], t["plannedEnd"]) == ("2026-11-03", "17:00", "18:00")
     assert t["rearrangeReason"].startswith("Shorten it to 60 min")
+
+
+def test_back_to_live_time():
+    c = client()
+    c.put("/demo/clock", json={"now": "2020-01-01T10:00"})
+    back = c.put("/demo/clock", json={"live": True}).json()
+    assert back["live"] is True and not back["now"].startswith("2020")
+
+
+def test_demo_data_survives_a_restart_and_exports_model_data(tmp_path):
+    from components.c1_disruption.demo.web_demo import store_for
+
+    db = f"sqlite:///{tmp_path / 'demo.sqlite3'}"
+    headers = {"X-API-Key": settings.api_key, "X-User-Id": "ravindu"}
+    first = TestClient(web_demo.build_app(store_for(db)))
+    first.put("/demo/clock", json={"now": "2026-11-02T09:00"})
+    first.request("PUT", "/api/me/settings", headers=headers, json={"workStart": "08:00", "workEnd": "22:00"})
+    task = first.post("/api/tasks", headers=headers, json={"title": "Lab sheet", "type": "Digital", "priority": "High",
+                                                            "estimatedHours": 1, "deadline": "2026-11-02T23:59",
+                                                            "plannedDate": "2026-11-02", "category": "coding"}).json()
+    first.post(f"/api/tasks/{task['id']}/start", headers=headers)
+    first.post("/api/disruptions", headers=headers, json={"date": "2026-11-02", "type": "power_outage", "start": "09:30",
+                                                          "timeLostMinutes": 20, "severity": 2, "confirmed": True})
+    first.put("/demo/clock", json={"now": "2026-11-02T10:30"})
+    first.post(f"/api/tasks/{task['id']}/done", headers=headers)
+    again = TestClient(web_demo.build_app(store_for(db)))  # the server restarted: same file
+    data = again.get("/demo/export", headers=headers).json()
+    assert [t["title"] for t in data["tasks"]] == ["Lab sheet"] and data["settings"]["workStart"] == "08:00"
+    (rec,) = data["model1Records"]
+    assert (rec["estimatedMinutes"], rec["actualMinutes"], rec["startHour"], rec["overlapMinutes"], rec["category"]) ==         (60, 90, 9, 20, "coding")
+    assert rec["dataset"] == "PILOT"
+    assert again.get("/demo/export", headers={"X-User-Id": "ravindu"}).status_code == 401  # the API key is needed
+    assert "sqlite" in again.get("/demo/info").json()["store"]
+
+
+def test_review_can_record_how_long_a_task_really_took():
+    c = client()
+    headers = {"X-API-Key": settings.api_key, "X-User-Id": "r"}
+    task = c.post("/api/tasks", headers=headers, json={"title": "Read", "type": "Analog", "priority": "Low", "estimatedHours": 1,
+                                                       "deadline": "2026-11-02T23:59", "plannedDate": "2026-11-02"}).json()
+    bad = c.post("/api/reviews/2026-11-02", headers=headers, json={"items": [{"taskId": task["id"], "outcome": "not_done", "actualMinutes": 30}]})
+    assert bad.status_code == 400
+    (done,) = c.post("/api/reviews/2026-11-02", headers=headers, json={"items": [{"taskId": task["id"], "outcome": "done", "actualMinutes": 75}]}).json()
+    assert (done["actualMinutes"], done["source"]) == (75, "review")

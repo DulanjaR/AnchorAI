@@ -27,7 +27,7 @@
 1. **Start each session by reading this file and `docs/PROGRESS.md`.** Say in 3–5 lines what the current task is and what was last done before writing any code.
 2. **Do not change any decision in Section 3** without asking the owner. If code seems to need a change, stop and explain why.
 3. **Keep the MVD engine pure.** No database, HTTP or framework code in `engine/`. Pure functions with type hints in, plain dicts out (same camelCase keys as the golden JSON and `docs/API.md`). Fully unit-tested.
-4. **Never call a database from business logic.** Storage goes through the repository interface in `app/data/`. The database is an **open team decision (PostgreSQL vs Firestore)**; until it is made, use the in-memory store. A real store must pass the same store contract tests.
+4. **Never call a database from business logic.** Storage goes through the repository interface in `app/data/`. The team database is **Supabase (PostgreSQL)** (owner, 17 Oct 2026): `app/data/sql_store.py` (one `c1_records` table; also a local SQLite file for the demo); tests use the in-memory store. Every store passes the same store contract tests.
 5. **No auto-actions.** Never auto-start tasks, auto-cascade overruns, or generate an MVD without the user confirming the disruption. These are deliberate design decisions, not missing features.
 6. **Synthetic data is for pipeline validation only.** Label every synthetic dataset and every result from it `SYNTHETIC`. Never present it as a research finding.
 7. **Test-first with owner approval.** For engine work, write the golden scenarios and their expected outputs to a file **on disk**, then stop. The owner checks them by hand and approves before the engine code is written. Never change an approved expected output to make a test pass; report the mismatch instead.
@@ -59,7 +59,7 @@ Anchor AI has 4 components (team repo `components/`). Component 1 is the entry p
 - Component 1 → **Component 3** (`c3_checkpointing`, Cognitive Checkpointing): receives **Keep**-tagged tasks
 - Component 1 → **Component 4** (`c4_hcde`, Human Capability Development Engine): receives **Delegate**-tagged tasks
 - Component 2 (`c2_capacity`, Human Capacity Manager) shares the same task list
-- All components use the team's Python/FastAPI stack and the `shared/` modules; `orchestration/` routes between them. The shared database is not decided yet (PostgreSQL vs Firestore).
+- All components use the team's Python/FastAPI stack and the `shared/` modules; `orchestration/` routes between them. The shared database is Supabase (PostgreSQL), 17 Oct 2026.
 
 The core research contribution is **Environmental Feasibility (EF)**: the type of disruption decides which task types are physically possible. No existing scheduling tool does this.
 
@@ -72,7 +72,7 @@ The core research contribution is **Environmental Feasibility (EF)**: the type o
 | Frontend (after PP1) | Flutter (Android, iOS, web) |
 | Backend (C1) | Python 3.11–3.13 + FastAPI, Pydantic v2, pytest (one service: MVD API + ML endpoints) |
 | Shared modules | `shared.config` (settings from `.env`), `shared.auth` (`X-API-Key`), `shared.schemas` |
-| Database | **Open: PostgreSQL vs Firestore** (team decision). C1 uses a repository interface + in-memory store until then |
+| Database | **Supabase (PostgreSQL)** (17 Oct 2026); C1 stores records in one `c1_records` table through its repository interface (`SqlStore`); in-memory store for tests |
 | ML Model 1 | scikit-learn **RandomForestRegressor** (Task 4) |
 | ML Model 2 | Vowpal Wabbit contextual bandit (Task 5) |
 | Experiments | Google Colab notebooks (`notebooks/`) calling code in `ml/` and `sim/` |
@@ -300,7 +300,7 @@ Data records (repository collections): `users`, `tasks`, `protectedBlocks`, `dis
 3. Threshold tuning (0.5, 0.5–2.0, 0.3) during the pilot.
 4. Whether Component 3 should also checkpoint Reduce tasks (owner to ask Member 3).
 5. **Gate: "after" or "outside"?** The C:\ v2 draft said gated tasks may only go *after* the window. The approved rule and scenario S9 allow *before or after*. This file uses "before or after".
-6. **Database (team decision): PostgreSQL vs Firestore.** C1 keeps the repository interface + in-memory store until it is decided. (Added 13 Oct 2026.)
+6. ~~Database (team decision): PostgreSQL vs Firestore.~~ **Answered 17 Oct 2026: Supabase (PostgreSQL).**
 7. **Base path for orchestration:** C1 serves `/api/...` as in `docs/API.md`; the prefix is one setting, so it can become e.g. `/c1/api` when `orchestration/` is designed. (Added 13 Oct 2026.)
 8. **Engine details pending (14 Oct 2026):** how the high duration is used in the Keep check; the values of `defer_order` and `recovery_timing`; the scope of the overload check. Built with defaults = old behaviour; see DECISIONS.md PROPOSED entries.
 9. **D-MOVE carry-over** rules: PROPOSED, not implemented until approved.

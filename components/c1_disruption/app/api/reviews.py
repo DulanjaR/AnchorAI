@@ -45,10 +45,12 @@ def review(
             raise bad_request("'partialPct' is required (one of: 25, 50, 75)")
         if item.outcome != "partial" and "partialPct" in item.model_fields_set:
             raise bad_request(f"'partialPct' is only allowed when outcome is 'partial' (task '{task_id}')")
-        answers.append((task, item.outcome, item.partialPct if item.outcome == "partial" else None))
+        if item.actualMinutes is not None and item.outcome == "not_done":
+            raise bad_request(f"'actualMinutes' is not allowed when outcome is 'not_done' (task '{task_id}')")
+        answers.append((task, item.outcome, item.partialPct if item.outcome == "partial" else None, item.actualMinutes))
 
     created = []
-    for task, outcome, partial_pct in answers:
+    for task, outcome, partial_pct, minutes in answers:
         created.append(deps.store.create("completions", {
             "userId": user_id,
             "taskId": task["id"],
@@ -56,7 +58,7 @@ def review(
             "source": "review",
             "outcome": outcome,
             "partialPct": partial_pct,
-            "actualMinutes": None,  # the review gives no timestamps
+            "actualMinutes": minutes,  # optional in the review (no timestamps); None if not given
             "estimatedMinutes": js_round(task["estimatedHours"] * 60),
         }))
         deps.store.update("tasks", task["id"], {"status": outcome})

@@ -58,9 +58,23 @@ class Setup:
         return self.client.request(method, api_path(path), **kwargs)
 
 
+def _store():
+    """MemoryStore by default; C1_TEST_STORE=sqlite runs the API tests on the SQL store too."""
+    import os
+
+    if os.environ.get("C1_TEST_STORE") == "sqlite":
+        import tempfile
+        from pathlib import Path
+
+        from components.c1_disruption.app.data.sql_store import SqlStore
+
+        return SqlStore(f"sqlite:///{Path(tempfile.mkdtemp()) / 'c1.sqlite3'}")
+    return MemoryStore()
+
+
 def setup(now: str = "2026-10-07T09:00", **hooks: Any) -> Setup:
     """hooks: corrector= / chooser= (ML hooks); default = approved behaviour."""
-    store = MemoryStore()
+    store = _store()
     clock = MovableClock(now)
     # raise_server_exceptions=False: a bug shows as a 500 response, as a client would see it.
     client = TestClient(create_app(store=store, clock=clock, **hooks), raise_server_exceptions=False)

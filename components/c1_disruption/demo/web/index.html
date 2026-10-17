@@ -120,19 +120,22 @@
     <button id="bPrev" aria-label="Previous week">‹</button><button id="bToday">This week</button><button id="bNext" aria-label="Next week">›</button>
     <button class="primary" id="bAdd">+ Task</button>
     <button id="bSetup">⚙ Setup</button>
-    <button id="bSample">Load sample week</button>
-    <button id="bNew">New student</button>
+    <button id="bReview">🌙 End of day</button>
+    <button id="bExport">⬇ Export my data</button>
+    <button id="bSample" title="Opens a separate sample student, so your own data is not touched">Try the sample week</button>
+    <button id="bNew">👤 <span id="whoName">Student</span></button>
     <button class="alert" id="bDisrupt">⚡ Record a disruption</button>
   </div>
 </header>
-<div class="clock" id="clock" title="Demo only: a real phone waits for the real time; here you move the time yourself to see reminders and prompts.">
-  <span>🕒 <b>Demo clock</b> (pretend time): <b id="simNow">–</b></span>
-  <span class="muted">skip ahead</span><button class="small" data-jump="5">+5 min</button><button class="small" data-jump="15">+15 min</button><button class="small" data-jump="30">+30 min</button>
-  <span class="muted">or jump to</span><input type="datetime-local" id="simSet" aria-label="Jump to a time"><button class="small" id="bSet">Go</button>
+<div class="clock" id="clock">
+  <span>🕒 <b id="simNow">–</b> <span id="clockMode" class="pill Keep">LIVE</span></span>
+  <span class="muted">try the prompts with a pretend time:</span><button class="small" data-jump="5">+5 min</button><button class="small" data-jump="15">+15 min</button><button class="small" data-jump="30">+30 min</button>
+  <input type="datetime-local" id="simSet" aria-label="Jump to a pretend time"><button class="small" id="bSet">Go</button>
+  <button class="small" id="bLive" hidden>↺ Back to real time</button>
   <span class="muted">· remind me</span><input type="number" id="remind" min="0" max="60" value="5" style="width:56px" aria-label="Reminder minutes"><span class="muted">min before a task</span>
   <label class="check" style="margin:0" title="Pretends the phone senses you are travelling: for a task planned at Home, the first reply offered is “Delayed on the way?”"><input type="checkbox" id="motion"> pretend I'm on the move</label>
-  <span class="muted" id="who"></span>
-  <span class="muted" style="flex-basis:100%">Move the pretend time forward to see the reminder (5 min before a task), “Time to start” at its start, one more prompt at +15 min, and “What happened?” after 30 min.</span>
+  <button class="small" id="bNotify">🔔 Allow notifications</button>
+  <span class="muted" id="storeInfo"></span>
 </div>
 
 <main>
@@ -257,6 +260,19 @@
   <div class="db"><p id="prText"></p><div class="replies" id="prReplies"></div></div>
 </dialog>
 
+<dialog id="dName">
+  <div class="dh"><h2>Who is using the planner?</h2></div>
+  <div class="db"><p>Your name keeps your data together: the same name on another day opens your own week again.</p>
+    <label for="nameIn">Your name</label><input id="nameIn" class="full" placeholder="e.g. Ravindu"></div>
+  <div class="df"><button class="primary" id="bName">Continue</button></div>
+</dialog>
+
+<dialog id="dReview" class="wide">
+  <div class="dh"><h2>🌙 End of day: what really happened today?</h2><button class="small" data-close>✕</button></div>
+  <div class="db"><p class="muted">For every task you did not mark done: did you do it, and how long did it really take? This is what Model 1 learns from.</p><div id="reviewBody"></div></div>
+  <div class="df"><button data-close>Later</button><button class="primary" id="bSaveReview">Save the day</button></div>
+</dialog>
+
 <div id="toast" role="status"></div>
 
 <script>
@@ -276,6 +292,9 @@ const PX = 0.8, H0 = 6 * 60, H1 = 23 * 60;
 const state = { user: "", settings: null, blocks: [], tasks: [], weekStart: "", now: "", mvd: null, explain: {}, rearr: null,
                 editRe: false, prompts: {}, returnQueue: [], promptQueue: [], optTask: null, optPick: null, current: null };
 
+function notify(title, body) {
+  try { if ("Notification" in window && Notification.permission === "granted" && document.hidden) new Notification(title, { body }); } catch {}
+}
 function toast(msg, kind = "err") { const t = $("toast"); t.textContent = msg; t.className = kind === "err" ? "" : kind; t.style.display = "block";
   clearTimeout(toast.t); toast.t = setTimeout(() => (t.style.display = "none"), kind === "err" ? 6000 : 3500); }
 async function api(method, path, body, raw) {
@@ -290,13 +309,20 @@ const today = () => state.now.slice(0, 10);
 const nowMin = () => toMin(state.now.slice(11, 16));
 
 /* ===================== clock ===================== */
-async function setClock(iso) {
+function showClock(c) {
   const before = state.now;
-  state.now = (await api("PUT", "/demo/clock", { now: iso }, true)).now;
+  state.now = c.now; state.live = c.live;
   $("simNow").textContent = `${dayName(today(), true)} ${state.now.slice(11, 16)}`;
   $("simSet").value = state.now;
+  $("clockMode").textContent = c.live ? "LIVE" : "PRETEND"; $("clockMode").className = `pill ${c.live ? "Keep" : "Reduce"}`;
+  $("bLive").hidden = c.live;
   if (!state.weekStart || (before && before.slice(0, 10) !== today())) state.weekStart = today();
   render(); checkPrompts();
+}
+async function goLive() { showClock(await api("PUT", "/demo/clock", { live: true }, true)); }
+setInterval(() => run(async () => { if (state.live !== false) showClock(await api("GET", "/demo/clock", undefined, true)); }), 30000);
+async function setClock(iso) {
+  return showClock(await api("PUT", "/demo/clock", { now: iso }, true));
 }
 function jump(minutes) { const d = new Date(state.now); d.setMinutes(d.getMinutes() + minutes);
   return setClock(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`); }
@@ -586,7 +612,8 @@ function checkPrompts() {
     if (diff >= 30 && p.stage < 4) { p.stage = 4; state.returnQueue.push(it); }        // silent now; "What happened?" when you return
     else if (diff >= 15 && diff < 30 && p.stage < 3) { p.stage = 3; state.promptQueue.push({ it, kind: "again" }); }
     else if (diff >= 0 && diff < 15 && p.stage < 2) { p.stage = 2; state.promptQueue.push({ it, kind: "start" }); }
-    else if (diff < 0 && diff >= -R && p.stage < 1) { p.stage = 1; toast(`🔔 Reminder: “${it.task.title}” starts at ${it.start} (in ${-diff} min)`, "info"); }
+    else if (diff < 0 && diff >= -R && p.stage < 1) { p.stage = 1; toast(`🔔 Reminder: “${it.task.title}” starts at ${it.start} (in ${-diff} min)`, "info");
+      notify("Reminder", `“${it.task.title}” starts at ${it.start}`); }
   }
   showNextPrompt();
 }
@@ -604,6 +631,7 @@ function showPrompt(it, kind) {
   const list = replies(it); if (kind === "what") list.push(["done", "✓ I did it already"]);
   $("prReplies").innerHTML = list.map(([v, t], i) => `<button class="${i === 0 ? "first" : ""}" data-reply="${v}">${t}</button>`).join("");
   $("dPrompt").showModal();
+  notify(kind === "what" ? "What happened?" : "Time to start", it.task.title);
 }
 function showNextPrompt() { if ($("dPrompt").open || document.querySelector("dialog[open]")) return; const n = state.promptQueue.shift(); if (n) showPrompt(n.it, n.kind); }
 async function reply(value) {
@@ -643,10 +671,54 @@ async function loadSample() {
   await setClock(`${d0}T13:45`);
   toast("Sample week loaded. Press +5 min twice: the reminder, then “Time to start” at 14:00.", "info");
 }
-async function newStudent() {
-  state.user = "student-" + Math.random().toString(36).slice(2, 7); $("who").textContent = "· " + state.user;
+const slug = (s) => s.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+async function useStudent(id, name) {
+  state.user = id; $("whoName").textContent = name || id;
+  try { localStorage.setItem("c1.student", JSON.stringify({ id, name })); } catch {}
   Object.assign(state, { settings: null, mvd: null, rearr: null, explain: {}, prompts: {}, returnQueue: [], promptQueue: [] });
   state.weekStart = today(); await refresh();
+  // The latest open proposals of this student come back after a restart.
+  try { const ex = await api("GET", "/demo/export", undefined, true);
+    state.mvd = (ex.mvds || []).filter(m => m.date === today() && m.status !== "superseded").pop() || null;
+    state.rearr = (ex.rearrangements || []).filter(r => r.status === "proposed").pop() || null;
+    if (state.mvd) for (const tk of state.mvd.plan.tasks) state.explain[tk.id] = tk.explanation;
+  } catch {}
+  render();
+}
+function askName() { $("nameIn").value = ""; $("dName").showModal(); $("nameIn").focus(); }
+async function saveName() { const name = $("nameIn").value.trim(); if (!slug(name)) throw new Error("Type your name");
+  $("dName").close(); await useStudent(slug(name), name); toast(`Hello ${name}: your data is saved, so you can come back tomorrow.`, "ok"); }
+async function newStudent() { askName(); }
+async function sampleStudent() {
+  await useStudent("sample-" + Math.random().toString(36).slice(2, 6), "Sample student"); await loadSample();
+  toast("This is a separate sample student. Click your name (top right) to go back to your own week.", "info");
+}
+async function openReview() {
+  const open = await api("GET", `/reviews/${today()}`);
+  if (!open.length) { toast("Nothing left to review today: every task has an outcome.", "ok"); return; }
+  $("reviewBody").innerHTML = `<table><tr><th>Task</th><th>What happened</th><th>Minutes it really took</th></tr>${open.map(t => `<tr>
+    <td><b>${esc(t.title)}</b><div class="muted">planned ${t.plannedStart ? `${t.plannedStart}–${t.plannedEnd}` : "with no set time"} · estimate ${Math.round(t.estimatedHours * 60)} min</div></td>
+    <td><select data-rv="${t.id}"><option value="">— skip —</option><option value="done">done</option><option value="partial:25">partly (25%)</option>
+      <option value="partial:50">partly (50%)</option><option value="partial:75">partly (75%)</option><option value="not_done">not done</option></select></td>
+    <td><input type="number" min="1" max="1440" data-rvm="${t.id}" placeholder="optional" style="width:110px"></td></tr>`).join("")}</table>`;
+  $("dReview").showModal();
+}
+async function saveReview() {
+  const items = [];
+  document.querySelectorAll("[data-rv]").forEach(sel => { if (!sel.value) return; const [outcome, pct] = sel.value.split(":");
+    const item = { taskId: sel.dataset.rv, outcome }; if (pct) item.partialPct = Number(pct);
+    const m = document.querySelector(`[data-rvm="${sel.dataset.rv}"]`).value; if (m && outcome !== "not_done") item.actualMinutes = Number(m);
+    items.push(item); });
+  if (!items.length) throw new Error("Choose what happened for at least one task");
+  await api("POST", `/reviews/${today()}`, { items }); $("dReview").close(); await refresh(); toast(`Saved ${items.length} task(s) for today`, "ok");
+}
+function download(name, text, type) { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); }
+async function exportData() {
+  const ex = await api("GET", "/demo/export", undefined, true), stamp = state.now.slice(0, 10);
+  download(`c1_${state.user}_${stamp}.json`, JSON.stringify(ex, null, 1), "application/json");
+  const cols = ["studentId", "taskType", "priority", "category", "estimatedMinutes", "actualMinutes", "date", "startHour", "overlapMinutes", "outcome", "source", "dataset"];
+  download(`c1_${state.user}_${stamp}_model1.csv`, [cols.join(","), ...ex.model1Records.map(r => cols.map(c => r[c] ?? "").join(","))].join("\n"), "text/csv");
+  toast(`Exported: ${ex.tasks.length} tasks, ${ex.model1Records.length} Model 1 records, ${ex.model2Decisions.length} decisions`, "ok");
 }
 
 /* ===================== wiring ===================== */
@@ -669,7 +741,12 @@ $("xStart").onchange = () => ($("xFrom").value = $("xStart").value);
 $("bMvdAccept").onclick = () => run(() => decideMvd("accept")); $("bMvdReject").onclick = () => run(() => decideMvd("reject"));
 $("bReAccept").onclick = () => run(() => decideRe("accept")); $("bReReject").onclick = () => run(() => decideRe("reject")); $("bReEdit").onclick = () => run(() => decideRe("edit"));
 $("bChoose").onclick = () => run(chooseOption);
-$("bSample").onclick = () => run(loadSample); $("bNew").onclick = () => run(newStudent);
+$("bSample").onclick = () => run(sampleStudent); $("bNew").onclick = () => run(newStudent);
+$("bName").onclick = () => run(saveName); $("nameIn").onkeydown = (e) => { if (e.key === "Enter") run(saveName); };
+$("bReview").onclick = () => run(openReview); $("bSaveReview").onclick = () => run(saveReview);
+$("bExport").onclick = () => run(exportData); $("bLive").onclick = () => run(goLive);
+$("bNotify").onclick = () => run(async () => { if (!("Notification" in window)) throw new Error("This browser has no notifications");
+  const r = await Notification.requestPermission(); toast(r === "granted" ? "Notifications on: you get them when this tab is in the background" : "Notifications are blocked in the browser", r === "granted" ? "ok" : "err"); });
 $("bPrev").onclick = () => { state.weekStart = addDays(state.weekStart, -7); render(); };
 $("bNext").onclick = () => { state.weekStart = addDays(state.weekStart, 7); render(); };
 $("bToday").onclick = () => { state.weekStart = today(); render(); };
@@ -699,8 +776,13 @@ document.addEventListener("click", (e) => {
 document.querySelectorAll("dialog").forEach(d => d.addEventListener("close", () => setTimeout(showNextPrompt, 50)));
 
 (async () => {
-  state.now = (await api("GET", "/demo/clock", undefined, true)).now;
-  await newStudent(); await setClock(state.now);
+  showClock(await api("GET", "/demo/clock", undefined, true));
+  try { $("storeInfo").textContent = "· data: " + (await api("GET", "/demo/info", undefined, true)).store; } catch {}
+  let saved = null; try { saved = JSON.parse(localStorage.getItem("c1.student") || "null"); } catch {}
+  const auto0 = new URLSearchParams(location.search).get("auto");
+  if (auto0) await useStudent("sample-" + Math.random().toString(36).slice(2, 6), "Sample student");
+  else if (saved && saved.id) await useStudent(saved.id, saved.name);
+  else askName();
   // ?auto=prompt | mvd | rearrange | options | week — the sample story in one go (quick start, screenshots)
   const auto = new URLSearchParams(location.search).get("auto");
   if (auto) run(async () => {

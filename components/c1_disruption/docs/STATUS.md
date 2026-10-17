@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`f370075` · 2026-10-17 · "C1 web demo: week calendar main screen with popups, rearranger options A-E, simulated clock and start prompts" (this update is in the commit after it).
+`3550ee1` · 2026-10-17 · "C1 web demo: clearer demo-clock bar (pretend time, what each control does)" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -26,17 +26,20 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Rearranger** `engine/rearrange.py` (owner-approved R01–R08, all eight reproduced exactly; plus unit tests: deadline day, horizon, deadline time, early warning, effort rounding, input never changed). Settings in `engine/config.py` (horizon 7, sessions 30–120, effort step 5, locations).
 - **Rearranger in the API:** `POST /api/rearrange` (proposal for the day's Move tasks + effort tasks over 7 days), `choose` (A–E), `accept` / `edit` / `reject` (logged for Model 2, `kind: "rearrange"`), `POST /api/tasks/:id/sessions/done`; optional task fields `location`, `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`; optional `routine` in settings (located study windows). Frozen API cases unchanged. Docs: API.md.
 - **Web demo rebuilt (17 Oct):** the 7-day week calendar is the main screen, everything else is a popup (task form with location pre-filled from the routine and effort fields; setup with routine, protected time and calendar sync; disruption; today's MVD; the rest-of-the-week proposal with reasons; options A–E dialog; task details with "why it is here"; start prompts). Simulated clock (bar labelled "Demo clock (pretend time)" with a one-line explanation, 17 Oct) drives reminders, "Time to start" quick replies, the +15 prompt, the silent +30 and "What happened?" on return, and "Delayed on the way?" with simulated motion. Checked in a headless browser; tested through the demo app.
+- **Real data for a 5-day self-trial (17 Oct):** team database Supabase (PostgreSQL) via `SqlStore` (also a local SQLite file; contract + full API suite pass on it). Demo: live clock by default, remembered student, end-of-day review with real minutes, notifications, Export (all data + Model 1 records `PILOT` + Model 2 decisions), sample week in a separate student.
 
 ## In progress
 - Nothing running.
 - **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
-- **Team decisions (open):** database (PostgreSQL vs Firestore); base path for orchestration; `/health` requires `X-API-Key`?
+- **Team decisions (open):** base path for orchestration; `/health` requires `X-API-Key`? (Database decided: Supabase, 17 Oct.)
+- **Owner:** put the Supabase connection string in the repo `.env` as `DATABASE_URL` to store the demo data in Supabase (README); until then it is kept in a local file.
 - Open research decision: the `None` EF values (Meeting/Fixed under power cut and transport delay, all of connectivity failure). Connectivity events are skipped and counted.
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- The owner's own self-trial data is labelled `PILOT` (one person; for checking the system and the pipeline, not a study result).
 - Rearranger: a moved task waiting for a decision keeps the free time its option C would use, so a less urgent task in the same run does not take it (DECISIONS.md 2026-10-17 web demo entry).
 - Model 1 gate details not covered by the approval (DECISIONS.md 2026-10-16): error in minutes, out-of-fold forest in the evidence, band widened when closed.
 - CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
@@ -54,4 +57,4 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **694 passed, 2 skipped** (C1 693 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.
+Root `pytest`: **706 passed, 2 skipped** (C1 705 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.

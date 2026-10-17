@@ -183,6 +183,8 @@ class ReviewItem(Body):
     taskId: Text
     outcome: choice(("done", "partial", "not_done"))
     partialPct: choice((25, 50, 75))
+    # Optional (17 Oct 2026): how long it really took, when no Start/Done timestamps exist.
+    actualMinutes: whole_number(1, MINUTES_PER_DAY)
 
 
 class ReviewBody(Body):

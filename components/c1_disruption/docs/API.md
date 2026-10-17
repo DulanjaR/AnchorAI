@@ -6,7 +6,7 @@
 
 FastAPI app around the MVD engine. All storage goes through the repository interface
 (`app/data/repository.py`), in-memory for now; the real database (PostgreSQL or
-Firestore, open team decision) is plugged in later without changing the routes.
+Firestore, open team decision) is plugged in later without changing the routes. (17 Oct 2026: the team database is Supabase/PostgreSQL; `app/data/sql_store.py`.)
 
 ## 1. Ground rules
 
