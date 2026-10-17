@@ -32,16 +32,16 @@ Personalized capacity manager that compares readiness with planned workload and 
 | Recovery | Latent | Sleep, resting heart rate, break gaps | Health Connect, steps |
 | Fatigue | Latent | Reaction-time slowing, variability, drift in the focus check | In-app focus check |
 | Focus | Latent | Misses, premature responses, accuracy, variability | In-app focus check |
-| Energy | Latent | Activity level, optional 1 to 5 rating | Health Connect, check-in |
-| Motivation | Latent | Optional 1 to 5 rating (no reliable sensor) | Check-in |
-| Stress | Latent | Optional rating, optional heart rate, phone use at night | Check-in, Health Connect, usage access |
+| Energy | Latent | Activity level, sleep and recovery signals | Health Connect |
+| Motivation | Latent | No reliable sensor. Not estimated directly. Inferred only through the task and engagement records of the other components | Other components |
+| Stress | Latent | Resting heart rate and heart rate variability against own usual, phone use at night | Health Connect, usage access |
 | Interruptions | Direct (proxy) | App switches per hour (counts only, no content) | UsageStatsManager |
-| Workload demand | Direct | User-chosen difficulty of the work about to start | User |
+| Workload demand | Direct | Task and difficulty received from C1 | C1 |
 
 Latent states are never read directly from a phone; they are estimated from signals and shown with a confidence level.
 
 ## Note on design versus proposal
-The proposal names self-reported readiness factors. The prototype estimates them from sensed signals and a short behavioural check, and keeps self-report as an optional three-tap input. This follows the proposal wording that behavioural and physiological data support the estimate, and it avoids relying on repeated questionnaires.
+The proposal names self-reported readiness factors. The prototype estimates them from sensed signals and a short behavioural check, and does not ask the student to fill in ratings; the pilot study uses a self-rating only as the research label. This follows the proposal wording that behavioural and physiological data support the estimate, and it avoids relying on repeated questionnaires.
 
 ## Evaluation plan (Objectives 5 and 6)
 - Participants: working university students, ethics approval and informed consent before any data is collected.

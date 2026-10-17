@@ -1,0 +1,16 @@
+experiment,model,rows,people,accuracy,precision,recall,F1,balanced acc,AUC,AUC std,shuffled AUC,clearly above chance?
+"S1 HR/HRV, raw",Majority,1359,15,0.7756,0.0,0.0,0.0,0.5,0.5,0.0,0.5,n/a
+"S1 HR/HRV, raw",LR,1359,15,0.8862,0.6884,0.901,0.7804,0.8914,0.955,0.0025,0.4988,YES
+"S1 HR/HRV, raw",RF,1359,15,0.857,0.6363,0.8469,0.7266,0.8534,0.923,0.0065,0.4863,YES
+"S2 HR/HRV, person-normalised",Majority,1359,15,0.7756,0.0,0.0,0.0,0.5,0.5,0.0,0.5,n/a
+"S2 HR/HRV, person-normalised",LR,1359,15,0.847,0.6231,0.8056,0.7026,0.8323,0.9159,0.0053,0.514,YES
+"S2 HR/HRV, person-normalised",RF,1359,15,0.8711,0.6756,0.8187,0.7402,0.8525,0.9296,0.003,0.4996,YES
+"S3 HR/HRV + movement, person-normalised",Majority,1359,15,0.7756,0.0,0.0,0.0,0.5,0.5,0.0,0.5,n/a
+"S3 HR/HRV + movement, person-normalised",LR,1359,15,0.855,0.6388,0.8148,0.716,0.8407,0.9172,0.0061,0.5122,YES
+"S3 HR/HRV + movement, person-normalised",RF,1359,15,0.8717,0.6789,0.8125,0.7397,0.8506,0.9328,0.0037,0.4913,YES
+"S4 + EDA and temperature (lab ceiling), person-normalised",Majority,1359,15,0.7756,0.0,0.0,0.0,0.5,0.5,0.0,0.5,n/a
+"S4 + EDA and temperature (lab ceiling), person-normalised",LR,1359,15,0.9461,0.8574,0.9115,0.8835,0.9338,0.9835,0.002,0.5128,YES
+"S4 + EDA and temperature (lab ceiling), person-normalised",RF,1359,15,0.9505,0.8785,0.9046,0.8913,0.9342,0.9881,0.0034,0.494,YES
+"S5 baseline vs stress only, HR/HRV person-normalised",Majority,864,15,0.647,0.0,0.0,0.0,0.5,0.5,0.0,0.5,n/a
+"S5 baseline vs stress only, HR/HRV person-normalised",LR,864,15,0.8366,0.7579,0.7892,0.7732,0.8258,0.905,0.0056,0.4936,YES
+"S5 baseline vs stress only, HR/HRV person-normalised",RF,864,15,0.8464,0.7553,0.8357,0.7935,0.844,0.9218,0.0035,0.5008,YES

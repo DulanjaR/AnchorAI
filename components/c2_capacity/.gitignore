@@ -10,3 +10,21 @@ models/*
 # pilot data from classmates (anonymous codes only)
 data/pilot/*
 !data/pilot/README.md
+
+# presentation files stay local
+*.pptx
+
+# public physiological datasets (downloaded locally, not in Git)
+data/wesad/*
+data/catsa/*
+data/exam_stress/*
+!data/wesad/README.md
+!data/catsa/README.md
+!data/exam_stress/README.md
+
+# nurses stress dataset
+data/nurses/*
+!data/nurses/README.md
+
+# derived per-window feature tables stay local (results and figures are committed)
+outputs/pilot_runs/*_windows.csv
