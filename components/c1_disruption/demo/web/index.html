@@ -125,13 +125,14 @@
     <button class="alert" id="bDisrupt">⚡ Record a disruption</button>
   </div>
 </header>
-<div class="clock" id="clock">
-  <span>🕒 Simulated time: <b id="simNow">–</b></span>
-  <button class="small" data-jump="5">+5 min</button><button class="small" data-jump="15">+15 min</button><button class="small" data-jump="30">+30 min</button>
-  <input type="datetime-local" id="simSet" aria-label="Set the simulated time"><button class="small" id="bSet">Set</button>
-  <span class="muted">· reminder</span><input type="number" id="remind" min="0" max="60" value="5" style="width:56px" aria-label="Reminder minutes"><span class="muted">min before</span>
-  <label class="check" style="margin:0"><input type="checkbox" id="motion"> sustained motion (simulated)</label>
+<div class="clock" id="clock" title="Demo only: a real phone waits for the real time; here you move the time yourself to see reminders and prompts.">
+  <span>🕒 <b>Demo clock</b> (pretend time): <b id="simNow">–</b></span>
+  <span class="muted">skip ahead</span><button class="small" data-jump="5">+5 min</button><button class="small" data-jump="15">+15 min</button><button class="small" data-jump="30">+30 min</button>
+  <span class="muted">or jump to</span><input type="datetime-local" id="simSet" aria-label="Jump to a time"><button class="small" id="bSet">Go</button>
+  <span class="muted">· remind me</span><input type="number" id="remind" min="0" max="60" value="5" style="width:56px" aria-label="Reminder minutes"><span class="muted">min before a task</span>
+  <label class="check" style="margin:0" title="Pretends the phone senses you are travelling: for a task planned at Home, the first reply offered is “Delayed on the way?”"><input type="checkbox" id="motion"> pretend I'm on the move</label>
   <span class="muted" id="who"></span>
+  <span class="muted" style="flex-basis:100%">Move the pretend time forward to see the reminder (5 min before a task), “Time to start” at its start, one more prompt at +15 min, and “What happened?” after 30 min.</span>
 </div>
 
 <main>

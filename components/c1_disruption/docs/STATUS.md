@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`4eff6e5` · 2026-10-17 · "C1 API: rearranger endpoints (propose, choose A-E, accept/edit/reject), location and effort fields, routine" (this update is in the commit after it).
+`f370075` · 2026-10-17 · "C1 web demo: week calendar main screen with popups, rearranger options A-E, simulated clock and start prompts" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -25,7 +25,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **Notebooks 01–04 on Colab (17 Oct):** setup clones once into `/content/AnchorAI`, installs only `notebooks/requirements.txt` (no web server), prints versions, stops with "Runtime → Restart session, then run from cell 2" if a loaded package was replaced; progress lines with elapsed seconds; charts labelled SYNTHETIC / REAL (MAE by method, learning curve, predicted vs actual, gate per student; 02: acceptance over time). **All four run top to bottom** in a clean environment with only the notebook packages (01: 68 s, 4 charts; 02: 9 s, 1 chart; 03: 951 s, 8 charts; 04 quick: 266 s, 4 charts). Ready for Colab.
 - **Rearranger** `engine/rearrange.py` (owner-approved R01–R08, all eight reproduced exactly; plus unit tests: deadline day, horizon, deadline time, early warning, effort rounding, input never changed). Settings in `engine/config.py` (horizon 7, sessions 30–120, effort step 5, locations).
 - **Rearranger in the API:** `POST /api/rearrange` (proposal for the day's Move tasks + effort tasks over 7 days), `choose` (A–E), `accept` / `edit` / `reject` (logged for Model 2, `kind: "rearrange"`), `POST /api/tasks/:id/sessions/done`; optional task fields `location`, `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`; optional `routine` in settings (located study windows). Frozen API cases unchanged. Docs: API.md.
-- **Web demo rebuilt (17 Oct):** the 7-day week calendar is the main screen, everything else is a popup (task form with location pre-filled from the routine and effort fields; setup with routine, protected time and calendar sync; disruption; today's MVD; the rest-of-the-week proposal with reasons; options A–E dialog; task details with "why it is here"; start prompts). Simulated clock drives reminders, "Time to start" quick replies, the +15 prompt, the silent +30 and "What happened?" on return, and "Delayed on the way?" with simulated motion. Checked in a headless browser; tested through the demo app.
+- **Web demo rebuilt (17 Oct):** the 7-day week calendar is the main screen, everything else is a popup (task form with location pre-filled from the routine and effort fields; setup with routine, protected time and calendar sync; disruption; today's MVD; the rest-of-the-week proposal with reasons; options A–E dialog; task details with "why it is here"; start prompts). Simulated clock (bar labelled "Demo clock (pretend time)" with a one-line explanation, 17 Oct) drives reminders, "Time to start" quick replies, the +15 prompt, the silent +30 and "What happened?" on return, and "Delayed on the way?" with simulated motion. Checked in a headless browser; tested through the demo app.
 
 ## In progress
 - Nothing running.
