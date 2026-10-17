@@ -22,4 +22,15 @@ def get_settings(user_id: str = Depends(require_user), deps: Deps = Depends(get_
 def put_settings(body: SettingsBody, user_id: str = Depends(require_user), deps: Deps = Depends(get_deps)) -> dict:
     if to_minutes(body.workEnd) <= to_minutes(body.workStart):
         raise bad_request("'workEnd' must be after 'workStart'")
-    return deps.store.set("users", user_id, {"workStart": body.workStart, "workEnd": body.workEnd})
+    settings = {"workStart": body.workStart, "workEnd": body.workEnd}
+    routine = body.routine
+    if routine is None:  # not sent: keep the routine set earlier (if any)
+        routine = (deps.store.get("users", user_id) or {}).get("routine")
+    else:
+        routine = [r.model_dump() for r in routine]
+        for r in routine:
+            if to_minutes(r["end"]) <= to_minutes(r["start"]):
+                raise bad_request(f"Routine '{r['label']}': 'end' must be after 'start'")
+    if routine:
+        settings["routine"] = routine
+    return deps.store.set("users", user_id, settings)

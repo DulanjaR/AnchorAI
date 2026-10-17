@@ -3,7 +3,7 @@
 One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log), `DECISIONS.md` (decisions), `METHODOLOGY.md` (method).
 
 ## Last commit
-`8c4473b` · 2026-10-16 · "C1 sim: SYNTHETIC rerun with the earned-trust gate; earlier run kept as 'Before gate'" (this update is in the commit after it).
+`7b76d7a` · 2026-10-17 · "C1 rearranger: engine/rearrange.py reproduces the approved golden R01-R08" (this update is in the commit after it).
 
 ## Done
 - **Port to the team repo** (13 Oct): golden spec frozen as JSON (S1–S16, 57 API cases), Python engine and FastAPI app match it exactly; shared `X-API-Key`, `/api` prefix as one setting, repository + in-memory store.
@@ -24,6 +24,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **CESAW rerun with the gate + median** (`docs/results/c1_model1_cesaw.md`, earlier run kept as "Before gate"; REAL, professional developers). Cold: model = B0 by design, 75.04 min (before 80.20); gate closed for all 247 developers. Warm: model 75.88 min vs B0 76.57 (before 82.00): the gap to B0 is closed and the model is now slightly better than every baseline. The gate fell back to B0 for most predictions: open for 27.2% (11 of 40 developers open at their last point, 29 closed; 18 open at least once). Where open: model 66.98 vs B0 69.53 min on the same tasks. Not separable from this run: how much comes from the median vs the gate (no median-only run).
 - **Notebooks 01–04 on Colab (17 Oct):** setup clones once into `/content/AnchorAI`, installs only `notebooks/requirements.txt` (no web server), prints versions, stops with "Runtime → Restart session, then run from cell 2" if a loaded package was replaced; progress lines with elapsed seconds; charts labelled SYNTHETIC / REAL (MAE by method, learning curve, predicted vs actual, gate per student; 02: acceptance over time). **All four run top to bottom** in a clean environment with only the notebook packages (01: 68 s, 4 charts; 02: 9 s, 1 chart; 03: 951 s, 8 charts; 04 quick: 266 s, 4 charts). Ready for Colab.
 - **Rearranger** `engine/rearrange.py` (owner-approved R01–R08, all eight reproduced exactly; plus unit tests: deadline day, horizon, deadline time, early warning, effort rounding, input never changed). Settings in `engine/config.py` (horizon 7, sessions 30–120, effort step 5, locations).
+- **Rearranger in the API:** `POST /api/rearrange` (proposal for the day's Move tasks + effort tasks over 7 days), `choose` (A–E), `accept` / `edit` / `reject` (logged for Model 2, `kind: "rearrange"`), `POST /api/tasks/:id/sessions/done`; optional task fields `location`, `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`; optional `routine` in settings (located study windows). Frozen API cases unchanged. Docs: API.md.
 
 ## In progress
 - Web demo rebuild: week calendar as the main screen, everything else in popups; rearranger in the API (options A–E dialog), location + effort fields, simulated clock with start prompts.
@@ -51,4 +52,4 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **682 passed, 2 skipped** (C1 681 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.
+Root `pytest`: **690 passed, 2 skipped** (C1 689 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.

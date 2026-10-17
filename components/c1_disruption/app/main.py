@@ -13,7 +13,7 @@ every /api route also needs X-User-Id (stand-in for user auth).
 """
 from fastapi import Depends, FastAPI
 
-from components.c1_disruption.app.api import disruptions, mvds, protected_blocks, reviews, settings, tasks
+from components.c1_disruption.app.api import disruptions, mvds, protected_blocks, rearrange, reviews, settings, tasks
 from components.c1_disruption.app.api.deps import require_user
 from components.c1_disruption.app.api.errors import install_error_handlers
 from components.c1_disruption.app.data.memory_store import MemoryStore
@@ -60,7 +60,7 @@ def create_app(
     prefix = c1_settings.api_prefix if api_prefix is None else api_prefix
     # API key first (team-wide), then the caller's user id.
     guarded = [Depends(require_api_key), Depends(require_user)]
-    for module in (settings, protected_blocks, tasks, disruptions, mvds, reviews):
+    for module in (settings, protected_blocks, tasks, disruptions, mvds, reviews, rearrange):
         app.include_router(module.router, prefix=prefix, dependencies=guarded)
     return app
 

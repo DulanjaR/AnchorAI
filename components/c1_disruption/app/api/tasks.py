@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, Response
 
 from components.c1_disruption.app.api.deps import get_deps, require_user
 from components.c1_disruption.app.api.errors import bad_request, conflict
-from components.c1_disruption.app.api.models import NewTask, TaskBody
+from components.c1_disruption.app.api.models import NewTask, SessionDone, TaskBody
 from components.c1_disruption.app.api.validation import require_date
 from components.c1_disruption.app.data.repository import Record
 from components.c1_disruption.app.services.clock import iso_utc, parse_iso
@@ -17,20 +17,24 @@ router = APIRouter(prefix="/tasks")
 
 USER_FIELDS = ("title", "type", "priority", "estimatedHours", "deadline", "delegable", "plannedDate",
                "plannedStart", "plannedEnd")
+# Optional fields (16–17 Oct 2026): stored only when set, so existing task objects (and the frozen
+# API cases) are unchanged; a PATCH without them keeps the current values.
+OPTIONAL_FIELDS = ("category", "location", "totalEffortMinutes", "minSession", "maxSession", "splittable")
 
 
 def _task_fields(body: TaskBody, current: Record | None = None) -> Record:
     """The user-settable fields after a POST (current = None: defaults apply) or
     a PATCH (missing fields keep their current values)."""
     sent = body.model_dump()
-    category = sent.pop("category")
+    optional = {name: sent.pop(name) for name in OPTIONAL_FIELDS}
     if current is None:
         task = {**sent, "delegable": sent["delegable"] if sent["delegable"] is not None else False}
     else:
         task = {name: sent[name] if sent[name] is not None else current[name] for name in USER_FIELDS}
-        category = category if category is not None else current.get("category")
-    if category is not None:  # optional (ML Model 1 only): stored only when set
-        task["category"] = category
+        optional = {name: value if value is not None else current.get(name) for name, value in optional.items()}
+    task.update({name: value for name, value in optional.items() if value is not None})
+    if task.get("minSession") and task.get("maxSession") and task["minSession"] > task["maxSession"]:
+        raise bad_request("'minSession' must not be more than 'maxSession'")
     if (task["plannedStart"] is None) != (task["plannedEnd"] is None):
         raise bad_request("'plannedStart' and 'plannedEnd' must be given together")
     if task["plannedStart"] is not None and to_minutes(task["plannedEnd"]) <= to_minutes(task["plannedStart"]):
@@ -93,6 +97,20 @@ def start_task(task_id: str, user_id: str = Depends(require_user), deps: Deps = 
     if task["startedAt"]:
         raise conflict("Task is already started")
     return deps.store.update("tasks", task["id"], {"status": "in_progress", "startedAt": iso_utc(deps.clock.now())})
+
+
+@router.post("/{task_id}/sessions/done")
+def finish_session(task_id: str, body: SessionDone, user_id: str = Depends(require_user),
+                   deps: Deps = Depends(get_deps)) -> dict:
+    """An effort-task session (rearranger) is done: its minutes count towards the effort done."""
+    task = load_owned(deps.store, "tasks", task_id, user_id, "Task")
+    sessions = [dict(s) for s in task.get("sessions") or []]
+    session = next((s for s in sessions if s["date"] == body.date and not s.get("done")), None)
+    if session is None:
+        raise bad_request(f"No open session of this task on {body.date}")
+    session["done"] = True
+    done = (task.get("actualMinutesDone") or 0) + session["minutes"]
+    return deps.store.update("tasks", task["id"], {"sessions": sessions, "actualMinutesDone": done})
 
 
 @router.post("/{task_id}/done")

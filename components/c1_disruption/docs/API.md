@@ -31,11 +31,12 @@ Firestore, open team decision) is plugged in later without changing the routes.
 
 | Collection | Main fields |
 |---|---|
-| `users` | `id`, `workStart`, `workEnd` |
+| `users` | `id`, `workStart`, `workEnd`; optional `routine` (17 Oct 2026): `[{label, start, end, location}]` — where the student usually is (free time, not busy); it gives each study window its location for the rearranger and pre-fills a task's location |
 | `protectedBlocks` | `id`, `userId`, `label`, `start`, `end` (may cross midnight, e.g. sleep 22:00–06:00) |
-| `tasks` | `id`, `userId`, `title`, `type` (Digital/Analog/Meeting/Fixed), `priority` (High/Medium/Low), `estimatedHours`, `deadline`, `delegable`, `plannedDate`, `plannedStart`, `plannedEnd` (the original plan), `status` (planned/in_progress/done/partial/not_done), `startedAt`, `doneAt`, `mvdTag`, `mvdStart`, `mvdEnd`, `mvdId` |
+| `tasks` | `id`, `userId`, `title`, `type` (Digital/Analog/Meeting/Fixed), `priority` (High/Medium/Low), `estimatedHours`, `deadline`, `delegable`, `plannedDate`, `plannedStart`, `plannedEnd` (the original plan), `status` (planned/in_progress/done/partial/not_done), `startedAt`, `doneAt`, `mvdTag`, `mvdStart`, `mvdEnd`, `mvdId`. Optional, stored only when set: `category` (coding/writing/reading/revision, Model 1); `location` (Home/Office/Campus/Commute/Other — a label, no GPS); effort tasks: `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`; set by the rearranger: `sessions` `[{date, start, end, minutes, done}]`, `actualMinutesDone`, `rearrangedFrom`, `rearrangedBy`, `movedBy`, `shortenedBy`, `needsSlot`, `deadlineRisk`, `shortfallMinutes` |
 | `disruptions` | `id`, `userId`, `date`, `type`, `start`, `timeLostMinutes`, `end` (derived), `severity` (1–3), `confirmed: true`, `suggestedType`, `reportedAt` |
 | `mvds` | `id`, `userId`, `disruptionId`, `parentMvdId`, `date`, `planFrom`, `status` (proposed/superseded/accepted/edited/rejected), `input` (the exact engine input, so any MVD can be re-run), engine output (tasks with tag, slot, reason, explanation, deadline risk; protected blocks; warnings; `freeMinutesLeft`), `comparison`, `finalPlan`; evaluation log (14 Oct 2026): `policyMode`, `shownPolicy`, `rankingShown`, `strategyId`, `strategy`, `modelOn`, `manualReplanFirst`, `taskLog` (per task: estimated, corrected point/low/high, correction source), `timeToDecisionSeconds` |
+| `rearrangements` | `id`, `userId`, `date`, `status` (proposed/accepted/edited/rejected), `input` (the exact rearranger input), `result` (placements, needsDecision with options A–E, missedSessions, warnings), `choices` `{taskId: option}`, `finalPlacements`, `createdAt`, `decidedAt` |
 | `feedback` | `id`, `userId`, `mvdId`, `action` (accept/edit/reject), `edits` (what the user changed), `reason`, `at`; `tagChanges` (structured tag diff, edit only), `totalTasks`, `timeToDecisionSeconds` |
 | `completions` | `id`, `userId`, `taskId`, `date`, `source` (buttons/review), `outcome` (done/partial/not_done), `partialPct` (25/50/75), `actualMinutes` |
 | `signals` | reserved for passive-signal events from Flutter (not used in Task 3) |
@@ -70,6 +71,19 @@ Firestore, open team decision) is plugged in later without changing the routes.
 | POST | `/api/mvds/:id/reject` | `{ reason? }`. Nothing is written to the tasks. Feedback `reject`. |
 
 An MVD can be decided **once** (accept, edit or reject); a second decision returns `409`.
+
+### Rearranger (17 Oct 2026; engine/rearrange.py, golden R01–R08)
+| Method | Path | Does |
+|---|---|---|
+| POST | `/api/rearrange` | `{ date }` → a **proposal**: where the day's accepted **Move** tasks go over the next 7 days (Model 1 corrected durations) and how effort tasks are spread; each placement has a `reason`. Study windows = free hours split by the `routine`; fixed = protected blocks; tasks already planned are never changed automatically. A task that does not fit is in `needsDecision` with options A–E (each `available` + `reason`). Nothing is written to the tasks yet. No settings → `409 NO_SETTINGS`. |
+| GET | `/api/rearrangements/:id` | Read one |
+| POST | `/api/rearrangements/:id/choose` | `{ taskId, option }` (A–E). An option that is not available → `400`. |
+| POST | `/api/rearrangements/:id/accept` | Applies the placements and the chosen options to the tasks (new date/slot, `sessions` for split and effort tasks, moved / shortened / delegated / needs-a-slot tasks). A task that still needs a choice → `409 CHOICE_NEEDED`. Feedback `accept` (`kind: "rearrange"`, logged for Model 2). |
+| POST | `/api/rearrangements/:id/edit` | `{ changes: [{ taskId, date, start, end }] }` — the student's own slot for a placed task, then as accept. Overlapping a protected block → `400 PROTECTED_BLOCK_OVERLAP`. |
+| POST | `/api/rearrangements/:id/reject` | `{ reason? }`. Nothing is written to the tasks. |
+| POST | `/api/tasks/:id/sessions/done` | `{ date }` — an effort-task session is done; its minutes are added to `actualMinutesDone` (remaining effort = total − done). |
+
+A proposal can be decided once (`409` after that).
 
 ### End-of-day review (backup completion detection, CLAUDE.md §3.5)
 | Method | Path | Does |

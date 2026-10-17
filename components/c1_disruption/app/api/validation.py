@@ -25,6 +25,8 @@ TASK_TYPES = config.TASK_TYPES
 PRIORITIES = tuple(config.PRIORITY_SCORE)
 TAGS = ("Keep", "Reduce", "Move", "Delegate")
 TASK_CATEGORIES = config.TASK_CATEGORIES
+LOCATIONS = config.LOCATIONS
+OPTION_CODES = ("A", "B", "C", "D", "E")
 
 # --- plain checks (also used for query and path parameters) ------------------
 
