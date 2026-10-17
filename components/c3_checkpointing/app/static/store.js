@@ -104,6 +104,15 @@
       loraAvailable: false,
       async load() { return { tasks: copy(state.tasks), events: state.log.length, interruptions: state.interruptions }; },
       async predict(input) { return predictionShape(C.predictDifficulty(input)); },
+      async createTask(p) {
+        const task = { id: 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), title: String(p.title || '').trim(),
+          kind: p.kind === 'document' ? 'document' : 'code', complexity: p.complexity || 'moderate', column: 'todo' };
+        if (!task.title) throw new Error('Give the task a name.');
+        state.tasks.push(task);
+        log('task_created', task, { kind: task.kind, complexity: task.complexity });
+        persist();
+        return copy(task);
+      },
       async analyzeFiles(files) {
         const out = [];
         for (const file of files) {
@@ -223,6 +232,7 @@
         for (const f of files) form.append('files', f, f.name);
         return (await request('POST', '/files/analyze', form)).files;
       },
+      createTask(p) { return request('POST', '/tasks', { title: p.title, kind: p.kind, complexity: p.complexity }); },
       move(id, column) { return request('PATCH', '/tasks/' + id, { column }); },
       saveCheckpoint(id, p) { return request('POST', '/tasks/' + id + '/checkpoint', p); },
       summary(id, opts) {

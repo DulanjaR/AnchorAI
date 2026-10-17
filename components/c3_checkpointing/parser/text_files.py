@@ -40,8 +40,8 @@ def _result(name: str, ext: str, line_count: int, todos, open_items, done_items,
         "todos": todos,
         "openItems": open_items,
         "doneItems": done_items,
-        "headings": _unique(headings, 5),
-        "symbols": _unique(symbols, 8),
+        "headings": _unique(headings, 12),
+        "symbols": _unique(symbols, 30),
         "openCount": len(todos) + len(open_items),
     }
 

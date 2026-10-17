@@ -338,3 +338,46 @@ def test_first_load_with_parallel_requests_seeds_the_demo_tasks_only_once(env):
     titles = [t.title for t in db.scalars(select(m.Task).where(m.Task.user_id == "parallel-user"))]
     db.close()
     assert sorted(titles) == sorted(title for title, *_ in service.SEED_TASKS)
+
+
+def test_file_snapshots_are_stored_and_returned_without_any_file_text(env):
+    client, _ = env
+    tid = tasks(client)["Hotel booking website"]["id"]
+    snap = {"name": "contact.html", "lineCount": 17, "symbols": ["validateName"], "headings": ["Contact Us"],
+            "open": ["validate email", "add submit"], "done": [], "text": "SECRET FILE TEXT"}
+    r = client.post(f"/api/tasks/{tid}/checkpoint", headers=H(), json={**CP, "fileSnapshots": [snap]})
+    assert r.status_code == 201
+    saved = r.json()["checkpoint"]["fileSnapshots"]
+    assert saved == [{"name": "contact.html", "lineCount": 17, "symbols": ["validateName"], "headings": ["Contact Us"],
+                      "open": ["validate email", "add submit"], "done": []}]
+    assert "SECRET FILE TEXT" not in json.dumps(client.get("/api/tasks", headers=H()).json())
+    assert tasks(client)["Hotel booking website"]["checkpoint"]["fileSnapshots"][0]["symbols"] == ["validateName"]
+
+
+def test_too_many_file_snapshots_are_rejected(env):
+    client, _ = env
+    tid = tasks(client)["Hotel booking website"]["id"]
+    many = [{"name": f"f{i}.py", "lineCount": 1} for i in range(11)]
+    r = client.post(f"/api/tasks/{tid}/checkpoint", headers=H(), json={**CP, "fileSnapshots": many})
+    assert r.status_code == 422
+
+
+def test_interface_files_are_revalidated_so_the_browser_never_mixes_old_and_new_scripts(env):
+    client, _ = env
+    for path in ("/", "/store.js", "/app.js"):
+        r = client.get(path)
+        assert r.status_code == 200
+        assert "no-cache" in r.headers["cache-control"]
+
+
+def test_an_old_database_without_the_snapshot_column_is_upgraded_on_start(tmp_path):
+    from sqlalchemy import inspect as sa_inspect, text
+
+    from components.c3_checkpointing.app.main import ensure_columns
+
+    engine = create_engine(f"sqlite:///{tmp_path / 'old.db'}")
+    with engine.begin() as conn:  # the table as an earlier version of C3 created it
+        conn.execute(text("CREATE TABLE c3_checkpoint (id INTEGER PRIMARY KEY, task_id VARCHAR(36), user_id VARCHAR(64))"))
+    assert ensure_columns(engine) == ["c3_checkpoint.file_snapshots"]
+    assert "file_snapshots" in {c["name"] for c in sa_inspect(engine).get_columns("c3_checkpoint")}
+    assert ensure_columns(engine) == []  # running it again changes nothing

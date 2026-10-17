@@ -181,8 +181,8 @@
       todos,
       openItems,
       doneItems,
-      headings: unique(headings).slice(0, 5),
-      symbols: unique(symbols).slice(0, 8),
+      headings: unique(headings).slice(0, 12),
+      symbols: unique(symbols).slice(0, 30),
       openCount: todos.length + openItems.length,
     };
   }
@@ -198,9 +198,77 @@
     return out;
   }
 
+  // ---- auto-log: what changed in the student's own files since the checkpoint ----------------
+  // Only names, headings, open-item texts and line counts are compared; the file text is never kept.
+  function snapshotOf(insight) {
+    return {
+      name: insight.name,
+      lineCount: insight.lineCount,
+      symbols: insight.symbols.slice(),
+      headings: insight.headings.slice(),
+      open: insight.todos.map((t) => t.text).concat(insight.openItems),
+      done: insight.doneItems.slice(),
+    };
+  }
+
+  const added = (before, now) => now.filter((x) => !before.includes(x));
+
+  function compareSnapshots(saved, insights) {
+    const snaps = (saved || []);
+    const nowList = insights.filter((i) => i && i.supported).map(snapshotOf);
+    const files = nowList.map((now) => {
+      const old = snaps.find((s) => s.name === now.name);
+      if (!old) {
+        return { name: now.name, status: 'new', lineDelta: 0, newSymbols: now.symbols, removedSymbols: [],
+          newHeadings: now.headings, resolved: [], newOpen: now.open, newlyDone: now.done };
+      }
+      const lineDelta = now.lineCount - old.lineCount;
+      const f = {
+        name: now.name, status: 'unchanged', lineDelta,
+        newSymbols: added(old.symbols || [], now.symbols), removedSymbols: added(now.symbols, old.symbols || []),
+        newHeadings: added(old.headings || [], now.headings),
+        resolved: added(now.open, old.open || []), newOpen: added(old.open || [], now.open),
+        newlyDone: added(old.done || [], now.done),
+      };
+      const changed = lineDelta !== 0 || f.newSymbols.length || f.removedSymbols.length || f.newHeadings.length ||
+        f.resolved.length || f.newOpen.length || f.newlyDone.length;
+      f.status = changed ? 'changed' : 'unchanged';
+      return f;
+    });
+    const notChecked = snaps.filter((s) => !nowList.some((n) => n.name === s.name)).map((s) => s.name);
+    const sum = (key) => files.reduce((n, f) => n + f[key].length, 0);
+    return {
+      files,
+      notChecked,
+      totals: {
+        filesChecked: files.length,
+        filesChanged: files.filter((f) => f.status === 'changed').length,
+        linesDelta: files.reduce((n, f) => n + (f.status === 'new' ? 0 : f.lineDelta), 0),
+        newSymbols: sum('newSymbols'),
+        resolved: sum('resolved'),
+        newOpen: sum('newOpen'),
+      },
+    };
+  }
+
+  function describeFileChange(f) {
+    if (f.status === 'unchanged') return ['No change found.'];
+    const out = [];
+    if (f.status === 'new') out.push('New file since the checkpoint.');
+    else if (f.lineDelta) out.push((f.lineDelta > 0 ? '+' : '') + f.lineDelta + ' lines');
+    if (f.newSymbols.length) out.push('new: ' + f.newSymbols.join(', '));
+    if (f.removedSymbols.length) out.push('no longer found: ' + f.removedSymbols.join(', '));
+    if (f.newHeadings.length) out.push('new heading: ' + f.newHeadings.join(', '));
+    if (f.newlyDone.length) out.push('ticked off: ' + f.newlyDone.join('; '));
+    if (f.resolved.length) out.push('open item no longer found (done or removed): ' + f.resolved.join('; '));
+    if (f.newOpen.length) out.push('new open item: ' + f.newOpen.join('; '));
+    return out;
+  }
+
   return {
     LEVELS, FIELDS, DEPTH, COMPLEXITY, MAX_SCORE,
     formatMinutes, durationPoints, openItemPoints,
     predictDifficulty, buildSummary, summaryToText, analyzeFile, suggestFromFile,
+    snapshotOf, compareSnapshots, describeFileChange,
   };
 });

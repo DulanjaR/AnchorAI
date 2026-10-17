@@ -187,3 +187,57 @@ test('summary labels match the shared vectors', () => {
     assert.strictEqual(s.intro, v.intro_300);
   }
 });
+
+// ---- auto-log: changes in the student's files since the checkpoint ----------------------------
+const BEFORE = [
+  '<html><head><title>Contact Us</title></head><body>',
+  '<script>',
+  'function validateName(n) { return n.length > 1; }',
+  '// TODO: validate email format',
+  '// TODO: add submit button',
+  '</script></body></html>',
+].join('\n');
+const AFTER = [
+  '<html><head><title>Contact Us</title></head><body>',
+  '<script>',
+  'function validateName(n) { return n.length > 1; }',
+  'function validateEmail(e) { return e.includes("@"); }',
+  '// TODO: add submit button',
+  '// TODO: show an error message under the field',
+  '</script></body></html>',
+].join('\n');
+
+test('snapshot keeps names and short items only, never the file text', () => {
+  const snap = C.snapshotOf(C.analyzeFile('contact.html', BEFORE));
+  assert.deepStrictEqual(Object.keys(snap).sort(), ['done', 'headings', 'lineCount', 'name', 'open', 'symbols']);
+  assert.ok(!JSON.stringify(snap).includes('n.length > 1'));
+  assert.deepStrictEqual(snap.open, ['validate email format', 'add submit button']);
+});
+
+test('auto-log finds new functions, resolved and new open items and the line change', () => {
+  const saved = [C.snapshotOf(C.analyzeFile('contact.html', BEFORE))];
+  const r = C.compareSnapshots(saved, [C.analyzeFile('contact.html', AFTER)]);
+  const f = r.files[0];
+  assert.strictEqual(f.status, 'changed');
+  assert.strictEqual(f.lineDelta, 1);
+  assert.deepStrictEqual(f.newSymbols, ['validateEmail']);
+  assert.deepStrictEqual(f.resolved, ['validate email format']);
+  assert.deepStrictEqual(f.newOpen, ['show an error message under the field']);
+  assert.deepStrictEqual(r.totals, { filesChecked: 1, filesChanged: 1, linesDelta: 1, newSymbols: 1, resolved: 1, newOpen: 1 });
+  assert.ok(C.describeFileChange(f).join(' | ').includes('new: validateEmail'));
+});
+
+test('auto-log reports unchanged files, new files and files that were not added again', () => {
+  const saved = [C.snapshotOf(C.analyzeFile('contact.html', BEFORE)), C.snapshotOf(C.analyzeFile('old.js', 'function a() {}'))];
+  const r = C.compareSnapshots(saved, [C.analyzeFile('contact.html', BEFORE), C.analyzeFile('extra.py', 'def go():\n  pass')]);
+  assert.strictEqual(r.files[0].status, 'unchanged');
+  assert.strictEqual(r.files[1].status, 'new');
+  assert.deepStrictEqual(r.notChecked, ['old.js']);
+  assert.deepStrictEqual(C.describeFileChange(r.files[0]), ['No change found.']);
+});
+
+test('auto-log ignores unsupported files and works with no saved snapshot', () => {
+  const r = C.compareSnapshots(undefined, [C.analyzeFile('photo.png', ''), C.analyzeFile('a.js', 'function x() {}')]);
+  assert.strictEqual(r.files.length, 1);
+  assert.strictEqual(r.files[0].status, 'new');
+});

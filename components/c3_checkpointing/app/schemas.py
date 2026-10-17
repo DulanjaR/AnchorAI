@@ -34,6 +34,21 @@ class PredictOut(BaseModel):
     reasons: list[Reason]
 
 
+class FileSnapshot(BaseModel):
+    """What the app noticed in one file at checkpoint time. Names and short items only, never the file text."""
+    name: str = Field(max_length=200)
+    lineCount: int = Field(default=0, ge=0, le=10_000_000)
+    symbols: list[str] = Field(default_factory=list, max_length=60)
+    headings: list[str] = Field(default_factory=list, max_length=40)
+    open: list[str] = Field(default_factory=list, max_length=80)
+    done: list[str] = Field(default_factory=list, max_length=80)
+
+    @field_validator("symbols", "headings", "open", "done")
+    @classmethod
+    def short_items(cls, v: list[str]) -> list[str]:
+        return [str(i).strip()[:200] for i in v if str(i).strip()]
+
+
 class CheckpointIn(BaseModel):
     goal: str = Field(default="", max_length=MAX_TEXT)
     completed: str = Field(default="", max_length=MAX_TEXT)
@@ -43,6 +58,7 @@ class CheckpointIn(BaseModel):
     resources: str = Field(default="", max_length=MAX_TEXT)
     openItems: list[str] = Field(default_factory=list, max_length=200)
     files: list[str] = Field(default_factory=list, max_length=50)
+    fileSnapshots: list[FileSnapshot] = Field(default_factory=list, max_length=10)
     type: InterruptionType = "meeting"
     minutes: float = Field(default=30, ge=0, le=60 * 24 * 365)
     complexity: Complexity = "moderate"
@@ -73,6 +89,7 @@ class CheckpointOut(BaseModel):
     resources: str
     openItems: list[str]
     files: list[str]
+    fileSnapshots: list[FileSnapshot] = Field(default_factory=list)
     type: str
     minutes: float
     complexity: str

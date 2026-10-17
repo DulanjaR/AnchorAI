@@ -92,16 +92,23 @@ to the backend.
 
 **Interface** (`app/static/`, plain HTML, CSS and JavaScript, no build step): a **task board** with draggable cards,
 a **checkpoint dialog** that predicts difficulty live and sets the checkpoint depth, **read-only file pre-fill**,
+**live graphs** that move with every input (what adds to the difficulty score, and score against time away),
 a **"Welcome back" popup** listing interrupted unfinished tasks, a **restart summary** with Accept / Edit / Ignore,
-and a **study log** with CSV export. Without the backend (opening `index.html` as a file) it still works and keeps
+an **auto-log** that compares the student's files with a snapshot taken at the checkpoint (new functions, open items
+done or added, line change), and a **study log** with CSV export and charts. Without the backend (opening `index.html` as a file) it still works and keeps
 its data in the browser; the header then shows **Browser only**.
 
 - Demo: press "Load demo data", then "I'm back"; or drag "Hotel booking website" to Interrupted and add
   `app/static/samples/contact.html` or `report_notes.docx` (Word files need the backend).
+- **Auto-log (semi-automatic data):** the student still writes the parts only they know (problem, next step). The app
+  collects the rest itself: time away, files and open items (read-only parsing), and on return what changed in the
+  files since the checkpoint. Only names, headings, open-item texts and line counts are kept as a snapshot, never the
+  file text. Fully automatic activity logging (IDE plugin, OS monitoring) is future work: it raises privacy issues and
+  was outside the reduced scope.
 - The difficulty comes from a transparent, hand-set rule (see "How it works" in the app), not from Model 1: the
   direction follows Model 1b, the thresholds are placeholders until pilot data.
-- Tests: `node --test components/c3_checkpointing/tests/core.test.js` (24 tests) and
-  `pytest components/c3_checkpointing` (74 tests): the difficulty rule and summary shared with the browser through
+- Tests: `node --test components/c3_checkpointing/tests/core.test.js` (28 tests) and
+  `pytest components/c3_checkpointing` (79 tests): the difficulty rule and summary shared with the browser through
   common test vectors, the file parser including `.docx`, the API and database rules, Model 2 data and metrics, and a
   dry run of the LoRA training code on a tiny model.
 

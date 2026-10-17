@@ -60,6 +60,8 @@ class Checkpoint(Base):
     resources: Mapped[str] = mapped_column(Text, default="")
     open_items: Mapped[list] = mapped_column(JsonType, default=list)  # texts found in the student's own files
     files: Mapped[list] = mapped_column(JsonType, default=list)  # file names only; file text is never stored
+    # per-file snapshot (names of functions / headings / open items, line count); used to show what changed on return
+    file_snapshots: Mapped[list] = mapped_column(JsonType, default=list)
 
     level: Mapped[str] = mapped_column(String(8))
     score: Mapped[int] = mapped_column(Integer)

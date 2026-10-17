@@ -55,7 +55,8 @@ def open_checkpoint(db: Session, task: m.Task) -> m.Checkpoint | None:
 def checkpoint_out(c: m.Checkpoint) -> dict:
     return {"id": c.id, "goal": c.goal, "completed": c.completed, "workingPoint": c.working_point, "problem": c.problem,
             "nextStep": c.next_step, "resources": c.resources, "openItems": list(c.open_items or []),
-            "files": list(c.files or []), "type": c.interruption_type, "minutes": c.minutes, "complexity": c.complexity,
+            "files": list(c.files or []), "fileSnapshots": list(c.file_snapshots or []),
+            "type": c.interruption_type, "minutes": c.minutes, "complexity": c.complexity,
             "level": c.level, "score": c.score, "depth": c.depth, "trigger": c.trigger, "savedAt": m.to_ms(c.created_at)}
 
 
@@ -141,6 +142,7 @@ def save_checkpoint(db: Session, user: str, task_id: str, p: CheckpointIn) -> di
         task_id=task.id, user_id=user, trigger=p.trigger, interruption_type=p.type, minutes=p.minutes,
         complexity=p.complexity, open_items_count=count, goal=p.goal, completed=p.completed, working_point=p.workingPoint,
         problem=p.problem, next_step=p.nextStep, resources=p.resources, open_items=p.openItems, files=p.files,
+        file_snapshots=[snap.model_dump() for snap in p.fileSnapshots],
         level=pred["level"], score=pred["score"], depth=pred["depth"]["name"])
     db.add(cp)
     task.complexity = p.complexity
@@ -148,7 +150,8 @@ def save_checkpoint(db: Session, user: str, task_id: str, p: CheckpointIn) -> di
     filled = sum(1 for v in (p.goal, p.completed, p.workingPoint, p.problem, p.nextStep, p.resources) if v)
     log_event(db, user, "checkpoint_saved", task, {"level": pred["level"], "depth": pred["depth"]["name"],
                                                    "minutes": p.minutes, "type": p.type, "fields_filled": filled,
-                                                   "files": len(p.files), "trigger": p.trigger})
+                                                   "files": len(p.files), "snapshots": len(p.fileSnapshots),
+                                                   "trigger": p.trigger})
     db.commit()
     return task_out(db, task)
 
