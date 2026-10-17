@@ -28,6 +28,7 @@ from sklearn.model_selection import KFold
 from components.c1_disruption.engine.config import TASK_CATEGORIES
 from components.c1_disruption.ml.drift import settings
 from components.c1_disruption.ml.drift.data import features, log_drift
+from components.c1_disruption.ml.progress import ProgressFn, say
 
 
 @dataclass(frozen=True)
@@ -156,7 +157,7 @@ class DriftModel:
             random_state=self.random_state,
         )
 
-    def fit(self, records: Sequence[Mapping[str, Any]]) -> "DriftModel":
+    def fit(self, records: Sequence[Mapping[str, Any]], progress: ProgressFn = None) -> "DriftModel":
         if len(records) < 2:
             raise ValueError("Need at least 2 training records")
         # The category columns are added only if the training data has categories at all, so data
@@ -168,7 +169,8 @@ class DriftModel:
         # Out-of-fold pooled predictions → honest residuals per record.
         oof = np.empty_like(y)
         folds = min(settings.RESIDUAL_FOLDS, len(records))
-        for train_idx, test_idx in KFold(folds, shuffle=True, random_state=self.random_state).split(X):
+        for fold, (train_idx, test_idx) in enumerate(KFold(folds, shuffle=True, random_state=self.random_state).split(X), 1):
+            say(progress, f"training fold {fold}/{folds} ({len(train_idx)} records)…")
             f = self._forest().fit(X[train_idx], y[train_idx])
             oof[test_idx] = f.predict(X[test_idx], quantiles=self.point_quantile)
         residuals = y - oof
@@ -178,7 +180,9 @@ class DriftModel:
         for s, r in zip(students, residuals):
             sums[s].append(float(r))
         self.offsets = {s: (len(v), float(np.mean(v))) for s, v in sums.items()}
+        say(progress, f"shrinkage k = {self.k}; earned-trust gate for {len(self.offsets)} students…")
         self.trust = gate_evidence(records, y, oof, self.k) if self.gate else {}
+        say(progress, f"training the final forest on all {len(records)} records…")
         self.forest = self._forest().fit(X, y)
         self.n_records = len(records)
         return self

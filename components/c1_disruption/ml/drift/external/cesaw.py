@@ -35,6 +35,7 @@ from components.c1_disruption.ml.drift import settings as drift_settings
 from components.c1_disruption.ml.drift.data import log_drift
 from components.c1_disruption.ml.drift.evaluation import (
     Predictions,
+    gate_by_student,
     gate_students,
     keep_before,
     learning_curve,
@@ -42,6 +43,7 @@ from components.c1_disruption.ml.drift.evaluation import (
 )
 from components.c1_disruption.ml.drift.external import settings
 from components.c1_disruption.ml.drift.model import DriftModel
+from components.c1_disruption.ml.progress import ProgressFn, say
 
 Records = Sequence[Mapping[str, Any]]
 Factory = Callable[[], Any]
@@ -193,11 +195,18 @@ def gate_summary(model: Predictions, b0: Predictions) -> dict[str, Any]:
 
 
 def evaluate(records: Records, n_estimators: int = settings.N_ESTIMATORS, n_jobs: int = settings.N_JOBS,
-             folds: int = settings.COLD_FOLDS, warm_sample: Sequence[str] | None = None) -> dict[str, Any]:
+             folds: int = settings.COLD_FOLDS, warm_sample: Sequence[str] | None = None,
+             warm_step: int = settings.WARM_STEP_DAYS, progress: ProgressFn = None,
+             keep_predictions: bool = False) -> dict[str, Any]:
+    """keep_predictions: also return the Predictions (for charts; not JSON)."""
     factories = methods(n_estimators)
     sample = list(warm_sample) if warm_sample is not None else warm_developers(records)
+    say(progress, f"cold start: {folds} groups of developers, {len(factories)} methods each "
+                  f"({n_estimators} trees, {n_jobs} workers)…")
     cold = cold_start(records, factories, n_jobs, folds)
-    warm = warm_start(records, factories, sample, n_jobs=n_jobs)
+    say(progress, f"warm: {len(sample)} developers, one retraining per {warm_step} of their days…")
+    warm = warm_start(records, factories, sample, step_days=warm_step, n_jobs=n_jobs)
+    say(progress, "scoring…")
     b0 = baselines.B0NoDrift.name
     return {
         "label": settings.LABEL, "trees": n_estimators, "coldFolds": folds, "warmDevelopers": sample,
@@ -209,6 +218,8 @@ def evaluate(records: Records, n_estimators: int = settings.N_ESTIMATORS, n_jobs
         "gateStudents": {"cold": {name: gate_students(p) for name, p in cold.items()},
                          "warm": {name: gate_students(p) for name, p in warm.items()}},
         "learningCurve": learning_curve(warm["model"]),
+        "gateByDeveloper": {"warm": gate_by_student(warm["model"])},
+        **({"predictions": {"cold": cold, "warm": warm}} if keep_predictions else {}),
     }
 
 
@@ -360,7 +371,7 @@ def main(argv: list[str] | None = None) -> None:
     # Aggregates only (no CESAW rows, no developer ids), so the table can be rebuilt later.
     import json
 
-    summary = {k: v for k, v in report.items() if k != "warmDevelopers"}
+    summary = {k: v for k, v in report.items() if k not in ("warmDevelopers", "gateByDeveloper", "predictions")}
     summary.update(warmDevelopers=len(report["warmDevelopers"]), dropped=dropped, shape=describe(records))
     out.with_suffix(".json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8", newline="\n")
     # The Windows console may not be UTF-8 ("≤", "÷"): never fail after the file is written.

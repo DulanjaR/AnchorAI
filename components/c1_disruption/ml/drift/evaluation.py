@@ -18,6 +18,7 @@ from typing import Any, Callable, Mapping, Sequence
 import numpy as np
 
 from components.c1_disruption.ml.drift.data import log_drift
+from components.c1_disruption.ml.progress import ProgressFn, say
 
 Records = Sequence[Mapping[str, Any]]
 Factory = Callable[[], Any]
@@ -90,19 +91,29 @@ def learning_curve(p: Predictions, bins: Sequence[int] = (0, 1, 5, 10, 20, 40)) 
     return rows
 
 
-def gate_students(p: Predictions) -> dict[str, int] | None:
-    """How many students had the earned-trust gate open vs closed, at each student's LAST
-    evaluation point (largest n seen; in cold start the only point). None: no gate (baselines)."""
+def gate_by_student(p: Predictions) -> dict[str, bool] | None:
+    """Each student's earned-trust gate at their LAST evaluation point (largest n seen; in
+    cold start the only point): True = open. None: no gate (baselines)."""
     if not p.trusted or any(t is None for t in p.trusted):
         return None
     last: dict[str, tuple[int, bool]] = {}
-    ever: dict[str, bool] = defaultdict(bool)
     for r, n, t in zip(p.records, p.n_seen, p.trusted):
         s = r["studentId"]
         if s not in last or n >= last[s][0]:
             last[s] = (n, bool(t))
-        ever[s] = ever[s] or bool(t)
-    open_now = sum(t for _, t in last.values())
+    return {s: t for s, (_, t) in sorted(last.items())}
+
+
+def gate_students(p: Predictions) -> dict[str, int] | None:
+    """How many students had the earned-trust gate open vs closed at their last evaluation
+    point (see gate_by_student), and how many were open at least once. None: no gate."""
+    last = gate_by_student(p)
+    if last is None:
+        return None
+    ever: dict[str, bool] = defaultdict(bool)
+    for r, t in zip(p.records, p.trusted):
+        ever[r["studentId"]] = ever[r["studentId"]] or bool(t)
+    open_now = sum(last.values())
     return {"students": len(last), "open": open_now, "closed": len(last) - open_now, "everOpen": sum(ever.values())}
 
 
@@ -121,16 +132,20 @@ def keep_before(previous: str | None, heading: str) -> str | None:
     return "\n".join([heading, "", *body]).rstrip() + "\n"
 
 
-def leave_one_student_out(records: Records, factory: Factory) -> Predictions:
+def leave_one_student_out(records: Records, factory: Factory, progress: ProgressFn = None,
+                          label: str = "") -> Predictions:
     out = Predictions()
-    for student in sorted({r["studentId"] for r in records}):
+    students = sorted({r["studentId"] for r in records})
+    for i, student in enumerate(students, 1):
+        say(progress, f"{label}cold start: student {student} ({i}/{len(students)})…")
         train = [r for r in records if r["studentId"] != student]
         test = [r for r in records if r["studentId"] == student]
         out.add(test, factory().fit(train), n_seen=0)
     return out
 
 
-def rolling_origin(records: Records, factory: Factory, min_history_days: int = 1, step_days: int = 1) -> Predictions:
+def rolling_origin(records: Records, factory: Factory, min_history_days: int = 1, step_days: int = 1,
+                   progress: ProgressFn = None, label: str = "") -> Predictions:
     """For each student, origin days d = their (min_history_days+1)-th day onwards,
     every `step_days`; predict all of the student's records on days [d, d+step)
     from everyone else's records + the student's records before d."""
@@ -138,9 +153,11 @@ def rolling_origin(records: Records, factory: Factory, min_history_days: int = 1
     by_student: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
     for r in records:
         by_student[r["studentId"]].append(r)
-    for student, own in sorted(by_student.items()):
+    for i, (student, own) in enumerate(sorted(by_student.items()), 1):
         others = [r for r in records if r["studentId"] != student]
         days = sorted({r["date"] for r in own})
+        origins = len(range(min_history_days, len(days), step_days))
+        say(progress, f"{label}warm: student {student} ({i}/{len(by_student)}), {origins} retrainings…")
         for i in range(min_history_days, len(days), step_days):
             window = set(days[i:i + step_days])
             past = [r for r in own if r["date"] < days[i]]

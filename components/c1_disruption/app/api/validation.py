@@ -10,7 +10,6 @@ Allowed task types, priorities and disruption types come from the engine config,
 so there is one source of truth for them.
 """
 import math
-import re
 from typing import Annotated, Any, Callable, ClassVar
 
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationInfo, model_validator
@@ -19,7 +18,7 @@ from pydantic_core import PydanticCustomError
 from components.c1_disruption.app.api.errors import bad_request
 from components.c1_disruption.engine import config
 from components.c1_disruption.engine.errors import EngineError
-from components.c1_disruption.engine.time import parse_date, to_minutes
+from components.c1_disruption.engine.time import is_time, parse_date, to_minutes
 
 DISRUPTION_TYPES = tuple(config.DISRUPTION_KINDS)
 TASK_TYPES = config.TASK_TYPES
@@ -27,20 +26,9 @@ PRIORITIES = tuple(config.PRIORITY_SCORE)
 TAGS = ("Keep", "Reduce", "Move", "Delegate")
 TASK_CATEGORIES = config.TASK_CATEGORIES
 
-_TWO_DIGIT_TIME = re.compile(r"[0-9]{2}:[0-9]{2}")
-
-
 # --- plain checks (also used for query and path parameters) ------------------
 
-def is_time(value: Any) -> bool:
-    """'HH:MM' with two-digit hours, a real time of day."""
-    if not isinstance(value, str) or not _TWO_DIGIT_TIME.fullmatch(value):
-        return False
-    try:
-        to_minutes(value)
-    except EngineError:
-        return False
-    return True
+# is_time (a real 'HH:MM' time of day) lives in engine/time.py; imported above.
 
 
 def is_date(value: Any) -> bool:

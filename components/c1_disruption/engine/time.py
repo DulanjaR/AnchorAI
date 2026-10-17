@@ -117,3 +117,18 @@ def window_to_interval(disruption: Mapping[str, str]) -> Interval:
     """
     start, end = to_minutes(disruption["start"]), to_minutes(disruption["end"])
     return Interval(start, MINUTES_PER_DAY if end < start else end)
+
+
+_TWO_DIGIT_TIME = re.compile(r"[0-9]{2}:[0-9]{2}")
+
+
+def is_time(value: object) -> bool:
+    """'HH:MM' with two-digit hours, a real time of day. (Used by the API checks and the
+    simulation loaders; lives here so the simulation does not need the web layer.)"""
+    if not isinstance(value, str) or not _TWO_DIGIT_TIME.fullmatch(value):
+        return False
+    try:
+        to_minutes(value)
+    except EngineError:
+        return False
+    return True

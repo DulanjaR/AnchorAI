@@ -1,0 +1,10 @@
+# What the Colab notebooks need, and nothing else (no web server: fastapi/uvicorn are not needed).
+# Same pins as components/c1_disruption/requirements.txt, so notebook results match the tests.
+# matplotlib only draws the charts; Colab's own version is fine, so it is not pinned.
+numpy==2.4.6
+scipy==1.17.1
+scikit-learn==1.9.1
+quantile-forest==1.4.2
+joblib==1.6.0
+pandas==3.0.6
+matplotlib>=3.8

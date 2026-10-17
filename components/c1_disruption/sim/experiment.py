@@ -7,6 +7,7 @@ Variants: 'planted' (persona drift as written), 'null' (no drift), 'misspecified
 (planted drift × a hidden daily factor the model cannot see).
 Every table is labelled SYNTHETIC: pipeline validation, never a research finding.
 """
+import math
 import random
 from statistics import mean, stdev
 from typing import Any, Iterable
@@ -19,6 +20,7 @@ from components.c1_disruption.ml.bandit.policies import FixedOrderPolicy, MostAc
 from components.c1_disruption.ml.drift import baselines
 from components.c1_disruption.ml.drift.data import clean
 from components.c1_disruption.ml.drift.evaluation import (
+    gate_by_student,
     gate_students,
     keep_before,
     leave_one_student_out,
@@ -27,6 +29,7 @@ from components.c1_disruption.ml.drift.evaluation import (
     score,
 )
 from components.c1_disruption.ml.drift.model import DriftModel
+from components.c1_disruption.ml.progress import ProgressFn, say
 from components.c1_disruption.sim import settings
 from components.c1_disruption.sim.events import CANNOT_PLAN, NO_EFFECT, Event, build_events, event_metrics
 from components.c1_disruption.sim.generate import World, generate
@@ -37,11 +40,12 @@ VARIANTS = ("planted", "null", "misspecified")
 LABEL = "SYNTHETIC — pipeline validation only, not a research finding"
 
 
-def model1(world: World, n_estimators: int) -> dict[str, Any]:
+def model1(world: World, n_estimators: int, progress: ProgressFn = None) -> dict[str, Any]:
     records = clean(world.records)
     methods = {"model": lambda: DriftModel(n_estimators=n_estimators), **{c.name: c for c in baselines.BASELINES}}
     out: dict[str, Any] = {"records": len(records), "cold": {}, "warm": {}, "gateStudents": {"cold": {}, "warm": {}}}
     for name, factory in methods.items():
+        say(progress, f"  Model 1, {name}: cold start + warm…")
         cold = leave_one_student_out(records, factory)
         out["cold"][name] = score(cold)
         warm = rolling_origin(records, factory, min_history_days=1, step_days=settings.ROLLING_STEP_DAYS)
@@ -50,6 +54,10 @@ def model1(world: World, n_estimators: int) -> dict[str, Any]:
         out["gateStudents"]["warm"][name] = gate_students(warm)
         if name == "model":
             out["learningCurve"] = learning_curve(warm)
+            out["gateByStudent"] = gate_by_student(warm)
+            # For the predicted-vs-actual chart (not written to the results JSON, see summary()).
+            out["scatter"] = [(r["estimatedMinutes"], r["actualMinutes"], float(r["estimatedMinutes"] * math.exp(v)))
+                              for r, v in zip(warm.records, warm.log_pred)]
     return out
 
 
@@ -93,7 +101,8 @@ def _avg(rows: Iterable[dict], plan: str, key: str) -> float | None:
     return mean(values) if values else None
 
 
-def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> dict[str, Any]:
+def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS, progress: ProgressFn = None) -> dict[str, Any]:
+    say(progress, "  replanning the disruption days (raw vs corrected plans, weekly Model 1 retraining)…")
     events, skipped = build_events(world, n_estimators)
     rows = [event_metrics(world, e) for e in events]
     compared = [r for r in rows if "corrected" in r]
@@ -105,7 +114,7 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
     changes = [r["decisionChangeRate"] for r in compared]
     return {
         "dataset": settings.DATASET, "seed": world.seed, "variant": world.variant,
-        "model1": model1(world, n_estimators),
+        "model1": model1(world, n_estimators, progress),
         "events": {"total": len(rows), "compared": len(compared), "summary": summary,
                    "noEffect": sum(s.kind == NO_EFFECT for s in skipped),
                    "skippedUnplannable": sum(s.kind == CANNOT_PLAN for s in skipped),
@@ -116,14 +125,19 @@ def run_world(world: World, n_estimators: int = settings.SIM_N_ESTIMATORS) -> di
                    "skippedReasons": sorted({s.reason for s in skipped if s.kind == CANNOT_PLAN}),
                    "decisionChangeRate": mean(changes) if changes else None,
                    "tightSlackEvents": sum(r["tightSlack"] for r in rows), "rows": rows},
-        "model2": model2(world, events, world.seed),
+        "model2": _model2(world, events, progress),
     }
+
+
+def _model2(world: World, events: list[Event], progress: ProgressFn) -> dict[str, list[float]]:
+    say(progress, f"  Model 2: simulated decisions on {len(events)} events for 4 policies…")
+    return model2(world, events, world.seed)
 
 
 def run(personas_csv: str, tasks_csv: str, seeds: Iterable[int] = settings.SEEDS,
         variants: Iterable[str] = VARIANTS, n_estimators: int = settings.SIM_N_ESTIMATORS,
         schedule_csv: str | None = None, habits_csv: str | None = None,
-        profile_csv: str | None = None) -> dict[str, Any]:
+        profile_csv: str | None = None, progress: ProgressFn = None) -> dict[str, Any]:
     """schedule_csv: per-day blocks (free-time windows etc.); habits_csv: special habits;
     profile_csv: per-persona disruption profile (sim/profile.py). All optional; without
     them the persona's fixed work hours, plain drift and random disruptions are used."""
@@ -131,8 +145,11 @@ def run(personas_csv: str, tasks_csv: str, seeds: Iterable[int] = settings.SEEDS
     tasks = load_tasks(tasks_csv, personas)
     schedule = load_schedule(schedule_csv, personas) if schedule_csv else None
     profile = load_profile(profile_csv, personas) if profile_csv else None
-    runs = [run_world(generate(personas, tasks, seed, variant, schedule, profile), n_estimators)
-            for variant in variants for seed in seeds]
+    plan = [(variant, seed) for variant in variants for seed in seeds]
+    runs = []
+    for i, (variant, seed) in enumerate(plan, 1):
+        say(progress, f"variant {variant}, seed {seed} ({i}/{len(plan)})…")
+        runs.append(run_world(generate(personas, tasks, seed, variant, schedule, profile), n_estimators, progress))
     return {"label": LABEL, "dataset": settings.DATASET, "personas": len(personas), "tasks": len(tasks),
             "scheduled": schedule is not None, "profiled": profile is not None, "runs": runs}
 
@@ -208,7 +225,8 @@ def summary(report: dict[str, Any]) -> dict[str, Any]:
     runs = []
     for r in report["runs"]:
         events = {k: v for k, v in r["events"].items() if k != "rows"}
-        runs.append({**r, "events": events})
+        model1_out = {k: v for k, v in r["model1"].items() if k != "scatter"}
+        runs.append({**r, "events": events, "model1": model1_out})
     return {**report, "runs": runs}
 
 

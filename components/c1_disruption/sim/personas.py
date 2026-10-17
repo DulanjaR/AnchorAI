@@ -10,7 +10,7 @@ from components.c1_disruption.app.services.planning import STRATEGIES
 from components.c1_disruption.engine import config as engine_config
 from components.c1_disruption.ml.bandit.actions import ACTIONS
 from components.c1_disruption.sim import settings
-from components.c1_disruption.app.api.validation import is_time
+from components.c1_disruption.engine.time import is_time
 
 
 class FormatError(ValueError):
