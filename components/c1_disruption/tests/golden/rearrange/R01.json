@@ -1,0 +1,58 @@
+{
+  "id": "R01",
+  "name": "Moved task fits the next day",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-02",
+    "from": "2026-11-03T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-03",
+        "windows": [
+          {
+            "start": "18:00",
+            "end": "22:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [
+      {
+        "id": "M1",
+        "title": "Lab report draft",
+        "type": "Digital",
+        "priority": "High",
+        "deadline": "2026-11-05T23:59",
+        "durationMinutes": 90,
+        "durationSource": "model",
+        "splittable": true,
+        "delegable": false,
+        "location": null
+      }
+    ],
+    "effort": []
+  },
+  "workings": [
+    "Fi = (3 days × 1) / (1.5 h × 1) = 2.0 (only task).",
+    "Tue 3 Nov free 18:00–22:00 (240 min) holds 90 min → 18:00–19:30. Not the deadline day."
+  ],
+  "expected": {
+    "placements": [
+      {
+        "taskId": "M1",
+        "date": "2026-11-03",
+        "start": "18:00",
+        "end": "19:30",
+        "minutes": 90,
+        "session": null,
+        "reason": "Placed on Tue 3 Nov, 18:00–19:30: the earliest free time before its deadline (Thu 5 Nov 23:59) that holds the whole task (90 min)."
+      }
+    ],
+    "needsDecision": [],
+    "warnings": []
+  }
+}

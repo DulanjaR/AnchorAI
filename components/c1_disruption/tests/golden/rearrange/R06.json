@@ -1,0 +1,199 @@
+{
+  "id": "R06",
+  "name": "Effort task spread evenly over 7 days, deadline day kept as a buffer",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-02",
+    "from": "2026-11-03T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-03",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-04",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-05",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-06",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-07",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-08",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-09",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-10",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [],
+    "effort": [
+      {
+        "id": "E1",
+        "title": "Project report",
+        "type": "Digital",
+        "priority": "Medium",
+        "deadline": "2026-11-10T23:59",
+        "totalEffortMinutes": 420,
+        "actualMinutesDone": 0,
+        "minSession": 30,
+        "maxSession": 120,
+        "splittable": true,
+        "location": null,
+        "sessions": []
+      }
+    ]
+  },
+  "workings": [
+    "Remaining effort = 420 − 0 = 420. Days before the deadline day (Tue 10 Nov, kept free as a buffer), from Tue 3 Nov: Tue 3 … Mon 9 = 7 days (all inside the 7-day horizon).",
+    "420 / 7 = 60 per day (a multiple of 5, inside 30–120). Each evening 19:00–21:00 holds 60 → 19:00–20:00.",
+    "Free time before the deadline (excluding the buffer day) = 7 × 120 = 840 ≥ 420 → no early warning."
+  ],
+  "expected": {
+    "placements": [
+      {
+        "taskId": "E1",
+        "date": "2026-11-03",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "1/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 1 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-04",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "2/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 2 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-05",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "3/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 3 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-06",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "4/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 4 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-07",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "5/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 5 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-08",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "6/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 6 of 7."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-09",
+        "start": "19:00",
+        "end": "20:00",
+        "minutes": 60,
+        "session": "7/7",
+        "reason": "Effort task: 420 min left, spread evenly over the 7 days before the deadline (Tue 10 Nov is kept free as a buffer): 60 min a day. Session 7 of 7."
+      }
+    ],
+    "needsDecision": [],
+    "warnings": []
+  }
+}

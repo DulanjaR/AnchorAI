@@ -2,6 +2,27 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-17 — Rearranger (replaces the D-MOVE swap rules)
+- Source: planning chat, 17 Oct 2026 (owner-approved design).
+- **`engine/rearrange.py`** (pure functions; settings in `engine/config.py`). Horizon today + 7 days, never past a task's deadline. Free time = study windows − fixed blocks − tasks already planned. **Existing future tasks are never changed automatically.**
+- Input: the MVD's moved tasks; duration = Model 1 corrected point (drift 1.0 when the gate is closed). Order: Fi ascending; ties earliest deadline, then shortest.
+- Placement: the earliest free gap before the deadline that holds the full duration; the deadline day only if nothing earlier fits. Else split into pieces ≥ `MIN_SESSION` (30) and ≤ `MAX_SESSION` (120) before the deadline, unless not splittable. Location: Campus tasks only in campus time; Commute gaps take only Analog tasks.
+- Nothing fits → **no decision**: `needsDecision` with pre-computed options — **A** make room on a later day (mini-MVD with the task added; only lower-priority or later-deadline tasks may be shortened ≤ 50% or moved further out; one level only: a pushed-out task gets one rearranger attempt, else it joins the list); **B** split across days (if splittable); **C** shorten the moved task itself (≤ 50%, if its priority allows); **D** delegate (if delegable); **E** keep it: "Needs a slot" + deadline risk with the shortfall in minutes. A reason sentence for every placement and every option.
+- **Effort tasks:** new optional fields `totalEffortMinutes`, `minSession`, `maxSession`, `splittable`. Sessions spread evenly over the days before the deadline, the deadline day kept as a buffer. Remaining effort = total − actual minutes done. A missed session → re-spread the rest. Early warning when remaining effort > free time before the deadline.
+- **Location:** every task gets an optional `location` (Home, Office, Campus, Commute, Other), pre-filled from the routine block at that time. A label only, no GPS. Add it to API.md and the task form.
+- **Test-first:** golden R01–R08 in `tests/golden/rearrange/` (hand-worked) are shown to the owner **before** any code. PROPOSED interpretations needed to hand-work them are listed in `tests/golden/rearrange/README.md` (e.g. option B = split with shortening-only room-making, C not offered for High priority, splittable defaults, effort rounding).
+
+## 2026-10-14 — D-MOVE carry-over — SUPERSEDED (17 Oct 2026)
+- Superseded by "Rearranger" (2026-10-17) above: the swap rules (tomorrow only, one swap level, bumped task → "Needs a slot") are replaced by the rearranger's horizon search and the A–E options. Kept below for the record.
+
+## 2026-10-17 — Notebooks 01–04 run cleanly on Colab and show the training
+- Source: planning chat, 17 Oct 2026.
+- **Setup cell:** clone `dev/ravindu` into `/content/AnchorAI` only if it does not exist (no nested clone); go to that absolute path; install only `notebooks/requirements.txt` (numpy, scipy, scikit-learn, quantile-forest, joblib, pandas, matplotlib — not fastapi/uvicorn); print the versions; if a package that was already loaded was replaced (e.g. numpy), print "Runtime → Restart session, then run from cell 2" and stop. **Cell 2** works on its own after a restart.
+- **Progress:** a line before every long step with elapsed seconds (`ml/progress.py`; optional `progress=` on `DriftModel.fit`, `leave_one_student_out`, `rolling_origin`, `sim.experiment.run`, `cesaw.evaluate`; default None = silent, so tests and the API are unchanged).
+- **Charts** (`ml/charts.py`, matplotlib; every title must say SYNTHETIC or REAL): MAE by method (bar), learning curve (line), predicted vs actual minutes (scatter), gate open/closed per student (bar); notebook 02: acceptance over time per policy (line).
+- Every notebook run top to bottom locally before committing, in a clean environment with only the notebook packages; committed without outputs.
+- Implementation details (PROPOSED): `engine.time.is_time` moved out of the API layer so the simulation does not need FastAPI (the API re-exports it); notebook outputs (model files, report) go to `/content/c1_outputs` (Colab) or the system temp folder, never into the repository; matplotlib not pinned (charts only; Colab's version is fine); notebook 04 has `QUICK = True` by default (8 developers, one retraining per 60 days, 30 trees) because the full CESAW run takes hours — the committed results file stays the full run; notebook 03 has `QUICK = False` (full 5 seeds).
+
 ## 2026-10-16 — After PP1: D-MOVE first, the LLM-persona idea only as a later stress test
 - Source: planning chat, 16 Oct 2026.
 - **D-MOVE carry-over:** not now. After PP1: golden S17+ written and approved first, then the implementation (rules: DECISIONS.md 2026-10-14 "D-MOVE carry-over").

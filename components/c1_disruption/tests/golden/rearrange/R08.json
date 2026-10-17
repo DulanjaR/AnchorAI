@@ -1,0 +1,102 @@
+{
+  "id": "R08",
+  "name": "A Campus task is never placed at home; commute time takes only Analog tasks",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-02",
+    "from": "2026-11-03T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-03",
+        "windows": [
+          {
+            "start": "07:30",
+            "end": "08:30",
+            "location": "Commute"
+          },
+          {
+            "start": "18:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-04",
+        "windows": [
+          {
+            "start": "13:00",
+            "end": "15:00",
+            "location": "Campus"
+          },
+          {
+            "start": "18:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [
+      {
+        "id": "M1",
+        "title": "Lab bench measurements",
+        "type": "Analog",
+        "priority": "Medium",
+        "deadline": "2026-11-05T23:59",
+        "durationMinutes": 60,
+        "durationSource": "model",
+        "splittable": false,
+        "delegable": false,
+        "location": "Campus"
+      },
+      {
+        "id": "M2",
+        "title": "Upload lab photos",
+        "type": "Digital",
+        "priority": "Medium",
+        "deadline": "2026-11-05T23:59",
+        "durationMinutes": 30,
+        "durationSource": "model",
+        "splittable": false,
+        "delegable": false,
+        "location": null
+      }
+    ],
+    "effort": []
+  },
+  "workings": [
+    "Order by Fi: M1 = (3 × 2) / 1 h = 6; M2 = (3 × 2) / 0.5 h = 12 → M1 first.",
+    "M1 (Campus): Tue Commute 07:30–08:30 and Tue Home 18:00–21:00 are not Campus → skipped. Wed Campus 13:00–15:00 → 13:00–14:00.",
+    "M2 (Digital, no location): Tue Commute 07:30–08:30 takes only Analog tasks → skipped. Tue Home 18:00–21:00 → 18:00–18:30."
+  ],
+  "expected": {
+    "placements": [
+      {
+        "taskId": "M1",
+        "date": "2026-11-04",
+        "start": "13:00",
+        "end": "14:00",
+        "minutes": 60,
+        "session": null,
+        "reason": "Placed on Wed 4 Nov, 13:00–14:00: it can only be done on campus, and this is the first campus time before its deadline (Thu 5 Nov 23:59). Earlier free time (Tue commute, Tue at home) is not on campus."
+      },
+      {
+        "taskId": "M2",
+        "date": "2026-11-03",
+        "start": "18:00",
+        "end": "18:30",
+        "minutes": 30,
+        "session": null,
+        "reason": "Placed on Tue 3 Nov, 18:00–18:30: the earliest free time before its deadline (Thu 5 Nov 23:59) that holds the whole task (30 min). The commute (07:30–08:30) only takes paper-based (Analog) tasks."
+      }
+    ],
+    "needsDecision": [],
+    "warnings": []
+  }
+}

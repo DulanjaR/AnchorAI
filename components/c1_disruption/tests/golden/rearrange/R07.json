@@ -1,0 +1,158 @@
+{
+  "id": "R07",
+  "name": "A missed session: the rest is re-spread over the remaining days",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-05",
+    "from": "2026-11-05T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-05",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-06",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-07",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-08",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-09",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [],
+    "effort": [
+      {
+        "id": "E1",
+        "title": "Project report",
+        "type": "Digital",
+        "priority": "Medium",
+        "deadline": "2026-11-09T23:59",
+        "totalEffortMinutes": 360,
+        "actualMinutesDone": 60,
+        "minSession": 30,
+        "maxSession": 120,
+        "splittable": true,
+        "location": null,
+        "sessions": [
+          {
+            "date": "2026-11-03",
+            "start": "19:00",
+            "end": "20:00",
+            "minutes": 60,
+            "done": true
+          },
+          {
+            "date": "2026-11-04",
+            "start": "19:00",
+            "end": "20:00",
+            "minutes": 60,
+            "done": false
+          }
+        ]
+      }
+    ]
+  },
+  "workings": [
+    "The session of Wed 4 Nov is in the past and not done → missed.",
+    "Remaining = 360 − 60 done = 300. Days from Thu 5 Nov to the day before the deadline day (Mon 9 Nov is the buffer): Thu 5, Fri 6, Sat 7, Sun 8 = 4 days.",
+    "300 / 4 = 75 per day (multiple of 5, inside 30–120) → 19:00–20:15 each day. Free 4 × 120 = 480 ≥ 300 → no early warning."
+  ],
+  "expected": {
+    "missedSessions": [
+      {
+        "taskId": "E1",
+        "date": "2026-11-04",
+        "minutes": 60
+      }
+    ],
+    "placements": [
+      {
+        "taskId": "E1",
+        "date": "2026-11-05",
+        "start": "19:00",
+        "end": "20:15",
+        "minutes": 75,
+        "session": "1/4",
+        "reason": "Effort task re-spread: the session of Wed 4 Nov was missed, so the 300 min left are spread over the 4 days before the deadline (Mon 9 Nov is kept free as a buffer): 75 min a day. Session 1 of 4."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-06",
+        "start": "19:00",
+        "end": "20:15",
+        "minutes": 75,
+        "session": "2/4",
+        "reason": "Effort task re-spread: the session of Wed 4 Nov was missed, so the 300 min left are spread over the 4 days before the deadline (Mon 9 Nov is kept free as a buffer): 75 min a day. Session 2 of 4."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-07",
+        "start": "19:00",
+        "end": "20:15",
+        "minutes": 75,
+        "session": "3/4",
+        "reason": "Effort task re-spread: the session of Wed 4 Nov was missed, so the 300 min left are spread over the 4 days before the deadline (Mon 9 Nov is kept free as a buffer): 75 min a day. Session 3 of 4."
+      },
+      {
+        "taskId": "E1",
+        "date": "2026-11-08",
+        "start": "19:00",
+        "end": "20:15",
+        "minutes": 75,
+        "session": "4/4",
+        "reason": "Effort task re-spread: the session of Wed 4 Nov was missed, so the 300 min left are spread over the 4 days before the deadline (Mon 9 Nov is kept free as a buffer): 75 min a day. Session 4 of 4."
+      }
+    ],
+    "needsDecision": [],
+    "warnings": []
+  }
+}

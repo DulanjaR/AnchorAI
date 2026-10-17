@@ -1,0 +1,87 @@
+{
+  "id": "R02",
+  "name": "Skips gaps that are too small and uses the next day",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-02",
+    "from": "2026-11-03T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-03",
+        "windows": [
+          {
+            "start": "18:00",
+            "end": "22:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [
+          {
+            "label": "Dinner",
+            "start": "19:00",
+            "end": "19:30"
+          }
+        ],
+        "planned": [
+          {
+            "id": "P1",
+            "title": "Read chapter 6",
+            "type": "Analog",
+            "priority": "Medium",
+            "deadline": "2026-11-06T23:59",
+            "start": "20:30",
+            "end": "22:00"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-04",
+        "windows": [
+          {
+            "start": "17:00",
+            "end": "21:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [
+      {
+        "id": "M1",
+        "title": "Lab report draft",
+        "type": "Digital",
+        "priority": "High",
+        "deadline": "2026-11-06T23:59",
+        "durationMinutes": 90,
+        "durationSource": "model",
+        "splittable": true,
+        "delegable": false,
+        "location": null
+      }
+    ],
+    "effort": []
+  },
+  "workings": [
+    "Tue free = 18:00–22:00 minus Dinner 19:00–19:30 minus P1 20:30–22:00 = 18:00–19:00 (60) and 19:30–20:30 (60): neither holds 90.",
+    "Wed 4 Nov free 17:00–21:00 holds 90 → 17:00–18:30. Wed is not the deadline day (Fri 6 Nov), so no split is needed.",
+    "P1 (an existing future task) is not changed."
+  ],
+  "expected": {
+    "placements": [
+      {
+        "taskId": "M1",
+        "date": "2026-11-04",
+        "start": "17:00",
+        "end": "18:30",
+        "minutes": 90,
+        "session": null,
+        "reason": "Placed on Wed 4 Nov, 17:00–18:30: Tue 3 Nov has free time (18:00–19:00, 19:30–20:30) but no gap of 90 min, so the next day that holds the whole task was used (deadline Fri 6 Nov 23:59)."
+      }
+    ],
+    "needsDecision": [],
+    "warnings": []
+  }
+}

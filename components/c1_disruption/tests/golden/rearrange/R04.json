@@ -1,0 +1,194 @@
+{
+  "id": "R04",
+  "name": "Nothing fits: no decision, five options A–E",
+  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "input": {
+    "today": "2026-11-02",
+    "from": "2026-11-03T00:00",
+    "horizonDays": 7,
+    "days": [
+      {
+        "date": "2026-11-03",
+        "windows": [
+          {
+            "start": "18:00",
+            "end": "20:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": [
+          {
+            "id": "P1",
+            "title": "Read chapter 6",
+            "type": "Analog",
+            "priority": "Low",
+            "deadline": "2026-11-09T23:59",
+            "start": "18:00",
+            "end": "19:00"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-04",
+        "windows": [
+          {
+            "start": "19:00",
+            "end": "19:40",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      },
+      {
+        "date": "2026-11-05",
+        "windows": [
+          {
+            "start": "18:00",
+            "end": "19:00",
+            "location": "Home"
+          }
+        ],
+        "fixed": [],
+        "planned": []
+      }
+    ],
+    "moved": [
+      {
+        "id": "M1",
+        "title": "Group report section",
+        "type": "Digital",
+        "priority": "Medium",
+        "deadline": "2026-11-04T23:59",
+        "durationMinutes": 120,
+        "durationSource": "model",
+        "splittable": true,
+        "delegable": true,
+        "location": null
+      }
+    ],
+    "effort": []
+  },
+  "workings": [
+    "Free before the deadline: Tue 19:00–20:00 (60, P1 holds 18:00–19:00), Wed 19:00–19:40 (40). Thu is after the deadline.",
+    "Whole: no gap of 120. Split: 60 + 40 = 100 < 120 → cannot place. Shortfall = 120 − 100 = 20 min. Nothing is decided.",
+    "A (one day, room made by lower-priority / later-deadline tasks): Tue — P1 is Low and due later, so it may yield. Shortening P1 by up to 50% frees 30 → 18:30–20:00 = 90 < 120: not enough. Moving P1 out frees 18:00–20:00 = 120: M1 fits. P1 gets one rearranger attempt: 60 min, due Mon 9 Nov → Wed 40 too small, Thu 18:00–19:00 fits.",
+    "B (split, with the same room-making but shortening only): Tue — P1 shortened by 30 → 18:00–18:30, M1 18:30–20:00 (90); Wed 19:00–19:30 (30). Total 120.",
+    "C (shorten M1, Medium → allowed, ≤ 50%): what fits without touching others = 100 min (shortened by 20 min, 17%) in Tue 19:00–20:00 + Wed 19:00–19:40.",
+    "D (delegate): M1 is delegable. E (keep): Needs a slot, deadline risk, 20 min short."
+  ],
+  "expected": {
+    "placements": [],
+    "needsDecision": [
+      {
+        "taskId": "M1",
+        "shortfallMinutes": 20,
+        "reason": "No free time before the deadline (Wed 4 Nov 23:59) holds 120 min: only 100 min are free (Tue 19:00–20:00, Wed 19:00–19:40). You choose:",
+        "options": [
+          {
+            "code": "A",
+            "available": true,
+            "changes": [
+              {
+                "taskId": "P1",
+                "action": "move",
+                "date": "2026-11-05",
+                "start": "18:00",
+                "end": "19:00"
+              },
+              {
+                "taskId": "M1",
+                "action": "place",
+                "date": "2026-11-03",
+                "start": "18:00",
+                "end": "20:00",
+                "minutes": 120
+              }
+            ],
+            "reason": "Make room on Tue 3 Nov: move \"Read chapter 6\" (Low priority, due Mon 9 Nov) to Thu 5 Nov 18:00–19:00, then do the whole task Tue 18:00–20:00. Shortening it by half would free only 30 min."
+          },
+          {
+            "code": "B",
+            "available": true,
+            "changes": [
+              {
+                "taskId": "P1",
+                "action": "shorten",
+                "date": "2026-11-03",
+                "start": "18:00",
+                "end": "18:30",
+                "minutesCut": 30
+              },
+              {
+                "taskId": "M1",
+                "action": "place",
+                "date": "2026-11-03",
+                "start": "18:30",
+                "end": "20:00",
+                "minutes": 90
+              },
+              {
+                "taskId": "M1",
+                "action": "place",
+                "date": "2026-11-04",
+                "start": "19:00",
+                "end": "19:30",
+                "minutes": 30
+              }
+            ],
+            "reason": "Split across two days: Tue 3 Nov 18:30–20:00 (90 min, after shortening \"Read chapter 6\" by 30 min) and Wed 4 Nov 19:00–19:30 (30 min)."
+          },
+          {
+            "code": "C",
+            "available": true,
+            "changes": [
+              {
+                "taskId": "M1",
+                "action": "place",
+                "date": "2026-11-03",
+                "start": "19:00",
+                "end": "20:00",
+                "minutes": 60
+              },
+              {
+                "taskId": "M1",
+                "action": "place",
+                "date": "2026-11-04",
+                "start": "19:00",
+                "end": "19:40",
+                "minutes": 40
+              }
+            ],
+            "reason": "Shorten it to 100 min (by 20 min, 17%) and do it in the free time: Tue 19:00–20:00 and Wed 19:00–19:40. Nothing else changes."
+          },
+          {
+            "code": "D",
+            "available": true,
+            "changes": [
+              {
+                "taskId": "M1",
+                "action": "delegate"
+              }
+            ],
+            "reason": "Delegate it: you marked it as something others (or AI help) could do."
+          },
+          {
+            "code": "E",
+            "available": true,
+            "changes": [
+              {
+                "taskId": "M1",
+                "action": "needsSlot",
+                "deadlineRisk": true,
+                "shortfallMinutes": 20
+              }
+            ],
+            "reason": "Keep it as \"Needs a slot\": it is due Wed 4 Nov and 20 min of free time are missing, so its deadline is at risk."
+          }
+        ]
+      }
+    ],
+    "warnings": []
+  }
+}

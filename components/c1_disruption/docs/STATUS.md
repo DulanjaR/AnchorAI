@@ -24,6 +24,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **CESAW rerun with the gate + median** (`docs/results/c1_model1_cesaw.md`, earlier run kept as "Before gate"; REAL, professional developers). Cold: model = B0 by design, 75.04 min (before 80.20); gate closed for all 247 developers. Warm: model 75.88 min vs B0 76.57 (before 82.00): the gap to B0 is closed and the model is now slightly better than every baseline. The gate fell back to B0 for most predictions: open for 27.2% (11 of 40 developers open at their last point, 29 closed; 18 open at least once). Where open: model 66.98 vs B0 69.53 min on the same tasks. Not separable from this run: how much comes from the median vs the gate (no median-only run).
 
 ## In progress
+- **Rearranger (17 Oct, owner-approved design):** golden R01–R08 written test-first (`tests/golden/rearrange/`, DRAFT) — **waiting for owner approval before any code.**
 - **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
@@ -32,6 +33,7 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
+- Rearranger interpretations used to hand-work R01–R08 (`tests/golden/rearrange/README.md`, items 1–11), incl. option B = split with shortening-only room-making, option C not for High priority, splittable defaults, effort rounding to 5 min (extra to the earliest days), reason wording.
 - Model 1 gate details not covered by the approval (DECISIONS.md 2026-10-16): error in minutes, out-of-fold forest in the evidence, band widened when closed.
 - CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
 - **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
@@ -41,11 +43,11 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - Disruption-profile interpretations (DECISIONS.md 2026-10-14 "Layer C = per-persona disruption profile"): weekly count rule, "evening bus" = bus block from 15:00, P08 evening = 18:00–22:00, missing times = any time, missing durations = 30–240 min, P04 Saturday row, 5-minute steps, several disruptions per day planned independently.
 
 ## Planned after PP1 (not now)
-- **D-MOVE carry-over:** golden S17+ first (owner approves), then implement.
+- ~~D-MOVE carry-over~~ superseded on 17 Oct by the **rearranger** (see In progress).
 - **Model 2 LLM-persona idea:** not used for results; at most an exploratory stress test later.
 
 ## Next step
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **635 passed** (C1 634 + C4 1), 16 Oct 2026.
+Root `pytest`: **666 passed, 2 skipped** (C1 665 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.
