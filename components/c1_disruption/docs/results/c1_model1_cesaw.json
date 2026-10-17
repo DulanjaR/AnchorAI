@@ -1,0 +1,231 @@
+{
+ "label": "REAL (CESAW, professional developers)",
+ "trees": 50,
+ "coldFolds": 10,
+ "gateSettings": {
+  "lookback": 20,
+  "minRecords": 5,
+  "margin": 0.05,
+  "pointQuantile": 0.5
+ },
+ "cold": {
+  "model": {
+   "maeMinutes": 75.04250927657031,
+   "maeLog": 0.7598167546481135,
+   "coverage": 0.7399309932983876,
+   "n": 60284,
+   "trustedShare": 0.0
+  },
+  "B0 drift = 1.0": {
+   "maeMinutes": 75.04250927657031,
+   "maeLog": 0.7598167546481135,
+   "coverage": null,
+   "n": 60284,
+   "trustedShare": null
+  },
+  "B1 global mean": {
+   "maeMinutes": 75.41075975977226,
+   "maeLog": 0.769300324122295,
+   "coverage": null,
+   "n": 60284,
+   "trustedShare": null
+  },
+  "B2 per-student mean": {
+   "maeMinutes": 75.41075975977226,
+   "maeLog": 0.769300324122295,
+   "coverage": null,
+   "n": 60284,
+   "trustedShare": null
+  },
+  "B3 shrinkage only": {
+   "maeMinutes": 75.41075975977226,
+   "maeLog": 0.769300324122295,
+   "coverage": null,
+   "n": 60284,
+   "trustedShare": null
+  }
+ },
+ "warm": {
+  "model": {
+   "maeMinutes": 75.87703410011211,
+   "maeLog": 0.7672507298036121,
+   "coverage": 0.7330731121453236,
+   "n": 13322,
+   "trustedShare": 0.2720312265425612
+  },
+  "B0 drift = 1.0": {
+   "maeMinutes": 76.56857038074239,
+   "maeLog": 0.776181529201287,
+   "coverage": null,
+   "n": 13322,
+   "trustedShare": null
+  },
+  "B1 global mean": {
+   "maeMinutes": 77.65319687655767,
+   "maeLog": 0.7867969514338029,
+   "coverage": null,
+   "n": 13322,
+   "trustedShare": null
+  },
+  "B2 per-student mean": {
+   "maeMinutes": 84.47829441379815,
+   "maeLog": 0.8207559647328403,
+   "coverage": null,
+   "n": 13322,
+   "trustedShare": null
+  },
+  "B3 shrinkage only": {
+   "maeMinutes": 78.85428255830035,
+   "maeLog": 0.790087691683634,
+   "coverage": null,
+   "n": 13322,
+   "trustedShare": null
+  }
+ },
+ "gate": {
+  "cold": {
+   "predictions": 60284,
+   "open": 0,
+   "openShare": 0.0,
+   "developers": 247,
+   "developersEverOpen": 0,
+   "developersNeverOpen": 247,
+   "whereOpen": {
+    "model": {
+     "maeMinutes": null,
+     "maeLog": null,
+     "coverage": null,
+     "n": 0,
+     "trustedShare": null
+    },
+    "B0": {
+     "maeMinutes": null,
+     "maeLog": null,
+     "coverage": null,
+     "n": 0,
+     "trustedShare": null
+    }
+   }
+  },
+  "warm": {
+   "predictions": 13322,
+   "open": 3624,
+   "openShare": 0.2720312265425612,
+   "developers": 40,
+   "developersEverOpen": 18,
+   "developersNeverOpen": 22,
+   "whereOpen": {
+    "model": {
+     "maeMinutes": 66.98435850032612,
+     "maeLog": 0.812047281556681,
+     "coverage": 0.7166114790286976,
+     "n": 3624,
+     "trustedShare": 1.0
+    },
+    "B0": {
+     "maeMinutes": 69.52647945246633,
+     "maeLog": 0.8448773338678915,
+     "coverage": null,
+     "n": 3624,
+     "trustedShare": null
+    }
+   }
+  }
+ },
+ "gateStudents": {
+  "cold": {
+   "model": {
+    "students": 247,
+    "open": 0,
+    "closed": 247,
+    "everOpen": 0
+   },
+   "B0 drift = 1.0": null,
+   "B1 global mean": null,
+   "B2 per-student mean": null,
+   "B3 shrinkage only": null
+  },
+  "warm": {
+   "model": {
+    "students": 40,
+    "open": 11,
+    "closed": 29,
+    "everOpen": 18
+   },
+   "B0 drift = 1.0": null,
+   "B1 global mean": null,
+   "B2 per-student mean": null,
+   "B3 shrinkage only": null
+  }
+ },
+ "learningCurve": [
+  {
+   "nFrom": 0,
+   "nTo": 1,
+   "maeMinutes": null,
+   "maeLog": null,
+   "coverage": null,
+   "n": 0,
+   "trustedShare": null
+  },
+  {
+   "nFrom": 1,
+   "nTo": 5,
+   "maeMinutes": 105.92865483072174,
+   "maeLog": 0.8907607632058326,
+   "coverage": 0.6801824632539281,
+   "n": 1973,
+   "trustedShare": 0.0
+  },
+  {
+   "nFrom": 5,
+   "nTo": 10,
+   "maeMinutes": 74.4891504522124,
+   "maeLog": 1.1079428377291107,
+   "coverage": 0.6548672566371682,
+   "n": 113,
+   "trustedShare": 0.0
+  },
+  {
+   "nFrom": 10,
+   "nTo": 20,
+   "maeMinutes": 31.95124745853536,
+   "maeLog": 0.9124728053842756,
+   "coverage": 0.6818181818181818,
+   "n": 198,
+   "trustedShare": 0.0
+  },
+  {
+   "nFrom": 20,
+   "nTo": 40,
+   "maeMinutes": 33.10102271977273,
+   "maeLog": 0.5573725624596801,
+   "coverage": 0.7727272727272727,
+   "n": 44,
+   "trustedShare": 0.0
+  },
+  {
+   "nFrom": 40,
+   "nTo": null,
+   "maeMinutes": 71.46048265445877,
+   "maeLog": 0.7398082306495279,
+   "coverage": 0.7441331635437511,
+   "n": 10994,
+   "trustedShare": 0.3296343460069129
+  }
+ ],
+ "warmDevelopers": 40,
+ "dropped": {
+  "rows": 61817,
+  "droppedPlanNotPositive": 692,
+  "droppedActualNotPositive": 0,
+  "droppedNoStartTime": 841,
+  "kept": 60284,
+  "developers": 247
+ },
+ "shape": {
+  "meanLogRatio": -0.20603021722500509,
+  "sdLogRatio": 1.0691302314760196,
+  "medianLogRatio": -0.06015979390103303
+ }
+}
