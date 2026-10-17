@@ -1,7 +1,7 @@
 {
   "id": "R01",
   "name": "Moved task fits the next day",
-  "status": "DRAFT — hand-worked, awaiting owner approval (planning chat, 17 Oct 2026)",
+  "status": "APPROVED — hand-worked, owner-approved 17 Oct 2026 (test-first)",
   "input": {
     "today": "2026-11-02",
     "from": "2026-11-03T00:00",

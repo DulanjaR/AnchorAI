@@ -1,7 +1,7 @@
-# Rearranger golden scenarios R01–R08 — DRAFT
+# Rearranger golden scenarios R01–R08 — APPROVED
 
-Hand-worked, test-first (planning chat, 17 Oct 2026). **Status: DRAFT until the owner approves them;
-no rearranger code exists yet.** After approval, `engine/rearrange.py` must reproduce `expected` exactly.
+Hand-worked, test-first (planning chat, 17 Oct 2026). **Owner-approved 17 Oct 2026**, interpretations included;
+`engine/rearrange.py` reproduces `expected` exactly (`tests/golden/test_rearrange_spec.py`).
 
 The rearranger finds a place for the tasks an MVD moved off today (and spreads effort tasks), over
 today + 7 days, never past a task's deadline. It **never changes existing future tasks by itself**:
@@ -42,7 +42,7 @@ expected
   free as a buffer); a missed session → re-spread the rest; early warning when remaining effort >
   free time before the deadline.
 
-## PROPOSED interpretations (to confirm with R01–R08)
+## Interpretations (approved with R01–R08)
 
 1. **Search starts at `from`**: moved tasks from the next day (the MVD already used today's time);
    effort tasks from `from` as well (R07: today).

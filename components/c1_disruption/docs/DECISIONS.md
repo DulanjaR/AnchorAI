@@ -2,6 +2,11 @@
 
 Dated record of design decisions for Component 1. Newest first.
 
+## 2026-10-17 — Rearranger golden R01–R08 approved; main screen = calendar
+- Source: owner, 17 Oct 2026.
+- **R01–R08 approved as written**, with the 11 interpretations in `tests/golden/rearrange/README.md` (now approved, no longer PROPOSED). `engine/rearrange.py` reproduces all eight exactly.
+- Web demo: **the main interface is the calendar with the tasks; everything else opens as a popup** (owner's issue list).
+
 ## 2026-10-17 — Rearranger (replaces the D-MOVE swap rules)
 - Source: planning chat, 17 Oct 2026 (owner-approved design).
 - **`engine/rearrange.py`** (pure functions; settings in `engine/config.py`). Horizon today + 7 days, never past a task's deadline. Free time = study windows − fixed blocks − tasks already planned. **Existing future tasks are never changed automatically.**

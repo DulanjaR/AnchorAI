@@ -23,9 +23,10 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - **SYNTHETIC rerun with the gate** (`sim/results/c1_simulation_SYNTHETIC.md`, earlier run kept as "Before gate"; 5 seeds × 3 variants). Warm MAE min, model with gate vs before vs B0: planted 8.87 vs 7.25 vs 12.19 (gate open for 8.8 of 10 personas, closed 1.2); null 4.20 vs 4.36 vs 4.18 (open 1.6 / closed 8.4: the model now no longer adds error where there is no drift); misspecified 17.01 vs 16.73 vs 17.90 (open 5.6 / closed 4.4). Cold start = B0 by design (planted 12.25 vs 8.50 before). The gate costs accuracy where the drift is real (cold start, early weeks) and protects where there is nothing to learn. Planned completion rate (corrected plans), planted 0.38 (before 0.42); null: identical to raw plans.
 - **CESAW rerun with the gate + median** (`docs/results/c1_model1_cesaw.md`, earlier run kept as "Before gate"; REAL, professional developers). Cold: model = B0 by design, 75.04 min (before 80.20); gate closed for all 247 developers. Warm: model 75.88 min vs B0 76.57 (before 82.00): the gap to B0 is closed and the model is now slightly better than every baseline. The gate fell back to B0 for most predictions: open for 27.2% (11 of 40 developers open at their last point, 29 closed; 18 open at least once). Where open: model 66.98 vs B0 69.53 min on the same tasks. Not separable from this run: how much comes from the median vs the gate (no median-only run).
 - **Notebooks 01–04 on Colab (17 Oct):** setup clones once into `/content/AnchorAI`, installs only `notebooks/requirements.txt` (no web server), prints versions, stops with "Runtime → Restart session, then run from cell 2" if a loaded package was replaced; progress lines with elapsed seconds; charts labelled SYNTHETIC / REAL (MAE by method, learning curve, predicted vs actual, gate per student; 02: acceptance over time). **All four run top to bottom** in a clean environment with only the notebook packages (01: 68 s, 4 charts; 02: 9 s, 1 chart; 03: 951 s, 8 charts; 04 quick: 266 s, 4 charts). Ready for Colab.
+- **Rearranger** `engine/rearrange.py` (owner-approved R01–R08, all eight reproduced exactly; plus unit tests: deadline day, horizon, deadline time, early warning, effort rounding, input never changed). Settings in `engine/config.py` (horizon 7, sessions 30–120, effort step 5, locations).
 
 ## In progress
-- **Rearranger (17 Oct, owner-approved design):** golden R01–R08 written test-first (`tests/golden/rearrange/`, DRAFT) — **waiting for owner approval before any code.**
+- Web demo rebuild: week calendar as the main screen, everything else in popups; rearranger in the API (options A–E dialog), location + effort fields, simulated clock with start prompts.
 - **Task category feature (Model 1):** code and tests done on a side branch (merged after the reruns land); then the SYNTHETIC with/without-category comparison.
 
 ## Waiting on owner
@@ -34,7 +35,6 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 - D-MOVE: approved, implement after PP1 (golden S17+ first).
 
 ## PROPOSED items not yet approved
-- Rearranger interpretations used to hand-work R01–R08 (`tests/golden/rearrange/README.md`, items 1–11), incl. option B = split with shortening-only room-making, option C not for High priority, splittable defaults, effort rounding to 5 min (extra to the earliest days), reason wording.
 - Model 1 gate details not covered by the approval (DECISIONS.md 2026-10-16): error in minutes, out-of-fold forest in the evidence, band widened when closed.
 - CESAW follow-ups (not done; each is a method change to decide before any rerun, no tuning on these results): (a) use the forest's median (q50) as the point instead of the mean: with skewed, noisy errors the mean pulls predictions down (B1 global mean is also worse than B0); (b) add the CESAW phase as a feature (it plays the role of task type); (c) report per-developer MAE as well as pooled.
 - **Explanation bug found while building the demo (not fixed, golden behaviour):** a never-placed low-urgency (group D) Digital task on a power-cut day gets reason `BLOCKED_BY_DISRUPTION` and the text "there is not enough free time outside it, even at half length", even when there is free time. The reason order checks "blocked" before "low urgency". Proposal after PP1: check group D first (needs a golden update).
@@ -51,4 +51,4 @@ One page, updated in every commit (CLAUDE.md §0.3). Details: `PROGRESS.md` (log
 PP1 charts and rehearsal (Task 6, PP1 = 19 Oct 2026); decide the CESAW follow-ups; D-MOVE after PP1 (golden S17+ first).
 
 ## Test count
-Root `pytest`: **666 passed, 2 skipped** (C1 665 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.
+Root `pytest`: **682 passed, 2 skipped** (C1 681 + C4 1; the 2 chart tests need matplotlib and pass in the notebook environment), 17 Oct 2026.

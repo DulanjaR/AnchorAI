@@ -57,3 +57,15 @@ ENV_FEASIBILITY: Final[dict[str, dict[str, float | None]]] = {
     "transport_delay":      {"Digital": 0.7,  "Analog": 1.2,  "Meeting": None, "Fixed": None},
     "connectivity_failure": {"Digital": None, "Analog": None, "Meeting": None, "Fixed": None},
 }
+
+# --- Rearranger (planning chat, 17 Oct 2026; golden R01–R08) -----------------------------------
+# Moved tasks and effort sessions are placed over today + this many days, never past a deadline.
+REARRANGE_HORIZON_DAYS: Final = 7
+# Session length when a task is split (minutes); a task may set its own minSession / maxSession.
+MIN_SESSION: Final = 30
+MAX_SESSION: Final = 120
+# Effort sessions are spread in steps of this many minutes (extra steps go to the earliest days).
+EFFORT_STEP_MINUTES: Final = 5
+# Optional task location (a label only, no GPS). Campus tasks only in Campus time; Commute time
+# takes only Analog tasks.
+LOCATIONS: Final[tuple[str, ...]] = ("Home", "Office", "Campus", "Commute", "Other")
